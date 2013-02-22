@@ -6,7 +6,9 @@ PHP library for the Bitpay.com API
 To use, fill in relivent information in the bp_options.php file.
 
 use 
+
     bpCreateInvoice($orderId, $price, $posData, $options = array())
+    
 to rise an invoice, where.
 
     $orderId: Used to display an orderID to the buyer. In the account summary view, this value is used to identify a ledger entry if present.
@@ -21,5 +23,7 @@ If a given option is not provided here, the value of that option will default to
  (see api documentation for information on these options).
 
 and
+
     bpGetInvoice($invoiceId, $apiKey=false)
+
 to check it's status.
