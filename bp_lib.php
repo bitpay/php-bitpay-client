@@ -2,6 +2,19 @@
 
 require_once 'bp_options.php';
 
+function bpLog($contents)
+{
+	$file = dirname(__FILE__).'/bplog.txt';
+	file_put_contents($file, date('m-d H:i:s').": ", FILE_APPEND);
+	
+	if (is_array($contents))
+		$contents = var_export($contents, true);	
+	else if (is_object($contents))
+		$contents = json_encode($contents);
+		
+	file_put_contents($file, $contents."\n", FILE_APPEND);			
+}
+
 function bpCurl($url, $apiKey, $post = false) {
 	global $bpOptions;	
 		
@@ -34,9 +47,11 @@ function bpCurl($url, $apiKey, $post = false) {
 	$responseString = curl_exec($curl);
 	
 	if($responseString == false) {
-		$response = curl_error($curl);
+		$response = array('error' => curl_error($curl));
 	} else {
 		$response = json_decode($responseString, true);
+		if (!$response)
+			$response = array('error' => 'invalid json: '.$responseString);
 	}
 	curl_close($curl);
 	return $response;
@@ -62,10 +77,10 @@ function bpCreateInvoice($orderId, $price, $posData, $options = array()) {
 	
 	$options = array_merge($bpOptions, $options);	// $options override any options found in bp_options.php
 	
-	$options['posData'] = '{"posData": "' . $posData . '"';
-	if ($bpOptions['verifyPos']) // if desired, a hash of the POS data is included to verify source in the callback
-		$options['posData'].= ', "hash": "' . crypt($posData, $options['apiKey']).'"';
-	$options['posData'].= '}';	
+	$pos = array('posData' => $posData);
+	if ($bpOptions['verifyPos'])
+		$pos['hash'] = crypt(serialize($posData), $options['apiKey']);
+	$options['posData'] = json_encode($pos);
 	
 	$options['orderID'] = $orderId;
 	$options['price'] = $price;
@@ -102,7 +117,7 @@ function bpVerifyNotification($apiKey = false) {
 		return 'no posData';
 		
 	$posData = json_decode($json['posData'], true);
-	if($bpOptions['verifyPos'] and $posData['hash'] != crypt($posData['posData'], $apiKey)) 
+	if($bpOptions['verifyPos'] and $posData['hash'] != crypt(serialize($posData['posData']), $apiKey)) 
 		return 'authentication failed (bad hash)';
 	$json['posData'] = $posData['posData'];
 		
@@ -119,8 +134,8 @@ function bpGetInvoice($invoiceId, $apiKey=false) {
 	if (is_string($response))
 		return $response; // error
 	$response['posData'] = json_decode($response['posData'], true);
+	$response['posData'] = $response['posData']['posData'];
+
 	return $response;	
 }
 
-
-?>
