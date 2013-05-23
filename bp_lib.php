@@ -79,7 +79,7 @@ function bpCreateInvoice($orderId, $price, $posData, $options = array()) {
 	
 	$pos = array('posData' => $posData);
 	if ($bpOptions['verifyPos'])
-		$pos['hash'] = crypt(serialize($posData), $options['apiKey']);
+		$pos['hash'] = bpHash(serialize($posData), $options['apiKey']);
 	$options['posData'] = json_encode($pos);
 	
 	$options['orderID'] = $orderId;
@@ -117,7 +117,7 @@ function bpVerifyNotification($apiKey = false) {
 		return 'no posData';
 		
 	$posData = json_decode($json['posData'], true);
-	if($bpOptions['verifyPos'] and $posData['hash'] != crypt(serialize($posData['posData']), $apiKey)) 
+	if($bpOptions['verifyPos'] and $posData['hash'] != bpHash(serialize($posData['posData']), $apiKey))
 		return 'authentication failed (bad hash)';
 	$json['posData'] = $posData['posData'];
 		
@@ -139,3 +139,8 @@ function bpGetInvoice($invoiceId, $apiKey=false) {
 	return $response;	
 }
 
+// Generates a keyed hash.
+function bpHash($data, $key) {
+	$hmac = base64_encode(hash_hmac('sha256', $data, $key, TRUE));
+	return strtr($hmac, array('+' => '-', '/' => '_', '=' => ''));
+}
