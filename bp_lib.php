@@ -130,7 +130,7 @@ function bpVerifyNotification($apiKey = false, $options = array()) {
 }
 
 // $options can include ('apiKey')
-function bpGetInvoice($invoiceId, $apiKey=false, $options = array()) {
+function bpGetInvoice($invoiceId, $apiKey=false) {
 	global $bpOptions;
 	if (!$apiKey)
 		$apiKey = $bpOptions['apiKey'];		
