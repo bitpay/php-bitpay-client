@@ -16,8 +16,6 @@ function bpLog($contents)
 }
 
 function bpCurl($url, $apiKey, $post = false) {
-	global $bpOptions;	
-		
 	$curl = curl_init($url);
 	$length = 0;
 	if ($post)
