@@ -75,10 +75,11 @@ function bpCurl($url, $apiKey, $post = false) {
 function bpCreateInvoice($orderId, $price, $posData, $options = array()) {	
 	global $bpOptions;	
 	
-	$options = array_merge($bpOptions, $options);	// $options override any options found in bp_options.php
+	// $options override any options found in bp_options.php
+	$options = array_merge($bpOptions, $options);
 	
 	$pos = array('posData' => $posData);
-	if ($bpOptions['verifyPos'])
+	if ($options['verifyPos'])
 		$pos['hash'] = bpHash(serialize($posData), $options['apiKey']);
 	$options['posData'] = json_encode($pos);
 	
@@ -99,10 +100,14 @@ function bpCreateInvoice($orderId, $price, $posData, $options = array()) {
 }
 
 // Call from your notification handler to convert $_POST data to an object containing invoice data
-function bpVerifyNotification($apiKey = false) {
+function bpVerifyNotification($apiKey = false, $options = array()) {
 	global $bpOptions;
+
+	// $options override any options found in bp_options.php
+	$options = array_merge($bpOptions, $options);
+
 	if (!$apiKey)
-		$apiKey = $bpOptions['apiKey'];		
+		$apiKey = $options['apiKey'];		
 	
 	$post = file_get_contents("php://input");
 	if (!$post)
@@ -117,7 +122,7 @@ function bpVerifyNotification($apiKey = false) {
 		return 'no posData';
 		
 	$posData = json_decode($json['posData'], true);
-	if($bpOptions['verifyPos'] and $posData['hash'] != bpHash(serialize($posData['posData']), $apiKey))
+	if($options['verifyPos'] and $posData['hash'] != bpHash(serialize($posData['posData']), $apiKey))
 		return 'authentication failed (bad hash)';
 	$json['posData'] = $posData['posData'];
 		
@@ -125,7 +130,7 @@ function bpVerifyNotification($apiKey = false) {
 }
 
 // $options can include ('apiKey')
-function bpGetInvoice($invoiceId, $apiKey=false) {
+function bpGetInvoice($invoiceId, $apiKey=false, $options = array()) {
 	global $bpOptions;
 	if (!$apiKey)
 		$apiKey = $bpOptions['apiKey'];		
