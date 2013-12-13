@@ -8,7 +8,7 @@ The recommended way to install the BitPay PHP Client is through [Composer](http:
     # Install Composer
     curl -sS https://getcomposer.org/installer | php
 
-    # Add Guzzle as a dependency
+    # Add BitPay as a dependency
     php composer.phar require bitpay/php-client
 
 After installing, you need to require Composer's autoloader:
