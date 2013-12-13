@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <ruleset name="Vest">
-  <description>Vest coding standard.</description>
+  <description>Coding standard.</description>
 
   <rule ref="PSR2" />
 
