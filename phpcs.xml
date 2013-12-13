@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<ruleset name="Vest">
+<ruleset name="BitPay">
   <description>Coding standard.</description>
 
   <rule ref="PSR2" />
@@ -7,8 +7,6 @@
   <rule ref="Internal.NoCodeFound">
     <severity>0</severity>
   </rule>
-
-  <!-- Laravel doesn't use namespaces bu default, ignoring for now. -->
   <rule ref="PSR1.Classes.ClassDeclaration.MissingNamespace">
     <severity>0</severity>
   </rule>

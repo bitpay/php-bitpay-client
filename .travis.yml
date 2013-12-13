@@ -9,4 +9,7 @@ before_script:
   - curl -s http://getcomposer.org/installer | php
   - php composer.phar install --dev
 
-script: phpunit
+script:
+  - ./vendor/bin/parallel-lint --exclude vendor .
+  - ./vendor/bin/phpcs -p --standard=phpcs.xml . 
+  - ./vendor/bin/phpunit
