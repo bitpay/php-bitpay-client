@@ -2,6 +2,7 @@
 .DS_STORE
 coverage
 .idea
+Makefile
 
 # Ignore composer generated files
 composer.phar
