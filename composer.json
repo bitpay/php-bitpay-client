@@ -1,0 +1,23 @@
+{
+    "name": "bitpay/php-client",
+    "description": "BitPay PHP Client",
+    "version": "0.0.1",
+    "keywords": ["bitpay", "bitcoin"],
+    "require": {
+        "php": ">=5.3.3",
+        "ext-curl": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "3.7.27",
+        "mockery/mockery": "0.8.0",
+        "squizlabs/php_codesniffer": "1.*",
+        "jakub-onderka/php-parallel-lint": "*",
+        "jakub-onderka/php-console-highlighter": "dev-master"
+    },
+    "autoload": {
+        "psr-0": {
+            "BitPay\\Tests": "tests/",
+            "BitPay": "src/"
+        }
+    }
+}
