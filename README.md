@@ -39,17 +39,28 @@ $invoice = $bitPay->createInvoice($orderID, $price); // returns Invoice Object
 With invoice creation, `orderID` and `currency` are the only required fields. If you are sending a customer from your website to make a purchase, setting `redirectURL` on BitPay constructor options is required.
 
 Response will be an object with information on your newly created invoice. Send your customer to the `url` to complete payment:
-```js
-{
-  "id"             => "DGrAEmbsXe9bavBPMJ8kuk",
-  "url"            => "https://bitpay.com/invoice?id=DGrAEmbsXe9bavBPMJ8kuk",
-  "status"         => "new",
-  "btcPrice"       => "0.0495",
-  "price"          => 10,
-  "currency"       => "USD",
-  "invoiceTime"    => 1383265343674,
-  "expirationTime" => 1383266243674,
-  "currentTime"    => 1383265957613
+```php
+class stdClass#5 (10) {
+  public $id =>
+  string(10) "EXAMPLE-ID"
+  public $url =>
+  string(40) "https://bitpay.com/invoice?id=EXAMPLE-ID"
+  public $posData =>
+  string(67) "{"posData":[],"hash":"HASH"}"
+  public $status =>
+  string(3) "new"
+  public $btcPrice =>
+  string(6) "1.0000"
+  public $price =>
+  int(1)
+  public $currency =>
+  string(3) "BTC"
+  public $invoiceTime =>
+  int(1386958726781)
+  public $expirationTime =>
+  int(1386959626781)
+  public $currentTime =>
+  int(1386958726861)
 }
 ```
 There are many options available when creating invoices, which are listed in the [BitPay API documentation](https://bitpay.com/bitcoin-payment-gateway-api).
