@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<ruleset name="BitPay">
+  <description>Coding standard.</description>
+
+  <rule ref="PSR2" />
+
+  <rule ref="Internal.NoCodeFound">
+    <severity>0</severity>
+  </rule>
+  <rule ref="PSR1.Classes.ClassDeclaration.MissingNamespace">
+    <severity>0</severity>
+  </rule>
+
+  <exclude-pattern>./vendor</exclude-pattern>
+
+</ruleset>

@@ -1,0 +1,13 @@
+# Ingore common cruft
+.DS_STORE
+coverage
+.idea
+Makefile
+
+# Ignore composer generated files
+composer.phar
+composer.lock
+vendor/
+
+# Ignore dummy test with real API key
+index.php
