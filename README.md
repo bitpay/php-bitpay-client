@@ -46,6 +46,7 @@ Change Log
 ----------
 Version 1
   - Initial version
+
 Version 1.1, rich@bitpay.com
   - Improved error handling, documentation
   - Added license information
