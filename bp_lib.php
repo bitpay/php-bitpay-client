@@ -1,7 +1,7 @@
 <?php
 
 /**
- * ©2011,2012,2013,2014 BIT-PAY LLC.
+ * ©2011,2012,2013,2014 BITPAY, INC.
  * 
  * Permission is hereby granted to any person obtaining a copy of this software
  * and associated documentation for use and/or modification in association with
@@ -34,28 +34,27 @@ require_once 'bp_options.php';
  *
  */
 function bpLog($contents) {
-	try {
-		
-		if(isset($bpOptions['logFile']) && $bpOptions['logFile'] != '') {
-			$file = dirname(__FILE__).$bpOptions['logFile'];
-		} else {
-			// Fallback to using a default logfile name in case the variable is
-			// missing or not set.
-			$file = dirname(__FILE__).'/bplog.txt';
-		}
-		
-		file_put_contents($file, date('m-d H:i:s').": ", FILE_APPEND);
-	
-		if (is_array($contents))
-			$contents = var_export($contents, true);	
-		else if (is_object($contents))
-			$contents = json_encode($contents);
-		
-		file_put_contents($file, $contents."\n", FILE_APPEND);
-		
-	} catch (Exception $e) {
-		echo 'Error: ' . $e->getMessage();
-	}
+  try {
+    if(isset($bpOptions['logFile']) && $bpOptions['logFile'] != '') {
+      $file = dirname(__FILE__).$bpOptions['logFile'];
+    } else {
+      // Fallback to using a default logfile name in case the variable is
+      // missing or not set.
+      $file = dirname(__FILE__).'/bplog.txt';
+    }
+
+    file_put_contents($file, date('m-d H:i:s').": ", FILE_APPEND);
+
+    if (is_array($contents))
+      $contents = var_export($contents, true);	
+    else if (is_object($contents))
+      $contents = json_encode($contents);
+
+    file_put_contents($file, $contents."\n", FILE_APPEND);
+
+  } catch (Exception $e) {
+    echo 'Error: ' . $e->getMessage();
+  }
 }
 
 /**
@@ -68,74 +67,75 @@ function bpLog($contents) {
  *
  */
 function bpCurl($url, $apiKey, $post = false) {
-	global $bpOptions;	
+  global $bpOptions;	
 
-	if((isset($url) && trim($url) != '') && (isset($apiKey) && trim($apiKey) != '')) {
-		try {
-			$curl = curl_init();
-			$length = 0;
+  if((isset($url) && trim($url) != '') && (isset($apiKey) && trim($apiKey) != '')) {
+    try {
+      $curl = curl_init();
+      $length = 0;
 
-			if ($post) {
-				curl_setopt($curl, CURLOPT_POST, 1);
-				curl_setopt($curl, CURLOPT_POSTFIELDS, $post);
-				$length = strlen($post);
-			}
-	
-			$uname = base64_encode($apiKey);
-			
-			if($uname) {
-				$header = array(
-								'Content-Type: application/json',
-								'Content-Length: ' . $length,
-								'Authorization: Basic ' . $uname,
-								);
+      if ($post) {
+        curl_setopt($curl, CURLOPT_POST, 1);
+        curl_setopt($curl, CURLOPT_POSTFIELDS, $post);
+        $length = strlen($post);
+      }
 
-				curl_setopt($curl, CURLOPT_URL, $url);
-				curl_setopt($curl, CURLOPT_PORT, 443);
-				curl_setopt($curl, CURLOPT_HTTPHEADER, $header);
-				curl_setopt($curl, CURLOPT_TIMEOUT, 10);
-				curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC ) ;
-				curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 1); // verify certificate
-				curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2); // check existence of CN and verify that it matches hostname
-				curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-				curl_setopt($curl, CURLOPT_FORBID_REUSE, 1);
-				curl_setopt($curl, CURLOPT_FRESH_CONNECT, 1);
-		
-				$responseString = curl_exec($curl);
+      $uname = base64_encode($apiKey);
 
-				if($responseString == false) {
-					$response = array('error' => curl_error($curl));
-					if($bpOptions['useLogging'])
-						bpLog('Error: ' . curl_error($curl));
-				} else {
-					$response = json_decode($responseString, true);
-					if (!$response) {
-						$response = array('error' => 'invalid json: '.$responseString);
-						if($bpOptions['useLogging'])
-							bpLog('Error - Invalid JSON: ' . $responseString);
-					}
-				}
+      if($uname) {
+        $header = array(
+                  'Content-Type: application/json',
+                  'Content-Length: ' . $length,
+                  'Authorization: Basic ' . $uname,
+        );
 
-				curl_close($curl);
-				return $response;
-			} else {
-				curl_close($curl);
-				if($bpOptions['useLogging'])
-					bpLog('Invalid data found in apiKey value passed to bpCurl. (Failed: base64_encode(apikey))');
-				return array('error' => 'Invalid data found in apiKey value passed to bpCurl. (Failed: base64_encode(apikey))');
-			}
-		} catch (Exception $e) {
-			@curl_close($curl);
-			if($bpOptions['useLogging'])
-				bpLog('Error: ' . $e->getMessage());
-			return array('error' => $e->getMessage());
-		}
-	} else {
-		// Invalid parameter specified
-		if($bpOptions['useLogging'])
-			bpLog('Error: You must supply non-empty url and apiKey parameters.');
-		return array('error' => 'You must supply non-empty url and apiKey parameters.');
-	}
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_PORT, 443);
+        curl_setopt($curl, CURLOPT_HTTPHEADER, $header);
+        curl_setopt($curl, CURLOPT_TIMEOUT, 10);
+        curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC ) ;
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 1); // verify certificate
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2); // check existence of CN and verify that it matches hostname
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curl, CURLOPT_FORBID_REUSE, 1);
+        curl_setopt($curl, CURLOPT_FRESH_CONNECT, 1);
+
+        $responseString = curl_exec($curl);
+
+        if($responseString == false) {
+          $response = array('error' => curl_error($curl));
+          if($bpOptions['useLogging'])
+            bpLog('Error: ' . curl_error($curl));
+        } else {
+          $response = json_decode($responseString, true);
+          if (!$response) {
+            $response = array('error' => 'invalid json: '.$responseString);
+            if($bpOptions['useLogging'])
+              bpLog('Error - Invalid JSON: ' . $responseString);
+          }
+        }
+
+        curl_close($curl);
+        return $response;
+      } else {
+        curl_close($curl);
+        if($bpOptions['useLogging'])
+          bpLog('Invalid data found in apiKey value passed to bpCurl. (Failed: base64_encode(apikey))');
+        return array('error' => 'Invalid data found in apiKey value passed to bpCurl. (Failed: base64_encode(apikey))');
+      }
+    } catch (Exception $e) {
+      @curl_close($curl);
+      if($bpOptions['useLogging'])
+        bpLog('Error: ' . $e->getMessage());
+      return array('error' => $e->getMessage());
+    }
+  } else {
+    // Invalid parameter specified
+    if($bpOptions['useLogging'])
+      bpLog('Error: You must supply non-empty url and apiKey parameters.');
+      return array('error' => 'You must supply non-empty url and apiKey parameters.');
+  }
+
 }
 
 /**
@@ -148,65 +148,64 @@ function bpCurl($url, $apiKey, $post = false) {
  *
  */
 function bpCreateInvoice($orderId, $price, $posData, $options = array()) {
-	// $orderId: Used to display an orderID to the buyer. In the account summary view, this value is used to
-	// identify a ledger entry if present.
-	//
-	// $price: by default, $price is expressed in the currency you set in bp_options.php.  The currency can be
-	// changed in $options.
-	//
-	// $posData: this field is included in status updates or requests to get an invoice.  It is intended to be used by
-	// the merchant to uniquely identify an order associated with an invoice in their system.  Aside from that, Bit-Pay does
-	// not use the data in this field.  The data in this field can be anything that is meaningful to the merchant.
-	//
-	// $options keys can include any of:
-	//		'itemDesc', 'itemCode', 'notificationEmail', 'notificationURL', 'redirectURL', 'apiKey'
-	//		'currency', 'physical', 'fullNotifications', 'transactionSpeed', 'buyerName',
-	//		'buyerAddress1', 'buyerAddress2', 'buyerCity', 'buyerState', 'buyerZip', 'buyerEmail', 'buyerPhone'
-	//
-	// If a given option is not provided here, the value of that option will default to what is found in bp_options.php
-	// (see api documentation for information on these options).
-	
-	global $bpOptions;	
-	
-	try {
-		$options = array_merge($bpOptions, $options);	// $options override any options found in bp_options.php
-	
-		$pos = array('posData' => $posData);
-	
-		if ($bpOptions['verifyPos']) 
-			$pos['hash'] = bpHash(serialize($posData), $options['apiKey']);
+  // $orderId: Used to display an orderID to the buyer. In the account summary view, this value is used to
+  // identify a ledger entry if present.
+  //
+  // $price: by default, $price is expressed in the currency you set in bp_options.php.  The currency can be
+  // changed in $options.
+  //
+  // $posData: this field is included in status updates or requests to get an invoice.  It is intended to be used by
+  // the merchant to uniquely identify an order associated with an invoice in their system.  Aside from that, Bit-Pay does
+  // not use the data in this field.  The data in this field can be anything that is meaningful to the merchant.
+  //
+  // $options keys can include any of:
+  //	'itemDesc', 'itemCode', 'notificationEmail', 'notificationURL', 'redirectURL', 'apiKey'
+  //	'currency', 'physical', 'fullNotifications', 'transactionSpeed', 'buyerName',
+  //	'buyerAddress1', 'buyerAddress2', 'buyerCity', 'buyerState', 'buyerZip', 'buyerEmail', 'buyerPhone'
+  //
+  // If a given option is not provided here, the value of that option will default to what is found in bp_options.php
+  // (see api documentation for information on these options).
 
-		$options['posData'] = json_encode($pos);
-		$options['orderID'] = $orderId;
-		$options['price'] = $price;
-	
-		$postOptions = array('orderID', 'itemDesc', 'itemCode', 'notificationEmail', 'notificationURL', 'redirectURL', 
-							 'posData', 'price', 'currency', 'physical', 'fullNotifications', 'transactionSpeed', 'buyerName', 
-							 'buyerAddress1', 'buyerAddress2', 'buyerCity', 'buyerState', 'buyerZip', 'buyerEmail', 'buyerPhone');
+  global $bpOptions;	
 
-		foreach($postOptions as $o) {
-			if (array_key_exists($o, $options))
-				$post[$o] = $options[$o];
-		}
+  try {
+    $options = array_merge($bpOptions, $options);  // $options override any options found in bp_options.php
+    $pos = array('posData' => $posData);
 
-		$post = json_encode($post);
-	
-		$response = bpCurl('https://bitpay.com/api/invoice/', $options['apiKey'], $post);
-		
-		if($bpOptions['useLogging']) {
-			bpLog('Create Invoice: ');
-			bpLog($post);
-			bpLog('Response: ');
-			bpLog($response);
-		}
-					
-		return $response;
-		
-	} catch (Exception $e) {
-		if($bpOptions['useLogging'])
-			bpLog('Error: ' . $e->getMessage());
-		return array('error' => $e->getMessage());
-	}
+    if ($bpOptions['verifyPos']) 
+      $pos['hash'] = bpHash(serialize($posData), $options['apiKey']);
+
+    $options['posData'] = json_encode($pos);
+    $options['orderID'] = $orderId;
+    $options['price'] = $price;
+    
+    $postOptions = array('orderID', 'itemDesc', 'itemCode', 'notificationEmail', 'notificationURL', 'redirectURL', 
+                         'posData', 'price', 'currency', 'physical', 'fullNotifications', 'transactionSpeed', 'buyerName', 
+                         'buyerAddress1', 'buyerAddress2', 'buyerCity', 'buyerState', 'buyerZip', 'buyerEmail', 'buyerPhone');
+
+    foreach($postOptions as $o) {
+      if (array_key_exists($o, $options))
+        $post[$o] = $options[$o];
+    }
+
+    $post = json_encode($post);
+
+    $response = bpCurl('https://bitpay.com/api/invoice/', $options['apiKey'], $post);
+
+    if($bpOptions['useLogging']) {
+      bpLog('Create Invoice: ');
+      bpLog($post);
+      bpLog('Response: ');
+      bpLog($response);
+    }
+
+    return $response;
+
+  } catch (Exception $e) {
+    if($bpOptions['useLogging'])
+      bpLog('Error: ' . $e->getMessage());
+    return array('error' => $e->getMessage());
+  }
 }
 
 /**
@@ -219,38 +218,38 @@ function bpCreateInvoice($orderId, $price, $posData, $options = array()) {
  *
  */
 function bpVerifyNotification($apiKey = false) {
-	global $bpOptions;
+  global $bpOptions;
 
-	try {
-		if (!$apiKey) 
-			$apiKey = $bpOptions['apiKey'];		
-	
-		$post = file_get_contents("php://input");
+  try {
+    if (!$apiKey) 
+      $apiKey = $bpOptions['apiKey'];		
 
-		if (!$post)
-			return 'No post data';
+    $post = file_get_contents("php://input");
 
-		$json = json_decode($post, true);
-	
-		if (is_string($json))
-			return $json; // error
+    if (!$post)
+      return 'No post data';
 
-		if (!array_key_exists('posData', $json))
-			return 'no posData';
-		
-		$posData = json_decode($json['posData'], true);
-		
-		if($bpOptions['verifyPos'] and $posData['hash'] != bpHash(serialize($posData['posData']), $apiKey))
-			return 'authentication failed (bad hash)';
+    $json = json_decode($post, true);
 
-		$json['posData'] = $posData['posData'];
-		
-		return $json;
-	} catch (Exception $e) {
-		if($bpOptions['useLogging'])
-			bpLog('Error: ' . $e->getMessage());
-		return array('error' => $e->getMessage());
-	}
+    if (is_string($json))
+      return $json; // error
+
+    if (!array_key_exists('posData', $json))
+      return 'no posData';
+
+    $posData = json_decode($json['posData'], true);
+
+    if($bpOptions['verifyPos'] and $posData['hash'] != bpHash(serialize($posData['posData']), $apiKey))
+      return 'authentication failed (bad hash)';
+
+    $json['posData'] = $posData['posData'];
+
+    return $json;
+  } catch (Exception $e) {
+    if($bpOptions['useLogging'])
+      bpLog('Error: ' . $e->getMessage());
+    return array('error' => $e->getMessage());
+  }
 }
 
 /**
@@ -263,24 +262,26 @@ function bpVerifyNotification($apiKey = false) {
  *
  */
 function bpGetInvoice($invoiceId, $apiKey=false) {
-	global $bpOptions;
-	
-	try {
-		if (!$apiKey)
-			$apiKey = $bpOptions['apiKey'];
+  global $bpOptions;
 
-		$response = bpCurl('https://bitpay.com/api/invoice/'.$invoiceId, $apiKey);
-		if (is_string($response))
-			return $response; // error
-		$response['posData'] = json_decode($response['posData'], true);
-		$response['posData'] = $response['posData']['posData'];
+  try {
+    if (!$apiKey)
+      $apiKey = $bpOptions['apiKey'];
 
-		return $response;
-	} catch (Exception $e) {
-		if($bpOptions['useLogging'])
-			bpLog('Error: ' . $e->getMessage());
-		return 'Error: ' . $e->getMessage();
-	}
+    $response = bpCurl('https://bitpay.com/api/invoice/'.$invoiceId, $apiKey);
+
+    if (is_string($response))
+      return $response; // error
+
+    $response['posData'] = json_decode($response['posData'], true);
+    $response['posData'] = $response['posData']['posData'];
+
+    return $response;
+  } catch (Exception $e) {
+    if($bpOptions['useLogging'])
+      bpLog('Error: ' . $e->getMessage());
+    return 'Error: ' . $e->getMessage();
+  }
 }
 
 /**
@@ -293,12 +294,12 @@ function bpGetInvoice($invoiceId, $apiKey=false) {
  *
  */
 function bpHash($data, $key) {
-	try {
-		$hmac = base64_encode(hash_hmac('sha256', $data, $key, TRUE));
-		return strtr($hmac, array('+' => '-', '/' => '_', '=' => ''));
-	} catch (Exception $e) {
-		if($bpOptions['useLogging'])
-			bpLog('Error: ' . $e->getMessage());
-		return 'Error: ' . $e->getMessage();
-	}
+  try {
+    $hmac = base64_encode(hash_hmac('sha256', $data, $key, TRUE));
+    return strtr($hmac, array('+' => '-', '/' => '_', '=' => ''));
+  } catch (Exception $e) {
+    if($bpOptions['useLogging'])
+      bpLog('Error: ' . $e->getMessage());
+    return 'Error: ' . $e->getMessage();
+  }
 }
