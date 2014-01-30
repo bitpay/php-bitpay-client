@@ -51,3 +51,6 @@ Version 1.1, rich@bitpay.com
   - Improved error handling, documentation
   - Added license information
   - Added automatic logging functionality (off by default)
+
+Version 1.2, rich@bitpay.com
+  - Added posData length checking (using hash can go over 100 char limit)
