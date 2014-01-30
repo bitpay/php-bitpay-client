@@ -133,7 +133,7 @@ function bpCurl($url, $apiKey, $post = false) {
     // Invalid parameter specified
     if($bpOptions['useLogging'])
       bpLog('Error: You must supply non-empty url and apiKey parameters.');
-      return array('error' => 'You must supply non-empty url and apiKey parameters.');
+    return array('error' => 'You must supply non-empty url and apiKey parameters.');
   }
 
 }
@@ -149,7 +149,7 @@ function bpCurl($url, $apiKey, $post = false) {
  */
 function bpCreateInvoice($orderId, $price, $posData, $options = array()) {
   // $orderId: Used to display an orderID to the buyer. In the account summary view, this value is used to
-  // identify a ledger entry if present.
+  // identify a ledger entry if present. Maximum length is 100 characters.
   //
   // $price: by default, $price is expressed in the currency you set in bp_options.php.  The currency can be
   // changed in $options.
@@ -157,6 +157,11 @@ function bpCreateInvoice($orderId, $price, $posData, $options = array()) {
   // $posData: this field is included in status updates or requests to get an invoice.  It is intended to be used by
   // the merchant to uniquely identify an order associated with an invoice in their system.  Aside from that, Bit-Pay does
   // not use the data in this field.  The data in this field can be anything that is meaningful to the merchant.
+  // Maximum length is 100 characters.
+  //
+  // Note:  Using the posData hash option will APPEND the hash to the posData field and could push you over the 100
+  //        character limit.
+  //
   //
   // $options keys can include any of:
   //	'itemDesc', 'itemCode', 'notificationEmail', 'notificationURL', 'redirectURL', 'apiKey'
@@ -176,9 +181,13 @@ function bpCreateInvoice($orderId, $price, $posData, $options = array()) {
       $pos['hash'] = bpHash(serialize($posData), $options['apiKey']);
 
     $options['posData'] = json_encode($pos);
+
+    if(strlen($options['posData']) > 100)
+      return array('error' => 'posData > 100 character limit. Are you using the posData hash?');
+
     $options['orderID'] = $orderId;
     $options['price'] = $price;
-    
+
     $postOptions = array('orderID', 'itemDesc', 'itemCode', 'notificationEmail', 'notificationURL', 'redirectURL', 
                          'posData', 'price', 'currency', 'physical', 'fullNotifications', 'transactionSpeed', 'buyerName', 
                          'buyerAddress1', 'buyerAddress2', 'buyerCity', 'buyerState', 'buyerZip', 'buyerEmail', 'buyerPhone');
