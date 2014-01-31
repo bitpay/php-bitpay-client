@@ -54,3 +54,6 @@ Version 1.1, rich@bitpay.com
 
 Version 1.2, rich@bitpay.com
   - Added posData length checking (using hash can go over 100 char limit)
+
+Version 1.3, rich@bitpay.com
+  - Added version & usage statistics tracking
