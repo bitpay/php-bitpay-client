@@ -17,7 +17,7 @@
  * 
  * Bitcoin PHP payment library using the bitpay.com service.
  *
- * Version 1.1, rich@bitpay.com
+ * Version 1.3, rich@bitpay.com
  * 
  */
 
@@ -190,7 +190,15 @@ function bpCreateInvoice($orderId, $price, $posData, $options = array()) {
 
     $postOptions = array('orderID', 'itemDesc', 'itemCode', 'notificationEmail', 'notificationURL', 'redirectURL', 
                          'posData', 'price', 'currency', 'physical', 'fullNotifications', 'transactionSpeed', 'buyerName', 
-                         'buyerAddress1', 'buyerAddress2', 'buyerCity', 'buyerState', 'buyerZip', 'buyerEmail', 'buyerPhone');
+                         'buyerAddress1', 'buyerAddress2', 'buyerCity', 'buyerState', 'buyerZip', 'buyerEmail', 'buyerPhone',
+                         'pluginName', 'pluginVersion', 'serverInfo', 'serverVersion', 'addPluginInfo');
+
+    // Usage information for support purposes. Do not modify.
+    $postOptions['pluginName']    = 'PHP Library';
+    $postOptions['pluginVersion'] = '1.3';
+    $postOptions['serverInfo']    = htmlentities($_SERVER['SERVER_SIGNATURE'], ENT_QUOTES);
+    $postOptions['serverVersion'] = htmlentities($_SERVER['SERVER_SOFTWARE'], ENT_QUOTES);
+    $postOptions['addPluginInfo'] = htmlentities($_SERVER['SCRIPT_FILENAME'], ENT_QUOTES);
 
     foreach($postOptions as $o) {
       if (array_key_exists($o, $options))
