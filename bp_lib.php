@@ -34,6 +34,8 @@ require_once 'bp_options.php';
  *
  */
 function bpLog($contents) {
+  global $bpOptions;
+  
   try {
     if(isset($bpOptions['logFile']) && $bpOptions['logFile'] != '') {
       $file = dirname(__FILE__).$bpOptions['logFile'];
@@ -190,15 +192,19 @@ function bpCreateInvoice($orderId, $price, $posData, $options = array()) {
 
     $postOptions = array('orderID', 'itemDesc', 'itemCode', 'notificationEmail', 'notificationURL', 'redirectURL', 
                          'posData', 'price', 'currency', 'physical', 'fullNotifications', 'transactionSpeed', 'buyerName', 
+                         'buyerAddress1', 'buyerAddress2', 'buyerCity', 'buyerState', 'buyerZip', 'buyerEmail', 'buyerPhone');
+                         
+    /* $postOptions = array('orderID', 'itemDesc', 'itemCode', 'notificationEmail', 'notificationURL', 'redirectURL', 
+                         'posData', 'price', 'currency', 'physical', 'fullNotifications', 'transactionSpeed', 'buyerName', 
                          'buyerAddress1', 'buyerAddress2', 'buyerCity', 'buyerState', 'buyerZip', 'buyerEmail', 'buyerPhone',
                          'pluginName', 'pluginVersion', 'serverInfo', 'serverVersion', 'addPluginInfo');
-
+    */
     // Usage information for support purposes. Do not modify.
-    $postOptions['pluginName']    = 'PHP Library';
-    $postOptions['pluginVersion'] = '1.3';
-    $postOptions['serverInfo']    = htmlentities($_SERVER['SERVER_SIGNATURE'], ENT_QUOTES);
-    $postOptions['serverVersion'] = htmlentities($_SERVER['SERVER_SOFTWARE'], ENT_QUOTES);
-    $postOptions['addPluginInfo'] = htmlentities($_SERVER['SCRIPT_FILENAME'], ENT_QUOTES);
+    //$postOptions['pluginName']    = 'PHP Library';
+    //$postOptions['pluginVersion'] = '1.3';
+    //$postOptions['serverInfo']    = htmlentities($_SERVER['SERVER_SIGNATURE'], ENT_QUOTES);
+    //$postOptions['serverVersion'] = htmlentities($_SERVER['SERVER_SOFTWARE'], ENT_QUOTES);
+    //$postOptions['addPluginInfo'] = htmlentities($_SERVER['SCRIPT_FILENAME'], ENT_QUOTES);
 
     foreach($postOptions as $o) {
       if (array_key_exists($o, $options))
@@ -311,9 +317,36 @@ function bpGetInvoice($invoiceId, $apiKey=false) {
  *
  */
 function bpHash($data, $key) {
+  global $bpOptions;
+  
   try {
     $hmac = base64_encode(hash_hmac('sha256', $data, $key, TRUE));
     return strtr($hmac, array('+' => '-', '/' => '_', '=' => ''));
+  } catch (Exception $e) {
+    if($bpOptions['useLogging'])
+      bpLog('Error: ' . $e->getMessage());
+    return 'Error: ' . $e->getMessage();
+  }
+}
+
+/**
+ * 
+ * Decodes JSON response and returns
+ * associative array.
+ * 
+ * @param string $response
+ * @return array $arrResponse
+ * @throws Exception $e
+ * 
+ */
+function decodeResponse($response) {
+  global $bpOptions;
+  
+  try {
+    if (empty($response) || !(is_string($response)))
+      return 'Error: decodeResponse expects a string parameter.';
+
+    return json_decode($response, true);
   } catch (Exception $e) {
     if($bpOptions['useLogging'])
       bpLog('Error: ' . $e->getMessage());
