@@ -40,6 +40,29 @@ Usage
    automatically by setting the useLogging option to true in the bp_options file.  The log file
    could potentially get very large, depending on usage, so monitor closely or only use
    during debugging.
+4. Responses from the BitPay network are JSON. You can use the new decodeResponse() function to
+   convert these to an associative array, if needed.
+
+
+Troubleshooting
+---------------
+The official BitPay API documentation should always be your first reference for development:
+https://bitpay.com/downloads/bitpayApi.pdf
+
+1. Verify that your "notificationURL" for the invoice is "https://" (not "http://")
+2. Ensure a valid SSL certificate is installed on your server. Also ensure your root CA cert is
+   updated. If your CA cert is not current, you will see curl SSL verification errors.
+3. Verify that your callback handler at the "notificationURL" is properly receiving POSTs. You
+   can verify this by POSTing your own messages to the server from a tool like Chrome Postman.
+4. Verify that the POST data received is properly parsed and that the logic that updates the
+   order status on the merchants web server is correct.
+5. Verify that the merchants web server is not blocking POSTs from servers it may not
+   recognize. Double check this on the firewall as well, if one is being used.
+6. Use the logging functionality to log errors during development. If you contact BitPay support,
+   they will ask to see the log file to help diagnose any problems.
+7. Check the version of this PHP library agains the official repository to ensure you are using
+   the latest version. Your issue might have been addressed in a newer version of the library.
+8. If all else fails, send an email describing your issue *in detail* to support@bitpay.com
 
 
 Change Log
@@ -56,4 +79,6 @@ Version 1.2, rich@bitpay.com
   - Added posData length checking (using hash can go over 100 char limit)
 
 Version 1.3, rich@bitpay.com
-  - Added version & usage statistics tracking
+  - Added version & usage statistics tracking stub
+  - Added decodeResponse function
+  - Fixed missing global options references
