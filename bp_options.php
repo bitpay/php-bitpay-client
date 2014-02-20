@@ -16,7 +16,7 @@
  * THE SOFTWARE.
  * 
  * Bitcoin PHP payment library using the bitpay.com service.
- * Version 1.1
+ * Version 1.3
  * 
  */
 
