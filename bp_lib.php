@@ -339,7 +339,7 @@ function bpHash($data, $key) {
  * @throws Exception $e
  * 
  */
-function decodeResponse($response) {
+function bpDecodeResponse($response) {
   global $bpOptions;
   
   try {
