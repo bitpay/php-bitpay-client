@@ -42,6 +42,8 @@ Usage
    during debugging.
 4. Responses from the BitPay network are JSON. You can use the new decodeResponse() function to
    convert these to an associative array, if needed.
+5. The bpCurrencyList() & bpGetRate() functions can be used to retrieve a list of all supported
+   currencies and particular BTC/currency rates.
 
 
 Troubleshooting
@@ -82,3 +84,6 @@ Version 1.3, rich@bitpay.com
   - Added version & usage statistics tracking stub
   - Added decodeResponse function
   - Fixed missing global options references
+
+Version 1.4, rich@bitpay.com
+  - Added bpCurrencyList() & bpGetRate() functions
