@@ -17,7 +17,7 @@
  * 
  * Bitcoin PHP payment library using the bitpay.com service.
  *
- * Version 1.3, rich@bitpay.com
+ * Version 1.4, rich@bitpay.com
  * 
  */
 
@@ -347,6 +347,69 @@ function bpDecodeResponse($response) {
       return 'Error: decodeResponse expects a string parameter.';
 
     return json_decode($response, true);
+  } catch (Exception $e) {
+    if($bpOptions['useLogging'])
+      bpLog('Error: ' . $e->getMessage());
+    return 'Error: ' . $e->getMessage();
+  }
+}
+
+/**
+ *
+ * Retrieves a list of all supported currencies
+ * and returns associative array.
+ * 
+ * @param none
+ * @return array $currencies
+ * @throws Exception $e
+ * 
+ */
+function bpCurrencyList() {
+  global $bpOptions;
+
+  $currencies = array();
+	$rate_url = 'https://bitpay.com/api/rates';
+
+  try {
+	  $clist = json_decode(file_get_contents($rate_url),true);
+
+	  foreach($clist as $key => $value)
+		  $currencies[$value['code']] = $value['name'];
+
+	  return $currencies;
+  } catch (Exception $e) {
+    if($bpOptions['useLogging'])
+      bpLog('Error: ' . $e->getMessage());
+    return 'Error: ' . $e->getMessage();
+  }
+}
+
+/**
+ * 
+ * Retrieves the current rate based on $code.
+ * The default code us USD, so calling the 
+ * function without a parameter will return
+ * the current BTC/USD price.
+ * 
+ * @param string $code
+ * @return string $rate
+ * @throws Exception $e
+ * 
+ */
+function bpGetRate($code = 'USD') {
+  global $bpOptions;
+
+	$rate_url = 'https://bitpay.com/api/rates';
+
+  try {
+	  $clist = json_decode(file_get_contents($rate_url),true);
+
+	  foreach($clist as $key => $value) {
+      if($value['code'] == $code)
+		    $rate = number_format($value['rate'], 2, '.', '');
+	  }
+	  
+	  return $rate;
   } catch (Exception $e) {
     if($bpOptions['useLogging'])
       bpLog('Error: ' . $e->getMessage());
