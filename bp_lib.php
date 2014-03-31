@@ -17,7 +17,7 @@
  * 
  * Bitcoin PHP payment library using the bitpay.com service.
  *
- * Version 1.4, rich@bitpay.com
+ * Version 1.5, rich@bitpay.com
  * 
  */
 
@@ -89,6 +89,7 @@ function bpCurl($url, $apiKey, $post = false) {
                   'Content-Type: application/json',
                   'Content-Length: ' . $length,
                   'Authorization: Basic ' . $uname,
+                  'X-BitPay-Plugin-Info: phplib1.5',
         );
 
         curl_setopt($curl, CURLOPT_URL, $url);
