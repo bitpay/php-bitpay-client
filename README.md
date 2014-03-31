@@ -1,4 +1,4 @@
-©2011,2012,2013,2014 BITPAY, INC.
+<strong>(c)2011,2012,2013,2014 BITPAY, INC.</strong>
 
 Permission is hereby granted to any person obtaining a copy of this software
 and associated documentation for use and/or modification in association with
@@ -87,3 +87,6 @@ Version 1.3, rich@bitpay.com
 
 Version 1.4, rich@bitpay.com
   - Added bpCurrencyList() & bpGetRate() functions
+
+Version 1.5, rich@bitpay.com
+  - Added new HTTP header for version tracking & support purposes
