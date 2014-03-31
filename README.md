@@ -1,4 +1,4 @@
-<strong>2011,2012,2013,2014 BITPAY, INC.</strong>
+<strong>(c)2011,2012,2013,2014 BITPAY, INC.</strong>
 
 Permission is hereby granted to any person obtaining a copy of this software
 and associated documentation for use and/or modification in association with
