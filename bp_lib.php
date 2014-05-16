@@ -17,7 +17,7 @@
  * 
  * Bitcoin PHP payment library using the bitpay.com service.
  *
- * Version 1.5, rich@bitpay.com
+ * Version 1.6, rich@bitpay.com
  * 
  */
 
