@@ -61,7 +61,7 @@ https://bitpay.com/downloads/bitpayApi.pdf
 5. Verify that the merchants web server is not blocking POSTs from servers it may not
    recognize. Double check this on the firewall as well, if one is being used.
 6. Use the logging functionality to log errors during development. If you contact BitPay support,
-   they will ask to see the log file to help diagnose any problems.
+   they will ask to see the server log file to help diagnose any problems.
 7. Check the version of this PHP library agains the official repository to ensure you are using
    the latest version. Your issue might have been addressed in a newer version of the library.
 8. If all else fails, send an email describing your issue *in detail* to support@bitpay.com
@@ -90,3 +90,6 @@ Version 1.4, rich@bitpay.com
 
 Version 1.5, rich@bitpay.com
   - Added new HTTP header for version tracking & support purposes
+
+Version 1.6, rich@bitpau.com
+  - Fix to use server logging functionality
