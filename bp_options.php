@@ -16,7 +16,7 @@
  * THE SOFTWARE.
  * 
  * Bitcoin PHP payment library using the bitpay.com service.
- * Version 1.6
+ * Version 1.7
  * 
  */
 
@@ -66,5 +66,11 @@ $bpOptions['transactionSpeed'] = 'low';
 // Change to 'true' if you would like automatic logging of errors.
 // Otherwise you will have to call the bpLog function manually to log any information.
 $bpOptions['useLogging'] = false;
+
+// Change to 'true' if you want to use the testnet development environment at
+// test.bitpay.com. See
+// http://blog.bitpay.com/2014/05/13/introducing-the-bitpay-test-environment.html
+// for details.
+$bpOptions['testnet'] = false;
 
 ?>
