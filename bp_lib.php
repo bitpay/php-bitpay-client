@@ -54,6 +54,8 @@ function bpLog($contents) {
  *
  */
 function bpHost() {
+  global $bpOptions;
+
   if ($bpOptions['testnet'] == true)
     return 'test.bitpay.com';
   return 'bitpay.com';
@@ -224,7 +226,7 @@ function bpCreateInvoice($orderId, $price, $posData, $options = array()) {
     else
       $post = bpJSONencode($post);
 
-    $response = bpCurl('https://' . $bpHost() . '/api/invoice/', $options['apiKey'], $post);
+    $response = bpCurl('https://' . bpHost() . '/api/invoice/', $options['apiKey'], $post);
 
     return $response;
 
@@ -301,7 +303,7 @@ function bpGetInvoice($invoiceId, $apiKey=false) {
     if (!$apiKey)
       $apiKey = $bpOptions['apiKey'];
 
-    $response = bpCurl('https://' . $bpHost() . '/api/invoice/' . $invoiceId, $apiKey);
+    $response = bpCurl('https://' . bpHost() . '/api/invoice/' . $invoiceId, $apiKey);
 
     if (is_string($response))
       return $response; // error
@@ -386,7 +388,7 @@ function bpCurrencyList() {
   global $bpOptions;
 
   $currencies = array();
-  $rate_url = 'https://' . $bpHost() . '/api/rates';
+  $rate_url = 'https://' . bpHost() . '/api/rates';
 
   try {
     if(function_exists('json_decode'))
@@ -420,7 +422,7 @@ function bpCurrencyList() {
 function bpGetRate($code = 'USD') {
   global $bpOptions;
 
-  $rate_url = 'https://' . $bpHost() . '/api/rates';
+  $rate_url = 'https://' . bpHost() . '/api/rates';
 
   try {
     if(function_exists('json_decode'))
