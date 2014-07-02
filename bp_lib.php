@@ -54,7 +54,7 @@ function bpLog($contents) {
  *
  */
 function bpHost() {
-  if (bpOptions['testnet'] == true)
+  if ($bpOptions['testnet'] == true)
     return 'test.bitpay.com';
   return 'bitpay.com';
 }
