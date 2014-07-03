@@ -91,5 +91,5 @@ Version 1.4, rich@bitpay.com
 Version 1.5, rich@bitpay.com
   - Added new HTTP header for version tracking & support purposes
 
-Version 1.6, rich@bitpau.com
+Version 1.6, rich@bitpay.com
   - Fix to use server logging functionality
