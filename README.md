@@ -93,3 +93,7 @@ Version 1.5, rich@bitpay.com
 
 Version 1.6, rich@bitpau.com
   - Fix to use server logging functionality
+
+Version 1.7, mike@gogulski.com
+  - Add support for BitPay testnet development environment
+
