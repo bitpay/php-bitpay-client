@@ -1,8 +1,17 @@
-<strong>(c)2011,2012,2013,2014 BITPAY, INC.</strong>
+<strong>Copyright (c) 2011-2014 BITPAY, INC.</strong>
 
-Permission is hereby granted to any person obtaining a copy of this software
-and associated documentation for use and/or modification in association with
-the bitpay.com service.
+
+The MIT License (MIT)
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -13,7 +22,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
 
-Bitcoin PHP payment library using the bitpay.com service.
+<strong>Bitcoin PHP payment library using the bitpay.com service. You can always 
+download the latest version at https://github.com/bitpay/php-client</strong>
 
 
 Installation
@@ -23,7 +33,7 @@ Copy these files into your custom shopping cart implementation directory.
 
 Configuration
 -------------
-NOTE: PHP 5.x, curl, and SSL is required for use of this BitPay PHP code library.
+NOTE: PHP 5.3+, curl, and SSL is required for use of this BitPay PHP code library.
 
 1. Create an API key at bitpay.com by clicking My Account > API Access Keys > Add New API Key.
 2. In the bp_options.php file, configure the options specific to your implementation.
@@ -97,3 +107,10 @@ Version 1.6, rich@bitpay.com
 Version 1.7, mike@gogulski.com
   - Add support for BitPay testnet development environment
 
+Version 1.8, rich@bitpay.com
+  - Improved the quality of the error messages
+  - Added MIT license file for clarification
+  - Added additional code comments to assist with development
+  - Improved cURL error handling and responses
+  - Fixed bug with bpLog where non-string values were throwing Warnings
+  - Added null/missing value checks in critical areas
