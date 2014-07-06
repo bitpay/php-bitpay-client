@@ -127,7 +127,7 @@ function bpCurl($url, $apiKey, $post = false) {
         curl_setopt($curl, CURLOPT_POST, 1);
         curl_setopt($curl, CURLOPT_POSTFIELDS, $post);
 
-        $length = strlen($post);
+        $content_length = strlen($post);
       }
 
       $uname = base64_encode($apiKey);
@@ -165,7 +165,7 @@ function bpCurl($url, $apiKey, $post = false) {
          * For a complete list and description of all curl error codes
          * see: http://curl.haxx.se/libcurl/c/libcurl-errors.html
          */
-        $curl_error_number = curl_errno();
+        $curl_error_number = curl_errno($curl);
 
         if ($responseString === false || $curl_error_number != 0) {
           $curl_error_description = curl_strerror($curl_error_number);
@@ -647,7 +647,7 @@ function bpJSONdecode($jsondata) {
 
     if ($level > 0) {
  
-      while($ x< strlen($jsondata) && $level > 0) {
+      while($x< strlen($jsondata) && $level > 0) {
         $val .= $jsondata[$x];
         $x++;
 
