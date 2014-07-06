@@ -1,7 +1,15 @@
+# This is restrictive by default.
+# Update with correct access privs 
+# consistent with your development.
 Order deny,allow
 Deny from all
 
-<Files createinvoice.php>
-order allow,deny
-allow from all
+<Files bp_options.php>
+  Order allow,deny
+  Allow from all
+</Files>
+
+<Files bp_lib.php>
+  Order allow,deny
+  Allow from all
 </Files>
