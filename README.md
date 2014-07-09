@@ -33,7 +33,7 @@ Copy these files into your custom shopping cart implementation directory.
 
 Configuration
 -------------
-NOTE: PHP 5.3+, curl, and SSL is required for use of this BitPay PHP code library.
+NOTE: PHP 5.3+, curl, and SSL are required for use of this BitPay PHP code library.
 
 1. Create an API key at bitpay.com by clicking My Account > API Access Keys > Add New API Key.
 2. In the bp_options.php file, configure the options specific to your implementation.
@@ -114,3 +114,8 @@ Version 1.8, rich@bitpay.com
   - Improved cURL error handling and responses
   - Fixed bug with bpLog where non-string values were throwing Warnings
   - Added null/missing value checks in critical areas
+
+Version 1.9, rich@bitpay.com
+  - Corrected cURL option parameters per PHP docs
+  - Added fallback function for cURL str_error() (PHP >=5.5.0)
+  - Fixed error logging to handle resources correctly
