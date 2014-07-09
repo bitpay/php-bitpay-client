@@ -38,14 +38,12 @@ define('VERSION', '1.8');
 
 
 /**
- *
  * Writes $contents to the system logger which is usually the webserver's error log 
  * but can be changed depending on your development requirements.
  *
  * @param mixed $contents
  * @return boolean
  * @throws Exception $e 
- *
  */
 function bpLog($contents) {
   global $bpOptions;
@@ -77,13 +75,11 @@ function bpLog($contents) {
 }
 
 /**
- *
  * Returns the correct API service endpoint hostname depending on whether the
  * production or test environment is selected.
  *
  * @param none
  * @return string $host
- *
  */
 function bpHost() {
   global $bpOptions;
@@ -102,13 +98,11 @@ function bpHost() {
 }
 
 /**
- *
  * Handles post/get to BitPay via curl.
  *
  * @param string $url, string $apiKey, boolean $post
  * @return mixed $response
  * @throws Exception $e
- *
  */
 function bpCurl($url, $apiKey, $post = false) {
   global $bpOptions;	
@@ -244,14 +238,12 @@ function bpCurl($url, $apiKey, $post = false) {
 }
 
 /**
- *
  * Creates BitPay invoice via bpCurl.  More information regarding the various options are explained
  * below.  For the official API documentation, see: https://bitpay.com/downloads/bitpayApi.pdf
  *
  * @param string $orderId, string $price, string $posData, array $options
  * @return array $response
  * @throws Exception $e
- *
  */
 function bpCreateInvoice($orderId, $price, $posData = '', $options = array()) {
 
@@ -270,7 +262,6 @@ function bpCreateInvoice($orderId, $price, $posData = '', $options = array()) {
    * Note:  Using the posData hash option will APPEND the hash to the posData field and could push you over the 100
    *        character limit.
    *
-   *
    * $options keys can include any of:
    *	'itemDesc', 'itemCode', 'notificationEmail', 'notificationURL', 'redirectURL', 'apiKey'
    *	'currency', 'physical', 'fullNotifications', 'transactionSpeed', 'buyerName',
@@ -278,7 +269,6 @@ function bpCreateInvoice($orderId, $price, $posData = '', $options = array()) {
    *
    * If a given option is not provided here, the value of that option will default to what is found in bp_options.php
    * (see api documentation for information on these options).
-   *
    */
 
   global $bpOptions;	
@@ -334,13 +324,11 @@ function bpCreateInvoice($orderId, $price, $posData = '', $options = array()) {
 }
 
 /**
- *
  * Call from your notification handler to convert $_POST data to an object containing invoice data
  *
  * @param boolean $apiKey
  * @return mixed $json
  * @throws Exception $e
- *
  */
 function bpVerifyNotification($apiKey = false) {
   global $bpOptions;
@@ -391,13 +379,11 @@ function bpVerifyNotification($apiKey = false) {
 }
 
 /**
- *
  * Retrieves an invoice from BitPay.  $options can include 'apiKey'
  *
  * @param string $invoiceId, boolean $apiKey
  * @return mixed $json
  * @throws Exception $e
- *
  */
 function bpGetInvoice($invoiceId, $apiKey=false) {
   global $bpOptions;
@@ -432,14 +418,12 @@ function bpGetInvoice($invoiceId, $apiKey=false) {
 }
 
 /**
- *
  * Generates a base64 encoded keyed hash using the HMAC method. For more 
  * information, see: http://www.php.net/manual/en/function.hash-hmac.php
  *
  * @param string $data, string $key
  * @return string $hmac
  * @throws Exception $e
- *
  */
 function bpHash($data, $key) {
   global $bpOptions;
@@ -464,13 +448,11 @@ function bpHash($data, $key) {
 }
 
 /**
- * 
  * Decodes JSON response and returns an associative array.
  * 
  * @param string $response
  * @return array $arrResponse
  * @throws Exception $e
- * 
  */
 function bpDecodeResponse($response) {
   global $bpOptions;
@@ -494,13 +476,11 @@ function bpDecodeResponse($response) {
 }
 
 /**
- *
  * Retrieves a list of all supported currencies and returns an associative array.
  * 
  * @param none
  * @return array $currencies
  * @throws Exception $e
- * 
  */
 function bpCurrencyList() {
   global $bpOptions;
@@ -529,14 +509,12 @@ function bpCurrencyList() {
 }
 
 /**
- * 
  * Retrieves the current rate based on $code. The default code us USD, so calling the 
  * function without a parameter will return the current BTC/USD price.
  * 
  * @param string $code
  * @return string $rate
  * @throws Exception $e
- * 
  */
 function bpGetRate($code = 'USD') {
   global $bpOptions;
@@ -568,7 +546,6 @@ function bpGetRate($code = 'USD') {
 }
 
 /**
- * 
  * Fallback JSON decoding function in the event you do not have the PHP JSON extension installed and
  * cannot install it.  This function takes an encoded string and returns an associative array.
  * 
@@ -708,13 +685,11 @@ function bpJSONdecode($jsondata) {
 }
 
 /**
- * 
  * Fallback JSON encoding function in the event you do not have the PHP JSON extension installed and
  * cannot install it.  This function takes data in various forms and returns a JSON encoded string.
  * 
  * @param mixed $data
  * @return string $jsondata
- * 
  */
 function bpJSONencode($data) {
   if (is_array($data)) {
@@ -754,10 +729,9 @@ function bpJSONencode($data) {
 }
 
 /**
- *
- * Fallback cURL error string function in the event you do not have PHP >= 5.5.0 installed.  This function takes
- * data in various forms and returns a JSON encoded string.  These cURL error codes and descriptions were retrieved
- * from the official libcurl error documentation.  See: http://curl.haxx.se/libcurl/c/libcurl-errors.html
+ * Fallback cURL error string function in the event you do not have PHP >= 5.5.0 installed.  These cURL 
+ * error codes and descriptions were retrieved from the official libcurl error documentation.  See: 
+ * http://curl.haxx.se/libcurl/c/libcurl-errors.html
  *
  * @param integer $errorno
  * @return string $error_description
