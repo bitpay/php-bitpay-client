@@ -34,7 +34,7 @@ require_once 'bp_options.php';
 /*
  * BitPay PHP Client Library Version
  */
-define('VERSION', '1.8');
+define('VERSION', '1.9');
 
 
 /**
