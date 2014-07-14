@@ -2,19 +2,21 @@
 
 /**
  * Copyright (c) 2011-2014 BITPAY, INC.
+ *  
+ * Bitcoin PHP payment library using the bitpay.com service. You can always 
+ * download the latest version at https://github.com/bitpay/php-client
+ * 
+ * PHP Version 5
+ * 
+ * License: Permission is hereby granted, free of charge, to any person obtaining
+ * a copy of this software and associated documentation files (the "Software"), to
+ * deal in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+ * of the Software, and to permit persons to whom the Software is furnished to do
+ * so, subject to the following conditions:
  *
- *
- * The MIT License (MIT)
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in all 
+ * copies or substantial portions of the Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -24,9 +26,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  * 
- *
- * Bitcoin PHP payment library using the bitpay.com service. You can always 
- * download the latest version at https://github.com/bitpay/php-client
+ * @category   Bitcoin
+ * @package    Bitcoin\BitPay\PHP-Client-Library
+ * @author     Rich Morgan <rich@bitpay.com>
+ * @copyright  2014 BITPAY, INC.
+ * @license    http://opensource.org/licenses/MIT  The MIT License (MIT)
+ * @version    Release 1.9
+ * @link       https://github.com/bitpay/php-client
+ * @since      File available since Release 0.1
  */
 
 require_once 'bp_options.php';
