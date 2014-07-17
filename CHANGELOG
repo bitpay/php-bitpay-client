@@ -1,0 +1,40 @@
+Version 1.9, rich@bitpay.com
+  * Corrected cURL option parameters per PHP docs
+  * Added fallback function for cURL str_error() (PHP >=5.5.0)
+  * Fixed error logging to handle resources correctly
+
+Version 1.8, rich@bitpay.com
+  * Improved the quality of the error messages
+  * Added MIT license file for clarification
+  * Added additional code comments to assist with development
+  * Improved cURL error handling and responses
+  * Fixed bug with bpLog where non-string values were throwing Warnings
+  * Added null/missing value checks in critical areas
+
+Version 1.7, mike@gogulski.com
+  * Add support for BitPay testnet development environment
+
+Version 1.6, rich@bitpay.com
+  * Fix to use server logging functionality
+
+Version 1.5, rich@bitpay.com
+  * Added new HTTP header for version tracking & support purposes
+
+Version 1.4, rich@bitpay.com
+  * Added bpCurrencyList() & bpGetRate() functions
+
+Version 1.3, rich@bitpay.com
+  * Added version & usage statistics tracking stub
+  * Added decodeResponse function
+  * Fixed missing global options references
+
+Version 1.2, rich@bitpay.com
+  * Added posData length checking (using hash can go over 100 char limit)
+
+Version 1.1, rich@bitpay.com
+  * Improved error handling, documentation
+  * Added license information
+  * Added automatic logging functionality (off by default)
+
+Version 1
+  * Initial version

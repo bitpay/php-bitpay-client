@@ -1,46 +1,21 @@
-<strong>Copyright (c) 2011-2014 BITPAY, INC.</strong>
+bitpay/php-client
+=================
 
+# Installation
 
-The MIT License (MIT)
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-
-
-<strong>Bitcoin PHP payment library using the bitpay.com service. You can always 
-download the latest version at https://github.com/bitpay/php-client</strong>
-
-
-Installation
-------------
 Copy these files into your custom shopping cart implementation directory.
 
 
-Configuration
--------------
+# Configuration
+
 NOTE: PHP 5.3+, curl, and SSL are required for use of this BitPay PHP code library.
 
 1. Create an API key at bitpay.com by clicking My Account > API Access Keys > Add New API Key.
 2. In the bp_options.php file, configure the options specific to your implementation.
 
 
-Usage
------
+# Usage
+
 1. In your shopping cart code, call bpCreateInvoice() with the appropriate orderID, price,
    posData and options.
 2. The library will attempt to POST the new invoice information via curl to the BitPay
@@ -55,9 +30,17 @@ Usage
 5. The bpCurrencyList() & bpGetRate() functions can be used to retrieve a list of all supported
    currencies and particular BTC/currency rates.
 
+# Support
 
-Troubleshooting
----------------
+## BitPay Support
+
+* [GitHub Issues](https://github.com/bitpay/php-client/issues)
+  * Open an issue if you are having issues with this plugin.
+* [Support](https://support.bitpay.com)
+  * BitPay merchant support documentation
+
+# Troubleshooting
+
 The official BitPay API documentation should always be your first reference for development:
 https://bitpay.com/downloads/bitpayApi.pdf
 
@@ -76,46 +59,33 @@ https://bitpay.com/downloads/bitpayApi.pdf
    the latest version. Your issue might have been addressed in a newer version of the library.
 8. If all else fails, send an email describing your issue *in detail* to support@bitpay.com
 
+# Contribute
 
-Change Log
-----------
-Version 1
-  - Initial version
+To contribute to this project, please fork and submit a pull request.
 
-Version 1.1, rich@bitpay.com
-  - Improved error handling, documentation
-  - Added license information
-  - Added automatic logging functionality (off by default)
+# License
 
-Version 1.2, rich@bitpay.com
-  - Added posData length checking (using hash can go over 100 char limit)
+Copyright (c) 2011-2014 BITPAY, INC.
+ 
+Bitcoin PHP payment library using the bitpay.com service. You can always 
+download the latest version at https://github.com/bitpay/php-client
 
-Version 1.3, rich@bitpay.com
-  - Added version & usage statistics tracking stub
-  - Added decodeResponse function
-  - Fixed missing global options references
+PHP Version 5
 
-Version 1.4, rich@bitpay.com
-  - Added bpCurrencyList() & bpGetRate() functions
-
-Version 1.5, rich@bitpay.com
-  - Added new HTTP header for version tracking & support purposes
-
-Version 1.6, rich@bitpay.com
-  - Fix to use server logging functionality
-
-Version 1.7, mike@gogulski.com
-  - Add support for BitPay testnet development environment
-
-Version 1.8, rich@bitpay.com
-  - Improved the quality of the error messages
-  - Added MIT license file for clarification
-  - Added additional code comments to assist with development
-  - Improved cURL error handling and responses
-  - Fixed bug with bpLog where non-string values were throwing Warnings
-  - Added null/missing value checks in critical areas
-
-Version 1.9, rich@bitpay.com
-  - Corrected cURL option parameters per PHP docs
-  - Added fallback function for cURL str_error() (PHP >=5.5.0)
-  - Fixed error logging to handle resources correctly
+License: Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the "Software"), to
+deal in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
+ 
+The above copyright notice and this permission notice shall be included in all 
+copies or substantial portions of the Software.
+ 
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
