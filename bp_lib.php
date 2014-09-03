@@ -55,7 +55,7 @@ define('VERSION', '1.9');
 function bpLog($contents) {
   global $bpOptions;
   
-  if (!isset($contents) || trim($contents) != '' || is_null($contents) || empty($contents))
+  if (!isset($contents) || trim($contents) == '' || is_null($contents) || empty($contents))
     return 'Error in bpLog(): Nothing to log was supplied. Usage: bpLog($contents)';
 
   try {
@@ -95,7 +95,7 @@ function bpHost() {
    * Safety check in case an older version of the option file is being used or the test option is
    * empty or not set at all.  Defaults to the live site.
    */
-  if (!isset($bpOptions['testnet']) || trim($bpOptions['testnet']) != '' || is_null($bpOptions['testnet']) || empty($bpOptions['testnet']))
+  if (!isset($bpOptions['testnet']) || trim($bpOptions['testnet']) == '' || is_null($bpOptions['testnet']) || empty($bpOptions['testnet']))
     $bpOptions['testnet'] == false;
 
   if ($bpOptions['testnet'] == true)
