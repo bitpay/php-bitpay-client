@@ -202,6 +202,7 @@ class Client extends ContainerAware implements ClientInterface
             sprintf('Basic %s', base64_encode($this->container->getParameter('bitpay.api_key')))
         );
         $request->setHeader('Content-Type', 'application/json');
+        $request->setHeader('X-Accept-Version', '2.0.0');
 
         return $request;
     }
