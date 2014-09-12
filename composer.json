@@ -20,7 +20,7 @@
         "monolog/monolog": "~1.10"
     },
     "require-dev": {
-        "phing/phing": "*",
+        "codegyre/robo": "*",
         "phpunit/phpunit": "*",
         "fzaninotto/faker": "*",
         "mikey179/vfsStream": "*"
