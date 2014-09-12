@@ -1,0 +1,9 @@
+#!/usr/bin/env php
+<?php
+// vim: set ft=php
+require_once __DIR__ . '/../vendor/autoload.php';
+
+use Bitpay\Console\Application;
+
+$app = new Application();
+$app->run();

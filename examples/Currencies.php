@@ -1,0 +1,11 @@
+<?php
+
+require __DIR__ . '/../vendor/autoload.php';
+
+$bitpay = new \Bitpay\Bitpay();
+
+$client     = $bitpay->get('client');
+$currencies = $client->getCurrencies();
+
+/** @var \Bitpay\Currency $currencies[0] **/
+var_dump($currencies[0]);
