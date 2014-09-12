@@ -22,7 +22,7 @@ Add to your composer.json file by hand.
     ...
     "require": {
         ...
-        "vendor/package": "VERSION"
+        "bitpay/php-client": "~2.0"
     }
     ...
 }
@@ -31,13 +31,13 @@ Add to your composer.json file by hand.
 Once you have added this, just run:
 
 ```bash
-php composer.phar update vendor/package
+php composer.phar update bitpay/php-client
 ```
 
 ### Install using composer
 
 ```bash
-php composer.phar require vendor/package:version
+php composer.phar require bitpay/php-client:~2.0
 ```
 
 # Usage
@@ -48,7 +48,7 @@ php composer.phar require vendor/package:version
 
 The MIT License (MIT)
 
-Copyright (c) 2014 BITPAY, INC.
+Copyright (c) 2014 BitPay, Inc.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
