@@ -1,0 +1,33 @@
+<?php
+
+namespace Bitpay\Network;
+
+/**
+ *
+ * @package Bitcore
+ */
+interface NetworkInterface
+{
+
+    /**
+     * Name of network, currently on livenet and testnet
+     *
+     * @return string
+     */
+    public function getName();
+
+    /**
+     * @return string
+     */
+    public function getAddressVersion();
+
+    /**
+     * The host that is used to interact with this network
+     *
+     * @see https://github.com/bitpay/insight
+     * @see https://github.com/bitpay/insight-api
+     *
+     * @return string
+     */
+    public function getApiHost();
+}

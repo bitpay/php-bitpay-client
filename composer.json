@@ -1,0 +1,37 @@
+{
+    "name": "bitpay/php-client",
+    "description": "PHP Library to work with the new Bitpay API",
+    "license": "MIT",
+    "minimum-stability": "stable",
+    "autoload": {
+        "psr-4": {
+            "": "src/"
+        }
+    },
+    "require": {
+        "php": ">=5.3.3",
+        "ext-curl": "*",
+        "ext-json": "*",
+        "ext-openssl": "*",
+        "psr/log": "~1.0",
+        "symfony/config": "~2.3",
+        "symfony/dependency-injection": "~2.3",
+        "symfony/console": "~2.3",
+        "monolog/monolog": "~1.10"
+    },
+    "require-dev": {
+        "phing/phing": "*",
+        "phpunit/phpunit": "*",
+        "fzaninotto/faker": "*",
+        "mikey179/vfsStream": "*"
+    },
+    "config": {
+        "bin-dir": "bin"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "2.0.x-dev"
+        }
+    },
+    "bin": ["bin/bitpay"]
+}
