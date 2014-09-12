@@ -1,4 +1,3 @@
-#!/usr/bin/env php
 <?php
 require_once 'phar://bitpay.phar/src/Bitpay/Autoloader.php';
 \Bitpay\Autoloader::register();
