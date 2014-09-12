@@ -2,6 +2,7 @@
 !/bin/bitpay
 /build/cache/
 /build/docs/
+/build/dist/
 /docs/_build/
 /vendor/
 composer.lock

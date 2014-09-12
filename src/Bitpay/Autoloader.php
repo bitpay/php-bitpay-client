@@ -47,9 +47,9 @@ class Autoloader
      */
     public static function autoload($class)
     {
-        if (0 !== strpos($class, 'Bitpay')) {
-            return;
-        }
+        //if (0 !== strpos($class, 'Bitpay')) {
+        //    return;
+        //}
 
         $file = __DIR__ . '/../' . str_replace(array('\\'), array('/'), $class) . '.php';
         if (is_file($file)) {
