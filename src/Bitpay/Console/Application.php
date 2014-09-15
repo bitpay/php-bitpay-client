@@ -26,10 +26,16 @@
 namespace Bitpay\Console;
 
 use Symfony\Component\Console\Application as BaseApplication;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputOption;
 
 class Application extends BaseApplication
 {
+
+    /**
+     * This is the version of the command line tool used
+     */
     const VERSION = '2.0.0';
 
     public function __construct()

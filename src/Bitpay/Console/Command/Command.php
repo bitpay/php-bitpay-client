@@ -25,12 +25,15 @@
 
 namespace Bitpay\Console\Command;
 
+use Bitpay\Bitpay;
 use Symfony\Component\Console\Command\Command as BaseCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class Command extends BaseCommand
 {
+
+    protected $container;
 
     /**
      * Used to make sure configuration is available
@@ -64,6 +67,12 @@ class Command extends BaseCommand
                 );
             }
         }
+
+        /**
+         * Find a better way to do this
+         */
+        $bitpay = new BitPay($input->getOption('config'));
+        $this->container = $bitpay->getContainer();
     }
 
     /**

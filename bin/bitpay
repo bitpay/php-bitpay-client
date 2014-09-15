@@ -29,6 +29,7 @@ if ('phar:' != substr(__FILE__, 0, 5)) {
 }
 
 use Bitpay\Console\Application;
+use Symfony\Component\Console\Input\ArgvInput;
 
 $app = new Application();
 $app->run();

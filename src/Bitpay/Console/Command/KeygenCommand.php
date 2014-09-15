@@ -28,7 +28,7 @@ namespace Bitpay\Console\Command;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Bitpay\Bitauth;
+use Bitpay\PrivateKey;
 
 /**
  * Command used to generate keypairs
@@ -83,8 +83,8 @@ HELP
          * the command needs to exit
          */
         if (!$input->getOption('overwrite')) {
-            $publicKey  = $input->getOption('home') . '/api.key';
-            $privateKey = $input->getOption('home') . '/api.pub';
+            $publicKey  = $input->getOption('home') . '/api.pub';
+            $privateKey = $input->getOption('home') . '/api.key';
             if (file_exists($publicKey) || file_exists($privateKey)) {
                 throw new \Exception(
                     sprintf(
@@ -125,21 +125,24 @@ HELP
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $output->writeln('Generating keys');
+        $output->writeln('<info>Generating Keys...</info>');
 
-        $bitauth = new Bitauth();
-        $keys    = $bitauth->generateSin();
-        $secret  = $bitauth->encrypt($input->getOption('password'), $keys['private']);
+        $private = new \Bitpay\PrivateKey($input->getOption('home').'/api.key');
+        $public  = new \Bitpay\PublicKey($input->getOption('home').'/api.pub');
+        $private->generate();
+        $public->setPrivateKey($private);
+        $public->generate();
 
-        file_put_contents($input->getOption('home') . '/api.key', $secret);
-        file_put_contents($input->getOption('home') . '/api.pub', (string) $keys['sin']);
+        $manager = $this->container->get('key_manager');
+        $manager->persist($private);
+        $manager->persist($public);
+
         chmod($input->getOption('home') . '/api.key', 0600);
         chmod($input->getOption('home') . '/api.pub', 0644);
 
         $output->writeln(
             array(
-                sprintf('Keys saved to "%s"', $input->getOption('home')),
-                sprintf('Your client identifier is "%s"', $keys['sin']),
+                sprintf('<info>Keys saved to "<comment>%s</comment>"</info>', $input->getOption('home')),
             )
         );
     }
