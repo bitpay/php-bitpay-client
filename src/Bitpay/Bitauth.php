@@ -26,7 +26,9 @@
 namespace Bitpay;
 
 use Bitpay\Util\Util;
+use Bitpay\Util\Gmp;
 use Bitpay\Util\Base58;
+use Bitpay\Util\Secp256k1;
 
 /**
  * This provides an easy interface for implementing Bitauth
@@ -74,16 +76,87 @@ class Bitauth
     }
 
     /**
+     * @param string $data
+     * @param PrivateKey $privateKey
      * @return string
      */
-    public function sign($data, $privateKey)
+    public function sign($data, \Bitpay\PrivateKey $privateKey)
     {
-        $hash = Util::sha256($data);
+        $e = Util::decodeHex($data);
+        do {
+            // supplied private key, 'd'
+            $d = '0x' . $privateKey->getHex();
 
-        $signature = $hash;
+            // get another random number 'k'
+            $k = openssl_random_pseudo_bytes(32, $cstrong);
+            $k_hex = '0x' . strtoupper(bin2hex($k));
 
-        return $signature;
+            // get the G point parameters (x,y)
+            $Gx = '0x' . substr(Secp256k1::G, 0, 62);
+            $Gy = '0x' . substr(Secp256k1::G, 64, 62);
+
+            // Calculate a new curve point from Q=k*G (x1,y1)
+            $P = array('x' => $Gx, 'y' => $Gy);
+            $R = Gmp::doubleAndAdd($k_hex, $P, '0x'.Secp256k1::P, '0x'.Secp256k1::A);
+            $Rx_hex = Util::encodeHex($R['x']);
+            $Ry_hex = Util::encodeHex($R['y']);
+
+            while(strlen($Rx_hex) < 64) $Rx_hex = '0' . $Rx_hex;
+            while(strlen($Ry_hex) < 64) $Ry_hex = '0' . $Ry_hex;
+
+            // Calculate r = x1 mod n
+            $r = gmp_strval(gmp_mod('0x' . $Rx_hex, '0x'.Secp256k1::N));
+
+            // Calculate s = k^-1 * (e+d*r) mod n
+            $edr = gmp_add($e, gmp_mul($d, $r));
+            $invk = gmp_invert($k_hex, '0x'.Secp256k1::N);
+            $kedr = gmp_mul($invk, $edr);
+            $s = gmp_strval(gmp_mod($kedr, '0x'.Secp256k1::N));
+
+            // The signature is the pair (r,s)
+            $signature = array('r' => Util::encodeHex($r), 's' => Util::encodeHex($s));
+
+            while(strlen($signature['r']) < 64) $signature['r'] = '0' . $signature['r'];
+            while(strlen($signature['s']) < 64) $signature['s'] = '0' . $signature['s'];
+        } while (gmp_cmp($r,'0') <= 0 || gmp_cmp($s, '0') <= 0);
+
+
+        $sig = array('sig_rs' => $signature, 'sig_hex' => self::serializeSig($signature['r'],$signature['s']));
+        return $sig['sig_hex']['seq'];
     }
+
+  public static function serializeSig($r,$s) {
+    // ASN.1 encodes the DER signature:
+    // 0x30 + size(all) + 0x02 + size(r) + r + 0x02 + size(s) + s
+
+    for($x=0;$x<256;$x++) $digits[$x] = chr($x);
+
+    $dec = Util::decodeHex($r); $byte = ''; $seq = ''; $retval = array();
+
+    while(gmp_cmp($dec,'0') > 0) {
+      $dv = gmp_div($dec,'256'); $rem = gmp_strval(gmp_mod($dec,'256')); $dec = $dv; $byte = $byte . $digits[$rem];
+    }
+
+    $byte = strrev($byte);
+
+    // if the msb is set add 0x00
+    if(gmp_cmp('0x'.bin2hex($byte[0]),'0x80') >= 0) $byte = chr(0x00) . $byte;
+
+    $retval['bin_r'] = bin2hex($byte); $seq = chr(0x02) . chr(strlen($byte)) . $byte; $dec = Util::decodeHex($s); $byte = '';
+
+    while(gmp_cmp($dec,'0') > 0) {
+      $dv = gmp_div($dec,'256'); $rem = gmp_strval(gmp_mod($dec,'256')); $dec = $dv; $byte = $byte . $digits[$rem];
+    }
+
+    $byte = strrev($byte);
+
+    // if the msb is set add 0x00
+    if(gmp_cmp('0x'.bin2hex($byte[0]),'0x80') >= 0) $byte = chr(0x00) . $byte;
+
+    $retval['bin_s'] = bin2hex($byte); $seq = $seq . chr(0x02) . chr(strlen($byte)) . $byte; $seq = chr(0x30) . chr(strlen($seq)) . $seq; $retval['seq'] = bin2hex($seq);
+
+    return $retval;
+  }
 
     /**
      * @return boolean

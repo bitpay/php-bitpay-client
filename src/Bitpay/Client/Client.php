@@ -76,7 +76,7 @@ class Client extends ContainerAware implements ClientInterface
         $this->logger->debug('Creating Invoice');
         $request = $this->createNewRequest();
         $request->setMethod(Request::METHOD_POST);
-        $request->setPath('api/invoice');
+        $request->setPath('invoices');
 
         $currency     = $invoice->getCurrency();
         $item         = $invoice->getItem();
@@ -84,35 +84,47 @@ class Client extends ContainerAware implements ClientInterface
         $buyerAddress = $buyer->getAddress();
 
         $body = array(
-                'price'             => $item->getPrice(),
-                'currency'          => $currency->getCode(),
-                'posData'           => $invoice->getPosData(),
-                'notificationURL'   => $invoice->getNotificationUrl(),
-                'transactionSpeed'  => $invoice->getTransactionSpeed(),
-                'fullNotifications' => $invoice->isFullNotifications(),
-                'notificationEmail' => $invoice->getNotificationEmail(),
-                'redirectURL'       => $invoice->getRedirectUrl(),
-                'orderID'           => $invoice->getOrderId(),
-                'itemDesc'          => $item->getDescription(),
-                'itemCode'          => $item->getCode(),
-                'physical'          => $item->isPhysical(),
-                'buyerName'         => trim(sprintf('%s %s', $buyer->getFirstName(), $buyer->getLastName())),
-                'buyerAddress1'     => isset($buyerAddress[0]) ? $buyerAddress[0] : '',
-                'buyerAddress2'     => isset($buyerAddress[1]) ? $buyerAddress[1] : '',
-                'buyerCity'         => $buyer->getCity(),
-                'buyerState'        => $buyer->getState(),
-                'buyerZip'          => $buyer->getZip(),
-                'buyerCountry'      => $buyer->getCountry(),
-                'buyerEmail'        => $buyer->getEmail(),
-                'buyerPhone'        => $buyer->getPhone(),
+            'amount'             => $item->getPrice(),
+            'currency'          => $currency->getCode(),
+            'posData'           => $invoice->getPosData(),
+            'notificationURL'   => $invoice->getNotificationUrl(),
+            'transactionSpeed'  => $invoice->getTransactionSpeed(),
+            'fullNotifications' => $invoice->isFullNotifications(),
+            'notificationEmail' => $invoice->getNotificationEmail(),
+            'redirectURL'       => $invoice->getRedirectUrl(),
+            'orderID'           => $invoice->getOrderId(),
+            'itemDesc'          => $item->getDescription(),
+            'itemCode'          => $item->getCode(),
+            'physical'          => $item->isPhysical(),
+            'buyerName'         => trim(sprintf('%s %s', $buyer->getFirstName(), $buyer->getLastName())),
+            'buyerAddress1'     => isset($buyerAddress[0]) ? $buyerAddress[0] : '',
+            'buyerAddress2'     => isset($buyerAddress[1]) ? $buyerAddress[1] : '',
+            'buyerCity'         => $buyer->getCity(),
+            'buyerState'        => $buyer->getState(),
+            'buyerZip'          => $buyer->getZip(),
+            'buyerCountry'      => $buyer->getCountry(),
+            'buyerEmail'        => $buyer->getEmail(),
+            'buyerPhone'        => $buyer->getPhone(),
+            'guid'              => Util::guid(),
+            'nonce'             => Util::nonce(),
         );
 
         $request->setBody(json_encode($body));
+        $this->addIdentityHeader($request);
+        $this->addSignatureHeader($request);
         $this->logger->debug('Request', $body);
+        $this->request  = $request;
         $this->response = $this->send($request);
 
         $body = json_decode($this->response->getBody(), true);
         $this->logger->debug('Response', $body);
+        if (isset($body['error'])) {
+            var_dump(
+                $this->request,
+                $this->response
+            );
+            throw new \Exception('Error with request');
+        }
         $invoice
             ->setId($body['id'])
             ->setUrl($body['url'])
@@ -181,6 +193,42 @@ class Client extends ContainerAware implements ClientInterface
     public function getResponse()
     {
         return $this->response;
+    }
+
+    /**
+     * @return RequestInterface
+     */
+    public function getRequest()
+    {
+        return $this->request;
+    }
+
+    protected function addIdentityHeader(RequestInterface $request)
+    {
+        $manager = $this->container->get('key_manager');
+        $publicKey = $manager->load($this->container->getParameter('bitpay.public_key'));
+        $sin = new \Bitpay\SinKey();
+        $sin->setPublicKey($publicKey);
+        $sin->generate();
+
+        //$request->setHeader('x-identity', (string) $sin);
+        $request->setHeader('x-identity', (string) $publicKey);
+    }
+
+    protected function addSignatureHeader(RequestInterface $request)
+    {
+        $manager    = $this->container->get('key_manager');
+        $privateKey = $manager->load($this->container->getParameter('bitpay.private_key'));
+        $bitauth    = new \Bitpay\Bitauth();
+        $message    = sprintf(
+            '%s%s',
+            $request->getUri(),
+            $request->getBody()
+        );
+
+        $signature = $bitauth->sign($message, $privateKey);
+
+        $request->setHeader('x-signature', $signature);
     }
 
     /**

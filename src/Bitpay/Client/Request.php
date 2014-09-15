@@ -149,10 +149,10 @@ class Request implements RequestInterface
     public function getUri()
     {
         return sprintf(
-            '%s://%s:%s/%s',
+            '%s://%s/%s',
             $this->getSchema(),
             $this->getHost(),
-            $this->getPort(),
+            //$this->getPort(),
             $this->getPath()
         );
     }
@@ -226,6 +226,9 @@ class Request implements RequestInterface
      */
     public function setHeader($header, $value)
     {
+        if (is_array($value)) {
+            throw new \Exception('Could not set the header: '.$header);
+        }
         $this->headers[$header] = $value;
     }
 

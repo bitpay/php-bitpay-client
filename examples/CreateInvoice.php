@@ -60,9 +60,9 @@ $invoice->setCurrency($currency);
 $bitpay = new \Bitpay\Bitpay(
     array(
         'bitpay' => array(
-            'api_key' => 'test', // Your API Key
             'network' => 'testnet', // testnet or livenet, default is livenet
-            'adapter' => 'mock', // default curl, mock is used to testing
+            'public_key' => getenv('HOME').'/.bitpay/api.pub',
+            'private_key' => getenv('HOME').'/.bitpay/api.key',
         )
     )
 );
@@ -75,6 +75,7 @@ $client = $bitpay->get('client');
 // Send invoice
 $client->createInvoice($invoice);
 var_dump(
+    $client->getRequest(),
     $client->getResponse(),
     $invoice
 );
