@@ -47,9 +47,10 @@ class Autoloader
      */
     public static function autoload($class)
     {
-        //if (0 !== strpos($class, 'Bitpay')) {
-        //    return;
-        //}
+        $isBitpay = false;
+        if (0 === strpos($class, 'Bitpay')) {
+            $isBitpay = true;
+        }
 
         $file = __DIR__ . '/../' . str_replace(array('\\'), array('/'), $class) . '.php';
         if (is_file($file)) {
@@ -57,6 +58,8 @@ class Autoloader
             return;
         }
 
-        throw new \Exception(sprintf('Class "%s" Not Found', $class));
+        if ($isBitpay) {
+            throw new \Exception(sprintf('Class "%s" Not Found', $class));
+        }
     }
 }

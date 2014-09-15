@@ -34,12 +34,16 @@ class AutoloaderTest extends \PHPUnit_Framework_TestCase
     {
         Autoloader::register();
 
-        // Only BitPay classes
-        Autoloader::autoload('FooBar/Bitpay');
-
         Autoloader::autoload('Bitpay/Bitpay');
         // Is only required once
         Autoloader::autoload('Bitpay/Bitpay');
+    }
+
+    /**
+     */
+    public function testNoClass()
+    {
+        Autoloader::autoload('Foo/Bar');
     }
 
     /**
