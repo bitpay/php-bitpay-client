@@ -74,11 +74,15 @@ HELP
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $sin    = file_get_contents($input->getOption('home') . '/api.pub');
-        $bitpay = new Bitpay($input->getOption('home') . '/config.yml');
-        $client = $bitpay->get('client');
+        $keyManager = $this->container->get('key_manager');
+        $publicKey = $keyManager->load($input->getOption('home').'/api.pub');
+        $sin = new \Bitpay\SinKey();
+        $sin->setPublicKey($publicKey);
+        $sin->generate();
+
+        $client = $this->container->get('client');
         $payload = array(
-            'id'          => $sin,
+            'id'          => (string) $sin,
             'pairingCode' => $input->getArgument('pairingcode'),
             'label'       => 'php-bitpay-client',
         );

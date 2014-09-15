@@ -21,7 +21,7 @@ $public->generate();
 
 // Generate Sin Key values
 $sin->setPublicKey($public);
-$sin->generate($public);
+$sin->generate();
 
 
 printf("Public Key:  %s\n", $public);
