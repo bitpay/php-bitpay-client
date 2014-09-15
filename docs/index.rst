@@ -14,6 +14,7 @@ Contents:
     invoices/index
     keypairs/index
     console/index
+    distribution/index
     changelog
     contributing
     license
