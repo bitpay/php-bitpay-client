@@ -42,7 +42,7 @@ class PrivateKey extends Key
      */
     public function __toString()
     {
-        return (string) $this->getHex();
+        return (string) $this->hex;
     }
 
     /**
@@ -54,10 +54,12 @@ class PrivateKey extends Key
     {
         do {
             $privateKey = openssl_random_pseudo_bytes(32, $cstrong);
-            $this->hex  = sprintf('0x%s', strtoupper(bin2hex($privateKey)));
-        } while (!$cstrong || gmp_cmp($this->hex, 1) <= 0 || gmp_cmp($this->hex, Secp256k1::N) >= 0);
+            $this->hex  = bin2hex($privateKey);
+        } while (!$cstrong || gmp_cmp('0x'.$this->hex, 1) <= 0 || gmp_cmp('0x'.$this->hex, '0x'.Secp256k1::N) >= 0);
 
         $this->dec = Util::decodeHex($this->hex);
+        $this->x = substr($this->hex, 0, 32);
+        $this->y = substr($this->hex, 32, 64);
 
         return $this;
     }
@@ -77,16 +79,16 @@ class PrivateKey extends Key
     {
         $e = Util::decodeHex($message);
         do {
-            $d    = '0x' . $this->getHex();
+            $d    = '0x' . $this->hex;
             $k    = openssl_random_pseudo_bytes(32);
             $kHex = '0x' . bin2hex($k);
-            $gX   = '0x' . substr(Secp256k1::G, 2, 64);
-            $gY   = '0x' . substr(Secp256k1::G, 66, 64);
+            $gX   = '0x' . substr(Secp256k1::G, 0, 62);
+            $gY   = '0x' . substr(Secp256k1::G, 64, 62);
             $p    = array(
                 'x' => $gX,
                 'y' => $gY,
             );
-            $r     = Gmp::doubleAndAdd($this->getHex(), $p, Secp256k1::P, Secp256k1::A);
+            $r     = Gmp::doubleAndAdd($this->hex, $p, '0x'.Secp256k1::P, '0x'.Secp256k1::A);
             $rXHex = Util::encodeHex($r['x']);
             $rYHex = Util::encodeHex($r['y']);
 
@@ -97,11 +99,11 @@ class PrivateKey extends Key
                 $rYHex = '0' . $rYHex;
             }
 
-            $r2   = gmp_strval(gmp_mod('0x' . $rXHex, Secp256k1::N));
+            $r2   = gmp_strval(gmp_mod('0x' . $rXHex, '0x'.Secp256k1::N));
             $edr  = gmp_add($e, gmp_mul($d, $r2));
-            $invk = gmp_invert($kHex, Secp256k1::N);
+            $invk = gmp_invert($kHex, '0x'.Secp256k1::N);
             $kedr = gmp_mul($invk, $edr);
-            $s    = gmp_strval(gmp_mod($kedr, Secp256k1::N));
+            $s    = gmp_strval(gmp_mod($kedr, '0x'.Secp256k1::N));
 
             $signature = array(
                 'r' => Util::encodeHex($r2),

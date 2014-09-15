@@ -25,6 +25,8 @@
 
 namespace Bitpay;
 
+use Bitpay\Util\Base58;
+
 /**
  * Object to represent a point on an elliptic curve
  *

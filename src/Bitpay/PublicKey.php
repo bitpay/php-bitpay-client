@@ -83,11 +83,12 @@ class PublicKey extends Key
         }
 
         $P = array(
-            'x' => sprintf('0x%s', substr(Secp256k1::G, 2, 64)),
-            'y' => sprintf('0x%s', substr(Secp256k1::G, 66, 64)),
+            'x' => sprintf('0x%s', substr(Secp256k1::G, 0, 62)),
+            'y' => sprintf('0x%s', substr(Secp256k1::G, 62, 62)),
         );
 
-        $R     = Gmp::doubleAndAdd($this->privateKey->getHex(), $P, Secp256k1::P, Secp256k1::A);
+
+        $R     = Gmp::doubleAndAdd('0x'.$this->privateKey->getHex(), $P, '0x'.Secp256k1::P, '0x'.Secp256k1::A);
         $RxHex = Util::encodeHex($R['x']);
         $RyHex = Util::encodeHex($R['y']);
         while (strlen($RxHex) < 64) {
@@ -100,7 +101,7 @@ class PublicKey extends Key
         $this->x   = $RxHex;
         $this->y   = $RyHex;
         $this->hex = sprintf('04%s%s', $RxHex, $RyHex);
-        $this->dec = sprintf(sprintf('04%s%s', $R['x'], $R['y']));
+        $this->dec = Util::decodeHex(sprintf('04%s%s', $R['x'], $R['y']));
 
         return $this;
     }

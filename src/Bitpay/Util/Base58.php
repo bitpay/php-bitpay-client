@@ -46,6 +46,7 @@ final class Base58
     {
         if (strlen($data) % 2 != 0 || strlen($data) == 0) {
             return '';
+            //throw new \Exception('Invalid Length');
         }
 
         $code_string = self::BASE58_CHARS;
