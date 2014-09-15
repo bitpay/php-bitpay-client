@@ -31,8 +31,8 @@ use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\Config\Loader\LoaderResolver;
 use Symfony\Component\Config\Loader\DelegatingLoader;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\ContainerAware;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
@@ -41,8 +41,13 @@ use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
  *
  * @package Bitpay
  */
-class Bitpay extends ContainerAware
+class Bitpay
 {
+
+    /**
+     * @var ContainerInterface
+     */
+    protected $container;
 
     /**
      * First argument can either be a string or fullpath to a yaml file that
@@ -56,20 +61,37 @@ class Bitpay extends ContainerAware
      */
     public function __construct($config = array(), ContainerInterface $container = null)
     {
-        if (is_null($container)) {
-            $container = new ContainerBuilder();
-            $this->registerAndLoadExtensions($container);
-            $this->buildLoader($container)->load($config);
-            $container->compile();
-        }
+        $this->container = $container;
 
-        $this->setContainer($container);
+        if (is_null($container)) {
+            $this->initializeContainer($config);
+        }
     }
 
     /**
-     * @param ContainerInterface $container
+     * Initialize the container
      */
-    private function registerAndLoadExtensions(ContainerInterface $container)
+    protected function initializeContainer($config)
+    {
+        $this->container = $this->buildContainer($config);
+        $this->container->compile();
+    }
+
+    /**
+     * Build the container of services and parameters
+     */
+    protected function buildContainer($config)
+    {
+        $container = new ContainerBuilder();
+        $this->prepareContainer($container);
+        $this->getContainerLoader($container)->load($config);
+
+        return $container;
+    }
+
+    /**
+     */
+    private function prepareContainer(ContainerInterface $container)
     {
         foreach ($this->getDefaultExtensions() as $ext) {
             $container->registerExtension($ext);
@@ -81,16 +103,17 @@ class Bitpay extends ContainerAware
      * @param ContainerInterface $container
      * @return LoaderInterface
      */
-    private function buildLoader(ContainerInterface $container)
+    private function getContainerLoader(ContainerInterface $container)
     {
-        return new DelegatingLoader(
-            new LoaderResolver(
-                array(
-                    new ArrayLoader($container),
-                    new YamlFileLoader($container, new FileLocator()),
-                )
+        $locator  = new FileLocator();
+        $resolver = new LoaderResolver(
+            array(
+                new ArrayLoader($container),
+                new YamlFileLoader($container, $locator),
             )
         );
+
+        return new DelegatingLoader($resolver);
     }
 
     /**
