@@ -8,7 +8,3 @@ require __DIR__ . '/../vendor/autoload.php';
  * to pass in the path to the yml file.
  */
 $bitpay = new \Bitpay\Bitpay(__DIR__ . '/config.yml');
-
-var_dump(
-    $bitpay->getContainer()->getParameter('bitpay.api_key')
-);

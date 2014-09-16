@@ -136,7 +136,17 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     public function testGetUri()
     {
         $this->request->setHost('test.bitpay.com');
-        $this->assertSame('https://test.bitpay.com:443/', $this->request->getUri());
+        $this->assertSame('https://test.bitpay.com/', $this->request->getUri());
+    }
+
+    /**
+     * @depends testSetHost
+     * @depends testGetPath
+     */
+    public function testGetUriWithPort()
+    {
+        $this->request->setHost('test.bitpay.com');
+        $this->assertSame('https://test.bitpay.com:443/', $this->request->getUriWithPort());
     }
 
     public function testGetHeaders()

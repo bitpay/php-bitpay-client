@@ -82,11 +82,18 @@ class Bitpay
      */
     protected function buildContainer($config)
     {
-        $container = new ContainerBuilder();
+        $container = new ContainerBuilder(new ParameterBag($this->getParameters()));
         $this->prepareContainer($container);
         $this->getContainerLoader($container)->load($config);
 
         return $container;
+    }
+
+    protected function getParameters()
+    {
+        return array(
+            'bitpay.root_dir' => realpath(__DIR__ . '/..'),
+        );
     }
 
     /**

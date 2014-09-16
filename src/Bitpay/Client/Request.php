@@ -93,7 +93,7 @@ class Request implements RequestInterface
      */
     public function __toString()
     {
-        $request = sprintf("%s %s HTTP/1.1\r\n", $this->getMethod(), $this->getUri());
+        $request = sprintf("%s %s HTTP/1.1\r\n", $this->getMethod(), $this->getUriWithPort());
         $request .= $this->getHeadersAsString();
         $request .= $this->getBody();
 
@@ -152,7 +152,20 @@ class Request implements RequestInterface
             '%s://%s/%s',
             $this->getSchema(),
             $this->getHost(),
-            //$this->getPort(),
+            $this->getPath()
+        );
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getUriWithPort()
+    {
+        return sprintf(
+            '%s://%s:%s/%s',
+            $this->getSchema(),
+            $this->getHost(),
+            $this->getPort(),
             $this->getPath()
         );
     }

@@ -117,7 +117,7 @@ class Client extends ContainerAware implements ClientInterface
         $this->response = $this->send($request);
 
         $body = json_decode($this->response->getBody(), true);
-        $this->logger->debug('Response', $body);
+        $this->logger->debug('Response', (array) $body);
         if (isset($body['error'])) {
             var_dump(
                 $this->request,
@@ -245,10 +245,6 @@ class Client extends ContainerAware implements ClientInterface
             sprintf('%s/%s (PHP %s)', self::NAME, self::VERSION, phpversion())
         );
         $request->setHeader('X-BitPay-Plugin-Info', sprintf('%s/%s', self::NAME, self::VERSION));
-        $request->setHeader(
-            'Authorization',
-            sprintf('Basic %s', base64_encode($this->container->getParameter('bitpay.api_key')))
-        );
         $request->setHeader('Content-Type', 'application/json');
         $request->setHeader('X-Accept-Version', '2.0.0');
 

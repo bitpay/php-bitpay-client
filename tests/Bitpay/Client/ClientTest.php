@@ -32,18 +32,11 @@ class ClientTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $bitpay = new \Bitpay\Bitpay(
-            array(
-                'bitpay' => array(
-                    'api_key'      => 'test',
-                    'network'      => 'testnet',
-                    'adapter'      => 'mock',
-                    'logger_level' => \Monolog\Logger::DEBUG,
-                )
-            )
-        );
+        $bitpay = new \Bitpay\Bitpay(__DIR__ . '/../../../build/test.yml');
         $this->client = new Client($bitpay->get('logger'));
         $this->client->setContainer($bitpay->getContainer());
+        @mkdir(dirname($bitpay->getContainer()->getParameter('logger.file')));
+        @touch($bitpay->getContainer()->getParameter('logger.file'));
     }
 
     public function testCreateInvoice()
