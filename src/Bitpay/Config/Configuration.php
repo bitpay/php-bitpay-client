@@ -47,10 +47,6 @@ class Configuration implements ConfigurationInterface
         $rootNode    = $treeBuilder->root('bitpay');
         $rootNode
             ->children()
-                ->scalarNode('api_key')
-                    ->info('API Key Obtained from BitPay')
-                    ->defaultNull()
-                ->end()
                 ->scalarNode('public_key')
                     ->info('Public Key Filename')
                     ->defaultValue(getenv('HOME').'/.bitpay/bitpay.pub')

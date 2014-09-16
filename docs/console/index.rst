@@ -29,7 +29,7 @@ config
 ------
 
 This command is used to set configuration values that are used to connect to
-BitPay's API.
+BitPay's API. It will also display all the current configuration options.
 
 keygen
 ------
@@ -40,6 +40,9 @@ those keys for you.
 
 pair
 ----
+
+When generating a new token for use with BitPay's API, you are given a paring
+code which you will need to use here.
 
 unpair
 ------
