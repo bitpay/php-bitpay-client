@@ -1,6 +1,6 @@
-========
-Licesnse
-========
+=======
+License
+=======
 
 The MIT License (MIT)
 
@@ -23,3 +23,10 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
+
+3rd Parties
+-----------
+
+* `Monolog <https://github.com/Seldaek/monolog>`_ - Copyright (c) 2011-2014 Jordi Boggiano
+* `PSR Log <https://github.com/php-fig/log>`_ - Copyright (c) 2012 PHP Framework Interoperability Group
+* `Symfony <https://github.com/symfony/symfony>`_ Copyright (c) 2004-2014 Fabien Potencier
