@@ -57,4 +57,26 @@ class BitauthTest extends \PHPUnit_Framework_TestCase
             $this->assertSame($datum[2], $bitauth->encrypt($datum[0], $datum[1]));
         }
     }
+
+    public function testSignature()
+    {
+        $bitauth   = new Bitauth();
+        $data      = 'https://test.bitpay.com/tokens?nonce=200';
+        $signature = $bitauth->sign($data, $this->getMockPrivateKey());
+        //$this->assertSame(
+        //    '03b8144d4943435474e40c0fb5eb8b58873671534232f08c2034d01a7210876d',
+        //    $signature
+        //);
+    }
+
+    private function getMockPrivateKey()
+    {
+        $key = $this->getMock('Bitpay\PrivateKey');
+
+        $key
+            ->method('getHex')
+            ->will($this->returnValue('private key hex value goes here'));
+
+        return $key;
+    }
 }
