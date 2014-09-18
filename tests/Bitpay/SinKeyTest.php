@@ -53,6 +53,15 @@ class SinKeyTest extends \PHPUnit_Framework_TestCase
         $sinKey->generate();
     }
 
+    /**
+     * @expectedException Exception
+     */
+    public function testGenerateWithoutPublicKey()
+    {
+        $sinKey = new SinKey();
+        $sinKey->generate();
+    }
+
     public function testGenerateWithoutException()
     {
         $pubKey = PublicKey::create();
@@ -62,5 +71,20 @@ class SinKeyTest extends \PHPUnit_Framework_TestCase
         $sinKey->setPublicKey($pubKey);
         $sinKey->generate();
         $this->assertEquals(35, strlen((string) $sinKey));
+    }
+
+    /**
+     * @depnds testGenerateWithoutException
+     */
+    public function testIsValid()
+    {
+        $sinKey = new SinKey();
+        $this->assertFalse($sinKey->isValid());
+        $pubKey = PublicKey::create();
+        $pubKey->setPrivateKey(PrivateKey::create()->generate());
+        $pubKey->generate();
+        $sinKey->setPublicKey($pubKey);
+        $sinKey->generate();
+        $this->assertTrue($sinKey->isValid());
     }
 }

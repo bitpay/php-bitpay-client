@@ -93,8 +93,14 @@ class SinKey extends Key
         return $this;
     }
 
+    /**
+     * Checks to make sure that this SIN is a valid object, this
+     * method needs some improvement.
+     *
+     * @return boolean
+     */
     public function isValid()
     {
-        return true;
+        return !is_null($this->value);
     }
 }
