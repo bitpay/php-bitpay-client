@@ -175,9 +175,14 @@ class Currency implements CurrencyInterface
         return $this->payoutEnabled;
     }
 
+    /**
+     * @param boolean $enabled
+     *
+     * @return CurrencyInterface
+     */
     public function setPayoutEnabled($enabled)
     {
-        $this->payoutEnabled = $enabled;
+        $this->payoutEnabled = (boolean) $enabled;
 
         return $this;
     }

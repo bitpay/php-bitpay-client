@@ -25,8 +25,6 @@
 
 namespace Bitpay;
 
-use Bitpay\Currency;
-
 class CurrencyTest extends \PHPUnit_Framework_TestCase
 {
     private $currency;
@@ -95,6 +93,15 @@ class CurrencyTest extends \PHPUnit_Framework_TestCase
     public function testIsPayoutEnabled()
     {
         $this->assertFalse($this->currency->isPayoutEnabled());
+    }
+
+    /**
+     * @depends testIsPayoutEnabled
+     */
+    public function testSetPayoutEnabled()
+    {
+        $this->currency->setPayoutEnabled(true);
+        $this->assertTrue($this->currency->isPayoutEnabled());
     }
 
     public function testGetName()
