@@ -35,6 +35,14 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $this->request = new Request();
     }
 
+    public function testGetHeaderFields()
+    {
+        $this->assertCount(1, $this->request->getHeaderFields());
+
+        $headers = $this->request->getHeaderFields();
+        $this->assertSame('Content-Type: application/json', $headers[0]);
+    }
+
     public function testGetMethod()
     {
         // default method is post
@@ -162,6 +170,15 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $this->request->setHeader('Header-Key', 'Header-Value');
         $this->assertArrayHasKey('Header-Key', $this->request->getHeaders());
         $this->assertContains('Header-Value', $this->request->getHeaders());
+    }
+
+    /**
+     * @depends testSetHeader
+     * @expectedException Exception
+     */
+    public function testSetHeaderException()
+    {
+        $this->request->setHeader('ting', array());
     }
 
     public function testGetBody()

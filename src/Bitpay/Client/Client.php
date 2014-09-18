@@ -1,19 +1,19 @@
 <?php
 /**
  * The MIT License (MIT)
- * 
+ *
  * Copyright (c) 2014 BitPay, Inc.
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -84,7 +84,7 @@ class Client extends ContainerAware implements ClientInterface
         $buyerAddress = $buyer->getAddress();
 
         $body = array(
-            'amount'             => $item->getPrice(),
+            'price'             => $item->getPrice(),
             'currency'          => $currency->getCode(),
             'posData'           => $invoice->getPosData(),
             'notificationURL'   => $invoice->getNotificationUrl(),
@@ -119,10 +119,10 @@ class Client extends ContainerAware implements ClientInterface
         $body = json_decode($this->response->getBody(), true);
         $this->logger->debug('Response', (array) $body);
         if (isset($body['error'])) {
-            var_dump(
-                $this->request,
-                $this->response
-            );
+            //var_dump(
+            //    $this->request,
+            //    $this->response
+            //);
             throw new \Exception('Error with request');
         }
         $invoice
@@ -142,16 +142,21 @@ class Client extends ContainerAware implements ClientInterface
     }
 
     /**
+     * Returns an array of Currency objects
+     *
      * @return array
      */
     public function getCurrencies()
     {
-        $request = $this->createNewRequest();
-        $request->setMethod(Request::METHOD_GET);
-        $request->setPath('currencies');
-        $this->response = $this->send($request);
+        $this->request = $this->createNewRequest();
+        $this->request->setMethod(Request::METHOD_GET);
+        $this->request->setPath('currencies');
+        $this->response = $this->send($this->request);
         $body           = json_decode($this->response->getBody(), true);
-        $currencies     = $body['data'];
+        if (empty($body['data'])) {
+            throw new \Exception('Error with request');
+        }
+        $currencies = $body['data'];
         array_walk($currencies, function (&$value, $key) {
             $currency = new \Bitpay\Currency();
             $currency
@@ -170,14 +175,18 @@ class Client extends ContainerAware implements ClientInterface
         return $currencies;
     }
 
+    /**
+     * Used to create a token. These method needs to be refactored to
+     * work better
+     *
+     * @return array
+     */
     public function createToken(array $payload = array())
     {
-        $request = $this->createNewRequest();
-        //$request->setHeader('X-Identity', $payload['id']);
-        $request->setMethod(Request::METHOD_POST);
-        $request->setPath('tokens');
+        $this->request = $this->createNewRequest();
+        $this->request->setMethod(Request::METHOD_POST);
+        $this->request->setPath('tokens');
         $payload['guid'] = Util::guid();
-        //$payload['nonce'] = Util::nonce();
         $request->setBody(json_encode($payload));
         $this->logger->debug('Request', $payload);
         $this->response = $this->send($request);

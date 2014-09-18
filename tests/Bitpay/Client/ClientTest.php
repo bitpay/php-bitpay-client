@@ -41,7 +41,16 @@ class ClientTest extends \PHPUnit_Framework_TestCase
 
     public function testCreateInvoice()
     {
+        $item = $this->getMockItem();
+        $item->method('getPrice')->will($this->returnValue(1));
+
+        $buyer = $this->getMockBuyer();
+        $buyer->method('getAddress')->will($this->returnValue(array()));
+
         $invoice = $this->getMockInvoice();
+        $invoice->method('getItem')->willReturn($item);
+        $invoice->method('getBuyer')->willReturn($buyer);
+
         $invoice->method('setId')->will($this->returnSelf());
         $invoice->method('setUrl')->will($this->returnSelf());
         $invoice->method('setStatus')->will($this->returnSelf());
@@ -53,20 +62,10 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $invoice->method('setBtcPaid')->will($this->returnSelf());
         $invoice->method('setRate')->will($this->returnSelf());
         $invoice->method('setExceptionStatus')->will($this->returnSelf());
+        $invoice->method('getCurrency')->willReturn($this->getMockCurrency());
 
-        $invoice
-            ->method('getBuyer')
-            ->willReturn($this->getMockBuyer());
-
-        $invoice
-            ->method('getItem')
-            ->willReturn($this->getMockItem());
-
-        $invoice
-            ->method('getCurrency')
-            ->willReturn($this->getMockCurrency());
-
-        $this->client->createInvoice($invoice);
+        $invoice = $this->client->createInvoice($invoice);
+        $this->assertInstanceOf('Bitpay\InvoiceInterface', $invoice);
     }
 
     /**
@@ -75,6 +74,26 @@ class ClientTest extends \PHPUnit_Framework_TestCase
     public function testGetResponse()
     {
         $this->assertNull($this->client->getResponse());
+    }
+
+
+    /**
+     * @depends testCreateInvoice
+     */
+    public function testGetRequest()
+    {
+        $this->assertNull($this->client->getRequest());
+    }
+
+    /**
+     * @depends testGetRequest
+     * @depends testGetResponse
+     * @expectedException Exception
+     */
+    public function testCreateInvoiceWithError()
+    {
+        $this->assertNull($this->client->getResponse());
+        $this->assertNull($this->client->getRequest());
 
         $invoice = $this->getMockInvoice();
         $invoice->method('setId')->will($this->returnSelf());
@@ -88,27 +107,25 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $invoice->method('setBtcPaid')->will($this->returnSelf());
         $invoice->method('setRate')->will($this->returnSelf());
         $invoice->method('setExceptionStatus')->will($this->returnSelf());
+        $invoice->method('getCurrency')->willReturn($this->getMockCurrency());
+        $invoice->method('getItem')->willReturn($this->getMockItem());
+        $invoice->method('getBuyer')->willReturn($this->getMockBuyer());
 
-        $invoice
-            ->method('getBuyer')
-            ->willReturn($this->getMockBuyer());
-
-        $invoice
-            ->method('getItem')
-            ->willReturn($this->getMockItem());
-
-        $invoice
-            ->method('getCurrency')
-            ->willReturn($this->getMockCurrency());
-
+        // throws exception
         $this->client->createInvoice($invoice);
+    }
 
-        $this->assertInstanceOf('Bitpay\Client\Response', $this->client->getResponse());
+    /**
+     * @expectedException Exception
+     */
+    public function testGetCurrenciesWithException()
+    {
+        $currencies = $this->client->getCurrencies();
     }
 
     private function getMockInvoice()
     {
-        return $this->getMockBuilder('Bitpay\InvoiceInterface')
+        $invoice = $this->getMockBuilder('Bitpay\InvoiceInterface')
             ->setMethods(
                 array(
                     'getPrice',
@@ -158,6 +175,9 @@ class ClientTest extends \PHPUnit_Framework_TestCase
                 )
             )
             ->getMock();
+
+
+        return $invoice;
     }
 
     private function getMockBuyer()

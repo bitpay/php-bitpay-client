@@ -45,18 +45,40 @@ class MockAdapter implements AdapterInterface
         $path = $request->getPath();
         switch ($path) {
             case ('api/invoice'):
+            case ('invoices'):
                 $response = $this->createMockInvoice($request);
                 break;
+            case ('currencies'):
+                $response = $this->createMockCurrencies($request);
+                break;
             default:
-                $response = new Response();
+                $response = $this->createMockError($request);
                 break;
         }
 
         return $response;
     }
 
+    private function createMockCurrencies(RequestInterface $request)
+    {
+        $response = new Response();
+
+        return $response;
+    }
+
+    /**
+     * Creates a fake response when a testing creating an invoice
+     *
+     * @param RequestInterface
+     *
+     * @return ResponseInterface
+     */
     private function createMockInvoice(RequestInterface $request)
     {
+        $body = json_decode($request->getBody(), true);
+        if (empty($body['price'])) {
+            return $this->createMockError($request);
+        }
         $faker    = \Faker\Factory::create();
         $response = new Response();
         $id       = $faker->randomNumber;
@@ -74,6 +96,27 @@ class MockAdapter implements AdapterInterface
                     'btcPaid'         => $faker->randomDigit,
                     'rate'            => $faker->randomFloat(8, 1, 100),
                     'exceptionStatus' => false,
+                )
+            )
+        );
+
+        return $response;
+    }
+
+    /**
+     * Creates an error response
+     *
+     * @param RequestInterface $request
+     *
+     * @return ResponseInterface
+     */
+    private function createMockError(RequestInterface $request)
+    {
+        $response = new Response();
+        $response->setBody(
+            json_encode(
+                array(
+                    'error' => array(),
                 )
             )
         );
