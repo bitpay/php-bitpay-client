@@ -53,11 +53,17 @@ class BitpayExtension implements ExtensionInterface
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__));
         $loader->load('services.xml');
 
-        $container->setParameter('network.class', 'Bitpay\Network\\' . ucfirst($config['network']));
-        $container->setParameter('adapter.class', 'Bitpay\Client\Adapter\\' . ucfirst($config['adapter']) . 'Adapter');
+        $container->setParameter('network.class', 'Bitpay\Network\\' . ContainerBuilder::camelize($config['network']));
         $container->setParameter('logger.level', $config['logger_level']);
         $container->setParameter('logger.file', $config['logger_file']);
-        $container->setParameter('key_storage.class', 'Bitpay\Storage\\' . ucfirst($config['key_storage']) . 'Storage');
+        $container->setParameter(
+            'adapter.class',
+            'Bitpay\Client\Adapter\\' . ContainerBuilder::camelize($config['adapter']) . 'Adapter'
+        );
+        $container->setParameter(
+            'key_storage.class',
+            'Bitpay\Storage\\' . ContainerBuilder::camelize($config['key_storage']) . 'Storage'
+        );
     }
 
     public function getAlias()

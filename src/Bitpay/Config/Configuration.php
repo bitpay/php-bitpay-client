@@ -78,9 +78,13 @@ class Configuration implements ConfigurationInterface
                     ->defaultValue(\Monolog\Logger::NOTICE)
                 ->end()
                 ->enumNode('key_storage')
-                    ->values(array('filesystem', 'mock'))
+                    ->values(array('filesystem', 'mock', 'encrypted_filesystem'))
                     ->info('Where to store the keys at')
                     ->defaultValue('filesystem')
+                ->end()
+                ->scalarNode('key_storage_password')
+                    ->info('Used to encrypt and decrypt keys when saving to filesystem')
+                    ->defaultNull()
                 ->end()
             ->end();
 
