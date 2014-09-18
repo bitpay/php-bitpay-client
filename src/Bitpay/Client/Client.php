@@ -25,14 +25,7 @@
 
 namespace Bitpay\Client;
 
-use Bitpay\Config\Configuration;
-use Bitpay\Client\Adapter\AdapterInterface;
-use Bitpay\Client\RequestInterface;
-use Bitpay\Client\Request;
-use Bitpay\Client\ResponseInterface;
-use Bitpay\Client\Response;
 use Bitpay\InvoiceInterface;
-use Bitpay\Network\NetworkInterface;
 use Symfony\Component\DependencyInjection\ContainerAware;
 use Psr\Log\LoggerInterface;
 use Bitpay\Util\Util;
