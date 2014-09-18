@@ -28,26 +28,31 @@ namespace Bitpay;
 class PointTest extends \PHPUnit_Framework_TestCase
 {
 
-    public function testAdd()
+    /**
+     */
+    public function testConstruct()
     {
-        $a = new Point(
-            '69b154b42ff9452c31251cb341d7db01ad603dc56d64f9c5fb9e7031b89a241d',
-            'eeedc91342b3c8982c1e676435780fe5f9d62f3f692e8d1512485d77fab35997'
-        );
+        $point = new Point(1, 2);
+    }
 
-        $b = new Point(
-            '5a784662a4a20a65bf6aab9ae98a6c068a81c52e4b032c0fb5400c706cfccc56',
-            '7f717885be239daadce76b568958305183ad616ff74ed4dc219a74c26d35f839'
-        );
+    /**
+     * @depends testConstruct
+     */
+    public function testToString()
+    {
+        $point = new Point(1, 2);
+        $this->assertSame('(1, 2)', (string) $point);
+    }
 
-        $s = new Point(
-            '501e454bf00751f24b1b489aa925215d66af2234e3891c3b21a52bedb3cd711c',
-            '008794c1df8131b9ad1e1359965b3f3ee2feef0866be693729772be14be881ab'
-        );
+    public function testGetX()
+    {
+        $point = new Point(1, 2);
+        $this->assertSame('1', $point->getX());
+    }
 
-        //$sum = $a->add($b);
-
-        //$this->assertSame($sum->getX(), $s->getX());
-        //$this->assertSame($sum->getY(), $s->getY());
+    public function testGetY()
+    {
+        $point = new Point(1, 2);
+        $this->assertSame('2', $point->getY());
     }
 }

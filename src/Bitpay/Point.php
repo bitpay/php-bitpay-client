@@ -25,8 +25,6 @@
 
 namespace Bitpay;
 
-use Bitpay\Util\Base58;
-
 /**
  * Object to represent a point on an elliptic curve
  *
@@ -50,11 +48,13 @@ class Point implements PointInterface
     protected $y;
 
     /**
+     * @param string $x
+     * @param string $y
      */
     public function __construct($x, $y)
     {
-        $this->x = $x;
-        $this->y = $y;
+        $this->x = (string) $x;
+        $this->y = (string) $y;
     }
 
     /**
