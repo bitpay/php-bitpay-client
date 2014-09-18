@@ -32,6 +32,7 @@ class FilesystemStorage implements StorageInterface
 {
 
     /**
+     * @inheritdoc
      */
     public function persist(\Bitpay\KeyInterface $key)
     {
@@ -40,6 +41,7 @@ class FilesystemStorage implements StorageInterface
     }
 
     /**
+     * @inheritdoc
      */
     public function load($id)
     {
