@@ -57,7 +57,7 @@ class BitauthTest extends \PHPUnit_Framework_TestCase
             //$this->assertSame($datum[2], $bitauth->encrypt($datum[0], $datum[1]));
             
             // TODO: get value and use for assert. checking not null for now...
-            $this-assertNotNull($bitauth->Encrypt($datum,'12345','123'));
+            $this->assertNotNull($bitauth->Encrypt($datum,'12345','123'));
         }
     }
 
