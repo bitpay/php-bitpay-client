@@ -36,6 +36,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
 
     public function testGetCode()
     {
+        $this->assertNotNull($this->item);
         $this->assertNull($this->item->getCode());
     }
 
@@ -45,11 +46,13 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     public function testSetCode()
     {
         $this->item->setCode('Code');
+        $this->assertNotNull($this->item->getCode());
         $this->assertSame('Code', $this->item->getCode());
     }
 
     public function testGetDescription()
     {
+        $this->assertNotNull($this->item);
         $this->assertNull($this->item->getDescription());
     }
 
@@ -59,11 +62,13 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     public function testSetDescription()
     {
         $this->item->setDescription('Description of Item');
+        $this->assertNotNull($this->item->getDescription());
         $this->assertSame('Description of Item', $this->item->getDescription());
     }
 
     public function testGetPrice()
     {
+        $this->assertNotNull($this->item);
         $this->assertNull($this->item->getPrice());
     }
 
@@ -73,11 +78,13 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     public function testSetPrice()
     {
         $this->item->setPrice(9.99);
+        $this->assertNotNull($this->item->getPrice());
         $this->assertSame(9.99, $this->item->getPrice());
     }
 
     public function testGetQuantity()
     {
+        $this->assertNotNull($this->item);
         $this->assertNull($this->item->getQuantity());
     }
 
@@ -87,11 +94,13 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     public function testSetQuantity()
     {
         $this->item->setQuantity(1);
+        $this->assertNotNull($this->item->getQuantity());
         $this->assertSame(1, $this->item->getQuantity());
     }
 
     public function testIsPhysical()
     {
+        $this->assertNotNull($this->item);
         $this->assertFalse($this->item->isPhysical());
     }
 
@@ -101,6 +110,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     public function testSetPhysicalTrue()
     {
         $this->item->setPhysical(true);
+        $this->assertNotNull($this->item->isPhysical());
         $this->assertTrue($this->item->isPhysical());
     }
 }
