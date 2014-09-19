@@ -39,18 +39,6 @@ adapter
 
 Used mostly for testing. You shouldn't need to change or update this.
 
-logger_file
------------
-
-Some classes log output for easy debugging when incorporating into other
-projects. The default log file is `$HOME/.bitpay/bitpay.log`
-
-logger_level
-------------
-
-See https://github.com/Seldaek/monolog#log-levels for various logging levels
-supported.
-
 key_storage
 -----------
 
@@ -66,8 +54,7 @@ Example YAML config
 
     # /path/to/config.yml
     bitpay:
-        logger_file:  /var/logs/bitpay.log
-        logger_level: 100
+        network: testnet
 
 .. code-block:: php
 
@@ -82,8 +69,7 @@ Example array config
     $bitpay = new \Bitpay\Bitpay(
         array(
             'bitpay' => array(
-                'logger_file' => '/var/logs/bitpay.log',
-                'logger_level' => \Monolog\Logger::DEBUG
+                'network' => 'testnet',
             )
         )
     );

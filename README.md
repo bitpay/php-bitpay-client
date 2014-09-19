@@ -1,7 +1,7 @@
-new-api-php-client
-==================
+bitpay/php-client
+=================
 
-This is a self-contained PHP implementation of BitPay's new cryptographically secure API: https://test.bitpay.com/api
+This is a self-contained PHP implementation of BitPay's new cryptographically secure API: https://bitpay.com/api
 
 # Installation
 
@@ -42,7 +42,13 @@ php composer.phar require bitpay/php-client:~2.0
 
 # Usage
 
+Please see the ``docs`` directory for information on how to use this library
+and the ``examples`` directory for examples on using this library. You should
+be able to run all the examples by running ``php examples/File.php``.
+
 # Configuration
+
+See http://php-bitpay-client.readthedocs.org/en/latest/configuration.html
 
 # License
 

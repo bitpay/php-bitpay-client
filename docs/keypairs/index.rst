@@ -60,3 +60,15 @@ easy.
 .. code-block:: php
 
     $key = $manager->load('/path/to/private.key');
+
+Encrypted on Filesystem
+-----------------------
+
+.. code-block:: php
+
+    $privateKey = new \Bitpay\PrivateKey('/path/to/private.key');
+    $privateKey->generate();
+
+    $password   = 'satoshi';
+    $keyManager = new \Bitpay\KeyManager(new \Bitpay\Storage\EncryptedFilesystemStorage($password));
+    $manager->persist($privateKey);
