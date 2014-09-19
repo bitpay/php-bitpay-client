@@ -86,8 +86,8 @@ class CurrencyTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetExchangePctFee()
     {
-        $this->currency->setExchangePctFee(100);
-        $this->assertSame(100, $this->currency->getExchangePctFee());
+        $this->currency->setExchangePctFee('100');
+        $this->assertSame('100', $this->currency->getExchangePctFee());
     }
 
     public function testIsPayoutEnabled()
