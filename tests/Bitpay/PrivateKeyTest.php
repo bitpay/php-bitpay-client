@@ -27,7 +27,6 @@ namespace Bitpay;
 
 class PrivateKeyTest extends \PHPUnit_Framework_TestCase
 {
-
     public function testCreate()
     {
         $this->assertInstanceOf('Bitpay\PrivateKey', PrivateKey::create());
@@ -89,5 +88,21 @@ class PrivateKeyTest extends \PHPUnit_Framework_TestCase
     {
         //$priKey = PrivateKey::create()->generate();
         //$signature = $priKey->sign('Hello');
+    }
+
+    public function testHasValidHex()
+    {
+        $pri = new PrivateKey();
+        $this->assertFalse($pri->hasValidHex());
+        $pri->generate();
+        $this->assertTrue($pri->hasValidHex());
+    }
+
+    public function testHasValidDec()
+    {
+        $pri = new PrivateKey();
+        $this->assertFalse($pri->hasValidDec());
+        $pri->generate();
+        $this->assertTrue($pri->hasValidDec());
     }
 }
