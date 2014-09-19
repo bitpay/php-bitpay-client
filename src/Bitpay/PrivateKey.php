@@ -45,7 +45,7 @@ class PrivateKey extends Key
     }
 
     /**
-     * Generates a a private key
+     * Generates an EC private key
      *
      * @return \Bitpay\PrivateKey
      */
@@ -53,10 +53,18 @@ class PrivateKey extends Key
     {
         do {
             $privateKey = openssl_random_pseudo_bytes(32, $cstrong);
-            $this->hex  = bin2hex($privateKey);
-        } while (!$cstrong || gmp_cmp('0x'.$this->hex, 1) <= 0 || gmp_cmp('0x'.$this->hex, '0x'.Secp256k1::N) >= 0);
+
+            if (!$privateKey || !$cstrong) {
+                // TODO throw exception
+                die('FATAL Error in PrivateKey::generate(): Could not generate a cryptographically-strong random number. Your OpenSSL extension might be old or broken.');
+            }
+
+            $this->hex  = strtolower(bin2hex($privateKey));
+
+        } while (gmp_cmp('0x' . $this->hex, '1') <= 0 || gmp_cmp('0x' . $this->hex, '0x' . Secp256k1::N) >= 0);
 
         $this->dec = Util::decodeHex($this->hex);
+
         $this->x = substr($this->hex, 0, 32);
         $this->y = substr($this->hex, 32, 64);
 
@@ -64,56 +72,89 @@ class PrivateKey extends Key
     }
 
     /**
+     * Checks to see if the private key value is not empty and
+     * the hex form only contains hexits and the decimal form
+     * only contains devimal digits.
+     * 
      * @return boolean
      */
     public function isValid()
     {
-        return (!empty($this->hex) && !empty($this->dec));
+        return ((!empty($this->hex) && !ctype_xdigit($this->hex)) && (!empty($this->dec) && !ctype_digit($this->dec));
     }
 
     /**
+     * Creates an ECDSA signature of $message
+     * 
      * @return string
      */
     public function sign($message)
     {
-        $e = Util::decodeHex($message);
+        // TODO: Signature code is already in Bitauth so is this needed here?
+
+        if (empty($message)) {
+            // TODO: Throw exception
+            die('FATAL Error in PrivateKey::sign(): You did not provide a message to hash.');
+        }
+
+        $e = Util::decodeHex(hash('sha256', $message));
+
         do {
-            $d    = '0x' . $this->hex;
+            if (substr(strtolower($this->hex), 0, 2) != '0x') {
+                $d = '0x' . $this->hex;
+            } else {
+                $d = $this->hex;
+            }
+
             $k    = openssl_random_pseudo_bytes(32);
-            $kHex = '0x' . bin2hex($k);
+
+            if (!$k || !$cstrong) {
+                // TODO: Throw exception
+                die('FATAL Error in PrivateKey::sign(): Could not generate a cryptographically-strong random number. Your OpenSSL extension might be old or broken.');
+            }
+
+            $kHex = '0x' . strtolower(bin2hex($k));
+
             $gX   = '0x' . substr(Secp256k1::G, 0, 62);
             $gY   = '0x' . substr(Secp256k1::G, 64, 62);
+
             $p    = array(
-                'x' => $gX,
-                'y' => $gY,
-            );
-            $r     = Gmp::doubleAndAdd($this->hex, $p, '0x'.Secp256k1::P, '0x'.Secp256k1::A);
+                          'x' => $gX,
+                          'y' => $gY
+                         );
+
+            $r     = Gmp::doubleAndAdd($this->hex, $p, '0x' . Secp256k1::P, '0x' . Secp256k1::A);
+
             $rXHex = Util::encodeHex($r['x']);
             $rYHex = Util::encodeHex($r['y']);
 
             while (strlen($rXHex) < 64) {
                 $rXHex = '0' . $rXHex;
             }
+
             while (strlen($rYHex) < 64) {
                 $rYHex = '0' . $rYHex;
             }
 
-            $r2   = gmp_strval(gmp_mod('0x' . $rXHex, '0x'.Secp256k1::N));
+            $r2   = gmp_strval(gmp_mod('0x' . $rXHex, '0x' . Secp256k1::N));
             $edr  = gmp_add($e, gmp_mul($d, $r2));
-            $invk = gmp_invert($kHex, '0x'.Secp256k1::N);
+            $invk = gmp_invert($kHex, '0x' . Secp256k1::N);
             $kedr = gmp_mul($invk, $edr);
-            $s    = gmp_strval(gmp_mod($kedr, '0x'.Secp256k1::N));
+            $s    = gmp_strval(gmp_mod($kedr, '0x' . Secp256k1::N));
 
             $signature = array(
-                'r' => Util::encodeHex($r2),
-                's' => Util::encodeHex($s),
-            );
+                               'r' => Util::encodeHex($r2),
+                               's' => Util::encodeHex($s)
+                              );
 
             while (strlen($signature['r']) < 64) {
                 $signature['r'] = '0' . $signature['r'];
-            } while (strlen($signature['s']) < 64) {
+            }
+            
+            while (strlen($signature['s']) < 64) {
                 $signature['s'] = '0' . $signature['s'];
             }
+
         } while (gmp_cmp($r2, '0') <= 0 || gmp_cmp($s, '0') <= 0);
 
         return $signature;
