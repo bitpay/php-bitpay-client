@@ -86,8 +86,8 @@ class PublicKey extends Key
         }
 
         $P = array(
-                   'x' => '0x' . substr(Secp256k1::G, 0, 62)),
-                   'y' => '0x' . substr(Secp256k1::G, 62, 62)),
+                   'x' => '0x' . substr(Secp256k1::G, 0, 62),
+                   'y' => '0x' . substr(Secp256k1::G, 62, 62),
                   );
 
         $R = Gmp::doubleAndAdd('0x' . $this->privateKey->getHex(), $P, '0x' . Secp256k1::P, '0x' . Secp256k1::A);
