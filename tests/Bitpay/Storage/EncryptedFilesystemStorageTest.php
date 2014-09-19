@@ -92,4 +92,14 @@ class EncryptedFilesystemStorageTest extends \PHPUnit_Framework_TestCase
         $key = $storage->load(vfsStream::url('tmp/public.key'));
         $this->assertInstanceOf('Bitpay\PublicKey', $key);
     }
+
+    public function testPersistAndLoadWithoutPassword()
+    {
+        $storage = new EncryptedFilesystemStorage(null);
+        $storage->persist(new \Bitpay\PublicKey(vfsStream::url('tmp/public.key')));
+        $this->assertTrue($this->root->hasChild('tmp/public.key'));
+
+        $key = $storage->load(vfsStream::url('tmp/public.key'));
+        $this->assertInstanceOf('Bitpay\PublicKey', $key);
+    }
 }

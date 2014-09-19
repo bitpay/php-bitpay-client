@@ -60,8 +60,8 @@ $invoice->setCurrency($currency);
 $bitpay = new \Bitpay\Bitpay(
     array(
         'bitpay' => array(
-            'network' => 'testnet', // testnet or livenet, default is livenet
-            'public_key' => getenv('HOME').'/.bitpay/api.pub',
+            'network'     => 'testnet', // testnet or livenet, default is livenet
+            'public_key'  => getenv('HOME').'/.bitpay/api.pub',
             'private_key' => getenv('HOME').'/.bitpay/api.key',
         )
     )

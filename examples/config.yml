@@ -3,6 +3,6 @@
 # Example config using a yml file
 #
 bitpay:
-    api_key: test_api_key
     network: testnet
     adapter: mock
+    key_storage_password: satoshi

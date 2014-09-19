@@ -28,5 +28,7 @@ printf("Private Key: %s\n", $private);
 printf("Sin Key:     %s\n\n", $sin);
 
 /**
- * NOTE: You store your keys somewhere
+ * NOTE: You MUST save your keypairs and not regenerate them once you have already
+ * generated a pair and have paired them with the BitPay's API. To see how to
+ * persist keys to the filesystem, please see the SaveKeypairsToFilesystem.php
  */

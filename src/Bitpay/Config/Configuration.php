@@ -72,7 +72,7 @@ class Configuration implements ConfigurationInterface
                 ->enumNode('key_storage')
                     ->values(array('filesystem', 'mock', 'encrypted_filesystem'))
                     ->info('Where to store the keys at')
-                    ->defaultValue('filesystem')
+                    ->defaultValue('encrypted_filesystem')
                 ->end()
                 ->scalarNode('key_storage_password')
                     ->info('Used to encrypt and decrypt keys when saving to filesystem')
