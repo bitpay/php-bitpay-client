@@ -43,7 +43,7 @@ class PublicKeyTest extends \PHPUnit_Framework_TestCase
         $pubKey = new PublicKey();
         $this->assertNotNull($pubKey);
 
-        $pubKey->setPrivateKey($pri);
+        $pubKey->setPrivateKey($priKey);
 
         $this->assertNull($pubKey->getHex());
         $this->assertNull($pubKey->getDec());
