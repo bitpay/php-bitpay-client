@@ -35,13 +35,21 @@ class PublicKeyTest extends \PHPUnit_Framework_TestCase
 
     public function testGenerate()
     {
-        $pri = new PrivateKey();
-        $pri->generate();
+        $priKey = new PrivateKey();
+        $this->assertNotNull($priKey);
+
+        $priKey->generate();
+
         $pubKey = new PublicKey();
+        $this->assertNotNull($pubKey);
+
         $pubKey->setPrivateKey($pri);
+
         $this->assertNull($pubKey->getHex());
         $this->assertNull($pubKey->getDec());
+
         $pubKey->generate();
+
         $this->assertEquals(130, strlen($pubKey->getHex()));
         $this->assertGreaterThanOrEqual(155, strlen($pubKey->getDec()));
     }
@@ -52,9 +60,14 @@ class PublicKeyTest extends \PHPUnit_Framework_TestCase
     public function testGetHex()
     {
         $pubKey = new PublicKey();
+        $this->assertNotNull($pubKey);
+
         $pubKey->setPrivateKey(PrivateKey::create()->generate());
+
         $this->assertNull($pubKey->getHex());
+
         $pubKey->generate(PrivateKey::create()->generate());
+
         $this->assertEquals(130, strlen($pubKey->getHex()));
     }
 
@@ -64,8 +77,12 @@ class PublicKeyTest extends \PHPUnit_Framework_TestCase
     public function testGetDec()
     {
         $pubKey = new PublicKey();
+        $this->assertNotNull($pubKey);
+
         $pubKey->setPrivateKey(PrivateKey::create()->generate());
+
         $this->assertNull($pubKey->getDec());
+
         $pubKey->generate(PrivateKey::create()->generate());
         //$this->assertGreaterThanOrEqual(155, strlen($pubKey->getDec()));
     }
@@ -76,8 +93,12 @@ class PublicKeyTest extends \PHPUnit_Framework_TestCase
     public function testToString()
     {
         $pubKey = new PublicKey();
+        $this->assertNotNull($pubKey);
+
         $pubKey->setPrivateKey(PrivateKey::create()->generate());
+
         $this->assertSame('', (string) $pubKey);
+
         $pubKey->generate(PrivateKey::create()->generate());
 
         if ('02'.$pubKey->getX() == $pubKey) {
@@ -95,9 +116,14 @@ class PublicKeyTest extends \PHPUnit_Framework_TestCase
     public function testGetX()
     {
         $pubKey = new PublicKey();
+        $this->assertNotNull($pubKey);
+
         $pubKey->setPrivateKey(PrivateKey::create()->generate());
+
         $this->assertNull($pubKey->getX());
+
         $pubKey->generate(PrivateKey::create()->generate());
+
         $this->assertEquals(64, strlen($pubKey->getX()));
     }
 
@@ -107,9 +133,14 @@ class PublicKeyTest extends \PHPUnit_Framework_TestCase
     public function testGetY()
     {
         $pubKey = new PublicKey();
+        $this->assertNotNull($pubKey);
+
         $pubKey->setPrivateKey(PrivateKey::create()->generate());
+
         $this->assertNull($pubKey->getY());
+
         $pubKey->generate(PrivateKey::create()->generate());
+
         $this->assertEquals(64, strlen($pubKey->getY()));
     }
 
