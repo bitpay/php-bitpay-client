@@ -44,6 +44,21 @@ class Bitauth
     const IV = '0000000000000000';
 
     /**
+     */
+    public function __construct()
+    {
+        if (!function_exists('openssl_open')) {
+            // TODO: Throw exception
+            die('FATAL Error in Bitauth::construct(): Your OpenSSL implementation is either too old or broken. Please contact your server administrator.');
+        }
+        
+        if (!function_exists('mcrypt_list_algorithms')) {
+            // TODO: Throw exception
+            die('FATAL Error in Bitauth::construct(): Missing mcrypt PHP extension. Cannot continue.');
+        }
+    }
+
+    /**
      * Generate Service Identification Number (SIN)
      * 
      * @param void
