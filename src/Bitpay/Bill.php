@@ -341,7 +341,7 @@ class Bill implements BillInterface
      */
     public function setStatus($status)
     {
-        if (!empty($status) && ctype_print(status)) {
+        if (!empty($status) && ctype_print($status)) {
             $this->status = trim($status);
         }
 
