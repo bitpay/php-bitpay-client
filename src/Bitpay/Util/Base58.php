@@ -26,7 +26,8 @@
 namespace Bitpay\Util;
 
 /**
- *
+ * Utility class for encoding/decoding BASE-58 data
+ * 
  * @package Bitcore
  */
 final class Base58
@@ -38,6 +39,8 @@ final class Base58
     const BASE58_CHARS = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
 
     /**
+     * Encodes $data into BASE-58 format
+     * 
      * @param string $data
      *
      * @return string
@@ -53,7 +56,7 @@ final class Base58
         $x = Util::decodeHex($data);
         $output_string = '';
 
-        while (0 < gmp_cmp($x, 0)) {
+        while (gmp_cmp($x, '0') > 0) {
             list($x, $r) = gmp_div_qr($x, 58);
             $output_string .= substr($code_string, gmp_intval($r), 1);
         }
@@ -68,6 +71,8 @@ final class Base58
     }
 
     /**
+     * Decodes $data from BASE-58 format
+     * 
      * @param string $data
      *
      * @return string

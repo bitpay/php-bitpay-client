@@ -44,6 +44,9 @@ class Bitauth
     const IV = '0000000000000000';
 
     /**
+     * Generate Service Identification Number (SIN)
+     * 
+     * @param void
      * @return array
      */
     public function generateSin()
@@ -53,10 +56,10 @@ class Bitauth
         $sinKey = SinKey::create()->setPublicKey($pubKey)->generate();
 
         return array(
-            'public'  => $pubKey,
-            'private' => $priKey,
-            'sin'     => $sinKey,
-        );
+                     'public'  => $pubKey,
+                     'private' => $priKey,
+                     'sin'     => $sinKey,
+                    );
     }
 
     /**
@@ -72,122 +75,252 @@ class Bitauth
      */
     public function getSinFromPublicKey(\Bitpay\PublicKey $publicKey)
     {
+        // TODO
         //return Sin::fromPubKey($publicKey);
     }
 
     /**
+     * Generates an ECDSA signature of $data
+     * 
      * @param  string     $data
      * @param  PrivateKey $privateKey
      * @return string
      */
     public function sign($data, \Bitpay\PrivateKey $privateKey)
     {
-        $e = Util::decodeHex($data);
+        if (!ctype_xdigit($privateKey->getHex())) {
+            die('FATAL error in Bitauth::sign(): The private key must be in hex format.');
+        }
+
+        if (empty($data)) {
+            die('FATAL error in Bitauth::sign(): You did not provide any data to sign.');
+        }
+
+        $e = Util::decodeHex(hash('sha256', $data));
+
         do {
-            // supplied private key, 'd'
-            $d = '0x' . $privateKey->getHex();
+            if (substr(strtolower($privateKey->getHex()), 0, 2) != '0x') {
+                $d = '0x' . $privateKey->getHex();
+            } else {
+                $d = $privateKey->getHex();
+            }
 
-            // get another random number 'k'
             $k = openssl_random_pseudo_bytes(32, $cstrong);
-            $k_hex = '0x' . strtoupper(bin2hex($k));
+            
+            if (!$k || !$cstrong) {
+                die('FATAL error in Bitauth::sign(): Could not generate a cryptographically-strong random number. Your OpenSSL extension might be old or broken.');
+            }
 
-            // get the G point parameters (x,y)
+            $k_hex = '0x' . strtolower(bin2hex($k));
+            $n_hex = '0x' . Secp256k1::N;
+            $a_hex = '0x' . Secp256k1::A;
+            $p_hex = '0x' . Secp256k1::P;
+
             $Gx = '0x' . substr(Secp256k1::G, 0, 62);
             $Gy = '0x' . substr(Secp256k1::G, 64, 62);
 
-            // Calculate a new curve point from Q=k*G (x1,y1)
             $P = array('x' => $Gx, 'y' => $Gy);
-            $R = Gmp::doubleAndAdd($k_hex, $P, '0x'.Secp256k1::P, '0x'.Secp256k1::A);
+
+            // Calculate a new curve point from Q=k*G (x1,y1)
+            $R = Gmp::doubleAndAdd($k_hex, $P, $p_hex, $a_hex);
+
             $Rx_hex = Util::encodeHex($R['x']);
             $Ry_hex = Util::encodeHex($R['y']);
 
-            while(strlen($Rx_hex) < 64) $Rx_hex = '0' . $Rx_hex;
-            while(strlen($Ry_hex) < 64) $Ry_hex = '0' . $Ry_hex;
+            while (strlen($Rx_hex) < 64) {
+                $Rx_hex = '0' . $Rx_hex;
+            }
 
-            // Calculate r = x1 mod n
-            $r = gmp_strval(gmp_mod('0x' . $Rx_hex, '0x'.Secp256k1::N));
+            while (strlen($Ry_hex) < 64) {
+                $Ry_hex = '0' . $Ry_hex;
+            }
 
-            // Calculate s = k^-1 * (e+d*r) mod n
+            // r = x1 mod n
+            $r = gmp_strval(gmp_mod('0x' . $Rx_hex, $n_hex));
+
+            // s = k^-1 * (e+d*r) mod n
             $edr = gmp_add($e, gmp_mul($d, $r));
-            $invk = gmp_invert($k_hex, '0x'.Secp256k1::N);
+            $invk = gmp_invert($k_hex, $n_hex);
             $kedr = gmp_mul($invk, $edr);
-            $s = gmp_strval(gmp_mod($kedr, '0x'.Secp256k1::N));
+            $s = gmp_strval(gmp_mod($kedr, $n_hex));
 
             // The signature is the pair (r,s)
-            $signature = array('r' => Util::encodeHex($r), 's' => Util::encodeHex($s));
+            $signature = array(
+                               'r' => Util::encodeHex($r),
+                               's' => Util::encodeHex($s)
+                              );
 
-            while(strlen($signature['r']) < 64) $signature['r'] = '0' . $signature['r'];
-            while(strlen($signature['s']) < 64) $signature['s'] = '0' . $signature['s'];
-        } while (gmp_cmp($r,'0') <= 0 || gmp_cmp($s, '0') <= 0);
+            while (strlen($signature['r']) < 64) {
+                $signature['r'] = '0' . $signature['r'];
+            }
 
-        $sig = array('sig_rs' => $signature, 'sig_hex' => self::serializeSig($signature['r'],$signature['s']));
+            while (strlen($signature['s']) < 64) {
+                $signature['s'] = '0' . $signature['s'];
+            }
+
+        } while (gmp_cmp($r, '0') <= 0 || gmp_cmp($s, '0') <= 0);
+
+        $sig = array(
+                     'sig_rs' => $signature,
+                     'sig_hex' => self::serializeSig($signature['r'], $signature['s'])
+                    );
 
         return $sig['sig_hex']['seq'];
     }
 
-  public static function serializeSig($r,$s)
-  {
-    // ASN.1 encodes the DER signature:
-    // 0x30 + size(all) + 0x02 + size(r) + r + 0x02 + size(s) + s
+    /**
+     * ASN.1 DER encodes the signature based on the form:
+     * 0x30 + size(all) + 0x02 + size(r) + r + 0x02 + size(s) + s
+     * http://www.itu.int/ITU-T/studygroups/com17/languages/X.690-0207.pdf
+     * 
+     * @param string
+     * @param string
+     * @return string
+     */
+    public static function serializeSig($r, $s)
+    {
+        for ($x = 0; $x < 256; $x++) {
+            $digits[$x] = chr($x);
+        }
 
-    for($x=0;$x<256;$x++) $digits[$x] = chr($x);
+        $dec = Util::decodeHex($r);
 
-    $dec = Util::decodeHex($r); $byte = ''; $seq = ''; $retval = array();
+        $byte = '';
+        $seq = '';
+        $retval = array();
 
-    while (gmp_cmp($dec,'0') > 0) {
-      $dv = gmp_div($dec,'256'); $rem = gmp_strval(gmp_mod($dec,'256')); $dec = $dv; $byte = $byte . $digits[$rem];
+        while (gmp_cmp($dec, '0') > 0) {
+            $dv = gmp_div($dec, '256');
+            $rem = gmp_strval(gmp_mod($dec, '256'));
+            $dec = $dv;
+            $byte = $byte . $digits[$rem];
+        }
+
+        $byte = strrev($byte);
+
+        // msb check
+        if (gmp_cmp('0x' . bin2hex($byte[0]), '0x80') >= 0) {
+            $byte = chr(0x00) . $byte;
+        }
+
+        $retval['bin_r'] = bin2hex($byte);
+        $seq = chr(0x02) . chr(strlen($byte)) . $byte;
+        $dec = Util::decodeHex($s);
+
+        $byte = '';
+
+        while (gmp_cmp($dec, '0') > 0) {
+            $dv = gmp_div($dec, '256');
+            $rem = gmp_strval(gmp_mod($dec, '256'));
+            $dec = $dv;
+            $byte = $byte . $digits[$rem];
+        }
+
+        $byte = strrev($byte);
+
+        // msb check
+        if (gmp_cmp('0x' . bin2hex($byte[0]), '0x80') >= 0) {
+            $byte = chr(0x00) . $byte;
+        }
+
+        $retval['bin_s'] = bin2hex($byte);
+        $seq = $seq . chr(0x02) . chr(strlen($byte)) . $byte;
+        $seq = chr(0x30) . chr(strlen($seq)) . $seq;
+        $retval['seq'] = bin2hex($seq);
+
+        return $retval;
     }
-
-    $byte = strrev($byte);
-
-    // if the msb is set add 0x00
-    if(gmp_cmp('0x'.bin2hex($byte[0]),'0x80') >= 0) $byte = chr(0x00) . $byte;
-
-    $retval['bin_r'] = bin2hex($byte); $seq = chr(0x02) . chr(strlen($byte)) . $byte; $dec = Util::decodeHex($s); $byte = '';
-
-    while (gmp_cmp($dec,'0') > 0) {
-      $dv = gmp_div($dec,'256'); $rem = gmp_strval(gmp_mod($dec,'256')); $dec = $dv; $byte = $byte . $digits[$rem];
-    }
-
-    $byte = strrev($byte);
-
-    // if the msb is set add 0x00
-    if(gmp_cmp('0x'.bin2hex($byte[0]),'0x80') >= 0) $byte = chr(0x00) . $byte;
-
-    $retval['bin_s'] = bin2hex($byte); $seq = $seq . chr(0x02) . chr(strlen($byte)) . $byte; $seq = chr(0x30) . chr(strlen($seq)) . $seq; $retval['seq'] = bin2hex($seq);
-
-    return $retval;
-  }
 
     /**
+     * Verifies a previously generated ECDSA signature
+     * 
+     * @param string
+     * @param string
+     * @param array
+     * @param array
+     * @param string
      * @return boolean
      */
-    public function verifySignature($contract, $publicKey, $signature)
+    public function verifySignature($contract, $publicKey, $signature, $Q, $data)
     {
-        return true;
+        $Gx = '0x' . substr(Secp256k1::G, 0, 62);
+        $Gy = '0x' . substr(Secp256k1::G, 64, 62);
+
+        $r = '0x' . $signature['r'];
+        $s = '0x' . $signature['s'];
+
+        $n_hex = '0x' . Secp256k1::N;
+        $a_hex = '0x' . Secp256k1::A;
+        $p_hex = '0x' . Secp256k1::P;
+
+        // check to see if r,s are in [1,n-1]
+        if (gmp_cmp($r, 1) <= 0 && gmp_cmp($r, $n_hex) > 0) {
+            die('FATAL Error in Bitauth::verifySignature(): r is out of range!');
+        }
+
+        if (gmp_cmp($s, 1) <= 0 && gmp_cmp($s, $n_hex) > 0) {
+            die('FATAL Error in Bitauth::verifySignature():s is out of range!');
+        }
+
+        // convert the hash of the hex message to decimal
+        $e = Util::decodeHex(hash('sha256', $data));
+
+        // calculate w = s^-1 (mod n)
+        $w = gmp_invert($s, $n_hex);
+
+        // calculate u1 = e*w (mod n)
+        $u1 = gmp_mod(gmp_mul($e, $w), $n_hex);
+
+        // calculate u2 = r*w (mod n)
+        $u2 = gmp_mod(gmp_mul($r, $w), $n_hex);
+
+        $P = array('x' => $Gx, 'y' => $Gy);
+
+        $Qx = '0x' . substr($Q, 2, 64);
+        $Qy = '0x' . substr($Q, 66, 64);
+
+        $Q = array('x' => $Qx, 'y' => $Qy);
+
+        // Get new point Z(x1,y1) = (u1 * G) + (u2 * Q)
+        $Za = Gmp::doubleAndAdd($u1, $P, $p_hex, $a_hex);
+        $Zb = Gmp::doubleAndAdd($u2, $Q, $p_hex, $a_hex);
+        $Z  = Gmp::gmpPointAdd($Za, $Zb, $p_hex, $a_hex);
+
+        $Zx_hex = Util::encodeHex($Z['x']);
+        $Zy_hex = Util::encodeHex($Z['y']);
+
+        while (strlen($Zx_hex) < 64) {
+            $Zx_hex = '0' . $Zx_hex;
+        }
+
+        while (strlen($Zy_hex) < 64) {
+            $Zy_hex = '0' . $Zy_hex;
+        }
+
+        // Signature is valid if r is congruent to x1 (mod n)
+        // or in other words, if r - x1 is an integer multiple of n
+        $rsubx = gmp_sub($r, '0x' . $Zx_hex);
+        $rsubx_rem = gmp_div_r($rsubx, $n_hex);
+
+        if (gmp_cmp($rsubx_rem, '0') == 0) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
+     * Determines if a SIN is valid or not, depending on
+     * rules defined in spec, see:
+     * https://en.bitcoin.it/wiki/Identity_protocol_v1
+     * 
+     * @param string
      * @return boolean
      */
     public function validateSin($sin)
     {
+        // TODO
         return true;
-    }
-
-    /**
-     * @return string
-     */
-    public function encrypt($password, $data)
-    {
-        return Base58::encode(bin2hex(openssl_encrypt($data, 'AES-128-CBC', $password, OPENSSL_RAW_DATA, self::IV)));
-    }
-
-    /**
-     * @return string
-     */
-    public function decrypt($password, $enc)
-    {
     }
 
     /**
@@ -199,7 +332,7 @@ class Bitauth
      * @param  string   $cypher_type
      * @return int|bool
      */
-    public function rmGetIVSize($cypher_type = 'MCRYPT_TRIPLEDES')
+    public function GetIVSize($cypher_type = 'MCRYPT_TRIPLEDES')
     {
 
         $block_mode = 'cbc';
@@ -218,7 +351,7 @@ class Bitauth
      * @param  string $cypher_type
      * @return int
      */
-    public function rmGetKeySize($cypher_type = 'MCRYPT_TRIPLEDES')
+    public function GetKeySize($cypher_type = 'MCRYPT_TRIPLEDES')
     {
 
         $block_mode = 'cbc';
@@ -239,10 +372,9 @@ class Bitauth
      * @param none
      * @return array
      */
-    public function rmGetAlgos()
+    public function GetAlgos()
     {
         return mcrypt_list_algorithms();
-
     }
 
     /**
@@ -253,10 +385,9 @@ class Bitauth
      * @param  string  $cypher_type
      * @return boolean
      */
-    public function rmAlgoSelfTest($cypher_type = 'MCRYPT_TRIPLEDES')
+    public function AlgoSelfTest($cypher_type = 'MCRYPT_TRIPLEDES')
     {
         return mcrypt_module_self_test($cypher_type);
-
     }
 
     /**
@@ -275,7 +406,7 @@ class Bitauth
      * @throws Exception $e
      *
      */
-    public function rmEncrypt($text, $key = '', $iv = '', $bit_check = 8, $cypher_type = 'MCRYPT_TRIPLEDES')
+    public function Encrypt($text, $key = '', $iv = '', $bit_check = 8, $cypher_type = 'MCRYPT_TRIPLEDES')
     {
 
         try {
@@ -285,7 +416,7 @@ class Bitauth
                 $text_num = str_split($text, $bit_check);
                 $text_num = $bit_check - strlen($text_num[count($text_num) - 1]);
 
-                for ($i=0; $i<$text_num; $i++) {
+                for ($i = 0; $i < $text_num; $i++) {
                     $text = $text . chr($text_num);
                 }
 
@@ -303,7 +434,7 @@ class Bitauth
             }
 
         } catch (Exception $e) {
-            return 'Error: ' . $e->getMessage();
+            return 'Error in Bitauth::Encrypt(): ' . $e->getMessage();
         }
 
     }
@@ -324,7 +455,7 @@ class Bitauth
      * @throws Exception $e
      *
      */
-    public function rmEecrypt($encrypted_text, $key = '', $iv = '', $bit_check = 8, $cypher_type = 'MCRYPT_TRIPLEDES')
+    public function Decrypt($encrypted_text, $key = '', $iv = '', $bit_check = 8, $cypher_type = 'MCRYPT_TRIPLEDES')
     {
 
         try {
@@ -354,7 +485,7 @@ class Bitauth
             }
 
         } catch (Exception $e) {
-            return 'Error: ' . $e->getMessage();
+            return 'Error in Bitauth::Dncrypt(): ' . $e->getMessage();
         }
 
     }
