@@ -56,7 +56,10 @@ class UtilTest extends \PHPUnit_Framework_TestCase
     public function testSha256()
     {
         $data = array(
-            array('03d95e184cce34c3cfa58e9a277a09a7c5ed1b2a8134ea1e52887bc66fa3f47071', 'a5c756101065ac5b8f689139e6d856fa99e54b5000b6428b43729d334cc9277d'),
+            array(
+                '03d95e184cce34c3cfa58e9a277a09a7c5ed1b2a8134ea1e52887bc66fa3f47071',
+                'a5c756101065ac5b8f689139e6d856fa99e54b5000b6428b43729d334cc9277d'
+            ),
         );
 
         foreach ($data as $datum) {
@@ -64,10 +67,17 @@ class UtilTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+    /**
+     * @see https://github.com/bitpay/bitcore/blob/master/test/test.util.js
+     */
     public function testTwoSha256()
     {
+        $this->markTestIncomplete();
         $data = array(
-            array('907c2bc503ade11cc3b04eb2918b6f547b0630ab569273824748c87ea14b0696526c66ba740200000000fd1f9bdd4ef073c7afc4ae00da8a66f429c917a0081ad1e1dabce28d373eab81d8628de80200000000ad042b5f25efb33beec9f3364e8a9139e8439d9d7e26529c3c30b6c3fd89f8684cfd68ea0200000000599ac2fe02a526ed040000000008535300516352515164370e010000000003006300ab2ec2291fe51c6f', '31af167a6cf3f9d5f6875caa4d31704ceb0eba078d132b78dab52c3b8997317e'),
+            array(
+                '907c2bc503ade11cc3b04eb2918b6f547b0630ab569273824748c87ea14b0696526c66ba740200000000fd1f9bdd4ef073c7afc4ae00da8a66f429c917a0081ad1e1dabce28d373eab81d8628de80200000000ad042b5f25efb33beec9f3364e8a9139e8439d9d7e26529c3c30b6c3fd89f8684cfd68ea0200000000599ac2fe02a526ed040000000008535300516352515164370e010000000003006300ab2ec2291fe51c6f',
+                '31af167a6cf3f9d5f6875caa4d31704ceb0eba078d132b78dab52c3b8997317e'
+            ),
         );
 
         foreach ($data as $datum) {
@@ -78,11 +88,14 @@ class UtilTest extends \PHPUnit_Framework_TestCase
     public function testSha256Ripe160()
     {
         $data = array(
-            array('03d95e184cce34c3cfa58e9a277a09a7c5ed1b2a8134ea1e52887bc66fa3f47071', 'd166a41f27fd4b158f70314e5eee8998bf3d97d5'),
+            array(
+                '03d95e184cce34c3cfa58e9a277a09a7c5ed1b2a8134ea1e52887bc66fa3f47071',
+                'd166a41f27fd4b158f70314e5eee8998bf3d97d5'
+            ),
         );
 
         foreach ($data as $datum) {
-            //$this->assertSame($datum[1], Util::sha256ripe160($datum[0]));
+            $this->assertSame($datum[1], Util::sha256ripe160($datum[0]));
         }
     }
 

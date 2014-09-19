@@ -43,7 +43,7 @@ class Util
      */
     public static function sha256($data, $binary = false)
     {
-        return openssl_digest($data, 'sha256', $binary);
+        return openssl_digest($data, 'SHA256', $binary);
     }
 
     /**
@@ -72,9 +72,9 @@ class Util
      *
      * @return string
      */
-    public static function ripe160($data)
+    public static function ripe160($data, $binary = false)
     {
-        return openssl_digest($data, 'ripemd160');
+        return openssl_digest($data, 'ripemd160', $binary);
     }
 
     /**
@@ -84,7 +84,7 @@ class Util
      */
     public static function sha256ripe160($data)
     {
-        return self::ripe160(self::sha256($data));
+        return bin2hex(self::ripe160(self::sha256($data, true), true));
     }
 
     /**
@@ -94,6 +94,9 @@ class Util
      */
     public static function twoSha256($data, $binary = false)
     {
+        //$pass1 = self::sha256(hex2bin($data), true);
+        //$pass2 = strrev(bin2hex(self::sha256($pass1, true)));
+
         return self::sha256(self::sha256($data, $binary), $binary);
     }
 
