@@ -66,16 +66,25 @@ class BitpayExtension implements ExtensionInterface
         );
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function getAlias()
     {
         return 'bitpay';
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function getNamespace()
     {
         return 'http://example.org/schema/dic/bitpay';
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function getXsdValidationBasePath()
     {
         return false;
