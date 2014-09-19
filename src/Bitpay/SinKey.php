@@ -35,7 +35,11 @@ use Bitpay\Util\Util;
 class SinKey extends Key
 {
 
+    // Type 2 (ephemeral)
     const SIN_TYPE    = '02';
+
+    // Always the prefix!
+    // (well, right now)
     const SIN_VERSION = '0F';
 
     /**
@@ -68,6 +72,9 @@ class SinKey extends Key
     }
 
     /**
+     * Generates a Service Identification Number (SIN), see:
+     * https://en.bitcoin.it/wiki/Identity_protocol_v1
+     * 
      * @return SinKey
      */
     public function generate()
@@ -83,16 +90,20 @@ class SinKey extends Key
         }
 
         $step1 = Util::sha256(Gmp::gmpBinconv($this->publicKey->getX()), true);
+
         $step2 = Util::ripe160($step1);
+
         $step3 = sprintf(
-            '%s%s%s',
-            self::SIN_VERSION,
-            self::SIN_TYPE,
-            $step2
-        );
+                         '%s%s%s',
+                         self::SIN_VERSION,
+                         self::SIN_TYPE,
+                         $step2
+                        );
 
         $step4 = Util::twoSha256(Gmp::gmpBinconv($step3), true);
+
         $step5 = substr(bin2hex($step4), 0, 8);
+
         $step6 = $step3 . $step5;
 
         $this->value = Base58::encode($step6);
@@ -101,13 +112,12 @@ class SinKey extends Key
     }
 
     /**
-     * Checks to make sure that this SIN is a valid object, this
-     * method needs some improvement.
+     * Checks to make sure that this SIN is a valid object.
      *
      * @return boolean
      */
     public function isValid()
     {
-        return !is_null($this->value);
+        return (!is_null($this->value) && (substr($this->value, 0, 1) == 'T'));
     }
 }
