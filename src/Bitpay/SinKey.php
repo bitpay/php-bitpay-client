@@ -43,6 +43,9 @@ class SinKey extends Key
      */
     protected $value;
 
+    /**
+     * @var PublicKey
+     */
     protected $publicKey;
 
     /**
@@ -53,6 +56,10 @@ class SinKey extends Key
         return (string) $this->value;
     }
 
+    /**
+     * @param PublicKey
+     * @return SinKey
+     */
     public function setPublicKey(PublicKey $publicKey)
     {
         $this->publicKey = $publicKey;

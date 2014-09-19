@@ -54,8 +54,6 @@ class BitpayExtension implements ExtensionInterface
         $loader->load('services.xml');
 
         $container->setParameter('network.class', 'Bitpay\Network\\' . ContainerBuilder::camelize($config['network']));
-        $container->setParameter('logger.level', $config['logger_level']);
-        $container->setParameter('logger.file', $config['logger_file']);
         $container->setParameter(
             'adapter.class',
             'Bitpay\Client\Adapter\\' . ContainerBuilder::camelize($config['adapter']) . 'Adapter'

@@ -27,7 +27,6 @@ namespace Bitpay\Client;
 
 use Bitpay\InvoiceInterface;
 use Symfony\Component\DependencyInjection\ContainerAware;
-use Psr\Log\LoggerInterface;
 use Bitpay\Util\Util;
 
 /**
@@ -49,24 +48,10 @@ class Client extends ContainerAware implements ClientInterface
     protected $response;
 
     /**
-     * @var LoggerInterface
-     */
-    protected $logger;
-
-    /**
-     * @param LoggerInterface $logger
-     */
-    public function __construct(LoggerInterface $logger)
-    {
-        $this->logger = $logger;
-    }
-
-    /**
      * @inheritdoc
      */
     public function createInvoice(InvoiceInterface $invoice)
     {
-        $this->logger->debug('Creating Invoice');
         $request = $this->createNewRequest();
         $request->setMethod(Request::METHOD_POST);
         $request->setPath('invoices');
@@ -105,12 +90,10 @@ class Client extends ContainerAware implements ClientInterface
         $request->setBody(json_encode($body));
         $this->addIdentityHeader($request);
         $this->addSignatureHeader($request);
-        $this->logger->debug('Request', $body);
         $this->request  = $request;
         $this->response = $this->send($request);
 
         $body = json_decode($this->response->getBody(), true);
-        $this->logger->debug('Response', (array) $body);
         if (isset($body['error'])) {
             //var_dump(
             //    $this->request,
@@ -181,10 +164,8 @@ class Client extends ContainerAware implements ClientInterface
         $this->request->setPath('tokens');
         $payload['guid'] = Util::guid();
         $request->setBody(json_encode($payload));
-        $this->logger->debug('Request', $payload);
         $this->response = $this->send($request);
         $body           = json_decode($this->response->getBody(), true);
-        $this->logger->debug('Response', $body);
 
         return $body;
     }

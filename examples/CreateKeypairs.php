@@ -23,7 +23,10 @@ $public->generate();
 $sin->setPublicKey($public);
 $sin->generate();
 
-
 printf("Public Key:  %s\n", $public);
 printf("Private Key: %s\n", $private);
 printf("Sin Key:     %s\n\n", $sin);
+
+/**
+ * NOTE: You store your keys somewhere
+ */

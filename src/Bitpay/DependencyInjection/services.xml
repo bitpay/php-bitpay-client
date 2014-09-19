@@ -30,29 +30,14 @@
         <parameter key="adapter.class">Bitpay\Client\Adapter\CurlAdapter</parameter>
         <parameter key="key_manager.class">Bitpay\KeyManager</parameter>
         <parameter key="key_storage.class">Bitpay\Storage\FilesystemStorage</parameter>
-        <parameter key="logger.file">/tmp/bitpay.log</parameter>
-        <parameter key="logger.level" type="constant">\Monolog\Logger::NOTICE</parameter>
     </parameters>
     <services>
         <service id="network" class="%network.class%" />
         <service id="adapter" class="%adapter.class%" />
 
         <service id="client" class="Bitpay\Client\Client">
-            <argument type="service" id="logger" />
             <call method="setContainer">
                 <argument type="service" id="service_container" />
-            </call>
-        </service>
-
-        <service id="logger.handler.stream" class="Monolog\Handler\StreamHandler" public="false">
-            <argument>%logger.file%</argument>
-            <argument>%logger.level%</argument>
-        </service>
-
-        <service id="logger" class="Monolog\Logger">
-            <argument>bitpay</argument>
-            <call method="pushHandler">
-                <argument type="service" id="logger.handler.stream" />
             </call>
         </service>
 

@@ -104,6 +104,9 @@ class PublicKey extends Key
         return $this;
     }
 
+    /**
+     * @return boolean
+     */
     public function isValid()
     {
         return true;
