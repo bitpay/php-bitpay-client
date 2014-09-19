@@ -343,7 +343,7 @@ class Invoice implements InvoiceInterface
      */
     public function setPosData($posData)
     {
-        if (!empty($posData) {
+        if (!empty($posData)) {
             $this->posData = $posData;
         }
 
