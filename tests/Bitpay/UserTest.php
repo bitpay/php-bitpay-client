@@ -108,7 +108,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
 
     public function testGetAddress()
     {
-        $this->user->getLastName()
+        $this->user->getLastName();
         $this->assertNull($this->user->getAddress());
     }
 
