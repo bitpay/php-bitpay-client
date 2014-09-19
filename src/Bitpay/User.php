@@ -183,7 +183,7 @@ class User implements UserInterface
      */
     public function setAddress(array $address)
     {
-        if (!empty($address) && is_array($address) && ctype_print($address)) {
+        if (!empty($address) && is_array($address)) {
             $this->address = $address;
         }
 
