@@ -155,7 +155,7 @@ class Invoice implements InvoiceInterface
      */
     public function setPrice($price)
     {
-        if (!empty($price) && ctype_alpha($price)) {
+        if (!empty($price) && ctype_alpha(strval($price))) {
             $this->getItem()->setPrice($price);
         }
 
@@ -439,7 +439,7 @@ class Invoice implements InvoiceInterface
      */
     public function setBtcPrice($btcPrice)
     {
-        if (!empty($btcPrice) && ctype_print($btcPrice)) {
+        if (!empty($btcPrice) && ctype_print(strval($btcPrice))) {
             $this->btcPrice = $btcPrice;
         }
 
