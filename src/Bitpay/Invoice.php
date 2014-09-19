@@ -674,7 +674,7 @@ class Invoice implements InvoiceInterface
      */
     public function setBtcPaid($btcPaid)
     {
-        if (!empty($btcPaid)) {
+        if (isset($btcPaid)) {
             $this->btcPaid = $btcPaid;
         }
 
