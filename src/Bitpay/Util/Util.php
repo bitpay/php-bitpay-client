@@ -166,8 +166,8 @@ class Util
 
         $hex = '';
 
-        while (gmp_cmp($dec, '0') > 0) {
-            list ($dec, $r) = gmp_div_qr($dec, '16');
+        while (gmp_cmp($dec, 0) > 0) {
+            list ($dec, $r) = gmp_div_qr($dec, 16);
             $hex .= substr(self::HEX_CHARS, gmp_intval($r), 1);
         }
 
@@ -199,7 +199,7 @@ class Util
 
         for ($dec = 0, $i = 0; $i < strlen($hex); $i++) {
             $c   = strpos(self::HEX_CHARS, $hex[$i]);
-            $dec = gmp_add(gmp_mul($dec, '16'), $c);
+            $dec = gmp_add(gmp_mul($dec, 16), $c);
         }
 
         return gmp_strval($dec);
