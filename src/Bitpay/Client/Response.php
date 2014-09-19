@@ -32,7 +32,6 @@ namespace Bitpay\Client;
  */
 class Response implements ResponseInterface
 {
-
     /**
      * @var string
      */

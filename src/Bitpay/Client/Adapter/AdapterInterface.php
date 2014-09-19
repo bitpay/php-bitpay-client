@@ -36,7 +36,6 @@ use Bitpay\Client\ResponseInterface;
  */
 interface AdapterInterface
 {
-
     /**
      * Send request to BitPay
      *

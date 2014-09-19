@@ -32,7 +32,6 @@ namespace Bitpay;
  */
 interface ApplicationInterface
 {
-
     /**
      * @return array
      */

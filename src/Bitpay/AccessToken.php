@@ -30,7 +30,6 @@ namespace Bitpay;
  */
 class AccessToken implements AccessTokenInterface
 {
-
     /**
      * @var string
      */

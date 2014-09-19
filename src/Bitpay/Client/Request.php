@@ -32,7 +32,6 @@ namespace Bitpay\Client;
  */
 class Request implements RequestInterface
 {
-
     /**
      * @var array
      */
@@ -228,7 +227,7 @@ class Request implements RequestInterface
             $return .= sprintf("%s: %s\r\n", $h, $v);
         }
 
-        return $return . "\r\n";
+        return $return."\r\n";
     }
 
     /**

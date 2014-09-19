@@ -36,7 +36,6 @@ use Bitpay\Util\Util;
  */
 class Client extends ContainerAware implements ClientInterface
 {
-
     /**
      * @var Request
      */

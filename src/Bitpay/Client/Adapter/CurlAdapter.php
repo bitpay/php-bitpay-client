@@ -39,7 +39,6 @@ use Bitpay\Client\Response;
  */
 class CurlAdapter implements AdapterInterface
 {
-
     /**
      * @inheritdoc
      */

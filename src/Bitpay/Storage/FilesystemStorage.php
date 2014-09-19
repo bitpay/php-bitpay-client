@@ -112,7 +112,7 @@ class FilesystemStorage implements StorageInterface
     {
         if ($newmode === false) {
             clearstatcache();
-            return sprintf('%o', fileperms($filename)), -4);
+            return sprintf('%o', fileperms($filename));
         } else {
             return chmod($filename, $newmode);
         }

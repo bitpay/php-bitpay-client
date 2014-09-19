@@ -43,7 +43,6 @@ use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
  */
 class Bitpay
 {
-
     /**
      * @var ContainerInterface
      */
@@ -101,7 +100,7 @@ class Bitpay
     protected function getParameters()
     {
         return array(
-                     'bitpay.root_dir' => realpath(__DIR__ . '/..'),
+                     'bitpay.root_dir' => realpath(__DIR__.'/..'),
                     );
     }
 

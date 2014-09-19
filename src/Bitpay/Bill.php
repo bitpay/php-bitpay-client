@@ -31,7 +31,6 @@ namespace Bitpay;
  */
 class Bill implements BillInterface
 {
-
     /**
      * @var array
      */

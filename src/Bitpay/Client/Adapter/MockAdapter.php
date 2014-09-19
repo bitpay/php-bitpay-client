@@ -36,7 +36,6 @@ use Bitpay\Client\Response;
  */
 class MockAdapter implements AdapterInterface
 {
-
     /**
      * @inheritdoc
      */

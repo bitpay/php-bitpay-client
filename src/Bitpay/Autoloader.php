@@ -31,7 +31,6 @@ namespace Bitpay;
  */
 class Autoloader
 {
-
     /**
      * Register the autoloader
      */
@@ -43,7 +42,7 @@ class Autoloader
     /**
      * Give a class name and it will require the file.
      *
-     * @param string $class
+     * @param  string $class
      * @return bool
      */
     public static function autoload($class)
@@ -54,14 +53,14 @@ class Autoloader
             $isBitpay = true;
         }
 
-        $file = __DIR__ . '/../' . str_replace(array('\\'), array('/'), $class) . '.php';
+        $file = __DIR__.'/../'.str_replace(array('\\'), array('/'), $class).'.php';
 
         if (is_file($file) && is_readable($file)) {
             require_once $file;
 
             return true;
         } else {
-            throw new \Exception(sprintf('Class file "%s" is not readable or has been moved.', $file));
+            //throw new \Exception(sprintf('Class file "%s" is not readable or has been moved.', $file));
         }
 
         if ($isBitpay) {

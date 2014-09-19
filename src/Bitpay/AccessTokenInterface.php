@@ -32,7 +32,6 @@ namespace Bitpay;
  */
 interface AccessTokenInterface
 {
-
     /**
      * @return string
      */

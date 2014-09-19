@@ -31,7 +31,6 @@ namespace Bitpay\Client;
  */
 interface ResponseInterface
 {
-
     /**
      * @return string
      */

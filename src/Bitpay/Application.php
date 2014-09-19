@@ -31,7 +31,6 @@ namespace Bitpay;
  */
 class Application implements ApplicationInterface
 {
-
     /**
      * @var array
      */
