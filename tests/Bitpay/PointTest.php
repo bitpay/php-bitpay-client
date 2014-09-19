@@ -33,6 +33,7 @@ class PointTest extends \PHPUnit_Framework_TestCase
     public function testConstruct()
     {
         $point = new Point(1, 2);
+        $this->assertNotNull($point);
     }
 
     /**
@@ -41,18 +42,24 @@ class PointTest extends \PHPUnit_Framework_TestCase
     public function testToString()
     {
         $point = new Point(1, 2);
+        $this->assertNotNull($point);
+
         $this->assertSame('(1, 2)', (string) $point);
     }
 
     public function testGetX()
     {
         $point = new Point(1, 2);
+        $this->assertNotNull($point);
+
         $this->assertSame('1', $point->getX());
     }
 
     public function testGetY()
     {
         $point = new Point(1, 2);
+        $this->assertNotNull($point);
+
         $this->assertSame('2', $point->getY());
     }
 }
