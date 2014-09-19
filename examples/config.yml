@@ -1,0 +1,8 @@
+####
+#
+# Example config using a yml file
+#
+bitpay:
+    network: testnet
+    adapter: mock
+    key_storage_password: satoshi

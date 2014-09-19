@@ -1,0 +1,53 @@
+{
+    "name": "bitpay/php-client",
+    "description": "PHP Library to work with the new Bitpay API",
+    "license": "MIT",
+    "minimum-stability": "stable",
+    "keywords": ["bitpay", "bitcoin"],
+    "homepage": "https://github.com/bitpay/php-bitpay-client",
+    "support": {
+        "email": "support+php@bitpay.com",
+        "issues": "https://github.com/bitpay/php-bitpay-client/issues",
+        "wiki": "http://php-bitpay-client.readthedocs.org/",
+        "source": "https://github.com/bitpay/php-bitpay-client/"
+    },
+    "authors": [
+        {
+            "name": "BitPay Inc Engineers",
+            "homepage": "https://bitpay.com",
+            "role": "Core Developer"
+        },
+        {
+            "name": "Community Contributors",
+            "homepage": "https://github.com/bitpay/php-bitpay-client/graphs/contributors"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "": "src/"
+        }
+    },
+    "require": {
+        "php": ">=5.3.3",
+        "ext-gmp": "*"
+        "ext-curl": "*",
+        "ext-json": "*",
+        "ext-openssl": "*",
+        "symfony/config": "~2.3",
+        "symfony/dependency-injection": "~2.3"
+    },
+    "require-dev": {
+        "codegyre/robo": "*",
+        "phpunit/phpunit": "*",
+        "fzaninotto/faker": "*",
+        "mikey179/vfsStream": "*"
+    },
+    "config": {
+        "bin-dir": "bin"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "2.0.x-dev"
+        }
+    }
+}
