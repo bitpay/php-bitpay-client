@@ -334,8 +334,7 @@ class Bitauth
      */
     public function validateSin($sin)
     {
-        // TODO
-        return true;
+        return (!empty($sin) && (substr($sin, 0, 1) == 'T'));
     }
 
     /**
