@@ -27,11 +27,13 @@ namespace Bitpay;
 
 class KeyManagerTest extends \PHPUnit_Framework_TestCase
 {
-
     public function testConstruct()
     {
         $storage = $this->getMockStorage();
+        $this->assertNotNull($storage);
+
         $manager = new KeyManager($storage);
+        $this->assertNotNull($manager);
     }
 
     /**
@@ -40,7 +42,11 @@ class KeyManagerTest extends \PHPUnit_Framework_TestCase
     public function testPersist()
     {
         $storage = $this->getMockStorage();
+        $this->assertNotNull($storage);
+
         $manager = new KeyManager($storage);
+        $this->assertNotNull($manager);
+
         $manager->persist($this->getMockKey());
     }
 
@@ -50,7 +56,11 @@ class KeyManagerTest extends \PHPUnit_Framework_TestCase
     public function testLoad()
     {
         $storage = $this->getMockStorage();
+        $this->assertNotNull($storage);
+
         $manager = new KeyManager($storage);
+        $this->assertNotNull($manager);
+
         $manager->load($this->getMockKey());
     }
 
