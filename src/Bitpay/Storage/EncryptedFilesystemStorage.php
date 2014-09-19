@@ -95,7 +95,7 @@ class EncryptedFilesystemStorage implements StorageInterface
                                       );
         } else {
             $decoded = openssl_decrypt(
-                                       Gmp::gmpBinconv($encoded),
+                                       \Bitpay\Util\Gmp::gmpBinconv($encoded),
                                        self::METHOD,
                                        $this->password,
                                        OPENSSL_RAW_DATA,
