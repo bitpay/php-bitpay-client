@@ -85,7 +85,7 @@ class EncryptedFilesystemStorage implements StorageInterface
 
         $encoded = file_get_contents($id);
         
-        if (function_exists('')) {
+        if (function_exists('hex2bin')) {
             $decoded = openssl_decrypt(
                                        hex2bin($encoded),
                                        self::METHOD,
