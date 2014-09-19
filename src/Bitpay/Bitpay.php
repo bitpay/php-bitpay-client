@@ -73,8 +73,12 @@ class Bitpay
      */
     protected function initializeContainer($config)
     {
-        $this->container = $this->buildContainer($config);
-        $this->container->compile();
+        if (!empty($config)) {
+            $this->container = $this->buildContainer($config);
+            $this->container->compile();
+        } else {
+            throw new \Exception(sprintf('Bitpay::initializeContainer(): Missing config parameter.'));
+        }
     }
 
     /**
@@ -82,27 +86,36 @@ class Bitpay
      */
     protected function buildContainer($config)
     {
-        $container = new ContainerBuilder(new ParameterBag($this->getParameters()));
-        $this->prepareContainer($container);
-        $this->getContainerLoader($container)->load($config);
+        if (!empty($config)) {
+            $container = new ContainerBuilder(new ParameterBag($this->getParameters()));
 
-        return $container;
+            $this->prepareContainer($container);
+            $this->getContainerLoader($container)->load($config);
+
+            return $container;
+        } else {
+            throw new \Exception(sprintf('Bitpay::buildContainer(): Missing config parameter.'));
+        }
     }
 
     protected function getParameters()
     {
         return array(
-            'bitpay.root_dir' => realpath(__DIR__ . '/..'),
-        );
+                     'bitpay.root_dir' => realpath(__DIR__ . '/..'),
+                    );
     }
 
     /**
      */
     private function prepareContainer(ContainerInterface $container)
     {
-        foreach ($this->getDefaultExtensions() as $ext) {
-            $container->registerExtension($ext);
-            $container->loadFromExtension($ext->getAlias());
+        if (!empty($container)) {
+            foreach ($this->getDefaultExtensions() as $ext) {
+                $container->registerExtension($ext);
+                $container->loadFromExtension($ext->getAlias());
+            }
+        } else {
+            throw new \Exception(sprintf('Bitpay::prepareContainer(): Missing container parameter.'));
         }
     }
 
@@ -112,15 +125,20 @@ class Bitpay
      */
     private function getContainerLoader(ContainerInterface $container)
     {
-        $locator  = new FileLocator();
-        $resolver = new LoaderResolver(
-            array(
-                new ArrayLoader($container),
-                new YamlFileLoader($container, $locator),
-            )
-        );
+        if (!empty($container)) {
+            $locator  = new FileLocator();
 
-        return new DelegatingLoader($resolver);
+            $resolver = new LoaderResolver(
+                                           array(
+                                                 new ArrayLoader($container),
+                                                 new YamlFileLoader($container, $locator),
+                                                )
+                                          );
+
+            return new DelegatingLoader($resolver);
+        } else {
+            throw new \Exception(sprintf('Bitpay::getContainerLoader(): Missing container parameter.'));
+        }
     }
 
     /**
@@ -131,8 +149,8 @@ class Bitpay
     private function getDefaultExtensions()
     {
         return array(
-            new BitpayExtension(),
-        );
+                     new BitpayExtension(),
+                    );
     }
 
     /**
@@ -148,6 +166,10 @@ class Bitpay
      */
     public function get($service)
     {
-        return $this->container->get($service);
+        if (!empty($service)) {
+            return $this->container->get($service);
+        } else {
+            return null;
+        }
     }
 }
