@@ -84,13 +84,13 @@ class Gmp
         $iter = 0;
         $bin  = '';
 
-        while (gmp_cmp($tmp, '0') > 0) {
-            if (gmp_mod($tmp, '2') == 1) {
+        while (gmp_cmp($tmp, 0) > 0) {
+            if (gmp_mod($tmp, 2) == 1) {
                 $bin .= '1';
             } else {
                 $bin .= '0';
             }
-            $tmp = gmp_div($tmp, '2');
+            $tmp = gmp_div($tmp, 2);
             $iter++;
         }
 
@@ -236,9 +236,9 @@ class Gmp
             $dec = '0x'.strtolower($dec);
         }
 
-        while (gmp_cmp($dec, '0') > 0) {
-            $dv   = gmp_div($dec, '256');
-            $rem  = gmp_strval(gmp_mod($dec, '256'));
+        while (gmp_cmp($dec, 0) > 0) {
+            $dv   = gmp_div($dec, 256);
+            $rem  = gmp_strval(gmp_mod($dec, 256));
             $dec  = $dv;
             $byte = $byte.$digits[$rem];
         }
