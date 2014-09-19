@@ -29,6 +29,7 @@
     },
     "require": {
         "php": ">=5.3.3",
+        "ext-gmp": "*"
         "ext-curl": "*",
         "ext-json": "*",
         "ext-openssl": "*",
