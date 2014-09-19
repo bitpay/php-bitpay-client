@@ -35,9 +35,13 @@ class PrivateKeyTest extends \PHPUnit_Framework_TestCase
     public function testGenerate()
     {
         $priKey = new PrivateKey();
+        $this->assertNotNull($priKey);
+
         $this->assertNull($priKey->getHex());
         $this->assertNull($priKey->getDec());
+
         $priKey->generate();
+
         $this->assertEquals(64, strlen($priKey->getHex()));
         $this->assertGreaterThanOrEqual(76, strlen($priKey->getDec()));
     }
@@ -45,9 +49,14 @@ class PrivateKeyTest extends \PHPUnit_Framework_TestCase
     public function testGetHex()
     {
         $priKey = new PrivateKey();
+        $this->assertNotNull($priKey);
+
         $this->assertNull($priKey->getHex());
+
         $this->assertEquals(0, strlen($priKey->getHex()));
+
         $priKey->generate();
+
         $this->assertEquals(64, strlen($priKey->getHex()));
     }
 
@@ -58,9 +67,13 @@ class PrivateKeyTest extends \PHPUnit_Framework_TestCase
     public function testToString()
     {
         $priKey = new PrivateKey();
+        $this->assertNotNull($priKey);
+
         // Make sure this is a string
         $this->assertInternalType('string', $priKey->__toString());
+
         $this->assertSame('', (string) $priKey);
+
         $priKey->generate();
 
         // make sure it's still a string after generating hex
@@ -70,39 +83,62 @@ class PrivateKeyTest extends \PHPUnit_Framework_TestCase
     public function testGetDec()
     {
         $priKey = new PrivateKey();
+        $this->assertNotNull($priKey);
+
         $this->assertNull($priKey->getDec());
+
         $this->assertEquals(0, strlen($priKey->getDec()));
+
         $priKey->generate();
+
         $this->assertGreaterThanOrEqual(76, strlen($priKey->getDec()));
     }
 
     public function testIsValid()
     {
         $priKey = new PrivateKey();
+        $this->assertNotNull($priKey);
+
         $this->assertFalse($priKey->isValid());
+
         $priKey->generate();
+
         $this->assertTrue($priKey->isValid());
     }
 
     public function testSign()
     {
-        //$priKey = PrivateKey::create()->generate();
-        //$signature = $priKey->sign('Hello');
+        $priKey = new PrivateKey();
+        $this->assertNotNull($priKey);
+
+        $priKey->generate();
+
+        $signature = $priKey->sign('BitPay');
+        
+        $this->assertNotNull($signature);
     }
 
     public function testHasValidHex()
     {
-        $pri = new PrivateKey();
-        $this->assertFalse($pri->hasValidHex());
-        $pri->generate();
-        $this->assertTrue($pri->hasValidHex());
+        $priKey = new PrivateKey();
+        $this->assertNotNull($priKey);
+
+        $this->assertFalse($priKey->hasValidHex());
+
+        $priKey->generate();
+
+        $this->assertTrue($priKey->hasValidHex());
     }
 
     public function testHasValidDec()
     {
-        $pri = new PrivateKey();
-        $this->assertFalse($pri->hasValidDec());
-        $pri->generate();
-        $this->assertTrue($pri->hasValidDec());
+        $priKey = new PrivateKey();
+        $this->assertNotNull($priKey);
+
+        $this->assertFalse($priKey->hasValidDec());
+
+        $priKey->generate();
+
+        $this->assertTrue($priKey->hasValidDec());
     }
 }
