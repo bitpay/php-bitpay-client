@@ -26,13 +26,18 @@
 namespace Bitpay\Util;
 
 /**
- *
+ * Provides methods used when creating elliptic curve keypairs
+ * and related utility functions to support algorithms.
+ * 
  * @package Bitcore
  */
 class Gmp
 {
 
     /**
+     * Pure PHP implementation of the doubleAndAdd algorithm, see:
+     * http://en.wikipedia.org/wiki/Elliptic_curve_point_multiplication#Double-and-add
+     * 
      * @param string
      * @param array
      * @param string
@@ -46,15 +51,16 @@ class Gmp
         $n   = strlen($tmp) - 1;
         $S   = 'infinity';
         $D   = 0;
-        $A   = 0;
 
         while ($n >= 0) {
             $D++;
+
             $S = self::gmpPointDouble($S, $p, $a);
+
             if ($tmp[$n] == 1) {
-                $A++;
                 $S = self::gmpPointAdd($S, $P, $p, $a);
             }
+
             $n--;
         }
 
@@ -62,6 +68,9 @@ class Gmp
     }
 
     /**
+     * This method returns a binary string representation of
+     * the decimal number.  Used for the doubleAndAdd() method.
+     * 
      * @param string
      *
      * @return string
@@ -71,16 +80,18 @@ class Gmp
         if (substr(strtolower($num), 0, 2) == '0x') {
             $num = Util::decodeHex(substr($num, 2));
         }
+
         $tmp  = $num;
         $iter = 0;
         $bin  = '';
-        while (gmp_cmp($tmp, 0) > 0) {
-            if (gmp_mod($tmp, 2) == 1) {
-                $bin .= 1;
+
+        while (gmp_cmp($tmp, '0') > 0) {
+            if (gmp_mod($tmp, '2') == 1) {
+                $bin .= '1';
             } else {
-                $bin .= 0;
+                $bin .= '0';
             }
-            $tmp = gmp_div($tmp, 2);
+            $tmp = gmp_div($tmp, '2');
             $iter++;
         }
 
@@ -88,10 +99,10 @@ class Gmp
     }
 
     /**
-     * 2P = R where
-     * s = (3xP2 + a)/(2yP) mod p
-     * xR = s2 - 2xP mod p
-     * yR = -yP + s(xP - xR) mod p
+     * Point multiplication method 2P = R where
+     *   s = (3xP2 + a)/(2yP) mod p
+     *   xR = s2 - 2xP mod p
+     *   yR = -yP + s(xP - xR) mod p
      *
      * @param array
      * @param string
@@ -104,43 +115,55 @@ class Gmp
         if ($P == 'infinity') {
             return $P;
         }
+
         $s = 0;
+
         $R = array(
-            'x' => 0,
-            'y' => 0,
-            's' => 0,
-            'p' => $p,
-            'a' => $a,
-        );
-        $m      = gmp_add(gmp_mul(3, gmp_mul($P['x'], $P['x'])), $a);
-        $o      = gmp_mul(2, $P['y']);
-        $n      = gmp_invert($o, $p);
-        $n2     = gmp_mod($o, $p);
-        $st     = gmp_mul($m, $n);
-        $st2    = gmp_mul($m, $n2);
-        $s      = gmp_mod($st, $p);
-        $s2     = gmp_mod($st2, $p);
-        $xmul   = gmp_mul(2, $P['x']);
-        $smul   = gmp_mul($s, $s);
-        $xsub   = gmp_sub($smul, $xmul);
-        $xmod   = gmp_mod($xsub, $p);
-        $R['x'] = $xmod;
-        $ysub   = gmp_sub($P['x'], $R['x']);
-        $ymul   = gmp_mul($s, $ysub);
-        $ysub2  = gmp_sub(0, $P['y']);
-        $yadd   = gmp_add($ysub2, $ymul);
-        $R['x'] = gmp_strval($R['x']);
-        $R['y'] = gmp_strval(gmp_mod($yadd, $p));
-        $R['s'] = gmp_strval($s);
+                   'x' => 0,
+                   'y' => 0,
+                   's' => 0,
+                   'p' => $p,
+                   'a' => $a,
+                  );
+
+        // Critical math section
+        try {
+            $m      = gmp_add(gmp_mul(3, gmp_mul($P['x'], $P['x'])), $a);
+            $o      = gmp_mul(2, $P['y']);
+            $n      = gmp_invert($o, $p);
+            $n2     = gmp_mod($o, $p);
+            $st     = gmp_mul($m, $n);
+            $st2    = gmp_mul($m, $n2);
+            $s      = gmp_mod($st, $p);
+            $s2     = gmp_mod($st2, $p);
+            $xmul   = gmp_mul(2, $P['x']);
+            $smul   = gmp_mul($s, $s);
+            $xsub   = gmp_sub($smul, $xmul);
+            $xmod   = gmp_mod($xsub, $p);
+
+            $R['x'] = $xmod;
+
+            $ysub   = gmp_sub($P['x'], $R['x']);
+            $ymul   = gmp_mul($s, $ysub);
+            $ysub2  = gmp_sub(0, $P['y']);
+            $yadd   = gmp_add($ysub2, $ymul);
+
+            $R['x'] = gmp_strval($R['x']);
+            $R['y'] = gmp_strval(gmp_mod($yadd, $p));
+            $R['s'] = gmp_strval($s);
+        } catch (Exception $e) {
+            // TODO throw exception
+            return 'Error in Util::gmpPointDouble(): ' . $e->getMessage();
+        }
 
         return $R;
     }
 
     /**
-     * P + Q = R where
-     * s = (yP - yQ)/(xP - xQ) mod p
-     * xR = s2 - xP - xQ mod p
-     * yR = -yP + s(xP - xR) mod p
+     * Point addition method P + Q = R where:
+     *   s = (yP - yQ)/(xP - xQ) mod p
+     *   xR = s2 - xP - xQ mod p
+     *   yR = -yP + s(xP - xR) mod p
      *
      * @param array
      * @param array
@@ -164,27 +187,38 @@ class Gmp
         }
 
         $s = 0;
-        $R = array(
-            'x' => 0,
-            'y' => 0,
-            's' => 0,
-        );
 
-        $m      = gmp_sub($P['y'], $Q['y']);
-        $n      = gmp_sub($P['x'], $Q['x']);
-        $o      = gmp_invert($n, $p);
-        $st     = gmp_mul($m, $o);
-        $s      = gmp_mod($st, $p);
-        $R['x'] = gmp_mod(gmp_sub(gmp_sub(gmp_mul($s, $s), $P['x']), $Q['x']), $p);
-        $R['y'] = gmp_mod(gmp_add(gmp_sub(0, $P['y']), gmp_mul($s, gmp_sub($P['x'], $R['x']))), $p);
-        $R['s'] = gmp_strval($s);
-        $R['x'] = gmp_strval($R['x']);
-        $R['y'] = gmp_strval($R['y']);
+        $R = array(
+                   'x' => 0,
+                   'y' => 0,
+                   's' => 0,
+                  );
+
+        // Critical math section
+        try {
+            $m      = gmp_sub($P['y'], $Q['y']);
+            $n      = gmp_sub($P['x'], $Q['x']);
+            $o      = gmp_invert($n, $p);
+            $st     = gmp_mul($m, $o);
+            $s      = gmp_mod($st, $p);
+
+            $R['x'] = gmp_mod(gmp_sub(gmp_sub(gmp_mul($s, $s), $P['x']), $Q['x']), $p);
+            $R['y'] = gmp_mod(gmp_add(gmp_sub(0, $P['y']), gmp_mul($s, gmp_sub($P['x'], $R['x']))), $p);
+
+            $R['s'] = gmp_strval($s);
+            $R['x'] = gmp_strval($R['x']);
+            $R['y'] = gmp_strval($R['y']);
+        } catch (Exception $e) {
+            // TODO throw exception
+            return 'Error in Util::gmpPointAdd(): ' . $e->getMessage();
+        }
 
         return $R;
     }
 
     /**
+     * Converts hex value into octet (byte) string
+     * 
      * @param string
      *
      * @return string
@@ -194,12 +228,13 @@ class Gmp
         for ($x = 0; $x < 256; $x++) {
             $digits[$x] = chr($x);
         }
+
         $dec  = $hex;
         $byte = '';
         $seq  = '';
 
-        if (substr(strtoupper($dec), 0, 2) != '0X') {
-            $dec='0x'.strtoupper($dec);
+        if (substr(strtolower($dec), 0, 2) != '0x') {
+            $dec = '0x' . strtolower($dec);
         }
 
         while (gmp_cmp($dec, '0') > 0) {
