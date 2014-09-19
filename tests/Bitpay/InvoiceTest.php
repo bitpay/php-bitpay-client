@@ -116,8 +116,8 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetNotificationEmail()
     {
-        $this->invoice->setNotificationEmail('josh@bitpay.com');
-        $this->assertSame('josh@bitpay.com', $this->invoice->getNotificationEmail());
+        $this->invoice->setNotificationEmail('support@bitpay.com');
+        $this->assertSame('support@bitpay.com', $this->invoice->getNotificationEmail());
     }
 
     public function testGetNotificationUrl()
@@ -130,8 +130,8 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetNotificationUrl()
     {
-        $this->invoice->setNotificationUrl('http://bitpay.com');
-        $this->assertSame('http://bitpay.com', $this->invoice->getNotificationUrl());
+        $this->invoice->setNotificationUrl('https://bitpay.com');
+        $this->assertSame('https://bitpay.com', $this->invoice->getNotificationUrl());
     }
 
     public function testGetRedirectUrl()
@@ -144,8 +144,8 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetRedirectUrl()
     {
-        $this->invoice->setRedirectUrl('http://bitpay.com');
-        $this->assertSame('http://bitpay.com', $this->invoice->getRedirectUrl());
+        $this->invoice->setRedirectUrl('https://bitpay.com');
+        $this->assertSame('https://bitpay.com', $this->invoice->getRedirectUrl());
     }
 
     public function testGetPosData()
@@ -158,8 +158,8 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetPosData()
     {
-        $this->invoice->setPosData('http://bitpay.com');
-        $this->assertSame('http://bitpay.com', $this->invoice->getPosData());
+        $this->invoice->setPosData('https://bitpay.com');
+        $this->assertSame('https://bitpay.com', $this->invoice->getPosData());
     }
 
     public function testGetStatus()
