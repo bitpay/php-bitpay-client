@@ -145,7 +145,7 @@ class Currency implements CurrencyInterface
      */
     public function setPrecision($precision)
     {
-        if (!empty($precision) && ctype_digit($precision)) {
+        if (!empty($precision) && ctype_digit(strval($precision))) {
             $this->precision = (int) $precision;
         }
 
