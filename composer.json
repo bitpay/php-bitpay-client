@@ -3,6 +3,25 @@
     "description": "PHP Library to work with the new Bitpay API",
     "license": "MIT",
     "minimum-stability": "stable",
+    "keywords": ["bitpay", "bitcoin"],
+    "homepage": "https://github.com/bitpay/php-bitpay-client",
+    "support": {
+        "email": "support+php@bitpay.com",
+        "issues": "https://github.com/bitpay/php-bitpay-client/issues",
+        "wiki": "http://php-bitpay-client.readthedocs.org/",
+        "source": "https://github.com/bitpay/php-bitpay-client/"
+    },
+    "authors": [
+        {
+            "name": "BitPay Inc Engineers",
+            "homepage": "https://bitpay.com",
+            "role": "Core Developer"
+        },
+        {
+            "name": "Community Contributors",
+            "homepage": "https://github.com/bitpay/php-bitpay-client/graphs/contributors"
+        }
+    ],
     "autoload": {
         "psr-4": {
             "": "src/"

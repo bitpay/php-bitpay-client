@@ -40,15 +40,24 @@ php composer.phar update bitpay/php-client
 php composer.phar require bitpay/php-client:~2.0
 ```
 
+# Configuration
+
+See http://php-bitpay-client.readthedocs.org/en/latest/configuration.html
+
 # Usage
 
 Please see the ``docs`` directory for information on how to use this library
 and the ``examples`` directory for examples on using this library. You should
 be able to run all the examples by running ``php examples/File.php``.
 
-# Configuration
+Reading the latest documentation at http://php-bitpay-client.readthedocs.org/
+can also help.
 
-See http://php-bitpay-client.readthedocs.org/en/latest/configuration.html
+# Support
+
+* https://github.com/bitpay/php-bitpay-client/issues
+* http://php-bitpay-client.readthedocs.org/en/latest/index.html
+* https://support.bitpay.com/
 
 # License
 
