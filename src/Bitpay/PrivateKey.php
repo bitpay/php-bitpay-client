@@ -120,10 +120,9 @@ class PrivateKey extends Key
                 $d = $this->hex;
             }
 
-            $k    = openssl_random_pseudo_bytes(32);
+            $k    = openssl_random_pseudo_bytes(32, $cstrong);
 
             if (!$k || !$cstrong) {
-                // TODO: Throw exception
                 throw new \Exception(
                     'Could not generate a cryptographically-strong random number. Your OpenSSL extension might be old or broken.'
                 );
