@@ -77,6 +77,11 @@ class User implements UserInterface
     protected $country;
 
     /**
+     * @var bool
+     */
+    protected $agreedToTOSandPP;
+
+    /**
      * @inheritdoc
      */
     public function getPhone()
@@ -91,7 +96,9 @@ class User implements UserInterface
      */
     public function setPhone($phone)
     {
-        $this->phone = $phone;
+        if (!empty($phone) && is_string($phone) && ctype_print($phone)) {
+            $this->phone = trim($phone);
+        }
 
         return $this;
     }
@@ -111,7 +118,9 @@ class User implements UserInterface
      */
     public function setEmail($email)
     {
-        $this->email = $email;
+        if (!empty($email) && is_string($email) && ctype_print($email)) {
+            $this->email = trim($email);
+        }
 
         return $this;
     }
@@ -131,7 +140,9 @@ class User implements UserInterface
      */
     public function setFirstName($firstName)
     {
-        $this->firstName = $firstName;
+        if (!empty($firstName) && is_string($firstName) && ctype_print($firstName)) {
+            $this->firstName = trim($firstName);
+        }
 
         return $this;
     }
@@ -151,7 +162,9 @@ class User implements UserInterface
      */
     public function setLastName($lastName)
     {
-        $this->lastName = $lastName;
+        if (!empty($lastName) && is_string($lastName) && ctype_print($lastName)) {
+            $this->lastName = trim($lastName);
+        }
 
         return $this;
     }
@@ -171,7 +184,9 @@ class User implements UserInterface
      */
     public function setAddress(array $address)
     {
-        $this->address = $address;
+        if (!empty($address) && is_array($address) && ctype_print($address)) {
+            $this->address = $address;
+        }
 
         return $this;
     }
@@ -191,7 +206,9 @@ class User implements UserInterface
      */
     public function setCity($city)
     {
-        $this->city = $city;
+        if (!empty($city) && is_string($city) && ctype_print($city)) {
+            $this->city = trim($city);
+        }
 
         return $this;
     }
@@ -211,7 +228,9 @@ class User implements UserInterface
      */
     public function setState($state)
     {
-        $this->state = $state;
+        if (!empty($state) && is_string($state) && ctype_print($state)) {
+            $this->state = trim($state);
+        }
 
         return $this;
     }
@@ -231,7 +250,9 @@ class User implements UserInterface
      */
     public function setZip($zip)
     {
-        $this->zip = $zip;
+        if (!empty($zip) && is_string($zip) && ctype_print($zip)) {
+            $this->zip = trim($zip);
+        }
 
         return $this;
     }
@@ -251,8 +272,32 @@ class User implements UserInterface
      */
     public function setCountry($country)
     {
-        $this->country = $country;
+        if (!empty($country) && is_string($country) && ctype_print($country)) {
+            $this->country = trim($country);
+        }
 
         return $this;
+    }
+    
+    /**
+     * @param bool $boolvalue
+     * 
+     * @return User
+     */
+    public function setAgreedToTOSandPP($boolvalue)
+    {
+        if (!empty($boolvalue)) {
+            $this->agreedToTOSandPP = $boolvalue;
+        }
+
+        return $this;
+    }
+    
+    /**
+     * @return bool
+     */
+    public function getAgreedToTOSandPP()
+    {
+        return $this->agreedToTOSandPP;
     }
 }
