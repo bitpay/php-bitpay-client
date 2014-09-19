@@ -35,9 +35,14 @@ class BitauthTest extends \PHPUnit_Framework_TestCase
     {
         $bitauth = new Bitauth();
         $keys    = $bitauth->generateSin();
+
+        $this->assertNotNull($bitauth);
+        $this->assertNotNull($keys);
+
         $this->assertArrayHasKey('private', $keys);
         $this->assertArrayHasKey('public', $keys);
         $this->assertArrayHasKey('sin', $keys);
+
         $this->assertInstanceOf('Bitpay\PrivateKey', $keys['private']);
         $this->assertInstanceOf('Bitpay\PublicKey', $keys['public']);
         $this->assertInstanceOf('Bitpay\SinKey', $keys['sin']);
@@ -53,9 +58,11 @@ class BitauthTest extends \PHPUnit_Framework_TestCase
 
         $bitauth = new Bitauth();
 
+        $this->assertNotNull($bitauth);
+
         foreach ($data as $datum) {
             //$this->assertSame($datum[2], $bitauth->encrypt($datum[0], $datum[1]));
-            
+
             // TODO: get value and use for assert. checking not null for now...
             $this->assertNotNull($bitauth->Encrypt($datum,'12345','123'));
         }
@@ -75,7 +82,9 @@ class BitauthTest extends \PHPUnit_Framework_TestCase
         $bitauth   = new Bitauth();
         $data      = 'https://test.bitpay.com/tokens?nonce=200';
         $signature = $bitauth->sign($data, $this->getMockPrivateKey());
-        
+
+        $this->assertNotNull($bitauth);
+
         // TODO: better test?
         $this->assertNotNull($signature);
 
