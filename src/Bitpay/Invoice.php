@@ -396,7 +396,7 @@ class Invoice implements InvoiceInterface
     public function setId($id)
     {
         if (!empty($id) && ctype_print($id)) {
-            $this->id = trim(id);
+            $this->id = trim($id);
         }
 
         return $this;
