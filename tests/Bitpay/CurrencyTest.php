@@ -36,6 +36,7 @@ class CurrencyTest extends \PHPUnit_Framework_TestCase
 
     public function testGetCode()
     {
+        $this->assertNotNull($this->currency);
         $this->assertNull($this->currency->getCode());
     }
 
@@ -44,12 +45,14 @@ class CurrencyTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetCode()
     {
+        $this->assertNotNull($this->currency);
         $this->currency->setCode('usd');
         $this->assertSame('USD', $this->currency->getCode());
     }
 
     public function testGetSymbol()
     {
+        $this->assertNotNull($this->currency);
         $this->assertNull($this->currency->getSymbol());
     }
 
@@ -58,12 +61,14 @@ class CurrencyTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetSymbol()
     {
+        $this->assertNotNull($this->currency);
         $this->currency->setSymbol('$');
         $this->assertSame('$', $this->currency->getSymbol());
     }
 
     public function testGetPrecision()
     {
+        $this->assertNotNull($this->currency);
         $this->assertNull($this->currency->getPrecision());
     }
 
@@ -72,12 +77,14 @@ class CurrencyTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetPrecision()
     {
+        $this->assertNotNull($this->currency);
         $this->currency->setPrecision(2);
         $this->assertSame(2, $this->currency->getPrecision());
     }
 
     public function testGetExchangePctFee()
     {
+        $this->assertNotNull($this->currency);
         $this->assertNull($this->currency->getExchangePctFee());
     }
 
@@ -86,12 +93,14 @@ class CurrencyTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetExchangePctFee()
     {
+        $this->assertNotNull($this->currency);
         $this->currency->setExchangePctFee('100');
         $this->assertSame('100', $this->currency->getExchangePctFee());
     }
 
     public function testIsPayoutEnabled()
     {
+        $this->assertNotNull($this->currency);
         $this->assertFalse($this->currency->isPayoutEnabled());
     }
 
@@ -100,12 +109,14 @@ class CurrencyTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetPayoutEnabled()
     {
+        $this->assertNotNull($this->currency);
         $this->currency->setPayoutEnabled(true);
         $this->assertTrue($this->currency->isPayoutEnabled());
     }
 
     public function testGetName()
     {
+        $this->assertNotNull($this->currency);
         $this->assertNull($this->currency->getName());
     }
 
@@ -114,12 +125,14 @@ class CurrencyTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetName()
     {
+        $this->assertNotNull($this->currency);
         $this->currency->setName('US Dollar');
         $this->assertSame('US Dollar', $this->currency->getName());
     }
 
     public function testGetPluralName()
     {
+        $this->assertNotNull($this->currency);
         $this->assertNull($this->currency->getPluralName());
     }
 
@@ -128,12 +141,14 @@ class CurrencyTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetPluralName()
     {
+        $this->assertNotNull($this->currency);
         $this->currency->setPluralName('US Dollars');
         $this->assertSame('US Dollars', $this->currency->getPluralName());
     }
 
     public function testGetAlts()
     {
+        $this->assertNotNull($this->currency);
         $this->assertNull($this->currency->getAlts());
     }
 
@@ -142,12 +157,14 @@ class CurrencyTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetAlts()
     {
+        $this->assertNotNull($this->currency);
         $this->currency->setAlts('usd bucks');
         $this->assertSame('usd bucks', $this->currency->getAlts());
     }
 
     public function testGetPayoutFields()
     {
+        $this->assertNotNull($this->currency);
         $this->assertEmpty($this->currency->getPayoutFields());
     }
 
@@ -156,12 +173,15 @@ class CurrencyTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetPayoutFields()
     {
+        $this->assertNotNull($this->currency);
+
         $fields = array(
-            'name',
-            'account',
-            'routing',
-            'merchantEIN',
-        );
+                        'name',
+                        'account',
+                        'routing',
+                        'merchantEIN',
+                       );
+
         $this->currency->setPayoutFields($fields);
         $this->assertSame($fields, $this->currency->getPayoutFields());
     }
