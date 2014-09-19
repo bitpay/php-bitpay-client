@@ -80,7 +80,11 @@ class PublicKeyTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('', (string) $pubKey);
         $pubKey->generate(PrivateKey::create()->generate());
 
-        $compressed = sprintf('02%s', $pubKey->getX());
+        if ('02'.$pubKey->getX() == $pubKey) {
+            $compressed = '02'.$pubKey->getX();
+        } else {
+            $compressed = '03'.$pubKey->getX();
+        }
 
         $this->assertSame($compressed, (string) $pubKey);
     }
