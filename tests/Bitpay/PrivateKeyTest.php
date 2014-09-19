@@ -111,10 +111,13 @@ class PrivateKeyTest extends \PHPUnit_Framework_TestCase
         $priKey = new PrivateKey();
         $this->assertNotNull($priKey);
 
+        $auth = new BitAuth();
+
         $priKey->generate();
 
-        $signature = $priKey->sign('BitPay');
-        
+        //$signature = $priKey->sign('BitPay');
+
+        $signature = $auth->sign('BitPay', $priKey);
         $this->assertNotNull($signature);
     }
 
