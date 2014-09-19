@@ -28,6 +28,8 @@ namespace Bitpay;
 class BuyerTest extends \PHPUnit_Framework_TestCase
 {
 
+    private $user;
+
     public function setUp()
     {
         $this->user = new Buyer();
@@ -35,6 +37,7 @@ class BuyerTest extends \PHPUnit_Framework_TestCase
 
     public function testGetPhone()
     {
+        $this->assertNotNull($this->user);
         $this->assertNull($this->user->getPhone());
     }
 
@@ -43,12 +46,14 @@ class BuyerTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetPhone()
     {
+        $this->assertNotNull($this->user);
         $this->user->setPhone('555-555-5555');
         $this->assertSame('555-555-5555', $this->user->getPhone());
     }
 
     public function testGetEmail()
     {
+        $this->assertNotNull($this->user);
         $this->assertNull($this->user->getEmail());
     }
 
@@ -57,12 +62,14 @@ class BuyerTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetEmail()
     {
-        $this->user->setEmail('josh@bitpay.com');
-        $this->assertSame('josh@bitpay.com', $this->user->getEmail());
+        $this->assertNotNull($this->user);
+        $this->user->setEmail('support@bitpay.com');
+        $this->assertSame('support@bitpay.com', $this->user->getEmail());
     }
 
     public function testGetFirstName()
     {
+        $this->assertNotNull($this->user);
         $this->assertNull($this->user->getFirstName());
     }
 
@@ -71,12 +78,14 @@ class BuyerTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetFirstName()
     {
-        $this->user->setFirstName('Joshua');
-        $this->assertSame('Joshua', $this->user->getFirstName());
+        $this->assertNotNull($this->user);
+        $this->user->setFirstName('BitPay');
+        $this->assertSame('BitPay', $this->user->getFirstName());
     }
 
     public function testGetLastName()
     {
+        $this->assertNotNull($this->user);
         $this->assertNull($this->user->getLastName());
     }
 
@@ -85,12 +94,14 @@ class BuyerTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetLastName()
     {
-        $this->user->setLastName('Estes');
-        $this->assertSame('Estes', $this->user->getLastName());
+        $this->assertNotNull($this->user);
+        $this->user->setLastName('Inc');
+        $this->assertSame('Inc', $this->user->getLastName());
     }
 
     public function testGetAddress()
     {
+        $this->assertNotNull($this->user);
         $this->assertNull($this->user->getAddress());
     }
 
@@ -99,16 +110,20 @@ class BuyerTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetAddress()
     {
+        $this->assertNotNull($this->user);
+
         $addr = array(
-            '123 Main St',
-            'Suite 100',
-        );
+                      '3405 Piedmont Rd NE',
+                      'Suite 200',
+                     );
+
         $this->user->setAddress($addr);
         $this->assertSame($addr, $this->user->getAddress());
     }
 
     public function testGetCity()
     {
+        $this->assertNotNull($this->user);
         $this->assertNull($this->user->getCity());
     }
 
@@ -117,12 +132,14 @@ class BuyerTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetCity()
     {
+        $this->assertNotNull($this->user);
         $this->user->setCity('Atlanta');
         $this->assertSame('Atlanta', $this->user->getCity());
     }
 
     public function testGetState()
     {
+        $this->assertNotNull($this->user);
         $this->assertNull($this->user->getState());
     }
 
@@ -131,12 +148,14 @@ class BuyerTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetState()
     {
+        $this->assertNotNull($this->user);
         $this->user->setState('GA');
         $this->assertSame('GA', $this->user->getState());
     }
 
     public function testGetZip()
     {
+        $this->assertNotNull($this->user);
         $this->assertNull($this->user->getZip());
     }
 
@@ -145,7 +164,8 @@ class BuyerTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetZip()
     {
-        $this->user->setZip('37379');
-        $this->assertSame('37379', $this->user->getZip());
+        $this->assertNotNull($this->user);
+        $this->user->setZip('30305');
+        $this->assertSame('30305', $this->user->getZip());
     }
 }
