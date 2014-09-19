@@ -277,7 +277,7 @@ class Currency implements CurrencyInterface
      */
     public function setPayoutFields(array $payoutFields)
     {
-        if (!empty($alts) && is_array($alts)) {
+        if (!empty($payoutFields) && is_array($payoutFields)) {
             $this->payoutFields = $payoutFields;
         }
 
