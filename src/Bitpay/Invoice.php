@@ -31,6 +31,7 @@ namespace Bitpay;
  */
 class Invoice implements InvoiceInterface
 {
+
     /**
      * @var CurrencyInterface
      */
@@ -154,7 +155,9 @@ class Invoice implements InvoiceInterface
      */
     public function setPrice($price)
     {
-        $this->getItem()->setPrice($price);
+        if (!empty($price) && ctype_alpha($price)) {
+            $this->getItem()->setPrice($price);
+        }
 
         return $this;
     }
@@ -174,7 +177,9 @@ class Invoice implements InvoiceInterface
      */
     public function setCurrency(CurrencyInterface $currency)
     {
-        $this->currency = $currency;
+        if (!empty($currency)) {
+            $this->currency = $currency;
+        }
 
         return $this;
     }
@@ -201,7 +206,9 @@ class Invoice implements InvoiceInterface
      */
     public function setItem(ItemInterface $item)
     {
-        $this->item = $item;
+        if (!empty($item)) {
+            $this->item = $item;
+        }
 
         return $this;
     }
@@ -226,7 +233,9 @@ class Invoice implements InvoiceInterface
      */
     public function setBuyer(BuyerInterface $buyer)
     {
-        $this->buyer = $buyer;
+        if (!empty($buyer)) {
+            $this->buyer = $buyer;
+        }
 
         return $this;
     }
@@ -246,7 +255,9 @@ class Invoice implements InvoiceInterface
      */
     public function setTransactionSpeed($transactionSpeed)
     {
-        $this->transactionSpeed = $transactionSpeed;
+        if (!empty($transactionSpeed) && ctype_print($transactionSpeed)) {
+            $this->transactionSpeed = trim($transactionSpeed);
+        }
 
         return $this;
     }
@@ -266,7 +277,9 @@ class Invoice implements InvoiceInterface
      */
     public function setNotificationEmail($notificationEmail)
     {
-        $this->notificationEmail = $notificationEmail;
+        if (!empty($notificationEmail) && ctype_print($notificationEmail)) {
+            $this->notificationEmail = trim($notificationEmail);
+        }
 
         return $this;
     }
@@ -286,7 +299,9 @@ class Invoice implements InvoiceInterface
      */
     public function setNotificationurl($notificationUrl)
     {
-        $this->notificationUrl = $notificationUrl;
+        if (!empty($notificationUrl) && ctype_print($notificationUrl)) {
+            $this->notificationUrl = trim($notificationUrl);
+        }
 
         return $this;
     }
@@ -306,7 +321,9 @@ class Invoice implements InvoiceInterface
      */
     public function setRedirectUrl($redirectUrl)
     {
-        $this->redirectUrl = $redirectUrl;
+        if (!empty($redirectUrl) && ctype_print($redirectUrl)) {
+            $this->redirectUrl = trim($redirectUrl);
+        }
 
         return $this;
     }
@@ -326,7 +343,9 @@ class Invoice implements InvoiceInterface
      */
     public function setPosData($posData)
     {
-        $this->posData = $posData;
+        if (!empty($posData) {
+            $this->posData = $posData;
+        }
 
         return $this;
     }
@@ -346,7 +365,9 @@ class Invoice implements InvoiceInterface
      */
     public function setStatus($status)
     {
-        $this->status = $status;
+        if (!empty($status) && ctype_print($status)) {
+            $this->status = trim($status);
+        }
 
         return $this;
     }
@@ -374,7 +395,9 @@ class Invoice implements InvoiceInterface
      */
     public function setId($id)
     {
-        $this->id = $id;
+        if (!empty($id) && ctype_print($id)) {
+            $this->id = trim(id);
+        }
 
         return $this;
     }
@@ -394,7 +417,9 @@ class Invoice implements InvoiceInterface
      */
     public function setUrl($url)
     {
-        $this->url = $url;
+        if (!empty($url) && ctype_print($url)) {
+            $this->url = trim($url);
+        }
 
         return $this;
     }
@@ -414,7 +439,9 @@ class Invoice implements InvoiceInterface
      */
     public function setBtcPrice($btcPrice)
     {
-        $this->btcPrice = $btcPrice;
+        if (!empty($btcPrice) && ctype_print($btcPrice)) {
+            $this->btcPrice = $btcPrice;
+        }
 
         return $this;
     }
@@ -434,7 +461,9 @@ class Invoice implements InvoiceInterface
      */
     public function setInvoiceTime($invoiceTime)
     {
-        $this->invoiceTime = $invoiceTime;
+        if (!empty($invoiceTime)) {
+            $this->invoiceTime = $invoiceTime;
+        }
 
         return $this;
     }
@@ -454,7 +483,9 @@ class Invoice implements InvoiceInterface
      */
     public function setExpirationTime($expirationTime)
     {
-        $this->expirationTime = $expirationTime;
+        if (!empty($expirationTime)) {
+            $this->expirationTime = $expirationTime;
+        }
 
         return $this;
     }
@@ -474,7 +505,9 @@ class Invoice implements InvoiceInterface
      */
     public function setCurrentTime($currentTime)
     {
-        $this->currentTime = $currentTime;
+        if (!empty($currentTime)) {
+            $this->currentTime = $currentTime;
+        }
 
         return $this;
     }
@@ -494,7 +527,9 @@ class Invoice implements InvoiceInterface
      */
     public function setOrderId($orderId)
     {
-        $this->orderId = $orderId;
+        if (!empty($orderId) && ctype_print($orderId)) {
+            $this->orderId = trim($orderId);
+        }
 
         return $this;
     }
@@ -531,7 +566,7 @@ class Invoice implements InvoiceInterface
         $firstName = $this->getBuyer()->getFirstName();
         $lastName  = $this->getBuyer()->getLastName();
 
-        return trim($firstName.' '.$lastName);
+        return trim($firstName . ' ' . $lastName);
     }
 
     /**
@@ -617,31 +652,53 @@ class Invoice implements InvoiceInterface
      */
     public function setExceptionStatus($exceptionStatus)
     {
-        $this->exceptionStatus = $exceptionStatus;
+        if (!empty($exceptionStatus)) {
+            $this->exceptionStatus = $exceptionStatus;
+        }
 
         return $this;
     }
 
+    /**
+     * @param void
+     * @return
+     */
     public function getBtcPaid()
     {
         return $this->btcPaid;
     }
 
+    /**
+     * @param
+     * @return Invoice
+     */
     public function setBtcPaid($btcPaid)
     {
-        $this->btcPaid = $btcPaid;
+        if (!empty($btcPaid)) {
+            $this->btcPaid = $btcPaid;
+        }
 
         return $this;
     }
 
+    /**
+     * @param void
+     * @return Invoice
+     */
     public function getRate()
     {
         return $this->rate;
     }
 
+    /**
+     * @param
+     * @return
+     */
     public function setRate($rate)
     {
-        $this->rate = $rate;
+        if (!empty($rate)) {
+            $this->rate = $rate;
+        }
 
         return $this;
     }
