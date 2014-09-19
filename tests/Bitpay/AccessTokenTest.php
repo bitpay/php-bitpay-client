@@ -31,6 +31,9 @@ class AccessTokenTest extends \PHPUnit_Framework_TestCase
     public function testId()
     {
         $token = new AccessToken();
+
+        $this->assertNotNull($token);
+
         $token->setId('test');
 
         $this->assertSame('test', $token->getId());
@@ -39,14 +42,20 @@ class AccessTokenTest extends \PHPUnit_Framework_TestCase
     public function testEmail()
     {
         $token = new AccessToken();
-        $token->setEmail('test@test.com');
 
-        $this->assertSame('test@test.com', $token->getEmail());
+        $this->assertNotNull($token);
+
+        $token->setEmail('support@bitpay.com');
+
+        $this->assertSame('support@bitpay.com', $token->getEmail());
     }
 
     public function testLabel()
     {
         $token = new AccessToken();
+
+        $this->assertNotNull($token);
+
         $token->setLabel('label');
 
         $this->assertSame('label', $token->getLabel());
@@ -55,12 +64,18 @@ class AccessTokenTest extends \PHPUnit_Framework_TestCase
     public function testNonce()
     {
         $token = new AccessToken();
+
+        $this->assertNotNull($token);
+
         $this->assertFalse($token->isNonceDisabled());
     }
 
     public function testNonceDisable()
     {
         $token = new AccessToken();
+
+        $this->assertNotNull($token);
+
         $this->assertFalse($token->isNonceDisabled());
         $token->nonceDisable();
         $this->assertTrue($token->isNonceDisabled());
@@ -69,6 +84,9 @@ class AccessTokenTest extends \PHPUnit_Framework_TestCase
     public function testNonceEnable()
     {
         $token = new AccessToken();
+
+        $this->assertNotNull($token);
+
         $this->assertFalse($token->isNonceDisabled());
         $token->nonceEnable();
         $this->assertFalse($token->isNonceDisabled());
