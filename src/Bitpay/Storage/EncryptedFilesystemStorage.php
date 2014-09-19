@@ -68,7 +68,7 @@ class EncryptedFilesystemStorage implements StorageInterface
             $data,
             self::METHOD,
             $this->password,
-            OPENSSL_RAW_DATA,
+            1,
             self::IV
         ));
 
@@ -95,7 +95,7 @@ class EncryptedFilesystemStorage implements StorageInterface
                                        hex2bin($encoded),
                                        self::METHOD,
                                        $this->password,
-                                       OPENSSL_RAW_DATA,
+                                       1,
                                        self::IV
                                       );
         } else {
@@ -103,7 +103,7 @@ class EncryptedFilesystemStorage implements StorageInterface
                                        \Bitpay\Util\Gmp::gmpBinconv($encoded),
                                        self::METHOD,
                                        $this->password,
-                                       OPENSSL_RAW_DATA,
+                                       1,
                                        self::IV
                                       );
         }
