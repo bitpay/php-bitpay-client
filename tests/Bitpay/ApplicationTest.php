@@ -32,6 +32,8 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
     {
         $application = new Application();
 
+        $this->assertNotNull($application);
+
         $this->assertInternalType('array', $application->getUsers());
         $this->assertEmpty($application->getUsers());
     }
@@ -42,6 +44,9 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
     public function testAddUser()
     {
         $application = new Application();
+
+        $this->assertNotNull($application);
+
         $application->addUser($this->getMockUser());
 
         $this->assertInternalType('array', $application->getUsers());
@@ -51,6 +56,8 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
     public function testGetOrgs()
     {
         $application = new Application();
+
+        $this->assertNotNull($application);
 
         $this->assertInternalType('array', $application->getOrgs());
         $this->assertEmpty($application->getOrgs());
@@ -62,6 +69,9 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
     public function testAddOrg()
     {
         $application = new Application();
+
+        $this->assertNotNull($application);
+
         $application->addOrg($this->getMockOrg());
 
         $this->assertInternalType('array', $application->getOrgs());
