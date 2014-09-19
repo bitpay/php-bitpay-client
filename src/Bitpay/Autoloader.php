@@ -41,22 +41,27 @@ class Autoloader
     }
 
     /**
-     * Give a class name and it will require the file
+     * Give a class name and it will require the file.
      *
      * @param string $class
+     * @return bool
      */
     public static function autoload($class)
     {
         $isBitpay = false;
+
         if (0 === strpos($class, 'Bitpay')) {
             $isBitpay = true;
         }
 
         $file = __DIR__ . '/../' . str_replace(array('\\'), array('/'), $class) . '.php';
-        if (is_file($file)) {
+
+        if (is_file($file) && is_readable($file)) {
             require_once $file;
 
-            return;
+            return true;
+        } else {
+            throw new \Exception(sprintf('Class file "%s" is not readable or has been moved.', $file));
         }
 
         if ($isBitpay) {
