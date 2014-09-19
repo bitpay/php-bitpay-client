@@ -45,6 +45,11 @@ class EncryptedFilesystemStorage implements StorageInterface
     const METHOD = 'AES-128-CBC';
 
     /**
+     * @var int
+     */
+    const OPENSSL_RAW_DATA = 1;
+    
+    /**
      * @param string $password
      */
     public function __construct($password)
