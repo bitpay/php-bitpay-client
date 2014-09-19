@@ -75,7 +75,9 @@ class Application implements ApplicationInterface
      */
     public function addUser(UserInterface $user)
     {
-        $this->users[] = $user;
+        if (!empty($user)) {
+            $this->users[] = $user;
+        }
 
         return $this;
     }
@@ -89,7 +91,9 @@ class Application implements ApplicationInterface
      */
     public function addOrg(OrgInterface $org)
     {
-        $this->orgs[] = $org;
+        if (!empty($org)) {
+            $this->orgs[] = $org;
+        }
 
         return $this;
     }
