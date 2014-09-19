@@ -26,6 +26,8 @@
 namespace Bitpay\Util;
 
 /**
+ * Utility class used by string and arbitrary integer methods.
+ * 
  * @package Bitcore
  */
 class Util
@@ -34,9 +36,14 @@ class Util
     /**
      * @var string
      */
-    const HEX_CHARS = '0123456789ABCDEF';
+    const HEX_CHARS = '0123456789abcdef';
 
     /**
+     * Computes a digest hash value for the given data using
+     * the given method, and returns a raw or binhex encoded
+     * string, see:
+     * http://us1.php.net/manual/en/function.openssl-digest.php
+     * 
      * @param string $data
      *
      * @return string
@@ -47,6 +54,11 @@ class Util
     }
 
     /**
+     * Computes a digest hash value for the given data using
+     * the given method, and returns a raw or binhex encoded
+     * string, see:
+     * http://us1.php.net/manual/en/function.openssl-digest.php
+     * 
      * @param string $data
      *
      * @return string
@@ -57,6 +69,9 @@ class Util
     }
 
     /**
+     * Generate a keyed hash value using the HMAC method.
+     * http://us1.php.net/manual/en/function.hash-hmac.php
+     * 
      * @param string $data
      * @param string $key
      *
@@ -68,6 +83,8 @@ class Util
     }
 
     /**
+     * Returns a RIPDEMD160 hash of a value.
+     * 
      * @param string $data
      *
      * @return string
@@ -78,6 +95,8 @@ class Util
     }
 
     /**
+     * Returns a SHA256 hash of a RIPEMD160 hash of a value.
+     * 
      * @param string $data
      *
      * @return string
@@ -88,6 +107,8 @@ class Util
     }
 
     /**
+     * Returns a double SHA256 hash of a value.
+     * 
      * @param string $data
      *
      * @return string
@@ -101,6 +122,8 @@ class Util
     }
 
     /**
+     * Returns a nonce for use in REST calls.
+     * 
      * @see http://en.wikipedia.org/wiki/Cryptographic_nonce
      *
      * @return string
@@ -111,6 +134,8 @@ class Util
     }
 
     /**
+     * Returns a GUID for use in REST calls.
+     * 
      * @see http://en.wikipedia.org/wiki/Globally_unique_identifier
      *
      * @return string
@@ -118,29 +143,32 @@ class Util
     public static function guid()
     {
         return sprintf(
-            '%s-%s-%s-%s-%s',
-            bin2hex(openssl_random_pseudo_bytes(4)),
-            bin2hex(openssl_random_pseudo_bytes(2)),
-            bin2hex(openssl_random_pseudo_bytes(2)),
-            bin2hex(openssl_random_pseudo_bytes(2)),
-            bin2hex(openssl_random_pseudo_bytes(6))
-        );
+                       '%s-%s-%s-%s-%s',
+                       bin2hex(openssl_random_pseudo_bytes(4)),
+                       bin2hex(openssl_random_pseudo_bytes(2)),
+                       bin2hex(openssl_random_pseudo_bytes(2)),
+                       bin2hex(openssl_random_pseudo_bytes(2)),
+                       bin2hex(openssl_random_pseudo_bytes(6))
+                      );
     }
 
     /**
+     * Encodes a decimal value into hexadecimal.
+     * 
      * @param string $hex
      *
      * @return string
      */
     public static function encodeHex($dec)
     {
-        if (!is_string($dec)) {
-            throw new \Exception(sprintf('argument is expected to be a string. You passed in "%s"', gettype($dec)));
+        if (!is_string($dec) && !ctype_digit($dec)) {
+            throw new \Exception(sprintf('Util::encodeHex(): Argument is expected to be a string of decimal numbers. You passed in "%s"', gettype($dec)));
         }
 
         $hex = '';
-        while (0 < gmp_cmp($dec, 0)) {
-            list ($dec, $r) = gmp_div_qr($dec, 16);
+
+        while (gmp_cmp($dec, '0') > 0) {
+            list ($dec, $r) = gmp_div_qr($dec, '16');
             $hex .= substr(self::HEX_CHARS, gmp_intval($r), 1);
         }
 
@@ -148,16 +176,31 @@ class Util
     }
 
     /**
+     * Decodes a hexadecimal value into decimal.
+     * 
      * @param string $hex
      *
      * @return string
      */
     public static function decodeHex($hex)
     {
-        $hex = strtoupper($hex);
+        if (!ctype_xdigit($hex)) {
+            throw new \Exception(sprintf('Util::decodeHex(): Argument must be a string of hex digits.'));
+        }
+
+        if (empty($hex)) {
+            throw new \Exception(sprintf('Util::decodeHex(): Argument missing.'));
+        }
+
+        $hex = strtolower($hex);
+
+        if (substr($hex, 0, 2) == '0x') {
+            $hex = substr($hex, 2);
+        }
+
         for ($dec = 0, $i = 0; $i < strlen($hex); $i++) {
             $c   = strpos(self::HEX_CHARS, $hex[$i]);
-            $dec = gmp_add(gmp_mul($dec, 16), $c);
+            $dec = gmp_add(gmp_mul($dec, '16'), $c);
         }
 
         return gmp_strval($dec);
