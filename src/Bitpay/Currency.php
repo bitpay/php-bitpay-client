@@ -102,7 +102,9 @@ class Currency implements CurrencyInterface
      */
     public function setCode($code)
     {
-        $this->code = strtoupper($code);
+        if (!empty($code) && ctype_print($code)) {
+            $this->code = strtoupper(trim($code));
+        }
 
         return $this;
     }
@@ -122,7 +124,9 @@ class Currency implements CurrencyInterface
      */
     public function setSymbol($symbol)
     {
-        $this->symbol = $symbol;
+        if (!empty($symbol) && ctype_print($symbol)) {
+            $this->symbol = trim($symbol);
+        }
 
         return $this;
     }
@@ -142,7 +146,9 @@ class Currency implements CurrencyInterface
      */
     public function setPrecision($precision)
     {
-        $this->precision = $precision;
+        if (!empty($precision) && ctype_digit($precision)) {
+            $this->precision = (int) $precision;
+        }
 
         return $this;
     }
@@ -162,7 +168,9 @@ class Currency implements CurrencyInterface
      */
     public function setExchangePctFee($fee)
     {
-        $this->exchangePercentageFee = $fee;
+        if (!empty($fee) && ctype_print($fee)) {
+            $this->exchangePercentageFee = trim($fee);
+        }
 
         return $this;
     }
@@ -182,7 +190,9 @@ class Currency implements CurrencyInterface
      */
     public function setPayoutEnabled($enabled)
     {
-        $this->payoutEnabled = (boolean) $enabled;
+        if (!empty($enabled) && is_bool($enabled)) {
+            $this->payoutEnabled = (boolean) $enabled;
+        }
 
         return $this;
     }
@@ -202,7 +212,9 @@ class Currency implements CurrencyInterface
      */
     public function setName($name)
     {
-        $this->name = $name;
+        if (!empty($name) && ctype_print($name)) {
+            $this->name = trim($name);
+        }
 
         return $this;
     }
@@ -222,7 +234,9 @@ class Currency implements CurrencyInterface
      */
     public function setPluralName($pluralName)
     {
-        $this->pluralName = $pluralName;
+        if (!empty($pluralName) && ctype_print($pluralName)) {
+            $this->pluralName = trim($pluralName);
+        }
 
         return $this;
     }
@@ -242,7 +256,9 @@ class Currency implements CurrencyInterface
      */
     public function setAlts($alts)
     {
-        $this->alts = $alts;
+        if (!empty($alts) && ctype_print($alts)) {
+            $this->alts = trim($alts);
+        }
 
         return $this;
     }
@@ -262,7 +278,9 @@ class Currency implements CurrencyInterface
      */
     public function setPayoutFields(array $payoutFields)
     {
-        $this->payoutFields = $payoutFields;
+        if (!empty($alts) && is_array($alts)) {
+            $this->payoutFields = $payoutFields;
+        }
 
         return $this;
     }
