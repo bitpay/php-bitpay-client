@@ -15,6 +15,7 @@ Contents:
     configuration
     invoices/index
     keypairs/index
+    pairing/index
     console/index
     distribution/index
     changelog
