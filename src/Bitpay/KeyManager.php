@@ -32,7 +32,6 @@ namespace Bitpay;
  */
 class KeyManager
 {
-
     /**
      * @var Bitpay\Storage\StorageInterface
      */

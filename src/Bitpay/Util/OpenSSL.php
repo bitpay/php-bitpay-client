@@ -27,7 +27,6 @@ namespace Bitpay\Util;
 
 class OpenSSL
 {
-
     public function __construct()
     {
         if (!function_exists('openssl_open')) {
@@ -37,7 +36,7 @@ class OpenSSL
     }
 
     /**
-     * Function to generate a new RSA keypair. This is not 
+     * Function to generate a new RSA keypair. This is not
      * used for point derivation or for generating signatures.
      * Only used for assymetric data encryption, as needed.
      *
@@ -47,18 +46,14 @@ class OpenSSL
      */
     final public function GenerateKeypair($keybits = 512, $digest_alg = 'sha512')
     {
-        
-
         try {
-
             /* see: http://www.php.net/manual/en/function.openssl-pkey-new.php */
             if (function_exists('openssl_pkey_new')) {
-
                 $keypair = array();
 
                 /* openssl keysize can't be smaller than 384 bits */
-                if ((int)$keybits < 384) {
-                    $this->addNotice('generateOpenSSLKeypair: Keybits param of "' . $keybits . '" is invalid. Setting to the minimum value of 384.');
+                if ((int) $keybits < 384) {
+                    $this->addNotice('generateOpenSSLKeypair: Keybits param of "'.$keybits.'" is invalid. Setting to the minimum value of 384.');
                     $keybits = 384;
                 }
 
@@ -67,14 +62,14 @@ class OpenSSL
                     $digest_alg = 'sha512';
                 }
 
-                /* 
+                /*
                  * RSA is the only supported key type at this time
                  * http://www.php.net/manual/en/function.openssl-csr-new.php
                  */
                 $config = array(
                                 'digest_alg'       => $digest_alg,
-                                'private_key_bits' => (int)$keybits,
-                                'private_key_type' => OPENSSL_KEYTYPE_RSA
+                                'private_key_bits' => (int) $keybits,
+                                'private_key_type' => OPENSSL_KEYTYPE_RSA,
                                 );
 
                 $resource = openssl_pkey_new($config);
@@ -84,7 +79,7 @@ class OpenSSL
 
                     /* with the openssl extension, you also have it's own errors returned */
                     while ($msg = openssl_error_string()) {
-                        $this->addError('Error in generateOpenSSLKeypair: OpenSSL reported error: ' . $msg);
+                        $this->addError('Error in generateOpenSSLKeypair: OpenSSL reported error: '.$msg);
                     }
 
                     return false;
@@ -97,7 +92,7 @@ class OpenSSL
                     $this->addError('Error in generateOpenSSLKeypair: Private key could not be determined from OpenSSL key resource.');
 
                     while ($msg = openssl_error_string()) {
-                        $this->addError('Error in generateOpenSSLKeypair: OpenSSL reported error: ' . $msg);
+                        $this->addError('Error in generateOpenSSLKeypair: OpenSSL reported error: '.$msg);
                     }
 
                     return false;
@@ -106,18 +101,17 @@ class OpenSSL
                 openssl_pkey_free($resource);
 
                 return $keypair;
-
             } else {
                 $this->addError('Error in generateOpenSSLKeypair: OpenSSL PHP extension missing. Cannot continue.');
+
                 return false;
             }
-
         } catch (Exception $e) {
             while ($msg = openssl_error_string()) {
-                $this->addError('Error in generateOpenSSLKeypair: OpenSSL reported error: ' . $msg);
+                $this->addError('Error in generateOpenSSLKeypair: OpenSSL reported error: '.$msg);
             }
 
-            $this->addError('Error in generateOpenSSLKeypair(): ' . $e->getMessage());
+            $this->addError('Error in generateOpenSSLKeypair(): '.$e->getMessage());
 
             return false;
         }
@@ -126,7 +120,7 @@ class OpenSSL
     /**
      * Generates a high-quality random number suitable for
      * use in cryptographic functions and returns hex value.
-     * 
+     *
      * @param int
      * @return string|bool
      */
@@ -142,9 +136,9 @@ class OpenSSL
     }
 
     /**
-     * Returns the cipher length on success, or FALSE 
+     * Returns the cipher length on success, or FALSE
      * on failure.  (PHP 5 >= PHP 5.3.3)
-     * 
+     *
      * @param string
      * @return int|bool
      */
@@ -154,11 +148,11 @@ class OpenSSL
     }
 
     /**
-     * Takes the Certificate Signing Request represented 
-     * by $csr and saves it as ascii-armoured text into 
+     * Takes the Certificate Signing Request represented
+     * by $csr and saves it as ascii-armoured text into
      * the file named by $outfilename.
      * (PHP 4 >= 4.2.0, PHP 5)
-     * 
+     *
      * @param resource
      * @param string
      * @param bool
@@ -172,13 +166,13 @@ class OpenSSL
 
         return openssl_csr_export_to_file($csr, $outfilename, $notext);
     }
-    
+
     /**
      * Takes the Certificate Signing Request represented
      * by $csr and stores it as ascii-armoured text into
      * $out, which is passed by reference.
      * (PHP 4 >= 4.2.0, PHP 5)
-     * 
+     *
      * @param resource
      * @param string
      * @param bool
@@ -192,5 +186,4 @@ class OpenSSL
 
         return openssl_csr_export($csr, string &$out, $notext);
     }
-    
 }

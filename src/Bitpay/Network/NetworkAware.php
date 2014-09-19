@@ -31,7 +31,6 @@ namespace Bitpay\Network;
  */
 abstract class NetworkAware implements NetworkAwareInterface
 {
-
     /**
      * @var NetworkInterface
      */

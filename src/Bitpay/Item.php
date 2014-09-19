@@ -31,7 +31,6 @@ namespace Bitpay;
  */
 class Item implements ItemInterface
 {
-
     /**
      * @var string
      */

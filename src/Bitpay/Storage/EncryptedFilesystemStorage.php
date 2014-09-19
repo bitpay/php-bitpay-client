@@ -29,7 +29,6 @@ namespace Bitpay\Storage;
  */
 class EncryptedFilesystemStorage implements StorageInterface
 {
-
     /**
      * @var string
      */

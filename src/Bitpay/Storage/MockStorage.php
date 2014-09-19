@@ -31,7 +31,6 @@ namespace Bitpay\Storage;
  */
 class MockStorage implements StorageInterface
 {
-
     public function persist(\Bitpay\KeyInterface $key)
     {
     }

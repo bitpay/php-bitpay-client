@@ -32,7 +32,6 @@ namespace Bitpay;
  */
 interface ItemInterface
 {
-
     /**
      * Used to display an item SKU code or part number to the buyer. Maximum string
      * length is 100 characters.

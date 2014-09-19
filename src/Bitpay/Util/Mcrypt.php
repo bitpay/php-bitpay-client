@@ -23,27 +23,24 @@
  * SOFTWARE.
  */
 
-namespace BitPay\Util;
+namespace Bitpay\Util;
 
 class Mcrypt
 {
-
     /**
      * Returns the inititialization size used for a particular cypher
      * type.  Returns an integer IV size on success or boolean false
      * on failure.  If no IV is needed for the cypher type and mode,
      * a zero is returned.
      *
-     * @param string $cypher_type
+     * @param  string   $cypher_type
      * @return int|bool
      */
     public function GetIVSize($cypher_type = 'MCRYPT_TRIPLEDES')
     {
-
         $block_mode = 'cbc';
 
         return mcrypt_get_iv_size($cypher_type, $block_mode);
-
     }
 
     /**
@@ -52,28 +49,26 @@ class Mcrypt
      * value are legal key sizes.  Depending on if the local mycrypt
      * extension is linked against 2.2 or 2.3/2.4 the block mode could
      * be required, hence the if/else statement.
-     * 
-     * @param string $cypher_type
+     *
+     * @param  string $cypher_type
      * @return int
      */
     public function GetKeySize($cypher_type = 'MCRYPT_TRIPLEDES')
     {
-
         $block_mode = 'cbc';
 
         $max_key_size = mcrypt_get_key_size($cipher_type);
-        
+
         if ($max_key_size !== false) {
             return $max_key_size;
         } else {
             return mcrypt_get_key_size($cipher_type, $block_mode);
         }
-
     }
 
     /**
      * Returns a list of all supported mcrypt algorithms on the local system.
-     * 
+     *
      * @param none
      * @return array
      */
@@ -86,8 +81,8 @@ class Mcrypt
      * Performs an internal self-test on the specified mcrypt algorithm and
      * returns either boolean true/false depending on if the self-test passed
      * or failed.
-     * 
-     * @param string $cypher_type
+     *
+     * @param  string  $cypher_type
      * @return boolean
      */
     public function AlgoSelfTest($cypher_type = 'MCRYPT_TRIPLEDES')
@@ -102,27 +97,25 @@ class Mcrypt
      * Default cypher is MCRYPT_TRIPLEDES but you can substitute depending
      * on your specific encryption needs.
      *
-     * @param string $text
-     * @param string $key
-     * @param string $iv
-     * @param int $bit_check
-     * @param string $cypher_type
-     * @return string $text
+     * @param  string    $text
+     * @param  string    $key
+     * @param  string    $iv
+     * @param  int       $bit_check
+     * @param  string    $cypher_type
+     * @return string    $text
      * @throws Exception $e
-     * 
+     *
      */
     public function Encrypt($text, $key = '', $iv = '', $bit_check = 8, $cypher_type = 'MCRYPT_TRIPLEDES')
     {
-
         try {
-
             /* Ensure the key & IV is the same for both encrypt & decrypt. */
             if (!empty($text) && is_string($text)) {
                 $text_num = str_split($text, $bit_check);
                 $text_num = $bit_check - strlen($text_num[count($text_num) - 1]);
 
-                for ($i=0; $i<$text_num; $i++) {
-                    $text = $text . chr($text_num);
+                for ($i = 0; $i<$text_num; $i++) {
+                    $text = $text.chr($text_num);
                 }
 
                 $cipher = mcrypt_module_open($cypher_type, '', 'cbc', '');
@@ -137,13 +130,10 @@ class Mcrypt
             } else {
                 return $text;
             }
-
         } catch (Exception $e) {
-            return 'Error: ' . $e->getMessage();
+            return 'Error: '.$e->getMessage();
         }
-
     }
-
 
     /**
      *
@@ -152,20 +142,18 @@ class Mcrypt
      * cypher is MCRYPT_TRIPLEDES but you can substitute depending on the cypher
      * used for encrypting the text - very important.
      *
-     * @param string $encrypted_text
-     * @param string $key
-     * @param string $iv
-     * @param int $bit_check
-     * @param string $cypher_type
-     * @return string $text
+     * @param  string    $encrypted_text
+     * @param  string    $key
+     * @param  string    $iv
+     * @param  int       $bit_check
+     * @param  string    $cypher_type
+     * @return string    $text
      * @throws Exception $e
-     * 
+     *
      */
     public function Decrypt($encrypted_text, $key = '', $iv = '', $bit_check = 8, $cypher_type = 'MCRYPT_TRIPLEDES')
     {
-
         try {
-
             /* Ensure the key & IV is the same for both encrypt & decrypt. */
             if (!empty($encrypted_text)) {
                 $cipher = mcrypt_module_open($cypher_type, '', 'cbc', '');
@@ -175,7 +163,7 @@ class Mcrypt
 
                 mcrypt_generic_deinit($cipher);
                 $last_char = substr($decrypted, -1);
-  
+
                 for ($i = 0; $i < $bit_check - 1; $i++) {
                     if (chr($i) == $last_char) {
                         $decrypted = substr($decrypted, 0, strlen($decrypted) - $i);
@@ -189,10 +177,8 @@ class Mcrypt
             } else {
                 return $encrypted_text;
             }
-
         } catch (Exception $e) {
-            return 'Error: ' . $e->getMessage();
+            return 'Error: '.$e->getMessage();
         }
-
     }
 }

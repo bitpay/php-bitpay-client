@@ -27,12 +27,11 @@ namespace Bitpay\Util;
 
 /**
  * Utility class used by string and arbitrary integer methods.
- * 
+ *
  * @package Bitcore
  */
 class Util
 {
-
     /**
      * @var string
      */
@@ -43,7 +42,7 @@ class Util
      * the given method, and returns a raw or binhex encoded
      * string, see:
      * http://us1.php.net/manual/en/function.openssl-digest.php
-     * 
+     *
      * @param string $data
      *
      * @return string
@@ -58,7 +57,7 @@ class Util
      * the given method, and returns a raw or binhex encoded
      * string, see:
      * http://us1.php.net/manual/en/function.openssl-digest.php
-     * 
+     *
      * @param string $data
      *
      * @return string
@@ -71,7 +70,7 @@ class Util
     /**
      * Generate a keyed hash value using the HMAC method.
      * http://us1.php.net/manual/en/function.hash-hmac.php
-     * 
+     *
      * @param string $data
      * @param string $key
      *
@@ -84,7 +83,7 @@ class Util
 
     /**
      * Returns a RIPDEMD160 hash of a value.
-     * 
+     *
      * @param string $data
      *
      * @return string
@@ -96,7 +95,7 @@ class Util
 
     /**
      * Returns a SHA256 hash of a RIPEMD160 hash of a value.
-     * 
+     *
      * @param string $data
      *
      * @return string
@@ -108,7 +107,7 @@ class Util
 
     /**
      * Returns a double SHA256 hash of a value.
-     * 
+     *
      * @param string $data
      *
      * @return string
@@ -123,7 +122,7 @@ class Util
 
     /**
      * Returns a nonce for use in REST calls.
-     * 
+     *
      * @see http://en.wikipedia.org/wiki/Cryptographic_nonce
      *
      * @return string
@@ -135,7 +134,7 @@ class Util
 
     /**
      * Returns a GUID for use in REST calls.
-     * 
+     *
      * @see http://en.wikipedia.org/wiki/Globally_unique_identifier
      *
      * @return string
@@ -154,7 +153,7 @@ class Util
 
     /**
      * Encodes a decimal value into hexadecimal.
-     * 
+     *
      * @param string $hex
      *
      * @return string
@@ -177,7 +176,7 @@ class Util
 
     /**
      * Decodes a hexadecimal value into decimal.
-     * 
+     *
      * @param string $hex
      *
      * @return string

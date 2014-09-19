@@ -31,7 +31,6 @@ namespace Bitpay;
  */
 class Invoice implements InvoiceInterface
 {
-
     /**
      * @var CurrencyInterface
      */
@@ -532,7 +531,7 @@ class Invoice implements InvoiceInterface
         $firstName = $this->getBuyer()->getFirstName();
         $lastName  = $this->getBuyer()->getLastName();
 
-        return trim($firstName . ' ' . $lastName);
+        return trim($firstName.' '.$lastName);
     }
 
     /**

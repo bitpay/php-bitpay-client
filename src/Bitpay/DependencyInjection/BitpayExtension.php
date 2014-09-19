@@ -47,20 +47,20 @@ class BitpayExtension implements ExtensionInterface
             if (in_array($key, array('network'))) {
                 continue;
             }
-            $container->setParameter('bitpay.' . $key, $config[$key]);
+            $container->setParameter('bitpay.'.$key, $config[$key]);
         }
 
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__));
         $loader->load('services.xml');
 
-        $container->setParameter('network.class', 'Bitpay\Network\\' . ContainerBuilder::camelize($config['network']));
+        $container->setParameter('network.class', 'Bitpay\Network\\'.ContainerBuilder::camelize($config['network']));
         $container->setParameter(
             'adapter.class',
-            'Bitpay\Client\Adapter\\' . ContainerBuilder::camelize($config['adapter']) . 'Adapter'
+            'Bitpay\Client\Adapter\\'.ContainerBuilder::camelize($config['adapter']).'Adapter'
         );
         $container->setParameter(
             'key_storage.class',
-            'Bitpay\Storage\\' . ContainerBuilder::camelize($config['key_storage']) . 'Storage'
+            'Bitpay\Storage\\'.ContainerBuilder::camelize($config['key_storage']).'Storage'
         );
     }
 

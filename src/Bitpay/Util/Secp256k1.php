@@ -29,7 +29,7 @@ namespace Bitpay\Util;
  * Elliptic curve parameters for secp256k1, see:
  * http://www.secg.org/collateral/sec2_final.pdf
  * also:
- * 
+ *
  * @see https://en.bitcoin.it/wiki/Secp256k1
  *
  * @package Bitcore

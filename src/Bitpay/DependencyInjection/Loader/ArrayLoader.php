@@ -45,7 +45,6 @@ class ArrayLoader extends Loader
 
     public function load($resource, $type = null)
     {
-
         // validation
         foreach (array_keys($resource) as $namespace) {
             if (in_array($namespace, array('imports', 'paramters', 'services'))) {

@@ -31,7 +31,6 @@ namespace Bitpay;
  */
 interface UserInterface
 {
-
     /**
      * @return string
      */

@@ -34,7 +34,6 @@ use Bitpay\Util\Util;
  */
 class SinKey extends Key
 {
-
     // Type 2 (ephemeral)
     const SIN_TYPE    = '02';
 
@@ -74,7 +73,7 @@ class SinKey extends Key
     /**
      * Generates a Service Identification Number (SIN), see:
      * https://en.bitcoin.it/wiki/Identity_protocol_v1
-     * 
+     *
      * @return SinKey
      */
     public function generate()
@@ -104,7 +103,7 @@ class SinKey extends Key
 
         $step5 = substr(bin2hex($step4), 0, 8);
 
-        $step6 = $step3 . $step5;
+        $step6 = $step3.$step5;
 
         $this->value = Base58::encode($step6);
 

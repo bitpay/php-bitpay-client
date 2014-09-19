@@ -31,7 +31,6 @@ namespace Bitpay\Network;
  */
 interface NetworkInterface
 {
-
     /**
      * Name of network, currently on livenet and testnet
      *

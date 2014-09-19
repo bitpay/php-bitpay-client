@@ -31,7 +31,6 @@ namespace Bitpay\Network;
  */
 interface NetworkAwareInterface
 {
-
     /**
      * Set the network the object will work with
      *

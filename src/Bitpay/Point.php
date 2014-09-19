@@ -32,7 +32,6 @@ namespace Bitpay;
  */
 class Point implements PointInterface
 {
-
     /**
      * MUST be a HEX value
      *

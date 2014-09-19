@@ -23,11 +23,10 @@
  * SOFTWARE.
  */
 
-namespace BitPay\Util;
+namespace Bitpay\Util;
 
 class Hash
 {
-
     public function __construct()
     {
         if (!function_exists('hash')) {
@@ -35,7 +34,7 @@ class Hash
             die('FATAL: The PHP hash extension is not supported by your installation. Contact your system administrator.');
         }
     }
-    
+
     /**
      * Return a list of registered hashing algorithms.
      * (PHP 5 >= 5.1.2, PECL hash >= 1.1)
@@ -47,11 +46,11 @@ class Hash
     {
         return hash_algos();
     }
-    
+
     /**
      * Copy a hashing context.
      * (PHP 5 >= 5.3.0)
-     * 
+     *
      * @param resource
      * @return resource
      */
@@ -71,7 +70,7 @@ class Hash
      * for instance, when testing crypt() password
      * hashes.
      * (PHP 5 >= 5.6.0)
-     * 
+     *
      * @param string
      * @param string
      */
@@ -80,10 +79,10 @@ class Hash
         if (!is_string($string1) || !is_string($string2)) {
             return false;
         }
-        
+
         return hash_equals($string1, $string2);
     }
-    
+
     /**
      * Generate a hash value using the contents of
      * a given file. Returns a string containing
@@ -92,7 +91,7 @@ class Hash
      * which case the raw binary representation of
      * the message digest is returned.
      * (PHP 5 >= 5.1.2, PECL hash >= 1.1)
-     * 
+     *
      * @param string
      * @param string
      * @param bool
@@ -102,12 +101,12 @@ class Hash
     {
         return hash_file($algorithm, string $filename, $raw_output);
     }
-    
+
     /**
      * Finalize an incremental hash and return
      * resulting digest.
      * (PHP 5 >= 5.1.2, PECL hash >= 1.1)
-     * 
+     *
      * @param resource
      * @param bool
      * @return string
@@ -117,15 +116,15 @@ class Hash
         if (!is_resource($context)) {
             return false;
         }
-        
+
         return hash_final($context, $raw_output);
     }
-    
+
     /**
      * Generate a keyed hash value using the HMAC
      * method and the contents of a given file.
      * (PHP 5 >= 5.1.2, PECL hash >= 1.1)
-     * 
+     *
      * @param string
      * @param string
      * @param string
@@ -141,7 +140,7 @@ class Hash
      * Generate a keyed hash value using the HMAC
      * method and the message passed via $data.
      * (PHP 5 >= 5.1.2, PECL hash >= 1.1)
-     * 
+     *
      * @param string
      * @param string
      * @param string
@@ -161,13 +160,13 @@ class Hash
      * for $options at this time is HASH_HMAC. When
      * this is specified, the key *must* be used as well.
      * (PHP 5 >= 5.1.2, PECL hash >= 1.1)
-     * 
+     *
      * @param string
      * @param int
      * @param string
      * @return resource
      */
-    final public function Init($algorithm, $options = 0, $key = NULL)
+    final public function Init($algorithm, $options = 0, $key = null)
     {
         return hash_init($algorithm, $options, $key);
     }
@@ -181,7 +180,7 @@ class Hash
      * INT_MAX - 4). The salt should be generated
      * randomly with openssl_ramdom_pseudo_bytes().
      * (PHP 5 >= 5.5.0)
-     * 
+     *
      * @param string
      * @param string
      * @param string
@@ -200,18 +199,18 @@ class Hash
      * from a file. Returns TRUE on success or
      * FALSE on failure.
      * (PHP 5 >= 5.1.2, PECL hash >= 1.1)
-     * 
+     *
      * @param resource
      * @param string
      * @param resource
      * @return bool
      */
-    final public function UpdateFile($hcontext, $filename, $scontext = NULL)
+    final public function UpdateFile($hcontext, $filename, $scontext = null)
     {
         if (!is_resource($hcontext)) {
             return false;
         }
-        
+
         return hash_update_file($hcontext, $filename, $scontext);
     }
 
@@ -221,7 +220,7 @@ class Hash
      * number of bytes added to the hashing
      * context from handle.
      * (PHP 5 >= 5.1.2, PECL hash >= 1.1)
-     * 
+     *
      * @param resource
      * @param resource
      * @param int
@@ -240,7 +239,7 @@ class Hash
      * Pump data into an active hashing context.
      * The PHP function itself only returns true.
      * (PHP 5 >= 5.1.2, PECL hash >= 1.1)
-     * 
+     *
      * @param resource
      * @param string
      * @return bool
@@ -260,7 +259,7 @@ class Hash
      * provided data. Outputs hex unless the
      * $raw_output param is set to true.
      * (PHP 5 >= 5.1.2, PECL hash >= 1.1)
-     * 
+     *
      * @param string
      * @param string
      * @param bool
@@ -271,7 +270,7 @@ class Hash
         if (empty($data)) {
             return false;
         }
-        
+
         return hash($algo, $data, $raw_output);
     }
 }

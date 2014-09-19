@@ -30,7 +30,6 @@ namespace Bitpay\Storage;
  */
 interface StorageInterface
 {
-
     /**
      * @param KeyInterface $key
      */

@@ -32,7 +32,6 @@ namespace Bitpay;
  */
 abstract class Key extends Point implements KeyInterface
 {
-
     /**
      * @var string
      */
@@ -99,7 +98,7 @@ abstract class Key extends Point implements KeyInterface
                 $this->x,
                 $this->y,
                 $this->hex,
-                $this->dec
+                $this->dec,
             )
         );
     }

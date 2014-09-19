@@ -28,16 +28,15 @@ namespace Bitpay\Util;
 /**
  * Provides methods used when creating elliptic curve keypairs
  * and related utility functions to support algorithms.
- * 
+ *
  * @package Bitcore
  */
 class Gmp
 {
-
     /**
      * Pure PHP implementation of the doubleAndAdd algorithm, see:
      * http://en.wikipedia.org/wiki/Elliptic_curve_point_multiplication#Double-and-add
-     * 
+     *
      * @param string
      * @param array
      * @param string
@@ -70,7 +69,7 @@ class Gmp
     /**
      * This method returns a binary string representation of
      * the decimal number.  Used for the doubleAndAdd() method.
-     * 
+     *
      * @param string
      *
      * @return string
@@ -153,7 +152,7 @@ class Gmp
             $R['s'] = gmp_strval($s);
         } catch (Exception $e) {
             // TODO throw exception
-            return 'Error in Util::gmpPointDouble(): ' . $e->getMessage();
+            return 'Error in Util::gmpPointDouble(): '.$e->getMessage();
         }
 
         return $R;
@@ -210,7 +209,7 @@ class Gmp
             $R['y'] = gmp_strval($R['y']);
         } catch (Exception $e) {
             // TODO throw exception
-            return 'Error in Util::gmpPointAdd(): ' . $e->getMessage();
+            return 'Error in Util::gmpPointAdd(): '.$e->getMessage();
         }
 
         return $R;
@@ -218,7 +217,7 @@ class Gmp
 
     /**
      * Converts hex value into octet (byte) string
-     * 
+     *
      * @param string
      *
      * @return string
@@ -234,7 +233,7 @@ class Gmp
         $seq  = '';
 
         if (substr(strtolower($dec), 0, 2) != '0x') {
-            $dec = '0x' . strtolower($dec);
+            $dec = '0x'.strtolower($dec);
         }
 
         while (gmp_cmp($dec, '0') > 0) {

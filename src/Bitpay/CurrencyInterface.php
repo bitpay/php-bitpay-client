@@ -34,7 +34,6 @@ namespace Bitpay;
  */
 interface CurrencyInterface
 {
-
     /**
      * @return string
      */

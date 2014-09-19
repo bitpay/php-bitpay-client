@@ -30,7 +30,6 @@ namespace Bitpay;
  */
 interface PointInterface
 {
-
     public function getX();
     public function getY();
 }

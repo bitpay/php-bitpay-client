@@ -23,18 +23,17 @@
  * SOFTWARE.
  */
 
-namespace BitPay\Util;
+namespace Bitpay\Util;
 
 class Error
 {
-
     /**
      * Generates a backtrace and returns an array of associative
      * arrays or prints to stdout. The possible returned elements
      * are as follows: function, line, file, class, object, type
      * and args.
      * (PHP 4 >= 4.3.0, PHP 5)
-     * 
+     *
      * @param bool
      * @param bool
      * @param int
@@ -42,13 +41,13 @@ class Error
      */
     final public function Backtrace($print = false, $options = false, $limit = 0)
     {
-        if($print == true) {
+        if ($print == true) {
             return debug_print_backtrace ($options, $limit);
         } else {
             return debug_backtrace($options, $limit);
         }
     }
-    
+
     /**
      * Get the last occurred error and returns an associative
      * array describing the last error with keys "type", "message",
@@ -56,7 +55,7 @@ class Error
      * internal function then the "message" begins with its name.
      * Returns NULL if there hasn't been an error yet.
      * (PHP 5 >= 5.2.0)
-     * 
+     *
      * @param void
      * @return array
      */
@@ -64,7 +63,7 @@ class Error
     {
         return error_get_last();
     }
-    
+
     /**
      * Send an error message to the defined error handling
      * routines.  Returns true on success or false on failure.
@@ -72,7 +71,7 @@ class Error
      * 1 = email to $destination, 2 = depricated, 3 = appended
      * to file $destination, 4 = sent to SAPI log handler.
      * (PHP 4, PHP 5)
-     * 
+     *
      * @param string
      * @param int
      * @param string
@@ -82,13 +81,13 @@ class Error
     {
         return error_log(string $message , $message_type = 0, $destination = '', $extra_headers = '');
     }
-    
+
     /**
      * Sets which PHP errors are reported or returns the old
      * error_reporting level or the current level if no level
      * parameter is given.
      * (PHP 4, PHP 5)
-     * 
+     *
      * @param bool
      * @return int
      */
@@ -100,12 +99,12 @@ class Error
             return error_reporting();
         }
     }
-    
+
     /**
      * Sets or restores either the error or exception handler
      * based on the $type and $action parameters.
      * (PHP 4 >= 4.0.1, PHP 5)
-     * 
+     *
      * @param string
      * @param string
      * @param mixed
@@ -150,7 +149,7 @@ class Error
      * specified, TRUE otherwise. The $error_msg param is
      * limited to 1024 bytes.
      * (PHP 4 >= 4.0.1, PHP 5)
-     * 
+     *
      * @param string
      * @param int
      * @return bool
@@ -159,6 +158,4 @@ class Error
     {
         return trigger_error($error_msg, $error_type);
     }
-
-
 }

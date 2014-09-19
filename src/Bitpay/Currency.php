@@ -31,7 +31,6 @@ namespace Bitpay;
  */
 class Currency implements CurrencyInterface
 {
-
     /**
      * @var string
      */

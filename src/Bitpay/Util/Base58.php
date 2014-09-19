@@ -27,12 +27,11 @@ namespace Bitpay\Util;
 
 /**
  * Utility class for encoding/decoding BASE-58 data
- * 
+ *
  * @package Bitcore
  */
 final class Base58
 {
-
     /**
      * @var string
      */
@@ -40,7 +39,7 @@ final class Base58
 
     /**
      * Encodes $data into BASE-58 format
-     * 
+     *
      * @param string $data
      *
      * @return string
@@ -72,7 +71,7 @@ final class Base58
 
     /**
      * Decodes $data from BASE-58 format
-     * 
+     *
      * @param string $data
      *
      * @return string

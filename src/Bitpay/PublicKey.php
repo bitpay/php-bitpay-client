@@ -34,7 +34,6 @@ use Bitpay\Util\Util;
  */
 class PublicKey extends Key
 {
-
     /**
      * @var PrivateKey
      */
@@ -50,11 +49,11 @@ class PublicKey extends Key
         if (is_null($this->x)) {
             return '';
         }
-        
-        if (gmp_strval(gmp_mod('0x' . $this->y, '0x02')) == '1') {
-                return sprintf('03%s', $this->x);
+
+        if (gmp_strval(gmp_mod('0x'.$this->y, '0x02')) == '1') {
+            return sprintf('03%s', $this->x);
         } else {
-                return sprintf('02%s', $this->x);
+            return sprintf('02%s', $this->x);
         }
     }
 
@@ -86,11 +85,11 @@ class PublicKey extends Key
         }
 
         $P = array(
-                   'x' => '0x' . substr(Secp256k1::G, 0, 62),
-                   'y' => '0x' . substr(Secp256k1::G, 62, 62),
+                   'x' => '0x'.substr(Secp256k1::G, 0, 62),
+                   'y' => '0x'.substr(Secp256k1::G, 62, 62),
                   );
 
-        $R = Gmp::doubleAndAdd('0x' . $this->privateKey->getHex(), $P, '0x' . Secp256k1::P, '0x' . Secp256k1::A);
+        $R = Gmp::doubleAndAdd('0x'.$this->privateKey->getHex(), $P, '0x'.Secp256k1::P, '0x'.Secp256k1::A);
 
         $RxHex = Util::encodeHex($R['x']);
         $RyHex = Util::encodeHex($R['y']);
@@ -115,7 +114,7 @@ class PublicKey extends Key
     /**
      * Checks to see if the public key is not blank and contains
      * valid decimal and hex valules for this->hex & this->dec
-     * 
+     *
      * @return boolean
      */
     public function isValid()

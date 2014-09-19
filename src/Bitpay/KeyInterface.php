@@ -30,7 +30,6 @@ namespace Bitpay;
  */
 interface KeyInterface extends \Serializable
 {
-
     /**
      * Generates a new key
      */

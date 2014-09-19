@@ -30,7 +30,6 @@ namespace Bitpay;
  */
 class User implements UserInterface
 {
-
     /**
      * @var string
      */
@@ -278,10 +277,10 @@ class User implements UserInterface
 
         return $this;
     }
-    
+
     /**
      * @param bool $boolvalue
-     * 
+     *
      * @return User
      */
     public function setAgreedToTOSandPP($boolvalue)
@@ -292,7 +291,7 @@ class User implements UserInterface
 
         return $this;
     }
-    
+
     /**
      * @return bool
      */
