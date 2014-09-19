@@ -1,5 +1,4 @@
 /bin/**
-!/bin/bitpay
 /build/cache/
 /build/docs/
 /build/dist/
