@@ -84,13 +84,24 @@ class EncryptedFilesystemStorage implements StorageInterface
         }
 
         $encoded = file_get_contents($id);
-        $decoded = openssl_decrypt(
-            hex2bin($encoded),
-            self::METHOD,
-            $this->password,
-            OPENSSL_RAW_DATA,
-            self::IV
-        );
+        
+        if (function_exists('')) {
+            $decoded = openssl_decrypt(
+                                       hex2bin($encoded),
+                                       self::METHOD,
+                                       $this->password,
+                                       OPENSSL_RAW_DATA,
+                                       self::IV
+                                      );
+        } else {
+            $decoded = openssl_decrypt(
+                                       Gmp::gmpBinconv($encoded),
+                                       self::METHOD,
+                                       $this->password,
+                                       OPENSSL_RAW_DATA,
+                                       self::IV
+                                      );
+        }
 
         if (false === $decoded) {
             throw new \Exception('Could not decode key');
