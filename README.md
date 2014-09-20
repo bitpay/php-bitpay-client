@@ -1,6 +1,8 @@
 bitpay/php-client
 =================
 
+[![Build Status](https://travis-ci.org/bitpay/php-bitpay-client.svg?branch=master)](https://travis-ci.org/bitpay/php-bitpay-client) [![Documentation Status](https://readthedocs.org/projects/php-bitpay-client/badge/?version=latest)](https://readthedocs.org/projects/php-bitpay-client/?badge=latest)
+
 This is a self-contained PHP implementation of BitPay's new cryptographically secure API: https://bitpay.com/api
 
 # Installation
