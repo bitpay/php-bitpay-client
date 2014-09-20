@@ -19,4 +19,5 @@ Contents:
     distribution/index
     changelog
     contributing
+    testing
     license
