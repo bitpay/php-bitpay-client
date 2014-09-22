@@ -297,7 +297,7 @@ class Invoice implements InvoiceInterface
      *
      * @return InvoiceInterface
      */
-    public function setNotificationurl($notificationUrl)
+    public function setNotificationUrl($notificationUrl)
     {
         if (!empty($notificationUrl) && ctype_print($notificationUrl)) {
             $this->notificationUrl = trim($notificationUrl);

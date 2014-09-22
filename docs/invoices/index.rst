@@ -86,3 +86,16 @@ your customer to BitPay's fullscreen invoice.
 .. code-block:: php
 
     header('Location: ' . $invoice->getUrl());
+
+Instant Payment Notifications (IPN)
+===================================
+
+You can enabled IPNs for an invoice by setting the notificationUrl. Example:
+
+.. code-block:: php
+
+    $invoice->setNotificationUrl('https://example.com/bitpay/ipn');
+
+By adding the Notification URL, it will receive an IPN when the invoice is
+updated. For more information on IPNs, please see the documentation on BitPay's
+website.
