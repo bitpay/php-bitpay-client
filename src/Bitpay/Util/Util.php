@@ -142,13 +142,13 @@ class Util
     public static function guid()
     {
         return sprintf(
-                       '%s-%s-%s-%s-%s',
-                       bin2hex(openssl_random_pseudo_bytes(4)),
-                       bin2hex(openssl_random_pseudo_bytes(2)),
-                       bin2hex(openssl_random_pseudo_bytes(2)),
-                       bin2hex(openssl_random_pseudo_bytes(2)),
-                       bin2hex(openssl_random_pseudo_bytes(6))
-                      );
+            '%s-%s-%s-%s-%s',
+            bin2hex(openssl_random_pseudo_bytes(4)),
+            bin2hex(openssl_random_pseudo_bytes(2)),
+            bin2hex(openssl_random_pseudo_bytes(2)),
+            bin2hex(openssl_random_pseudo_bytes(2)),
+            bin2hex(openssl_random_pseudo_bytes(6))
+        );
     }
 
     /**

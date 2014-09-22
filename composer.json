@@ -41,7 +41,8 @@
         "codegyre/robo": "*",
         "phpunit/phpunit": "*",
         "fzaninotto/faker": "*",
-        "mikey179/vfsStream": "*"
+        "mikey179/vfsStream": "*",
+        "squizlabs/php_codesniffer": "*"
     },
     "config": {
         "bin-dir": "bin"
