@@ -44,9 +44,6 @@ class BitpayExtension implements ExtensionInterface
         $config    = $processor->processConfiguration(new Configuration(), $configs);
 
         foreach (array_keys($config) as $key) {
-            if (in_array($key, array('network'))) {
-                continue;
-            }
             $container->setParameter('bitpay.'.$key, $config[$key]);
         }
 
