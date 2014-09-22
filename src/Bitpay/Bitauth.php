@@ -343,7 +343,7 @@ class Bitauth
      * @param  string   $cypher_type
      * @return int|bool
      */
-    public function GetIVSize($cypher_type = 'MCRYPT_TRIPLEDES')
+    public function getIVSize($cypher_type = 'MCRYPT_TRIPLEDES')
     {
         $block_mode = 'cbc';
 
@@ -360,7 +360,7 @@ class Bitauth
      * @param  string $cypher_type
      * @return int
      */
-    public function GetKeySize($cypher_type = 'MCRYPT_TRIPLEDES')
+    public function getKeySize($cypher_type = 'MCRYPT_TRIPLEDES')
     {
         $block_mode = 'cbc';
 
@@ -379,7 +379,7 @@ class Bitauth
      * @param none
      * @return array
      */
-    public function GetAlgos()
+    public function getAlgos()
     {
         return mcrypt_list_algorithms();
     }
@@ -392,7 +392,7 @@ class Bitauth
      * @param  string  $cypher_type
      * @return boolean
      */
-    public function AlgoSelfTest($cypher_type = 'MCRYPT_TRIPLEDES')
+    public function glgoSelfTest($cypher_type = 'MCRYPT_TRIPLEDES')
     {
         return mcrypt_module_self_test($cypher_type);
     }
@@ -413,7 +413,7 @@ class Bitauth
      * @throws Exception $e
      *
      */
-    public function Encrypt($text, $key = '', $iv = '', $bit_check = 8, $cypher_type = 'MCRYPT_TRIPLEDES')
+    public function encrypt($text, $key = '', $iv = '', $bit_check = 8, $cypher_type = 'MCRYPT_TRIPLEDES')
     {
         try {
             /* Ensure the key & IV is the same for both encrypt & decrypt. */
@@ -458,7 +458,7 @@ class Bitauth
      * @throws Exception $e
      *
      */
-    public function Decrypt($encrypted_text, $key = '', $iv = '', $bit_check = 8, $cypher_type = 'MCRYPT_TRIPLEDES')
+    public function decrypt($encrypted_text, $key = '', $iv = '', $bit_check = 8, $cypher_type = 'MCRYPT_TRIPLEDES')
     {
         try {
             /* Ensure the key & IV is the same for both encrypt & decrypt. */
