@@ -25,34 +25,12 @@
 
 namespace Bitpay\Util;
 
-/**
- * Generates secure random numbers
- */
-class SecureRandom
+class FingerprintTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @return string
-     */
-    public static function generateRandom($bytes = 32)
+
+    public function testGenerate()
     {
-        if (!self::hasOpenSSL()) {
-            throw new \Exception('You MUST have openssl module installed.');
-        }
-
-        $random = openssl_random_pseudo_bytes($bytes, $isStrong);
-
-        if (!random || !$isStrong) {
-            throw new \Exception('Cound not generate a cryptographically strong random number.');
-        }
-
-        return $random;
+        $this->assertNotNull(Fingerprint::generate());
     }
 
-    /**
-     * @return boolean
-     */
-    public static function hasOpenSSL()
-    {
-        return function_exists('openssl_random_pseudo_bytes');
-    }
 }
