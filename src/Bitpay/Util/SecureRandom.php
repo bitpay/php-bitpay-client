@@ -41,7 +41,7 @@ class SecureRandom
 
         $random = openssl_random_pseudo_bytes($bytes, $isStrong);
 
-        if (!$isStrong) {
+        if (!random || !$isStrong) {
             throw new \Exception('Cound not generate a cryptographically strong random number.');
         }
 
