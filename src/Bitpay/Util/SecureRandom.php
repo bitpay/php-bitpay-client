@@ -23,36 +23,36 @@
  * SOFTWARE.
  */
 
-namespace Bitpay;
+namespace Bitpay\Util;
 
 /**
- * @package Bitpay
+ * Generates secure random numbers
  */
-interface TokenInterface
+class SecureRandom
 {
-
     /**
      * @return string
      */
-    public function getToken();
+    public static function generateRandom($bytes = 32)
+    {
+        if (!self::hasOpenSSL()) {
+            throw new \Exception('You MUST have openssl module installed.');
+        }
+
+        $random = openssl_random_pseudo_bytes($bytes, $isStrong);
+
+        if (!$isStrong) {
+            throw new \Exception('Cound not generate a cryptographically strong random number.');
+        }
+
+        return $random;
+    }
 
     /**
-     * @return string
+     * @return boolean
      */
-    public function getResource();
-
-    /**
-     * @return string
-     */
-    public function getFacade();
-
-    /**
-     * @return \DateTime
-     */
-    public function getCreatedAt();
-
-    /**
-     * @return array
-     */
-    public function getPolicies();
+    public static function hasOpenSSL()
+    {
+        return function_exists('openssl_random_pseudo_bytes');
+    }
 }

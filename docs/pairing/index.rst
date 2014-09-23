@@ -41,6 +41,7 @@ You will next need to create a SIN based on your Public Key.
     $sin->setPublicKey($publicKey);
     $sin->generate();
 
+    // @var \Bitpay\TokenInterface
     $token = $client->createToken(
         array(
             'id'          => (string) $sin,
@@ -52,3 +53,5 @@ You will next need to create a SIN based on your Public Key.
 .. note::
 
     Want to know more about SINs? See https://en.bitcoin.it/wiki/Identity_protocol_v1
+
+The token that you get back will be needed to be sent with future requests.

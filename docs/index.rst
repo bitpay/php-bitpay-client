@@ -16,7 +16,8 @@ Contents:
     invoices/index
     keypairs/index
     pairing/index
-    distribution/index
+    documentation/index
     changelog
     contributing
+    testing
     license

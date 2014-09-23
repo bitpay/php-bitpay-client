@@ -33,6 +33,7 @@
         "ext-curl": "*",
         "ext-json": "*",
         "ext-openssl": "*",
+        "ext-mcrypt": "*",
         "symfony/config": "~2.3",
         "symfony/dependency-injection": "~2.3"
     },
@@ -40,7 +41,8 @@
         "codegyre/robo": "*",
         "phpunit/phpunit": "*",
         "fzaninotto/faker": "*",
-        "mikey179/vfsStream": "*"
+        "mikey179/vfsStream": "*",
+        "squizlabs/php_codesniffer": "*"
     },
     "config": {
         "bin-dir": "bin"

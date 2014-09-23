@@ -39,10 +39,10 @@ class Error
      * @param int
      * @return array|void
      */
-    final public function Backtrace($print = false, $options = false, $limit = 0)
+    final public function backtrace($print = false, $options = false, $limit = 0)
     {
         if ($print == true) {
-            return debug_print_backtrace ($options, $limit);
+            return debug_print_backtrace($options, $limit);
         } else {
             return debug_backtrace($options, $limit);
         }
@@ -59,7 +59,7 @@ class Error
      * @param void
      * @return array
      */
-    final public function Last()
+    final public function last()
     {
         return error_get_last();
     }
@@ -77,9 +77,9 @@ class Error
      * @param string
      * @param string
      */
-    final public function Log(string $message , $message_type = 0, $destination = '', $extra_headers = '')
+    final public function log($message, $message_type = 0, $destination = '', $extra_headers = '')
     {
-        return error_log(string $message , $message_type = 0, $destination = '', $extra_headers = '');
+        return error_log((string) $message, $message_type = 0, $destination = '', $extra_headers = '');
     }
 
     /**
@@ -91,7 +91,7 @@ class Error
      * @param bool
      * @return int
      */
-    final public function Reporting($level = false)
+    final public function reporting($level = false)
     {
         if ($level !== false) {
             return error_reporting($level);
@@ -111,8 +111,11 @@ class Error
      * @param int
      * return mixed
      */
-    final public function Handler($type = 'error', $action = 'restore', $callable_handler = false, $error_types = E_ALL | E_STRICT)
+    final public function handler($type = 'error', $action = 'restore', $callable_handler = false, $error_types = null)
     {
+        if (empty($error_types)) {
+            $error_types = E_ALL | E_STRICT;
+        }
         switch (strtolower($type)) {
             case 'error':
                 switch (strtolower($action)) {
@@ -154,7 +157,7 @@ class Error
      * @param int
      * @return bool
      */
-    final public function Raise($error_msg, $error_type = E_USER_NOTICE)
+    final public function raise($error_msg, $error_type = E_USER_NOTICE)
     {
         return trigger_error($error_msg, $error_type);
     }

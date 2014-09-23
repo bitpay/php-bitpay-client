@@ -23,36 +23,23 @@
  * SOFTWARE.
  */
 
-namespace Bitpay;
+namespace Bitpay\Crypto;
 
 /**
- * @package Bitpay
+ * All crypto extensions MUST support this interface
  */
-interface TokenInterface
+interface CryptoInterface
 {
-
     /**
-     * @return string
+     * If the users system supports the cryto extension, this should return
+     * true, otherwise it should return false.
+     *
+     * @return boolean
      */
-    public function getToken();
-
-    /**
-     * @return string
-     */
-    public function getResource();
-
-    /**
-     * @return string
-     */
-    public function getFacade();
-
-    /**
-     * @return \DateTime
-     */
-    public function getCreatedAt();
+    public static function hasSupport();
 
     /**
      * @return array
      */
-    public function getPolicies();
+    public function getAlgos();
 }

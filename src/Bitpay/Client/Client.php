@@ -94,10 +94,6 @@ class Client extends ContainerAware implements ClientInterface
 
         $body = json_decode($this->response->getBody(), true);
         if (isset($body['error'])) {
-            //var_dump(
-            //    $this->request,
-            //    $this->response
-            //);
             throw new \Exception('Error with request');
         }
         $invoice
@@ -154,7 +150,7 @@ class Client extends ContainerAware implements ClientInterface
      * Used to create a token. These method needs to be refactored to
      * work better
      *
-     * @return array
+     * @return TokenInterface
      */
     public function createToken(array $payload = array())
     {
@@ -162,11 +158,25 @@ class Client extends ContainerAware implements ClientInterface
         $this->request->setMethod(Request::METHOD_POST);
         $this->request->setPath('tokens');
         $payload['guid'] = Util::guid();
-        $request->setBody(json_encode($payload));
-        $this->response = $this->send($request);
+        $this->request->setBody(json_encode($payload));
+        $this->response = $this->send($this->request);
         $body           = json_decode($this->response->getBody(), true);
 
-        return $body;
+        if (!empty($body['error'])) {
+            throw new \Exception($body['error']);
+        }
+
+        $tkn = $body['data'][0];
+
+        $token = new \Bitpay\Token();
+        $token
+            ->setPolicies($tkn['policies'])
+            ->setResource($tkn['resource'])
+            ->setToken($tkn['token'])
+            ->setFacade($tkn['facade'])
+            ->setCreatedAt($tkn['dateCreated']);
+
+        return $token;
     }
 
     /**
@@ -183,6 +193,26 @@ class Client extends ContainerAware implements ClientInterface
     public function getRequest()
     {
         return $this->request;
+    }
+
+    /**
+     * @param  string           $invoiceId
+     * @return InvoiceInterface
+     */
+    public function getInvoice($invoiceId)
+    {
+        $this->request = $this->createNewRequest();
+        $this->request->setMethod(Request::METHOD_GET);
+        $this->request->setPath(sprintf('invoices/%s', $invoiceId));
+        $body = array(
+            'guid'  => Util::guid(),
+            'nonce' => Util::nonce(),
+        );
+        $this->request->setBody(json_encode($body));
+        $this->response = $this->send($this->request);
+        $body = json_decode($this->response->getBody(), true);
+
+        return $body;
     }
 
     protected function addIdentityHeader(RequestInterface $request)

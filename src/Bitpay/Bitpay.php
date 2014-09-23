@@ -128,11 +128,11 @@ class Bitpay
             $locator  = new FileLocator();
 
             $resolver = new LoaderResolver(
-                                           array(
-                                                 new ArrayLoader($container),
-                                                 new YamlFileLoader($container, $locator),
-                                                )
-                                          );
+                array(
+                    new ArrayLoader($container),
+                    new YamlFileLoader($container, $locator),
+                )
+            );
 
             return new DelegatingLoader($resolver);
         } else {

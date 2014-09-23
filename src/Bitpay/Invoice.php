@@ -31,7 +31,6 @@ namespace Bitpay;
  */
 class Invoice implements InvoiceInterface
 {
-
     /**
      * @var CurrencyInterface
      */
@@ -297,7 +296,7 @@ class Invoice implements InvoiceInterface
      *
      * @return InvoiceInterface
      */
-    public function setNotificationurl($notificationUrl)
+    public function setNotificationUrl($notificationUrl)
     {
         if (!empty($notificationUrl) && ctype_print($notificationUrl)) {
             $this->notificationUrl = trim($notificationUrl);
@@ -566,7 +565,7 @@ class Invoice implements InvoiceInterface
         $firstName = $this->getBuyer()->getFirstName();
         $lastName  = $this->getBuyer()->getLastName();
 
-        return trim($firstName . ' ' . $lastName);
+        return trim($firstName.' '.$lastName);
     }
 
     /**
