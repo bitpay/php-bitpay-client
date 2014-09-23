@@ -150,7 +150,7 @@ class Client extends ContainerAware implements ClientInterface
      * Used to create a token. These method needs to be refactored to
      * work better
      *
-     * @return array
+     * @return TokenInterface
      */
     public function createToken(array $payload = array())
     {
@@ -162,7 +162,21 @@ class Client extends ContainerAware implements ClientInterface
         $this->response = $this->send($this->request);
         $body           = json_decode($this->response->getBody(), true);
 
-        return $body;
+        if (!empty($body['error'])) {
+            throw new \Exception($body['error']);
+        }
+
+        $tkn = $body['data'][0];
+
+        $token = new \Bitpay\Token();
+        $token
+            ->setPolicies($tkn['policies'])
+            ->setResource($tkn['resource'])
+            ->setToken($tkn['token'])
+            ->setFacade($tkn['facade'])
+            ->setCreatedAt($tkn['dateCreated']);
+
+        return $token;
     }
 
     /**

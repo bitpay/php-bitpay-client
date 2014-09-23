@@ -30,4 +30,29 @@ namespace Bitpay;
  */
 interface TokenInterface
 {
+
+    /**
+     * @return string
+     */
+    public function getToken();
+
+    /**
+     * @return string
+     */
+    public function getResource();
+
+    /**
+     * @return string
+     */
+    public function getFacade();
+
+    /**
+     * @return \DateTime
+     */
+    public function getCreatedAt();
+
+    /**
+     * @return array
+     */
+    public function getPolicies();
 }
