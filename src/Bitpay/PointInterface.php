@@ -30,7 +30,6 @@ namespace Bitpay;
  */
 interface PointInterface
 {
-
     /**
      * Infinity constant
      *

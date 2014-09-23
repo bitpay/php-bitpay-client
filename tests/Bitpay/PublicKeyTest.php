@@ -27,7 +27,6 @@ namespace Bitpay;
 
 class PublicKeyTest extends \PHPUnit_Framework_TestCase
 {
-
     public function testCreate()
     {
         $this->assertInstanceOf('Bitpay\PublicKey', PublicKey::create());

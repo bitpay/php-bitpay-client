@@ -27,7 +27,6 @@ namespace Bitpay\Network;
 
 class TestnetTest extends \PHPUnit_Framework_TestCase
 {
-
     public function setUp()
     {
         $this->network = new Testnet();

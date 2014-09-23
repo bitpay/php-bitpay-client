@@ -27,8 +27,6 @@ namespace Bitpay\Util;
 
 use Bitpay\PointInterface;
 use Bitpay\Point;
-use Bitpay\Util\CurveParameterInterface;
-use Bitpay\Util\Secp256k1;
 
 /**
  * Provides methods used when creating elliptic curve keypairs
@@ -42,8 +40,8 @@ class Gmp
      * Pure PHP implementation of the doubleAndAdd algorithm, see:
      * http://en.wikipedia.org/wiki/Elliptic_curve_point_multiplication#Double-and-add
      *
-     * @param string $hex
-     * @param PointInterface $point
+     * @param string                  $hex
+     * @param PointInterface          $point
      * @param CurveParameterInterface $parameters
      *
      * @return PointInterface

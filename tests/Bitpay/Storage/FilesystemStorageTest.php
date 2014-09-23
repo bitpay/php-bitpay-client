@@ -29,7 +29,6 @@ use org\bovigo\vfs\vfsStream;
 
 class FilesystemStorageTest extends \PHPUnit_Framework_TestCase
 {
-
     public function setUp()
     {
         $this->root = vfsStream::setup('tmp');

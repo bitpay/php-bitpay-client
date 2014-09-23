@@ -367,7 +367,7 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
     public function testSetBuyerName()
     {
         $this->assertNotNull($this->invoice);
-        
+
         // TODO: add a test for setting the buyer name...
     }
 
@@ -380,7 +380,7 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
     public function testSetBuyerAddress1()
     {
         $this->assertNotNull($this->invoice);
-        
+
         // TODO: add a test for setting the buyer address1...
     }
 

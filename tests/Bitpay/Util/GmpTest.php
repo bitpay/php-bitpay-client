@@ -26,11 +26,8 @@
 namespace Bitpay\Util;
 
 use Bitpay\Point;
-use Bitpay\Util\Secp256k1;
-
 class GmpTest extends \PHPUnit_Framework_TestCase
 {
-
     public function testDoubleAndAdd()
     {
         $point = Gmp::doubleAndAdd('0', new Point(0, 0));

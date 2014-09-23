@@ -35,7 +35,6 @@ use Bitpay\Util\Util;
  */
 class PrivateKey extends Key
 {
-
     /**
      * @return string
      */
@@ -49,7 +48,7 @@ class PrivateKey extends Key
      *
      * @TODO
      *
-     * @param string $hex
+     * @param  string     $hex
      * @return PrivateKey
      */
     public static function createFromHex($hex)

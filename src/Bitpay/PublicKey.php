@@ -28,7 +28,6 @@ namespace Bitpay;
 use Bitpay\Util\Gmp;
 use Bitpay\Util\Secp256k1;
 use Bitpay\Util\Util;
-use Bitpay\Point;
 
 /**
  * @package Bitcore

@@ -27,7 +27,6 @@ namespace Bitpay\Network;
 
 class NetworkAwareTest extends \PHPUnit_Framework_TestCase
 {
-
     public function testSetNetwork()
     {
         $networkAware = $this->getMockForAbstractClass('Bitpay\Network\NetworkAware');

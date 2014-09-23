@@ -30,7 +30,6 @@ namespace Bitpay\Util;
  */
 class SecureRandomTest extends \PHPUnit_Framework_TestCase
 {
-
     public function testHasOpenSSL()
     {
         $this->assertTrue(SecureRandom::hasOpenSSL());
