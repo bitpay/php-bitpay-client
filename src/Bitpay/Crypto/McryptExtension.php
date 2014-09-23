@@ -23,10 +23,31 @@
  * SOFTWARE.
  */
 
-namespace Bitpay\Util;
+namespace Bitpay\Crypto;
 
-class Mcrypt
+/**
+ * Wrapper around the Mcrypt PHP Extension
+ *
+ * @see http://php.net/manual/en/book.mcrypt.php
+ */
+class McryptExtension implements CryptoInterface
 {
+    /**
+     * @inheritdoc
+     */
+    public static function hasSupport()
+    {
+        return function_exists('mcrypt_encrypt');
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getAlgos()
+    {
+        return mcrypt_list_algorithms();
+    }
+
     /**
      * Returns the inititialization size used for a particular cypher
      * type.  Returns an integer IV size on success or boolean false
@@ -36,7 +57,7 @@ class Mcrypt
      * @param  string   $cypher_type
      * @return int|bool
      */
-    public function GetIVSize($cypher_type = 'MCRYPT_TRIPLEDES')
+    public function getIVSize($cypher_type = 'MCRYPT_TRIPLEDES')
     {
         $block_mode = 'cbc';
 
@@ -53,7 +74,7 @@ class Mcrypt
      * @param  string $cypher_type
      * @return int
      */
-    public function GetKeySize($cypher_type = 'MCRYPT_TRIPLEDES')
+    public function getKeySize($cypher_type = 'MCRYPT_TRIPLEDES')
     {
         $block_mode = 'cbc';
 
@@ -67,17 +88,6 @@ class Mcrypt
     }
 
     /**
-     * Returns a list of all supported mcrypt algorithms on the local system.
-     *
-     * @param none
-     * @return array
-     */
-    public function GetAlgos()
-    {
-        return mcrypt_list_algorithms();
-    }
-
-    /**
      * Performs an internal self-test on the specified mcrypt algorithm and
      * returns either boolean true/false depending on if the self-test passed
      * or failed.
@@ -85,7 +95,7 @@ class Mcrypt
      * @param  string  $cypher_type
      * @return boolean
      */
-    public function AlgoSelfTest($cypher_type = 'MCRYPT_TRIPLEDES')
+    public function algoSelfTest($cypher_type = 'MCRYPT_TRIPLEDES')
     {
         return mcrypt_module_self_test($cypher_type);
     }
@@ -106,7 +116,7 @@ class Mcrypt
      * @throws Exception $e
      *
      */
-    public function Encrypt($text, $key = '', $iv = '', $bit_check = 8, $cypher_type = 'MCRYPT_TRIPLEDES')
+    public function encrypt($text, $key = '', $iv = '', $bit_check = 8, $cypher_type = 'MCRYPT_TRIPLEDES')
     {
         try {
             /* Ensure the key & IV is the same for both encrypt & decrypt. */
@@ -151,7 +161,7 @@ class Mcrypt
      * @throws Exception $e
      *
      */
-    public function Decrypt($encrypted_text, $key = '', $iv = '', $bit_check = 8, $cypher_type = 'MCRYPT_TRIPLEDES')
+    public function decrypt($encrypted_text, $key = '', $iv = '', $bit_check = 8, $cypher_type = 'MCRYPT_TRIPLEDES')
     {
         try {
             /* Ensure the key & IV is the same for both encrypt & decrypt. */

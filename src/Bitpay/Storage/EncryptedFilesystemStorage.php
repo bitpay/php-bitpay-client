@@ -48,7 +48,7 @@ class EncryptedFilesystemStorage implements StorageInterface
      * @var int
      */
     const OPENSSL_RAW_DATA = 1;
-    
+
     /**
      * @param string $password
      */
@@ -89,23 +89,23 @@ class EncryptedFilesystemStorage implements StorageInterface
         }
 
         $encoded = file_get_contents($id);
-        
+
         if (function_exists('hex2bin')) {
             $decoded = openssl_decrypt(
-                                       hex2bin($encoded),
-                                       self::METHOD,
-                                       $this->password,
-                                       1,
-                                       self::IV
-                                      );
+                hex2bin($encoded),
+                self::METHOD,
+                $this->password,
+                1,
+                self::IV
+            );
         } else {
             $decoded = openssl_decrypt(
-                                       \Bitpay\Util\Gmp::gmpBinconv($encoded),
-                                       self::METHOD,
-                                       $this->password,
-                                       1,
-                                       self::IV
-                                      );
+                \Bitpay\Util\Gmp::gmpBinconv($encoded),
+                self::METHOD,
+                $this->password,
+                1,
+                self::IV
+            );
         }
 
         if (false === $decoded) {

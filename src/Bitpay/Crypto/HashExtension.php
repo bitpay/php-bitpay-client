@@ -23,26 +23,30 @@
  * SOFTWARE.
  */
 
-namespace Bitpay\Util;
+namespace Bitpay\Crypto;
 
-class Hash
+/**
+ * Wrapper around the HASH Message Digest Framework for PHP
+ *
+ * @see http://php.net/manual/en/book.hash.php
+ */
+class HashExtension implements CryptoInterface
 {
-    public function __construct()
+    /**
+     * @inheritdoc
+     */
+    public static function hasSupport()
     {
-        if (!function_exists('hash')) {
-            // TODO: Throw exception
-            die('FATAL: The PHP hash extension is not supported by your installation. Contact your system administrator.');
-        }
+        return function_exists('hash');
     }
 
     /**
      * Return a list of registered hashing algorithms.
      * (PHP 5 >= 5.1.2, PECL hash >= 1.1)
      *
-     * @param void
      * @return array
      */
-    final public function Algorithms()
+    public function getAlgos()
     {
         return hash_algos();
     }
@@ -54,7 +58,7 @@ class Hash
      * @param resource
      * @return resource
      */
-    final public function Copy($context)
+    final public function copy($context)
     {
         if (!is_resource($context)) {
             return false;
@@ -74,7 +78,7 @@ class Hash
      * @param string
      * @param string
      */
-    final public function Equals($string1, $string2)
+    public function equals($string1, $string2)
     {
         if (!is_string($string1) || !is_string($string2)) {
             return false;
@@ -97,9 +101,9 @@ class Hash
      * @param bool
      * @return string
      */
-    final public function File($algorithm, $filename, $raw_output = false)
+    public function file($algorithm, $filename, $raw_output = false)
     {
-        return hash_file($algorithm, string $filename, $raw_output);
+        return hash_file($algorithm, (string) $filename, $raw_output);
     }
 
     /**
@@ -111,7 +115,7 @@ class Hash
      * @param bool
      * @return string
      */
-    final public function Finalize($context, $raw_output = false)
+    public function finalize($context, $raw_output = false)
     {
         if (!is_resource($context)) {
             return false;
@@ -131,9 +135,9 @@ class Hash
      * @param bool
      * @return string
      */
-    final public function HMACfile($algorithm, $filename, $key, $raw_output = false)
+    public function hmacFile($algorithm, $filename, $key, $raw_output = false)
     {
-        return hash_hmac_file($algorithm, $filename, $key ,$raw_output);
+        return hash_hmac_file($algorithm, $filename, $key, $raw_output);
     }
 
     /**
@@ -147,7 +151,7 @@ class Hash
      * @param bool
      * @return string
      */
-    final public function HMAC($algorithm, $data, $key, $raw_output = false)
+    public function hmac($algo, $data, $key, $raw_output = false)
     {
         return hash_hmac($algo, $data, $key, $raw_output);
     }
@@ -166,7 +170,7 @@ class Hash
      * @param string
      * @return resource
      */
-    final public function Init($algorithm, $options = 0, $key = null)
+    public function init($algorithm, $options = 0, $key = null)
     {
         return hash_init($algorithm, $options, $key);
     }
@@ -189,7 +193,7 @@ class Hash
      * @param bool
      * @return string
      */
-    final public function PBKDF2($algorithm, $password, $salt, $iterations, $length = 0, $raw_output = false)
+    public function pbkdf2($algo, $password, $salt, $iterations, $length = 0, $raw_output = false)
     {
         return hash_pbkdf2($algo, $password, $salt, $iterations, $length, $raw_output);
     }
@@ -205,7 +209,7 @@ class Hash
      * @param resource
      * @return bool
      */
-    final public function UpdateFile($hcontext, $filename, $scontext = null)
+    public function updateFile($hcontext, $filename, $scontext = null)
     {
         if (!is_resource($hcontext)) {
             return false;
@@ -226,7 +230,7 @@ class Hash
      * @param int
      * @return int
      */
-    final public function UpdateStream($context, $handle, $length = -1)
+    public function updateStream($context, $handle, $length = -1)
     {
         if (!is_resource($context) || !is_resource($handle)) {
             return false;
@@ -244,7 +248,7 @@ class Hash
      * @param string
      * @return bool
      */
-    final public function Update($context, $data)
+    public function update($context, $data)
     {
         if (!is_resource($context)) {
             return false;
@@ -265,7 +269,7 @@ class Hash
      * @param bool
      * @return string
      */
-    final public function Generate($algo, $data, $raw_output = false)
+    public function generate($algo, $data, $raw_output = false)
     {
         if (empty($data)) {
             return false;

@@ -23,16 +23,28 @@
  * SOFTWARE.
  */
 
-namespace Bitpay\Util;
+namespace Bitpay\Crypto;
 
-class OpenSSL
+/**
+ * Wrapper around the OpenSSL PHP Extension
+ *
+ * @see http://php.net/manual/en/book.openssl.php
+ */
+class OpenSSLExtension implements CryptoInterface
 {
-    public function __construct()
+    /**
+     * @inheritdoc
+     */
+    public static function hasSupport()
     {
-        if (!function_exists('openssl_open')) {
-            // TODO: Throw exception
-            die('FATAL Error in OpenSSL::construct(): Your OpenSSL implementation is either too old or broken. Please contact your server administrator.');
-        }
+        return function_exists('openssl_open');
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getAlgos()
+    {
     }
 
     /**
@@ -44,7 +56,7 @@ class OpenSSL
      * @param string
      * @return array
      */
-    final public function GenerateKeypair($keybits = 512, $digest_alg = 'sha512')
+    final public function generateKeypair($keybits = 512, $digest_alg = 'sha512')
     {
         try {
             /* see: http://www.php.net/manual/en/function.openssl-pkey-new.php */
@@ -124,7 +136,7 @@ class OpenSSL
      * @param int
      * @return string|bool
      */
-    final public function RandomNumber($bytes = 32)
+    final public function randomNumber($bytes = 32)
     {
         $random_data = openssl_random_pseudo_bytes($bytes, $cstrong);
 
@@ -142,7 +154,7 @@ class OpenSSL
      * @param string
      * @return int|bool
      */
-    final public function CypherIVLength($cypher = '')
+    final public function cypherIVLength($cypher = '')
     {
         return openssl_cipher_iv_length($cypher);
     }
@@ -158,7 +170,7 @@ class OpenSSL
      * @param bool
      * @return bool
      */
-    final public function SaveCSRtoFile($csr, $outfilename, $notext = true)
+    final public function saveCSRtoFile($csr, $outfilename, $notext = true)
     {
         if (!is_resource($csr)) {
             return false;
@@ -178,7 +190,7 @@ class OpenSSL
      * @param bool
      * @return bool
      */
-    final public function SaveCSRtoString($csr, &$out, $notext = true)
+    final public function saveCSRtoString($csr, &$out, $notext = true)
     {
         if (!is_resource($csr)) {
             return false;

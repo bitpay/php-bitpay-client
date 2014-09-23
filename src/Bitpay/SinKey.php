@@ -93,11 +93,11 @@ class SinKey extends Key
         $step2 = Util::ripe160($step1);
 
         $step3 = sprintf(
-                         '%s%s%s',
-                         self::SIN_VERSION,
-                         self::SIN_TYPE,
-                         $step2
-                        );
+            '%s%s%s',
+            self::SIN_VERSION,
+            self::SIN_TYPE,
+            $step2
+        );
 
         $step4 = Util::twoSha256(Gmp::gmpBinconv($step3), true);
 

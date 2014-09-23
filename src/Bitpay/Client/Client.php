@@ -94,10 +94,6 @@ class Client extends ContainerAware implements ClientInterface
 
         $body = json_decode($this->response->getBody(), true);
         if (isset($body['error'])) {
-            //var_dump(
-            //    $this->request,
-            //    $this->response
-            //);
             throw new \Exception('Error with request');
         }
         $invoice
@@ -183,6 +179,26 @@ class Client extends ContainerAware implements ClientInterface
     public function getRequest()
     {
         return $this->request;
+    }
+
+    /**
+     * @param  string           $invoiceId
+     * @return InvoiceInterface
+     */
+    public function getInvoice($invoiceId)
+    {
+        $this->request = $this->createNewRequest();
+        $this->request->setMethod(Request::METHOD_GET);
+        $this->request->setPath(sprintf('invoices/%s', $invoiceId));
+        $body = array(
+            'guid'  => Util::guid(),
+            'nonce' => Util::nonce(),
+        );
+        $this->request->setBody(json_encode($body));
+        $this->response = $this->send($this->request);
+        $body = json_decode($this->response->getBody(), true);
+
+        return $body;
     }
 
     protected function addIdentityHeader(RequestInterface $request)

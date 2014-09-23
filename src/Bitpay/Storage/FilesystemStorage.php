@@ -66,7 +66,7 @@ class FilesystemStorage implements StorageInterface
      * @param string
      * @return string|bool
      */
-    final public function Name($path, $suffix = '')
+    final public function name($path, $suffix = '')
     {
         return basename($path, $suffix);
     }
@@ -79,7 +79,7 @@ class FilesystemStorage implements StorageInterface
      * @param mixed
      * @return array|bool
      */
-    final public function Group($filename, $newgroup = false)
+    final public function group($filename, $newgroup = false)
     {
         if ($newgroup === false) {
             clearstatcache();
@@ -107,7 +107,7 @@ class FilesystemStorage implements StorageInterface
      * @param bool|int
      * @return int|bool
      */
-    final public function Perms($filename, $newmode = false)
+    final public function perms($filename, $newmode = false)
     {
         if ($newmode === false) {
             clearstatcache();
@@ -127,7 +127,7 @@ class FilesystemStorage implements StorageInterface
      * @param mixed
      * @return array|bool
      */
-    final public function Owner($filename, $newowner = false)
+    final public function owner($filename, $newowner = false)
     {
         if ($newgroup === false) {
             clearstatcache();
@@ -158,7 +158,7 @@ class FilesystemStorage implements StorageInterface
      * @param bool
      * @return bool
      */
-    final public function Copy($source, $dest, $context = null, $force = false)
+    final public function copy($source, $dest, $context = null, $force = false)
     {
         if ($force === false) {
             if ($file_exists) {
@@ -180,7 +180,7 @@ class FilesystemStorage implements StorageInterface
      * @param resource
      * @return bool
      */
-    final public function Delete($filename, $context = null)
+    final public function delete($filename, $context = null)
     {
         if ($file_exists) {
             return unlink($filename, $context);
@@ -199,7 +199,7 @@ class FilesystemStorage implements StorageInterface
      * @param string
      * @return string
      */
-    final public function Dirname($path)
+    final public function dirname($path)
     {
         return dirname($path);
     }
