@@ -163,7 +163,7 @@ class Client extends ContainerAware implements ClientInterface
         $this->request->setPath('tokens');
         $payload['guid'] = Util::guid();
         $request->setBody(json_encode($payload));
-        $this->response = $this->send($request);
+        $this->response = $this->send($this->request);
         $body           = json_decode($this->response->getBody(), true);
 
         return $body;
