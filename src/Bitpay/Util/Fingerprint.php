@@ -46,11 +46,15 @@ class Fingerprint
         self::$finHash = '';
         self::$sigData = array();
 
-        self::$sigData[] = $_SERVER['SERVER_SOFTWARE'];
-        self::$sigData[] = $_SERVER['SERVER_NAME'];
-        self::$sigData[] = $_SERVER['SERVER_ADDR'];
-        self::$sigData[] = $_SERVER['SERVER_PORT'];
-        self::$sigData[] = $_SERVER['DOCUMENT_ROOT'];
+        if (php_sapi_name() != 'cli') {
+            self::$sigData[] = $_SERVER['SERVER_SOFTWARE'];
+            self::$sigData[] = $_SERVER['SERVER_NAME'];
+            self::$sigData[] = $_SERVER['SERVER_ADDR'];
+            self::$sigData[] = $_SERVER['SERVER_PORT'];
+            self::$sigData[] = $_SERVER['DOCUMENT_ROOT'];
+        } else {
+            self::$sigData[] = phpversion();
+        }
 
         if (function_exists('get_current_user')) {
             self::$sigData[] = get_current_user();
