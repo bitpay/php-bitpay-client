@@ -25,7 +25,7 @@
  */
  -->
 <phpunit
-    bootstrap="../tests/bootstrap.php"
+    bootstrap="../vendor/autoload.php"
     colors="true">
     <testsuites>
         <testsuite name="Bitpay Package">
