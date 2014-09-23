@@ -26,6 +26,7 @@
 namespace Bitpay\Util;
 
 use Bitpay\Point;
+
 class GmpTest extends \PHPUnit_Framework_TestCase
 {
     public function testDoubleAndAdd()
