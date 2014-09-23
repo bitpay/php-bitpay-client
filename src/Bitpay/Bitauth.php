@@ -69,10 +69,10 @@ class Bitauth
         $sinKey = SinKey::create()->setPublicKey($pubKey)->generate();
 
         return array(
-                     'public'  => $pubKey,
-                     'private' => $priKey,
-                     'sin'     => $sinKey,
-                    );
+            'public'  => $pubKey,
+            'private' => $priKey,
+            'sin'     => $sinKey,
+        );
     }
 
     /**
@@ -132,13 +132,13 @@ class Bitauth
             $Gx = '0x'.substr(Secp256k1::G, 0, 62);
             $Gy = '0x'.substr(Secp256k1::G, 64, 62);
 
-            $P = array('x' => $Gx, 'y' => $Gy);
+            $P = new Point($Gx, $Gy);
 
             // Calculate a new curve point from Q=k*G (x1,y1)
-            $R = Gmp::doubleAndAdd($k_hex, $P, $p_hex, $a_hex);
+            $R = Gmp::doubleAndAdd($k_hex, $P);
 
-            $Rx_hex = Util::encodeHex($R['x']);
-            $Ry_hex = Util::encodeHex($R['y']);
+            $Rx_hex = Util::encodeHex($R->getX());
+            $Ry_hex = Util::encodeHex($R->getY());
 
             while (strlen($Rx_hex) < 64) {
                 $Rx_hex = '0'.$Rx_hex;
@@ -159,9 +159,9 @@ class Bitauth
 
             // The signature is the pair (r,s)
             $signature = array(
-                               'r' => Util::encodeHex($r),
-                               's' => Util::encodeHex($s),
-                              );
+                'r' => Util::encodeHex($r),
+                's' => Util::encodeHex($s),
+            );
 
             while (strlen($signature['r']) < 64) {
                 $signature['r'] = '0'.$signature['r'];
@@ -173,9 +173,9 @@ class Bitauth
         } while (gmp_cmp($r, '0') <= 0 || gmp_cmp($s, '0') <= 0);
 
         $sig = array(
-                     'sig_rs' => $signature,
-                     'sig_hex' => self::serializeSig($signature['r'], $signature['s']),
-                    );
+            'sig_rs' => $signature,
+            'sig_hex' => self::serializeSig($signature['r'], $signature['s']),
+        );
 
         return $sig['sig_hex']['seq'];
     }

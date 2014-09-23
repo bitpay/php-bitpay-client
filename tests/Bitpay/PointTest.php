@@ -45,6 +45,9 @@ class PointTest extends \PHPUnit_Framework_TestCase
         $this->assertNotNull($point);
 
         $this->assertSame('(1, 2)', (string) $point);
+
+        $point = new Point(PointInterface::INFINITY, PointInterface::INFINITY);
+        $this->assertSame(PointInterface::INFINITY, (string) $point);
     }
 
     public function testGetX()
@@ -61,5 +64,14 @@ class PointTest extends \PHPUnit_Framework_TestCase
         $this->assertNotNull($point);
 
         $this->assertSame('2', $point->getY());
+    }
+
+    public function testInfinity()
+    {
+        $point = new Point(1, 2);
+        $this->assertFalse($point->isInfinity());
+
+        $point = new Point(PointInterface::INFINITY, PointInterface::INFINITY);
+        $this->assertTrue($point->isInfinity());
     }
 }

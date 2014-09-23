@@ -61,6 +61,10 @@ class Point implements PointInterface
      */
     public function __toString()
     {
+        if ($this->isInfinity()) {
+            return self::INFINITY;
+        }
+
         return sprintf('(%s, %s)', $this->x, $this->y);
     }
 
@@ -78,5 +82,13 @@ class Point implements PointInterface
     public function getY()
     {
         return $this->y;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isInfinity()
+    {
+        return (self::INFINITY == $this->x || self::INFINITY == $this->y);
     }
 }

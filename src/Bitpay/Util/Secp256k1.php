@@ -34,7 +34,7 @@ namespace Bitpay\Util;
  *
  * @package Bitcore
  */
-final class Secp256k1
+class Secp256k1 implements CurveParameterInterface
 {
     const A = '0000000000000000000000000000000000000000000000000000000000000000';
     const B = '0000000000000000000000000000000000000000000000000000000000000007';
@@ -42,5 +42,44 @@ final class Secp256k1
     const H = '01';
     const N = 'FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141';
     const P = 'FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFC2F';
-    const INF = 'infinity';
+
+    public function aHex()
+    {
+        return '0x'.self::A;
+    }
+
+    public function bHex()
+    {
+        return '0x'.self::B;
+    }
+
+    public function gHex()
+    {
+        return '0x'.self::G;
+    }
+
+    public function gxHex()
+    {
+        return '0x'.substr(self::G, 0, 62);
+    }
+
+    public function gyHex()
+    {
+        return '0x'.substr(self::G, 64, 62);
+    }
+
+    public function hHex()
+    {
+        return '0x'.self::H;
+    }
+
+    public function nHex()
+    {
+        return '0x'.self::N;
+    }
+
+    public function pHex()
+    {
+        return '0x'.self::P;
+    }
 }

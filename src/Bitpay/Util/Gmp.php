@@ -25,6 +25,11 @@
 
 namespace Bitpay\Util;
 
+use Bitpay\PointInterface;
+use Bitpay\Point;
+use Bitpay\Util\CurveParameterInterface;
+use Bitpay\Util\Secp256k1;
+
 /**
  * Provides methods used when creating elliptic curve keypairs
  * and related utility functions to support algorithms.
@@ -37,33 +42,39 @@ class Gmp
      * Pure PHP implementation of the doubleAndAdd algorithm, see:
      * http://en.wikipedia.org/wiki/Elliptic_curve_point_multiplication#Double-and-add
      *
-     * @param string
-     * @param array
-     * @param string
-     * @param string
+     * @param string $hex
+     * @param PointInterface $point
+     * @param CurveParameterInterface $parameters
      *
-     * @return array
+     * @return PointInterface
      */
-    public static function doubleAndAdd($x, $P, $p, $a)
+    public static function doubleAndAdd($hex, PointInterface $point, CurveParameterInterface $parameters = null)
     {
-        $tmp = self::gmpD2B($x);
+        if (null === $parameters) {
+            $parameters = new Secp256k1();
+        }
+
+        $p = $parameters->pHex();
+        $a = $parameters->aHex();
+
+        $tmp = self::gmpD2B($hex);
         $n   = strlen($tmp) - 1;
-        $S   = 'infinity';
+        $S   = new Point(PointInterface::INFINITY, PointInterface::INFINITY);
         $D   = 0;
 
         while ($n >= 0) {
             $D++;
 
-            $S = self::gmpPointDouble($S, $p, $a);
+            $S = self::gmpPointDouble($S);
 
             if ($tmp[$n] == 1) {
-                $S = self::gmpPointAdd($S, $P, $p, $a);
+                $S = self::gmpPointAdd($S, $point);
             }
 
             $n--;
         }
 
-        return $S;
+        return new Point($S->getX(), $S->getY());
     }
 
     /**
@@ -94,7 +105,7 @@ class Gmp
             $iter++;
         }
 
-        return $bin;
+        return strrev($bin);
     }
 
     /**
@@ -103,59 +114,56 @@ class Gmp
      *   xR = s2 - 2xP mod p
      *   yR = -yP + s(xP - xR) mod p
      *
-     * @param array
-     * @param string
-     * @param string
+     * @param PointInterface $point
      *
      * @return array
      */
-    public static function gmpPointDouble($P, $p, $a)
+    public static function gmpPointDouble(PointInterface $point, CurveParameterInterface $parameters = null)
     {
-        if ($P == 'infinity') {
-            return $P;
+        if ($point->isInfinity()) {
+            return $point;
         }
 
-        $s = 0;
+        if (null === $parameters) {
+            $parameters = new Secp256k1();
+        }
 
+        $p = $parameters->pHex();
+        $a = $parameters->aHex();
+        $s = 0;
         $R = array(
-                   'x' => 0,
-                   'y' => 0,
-                   's' => 0,
-                   'p' => $p,
-                   'a' => $a,
-                  );
+            'x' => 0,
+            'y' => 0,
+        );
 
         // Critical math section
         try {
-            $m      = gmp_add(gmp_mul(3, gmp_mul($P['x'], $P['x'])), $a);
-            $o      = gmp_mul(2, $P['y']);
+            $m      = gmp_add(gmp_mul(3, gmp_mul($point->getX(), $point->getX())), $a);
+            $o      = gmp_mul(2, $point->getY());
             $n      = gmp_invert($o, $p);
             $n2     = gmp_mod($o, $p);
             $st     = gmp_mul($m, $n);
             $st2    = gmp_mul($m, $n2);
             $s      = gmp_mod($st, $p);
             $s2     = gmp_mod($st2, $p);
-            $xmul   = gmp_mul(2, $P['x']);
+            $xmul   = gmp_mul(2, $point->getX());
             $smul   = gmp_mul($s, $s);
             $xsub   = gmp_sub($smul, $xmul);
             $xmod   = gmp_mod($xsub, $p);
-
             $R['x'] = $xmod;
-
-            $ysub   = gmp_sub($P['x'], $R['x']);
+            $ysub   = gmp_sub($point->getX(), $R['x']);
             $ymul   = gmp_mul($s, $ysub);
-            $ysub2  = gmp_sub(0, $P['y']);
+            $ysub2  = gmp_sub(0, $point->getY());
             $yadd   = gmp_add($ysub2, $ymul);
 
             $R['x'] = gmp_strval($R['x']);
             $R['y'] = gmp_strval(gmp_mod($yadd, $p));
-            $R['s'] = gmp_strval($s);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             // TODO throw exception
             return 'Error in Util::gmpPointDouble(): '.$e->getMessage();
         }
 
-        return $R;
+        return new Point($R['x'], $R['y']);
     }
 
     /**
@@ -164,45 +172,69 @@ class Gmp
      *   xR = s2 - xP - xQ mod p
      *   yR = -yP + s(xP - xR) mod p
      *
-     * @param array
-     * @param array
-     * @param string
-     * @param string
+     * @param PointInterface
+     * @param PointInterface
      *
-     * @return array
+     * @return PointInterface
      */
-    public static function gmpPointAdd($P, $Q, $p, $a)
+    public static function gmpPointAdd(PointInterface $P, PointInterface $Q)
     {
-        if ($P == 'infinity') {
+        $p = '0x'.Secp256k1::P;
+        $a = '0x'.Secp256k1::A;
+
+        if ($P->isInfinity()) {
             return $Q;
         }
 
-        if ($Q == 'infinity') {
+        if ($Q->isInfinity()) {
             return $P;
         }
 
-        if ($P == $Q) {
-            return self::gmpPointDouble($P, $p, $a);
+        if ($P->getX() == $Q->getX() && $P->getY() == $Q->getY()) {
+            return self::gmpPointDouble(new Point($P->getX(), $P->getY()));
         }
 
         $s = 0;
-
         $R = array(
-                   'x' => 0,
-                   'y' => 0,
-                   's' => 0,
-                  );
+            'x' => 0,
+            'y' => 0,
+            's' => 0,
+        );
 
         // Critical math section
         try {
-            $m      = gmp_sub($P['y'], $Q['y']);
-            $n      = gmp_sub($P['x'], $Q['x']);
+            $m      = gmp_sub($P->getY(), $Q->getY());
+            $n      = gmp_sub($P->getX(), $Q->getX());
             $o      = gmp_invert($n, $p);
             $st     = gmp_mul($m, $o);
             $s      = gmp_mod($st, $p);
 
-            $R['x'] = gmp_mod(gmp_sub(gmp_sub(gmp_mul($s, $s), $P['x']), $Q['x']), $p);
-            $R['y'] = gmp_mod(gmp_add(gmp_sub(0, $P['y']), gmp_mul($s, gmp_sub($P['x'], $R['x']))), $p);
+            $R['x'] = gmp_mod(
+                gmp_sub(
+                    gmp_sub(
+                        gmp_mul($s, $s),
+                        $P->getX()
+                    ),
+                    $Q->getX()
+                ),
+                $p
+            );
+            $R['y'] = gmp_mod(
+                gmp_add(
+                    gmp_sub(
+                        0,
+                        $P->getY()
+                    ),
+                    gmp_mul(
+                        $s,
+                        gmp_sub(
+                            $P->getX(),
+                            $R['x']
+                        )
+                    )
+                ),
+                $p
+            );
 
             $R['s'] = gmp_strval($s);
             $R['x'] = gmp_strval($R['x']);
@@ -212,7 +244,7 @@ class Gmp
             return 'Error in Util::gmpPointAdd(): '.$e->getMessage();
         }
 
-        return $R;
+        return new Point($R['x'], $R['y']);
     }
 
     /**

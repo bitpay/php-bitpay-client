@@ -35,12 +35,26 @@ use Bitpay\Util\Util;
  */
 class PrivateKey extends Key
 {
+
     /**
      * @return string
      */
     public function __toString()
     {
         return (string) $this->hex;
+    }
+
+    /**
+     * Creates a new PrivateKey from an already know hex value
+     *
+     * @TODO
+     *
+     * @param string $hex
+     * @return PrivateKey
+     */
+    public static function createFromHex($hex)
+    {
+        $key = new self();
     }
 
     /**
@@ -51,14 +65,7 @@ class PrivateKey extends Key
     public function generate()
     {
         do {
-            $privateKey = openssl_random_pseudo_bytes(32, $cstrong);
-
-            if (!$privateKey || !$cstrong) {
-                throw new \Exception(
-                    'Could not generate a cryptographically-strong random number. Your OpenSSL extension might be old or broken.'
-                );
-            }
-
+            $privateKey = \Bitpay\Util\SecureRandom::generateRandom(32);
             $this->hex  = strtolower(bin2hex($privateKey));
         } while (gmp_cmp('0x'.$this->hex, '1') <= 0 || gmp_cmp('0x'.$this->hex, '0x'.Secp256k1::N) >= 0);
 
@@ -133,15 +140,11 @@ class PrivateKey extends Key
             $gX   = '0x'.substr(Secp256k1::G, 0, 62);
             $gY   = '0x'.substr(Secp256k1::G, 64, 62);
 
-            $p    = array(
-                          'x' => $gX,
-                          'y' => $gY,
-                         );
+            $p = new Point($gX, $gY);
+            $r = Gmp::doubleAndAdd($this->hex, $p);
 
-            $r     = Gmp::doubleAndAdd($this->hex, $p, '0x'.Secp256k1::P, '0x'.Secp256k1::A);
-
-            $rXHex = Util::encodeHex($r['x']);
-            $rYHex = Util::encodeHex($r['y']);
+            $rXHex = Util::encodeHex($r->getX());
+            $rYHex = Util::encodeHex($r->getY());
 
             while (strlen($rXHex) < 64) {
                 $rXHex = '0'.$rXHex;
@@ -158,9 +161,9 @@ class PrivateKey extends Key
             $s    = gmp_strval(gmp_mod($kedr, '0x'.Secp256k1::N));
 
             $signature = array(
-                               'r' => Util::encodeHex($r2),
-                               's' => Util::encodeHex($s),
-                              );
+                'r' => Util::encodeHex($r2),
+                's' => Util::encodeHex($s),
+            );
 
             while (strlen($signature['r']) < 64) {
                 $signature['r'] = '0'.$signature['r'];
@@ -172,5 +175,38 @@ class PrivateKey extends Key
         } while (gmp_cmp($r2, '0') <= 0 || gmp_cmp($s, '0') <= 0);
 
         return $signature;
+    }
+
+    /**
+     * Returns true if the key is compressed
+     *
+     * @TODO
+     *
+     * @return boolean
+     */
+    public function isCompressed()
+    {
+    }
+
+    /**
+     * Compresses the current key
+     *
+     * @TODO
+     *
+     * @return PrivateKey
+     */
+    public function compress()
+    {
+    }
+
+    /**
+     * Uncompress the current key
+     *
+     * @TODO
+     *
+     * @return PrivateKey
+     */
+    public function uncompress()
+    {
     }
 }

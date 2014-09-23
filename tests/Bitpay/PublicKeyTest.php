@@ -88,6 +88,7 @@ class PublicKeyTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @see https://github.com/bitpay/bitcore/blob/master/test/test.Key.js
      * @depends testGenerate
      */
     public function testToString()
@@ -108,6 +109,10 @@ class PublicKeyTest extends \PHPUnit_Framework_TestCase
         }
 
         $this->assertSame($compressed, (string) $pubKey);
+        // compress is 33 length
+        //$this->assertEquals(33, strlen((string) $pubKey));
+        // uncompresses is 66 length
+        //$this->assertEquals(66, strlen((string) $pubKey));
     }
 
     /**

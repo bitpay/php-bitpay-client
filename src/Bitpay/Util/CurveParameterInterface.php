@@ -23,33 +23,18 @@
  * SOFTWARE.
  */
 
-namespace Bitpay;
+namespace Bitpay\Util;
 
 /**
- * @package Bitcore
  */
-interface PointInterface
+interface CurveParameterInterface
 {
-
-    /**
-     * Infinity constant
-     *
-     * @var string
-     */
-    const INFINITY = 'inf';
-
-    /**
-     * @return string
-     */
-    public function getX();
-
-    /**
-     * @return string
-     */
-    public function getY();
-
-    /**
-     * @return boolean
-     */
-    public function isInfinity();
+    public function aHex();
+    public function bHex();
+    public function gHex();
+    public function gxHex();
+    public function gyHex();
+    public function hHex();
+    public function nHex();
+    public function pHex();
 }
