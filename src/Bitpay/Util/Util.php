@@ -154,21 +154,20 @@ class Util
     /**
      * Encodes a decimal value into hexadecimal.
      *
-     * @param string $hex
-     *
+     * @param string $dec
      * @return string
      */
     public static function encodeHex($dec)
     {
         if (!is_string($dec) && !ctype_digit($dec)) {
-            throw new \Exception(sprintf('Util::encodeHex(): Argument is expected to be a string of decimal numbers. You passed in "%s"', gettype($dec)));
+            throw new \Exception(sprintf('Argument is expected to be a string of decimal numbers. You passed in "%s"', gettype($dec)));
         }
 
         $hex = '';
 
         while (gmp_cmp($dec, 0) > 0) {
-            list ($dec, $r) = gmp_div_qr($dec, 16);
-            $hex .= substr(self::HEX_CHARS, gmp_intval($r), 1);
+            list ($dec, $rem) = gmp_div_qr($dec, 16);
+            $hex = substr(self::HEX_CHARS, gmp_intval($rem), 1) . $hex;
         }
 
         return $hex;

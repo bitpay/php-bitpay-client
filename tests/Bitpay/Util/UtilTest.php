@@ -143,4 +143,32 @@ class UtilTest extends \PHPUnit_Framework_TestCase
     {
         Util::encodeHex(new \StdClass());
     }
+
+    public function testEncodeHex()
+    {
+        $data = array(
+            array('123456789', '75bcd15'),
+        );
+
+        foreach ($data as $datum) {
+            $this->assertSame(
+                $datum[1],
+                Util::encodeHex($datum[0])
+            );
+        }
+    }
+
+    public function testDecodeHex()
+    {
+        $data = array(
+            array('75bcd15', '123456789'),
+        );
+
+        foreach ($data as $datum) {
+            $this->assertSame(
+                $datum[1],
+                Util::encodeHex($datum[0])
+            );
+        }
+    }
 }
