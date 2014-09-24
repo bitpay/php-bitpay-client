@@ -41,8 +41,8 @@ class Gmp
      * http://en.wikipedia.org/wiki/Elliptic_curve_point_multiplication#Double-and-add
      *
      * @param string                  $hex
-     * @param PointInterface          $point
-     * @param CurveParameterInterface $parameters
+     * @param PointInterface          $point      Point to double
+     * @param CurveParameterInterface $parameters Curve parameters
      *
      * @return PointInterface
      */
@@ -58,17 +58,12 @@ class Gmp
         $tmp = self::gmpD2B($hex);
         $n   = strlen($tmp) - 1;
         $S   = new Point(PointInterface::INFINITY, PointInterface::INFINITY);
-        $D   = 0;
 
         while ($n >= 0) {
-            $D++;
-
             $S = self::gmpPointDouble($S);
-
             if ($tmp[$n] == 1) {
                 $S = self::gmpPointAdd($S, $point);
             }
-
             $n--;
         }
 
@@ -77,30 +72,27 @@ class Gmp
 
     /**
      * This method returns a binary string representation of
-     * the decimal number.  Used for the doubleAndAdd() method.
+     * the decimal number. Used for the doubleAndAdd() method.
+     *
+     * @see http://php.net/manual/en/function.decbin.php but for large numbers
      *
      * @param string
-     *
      * @return string
      */
-    public static function gmpD2B($num)
+    public static function gmpD2B($dec)
     {
-        if (substr(strtolower($num), 0, 2) == '0x') {
-            $num = Util::decodeHex(substr($num, 2));
+        if (substr(strtolower($dec), 0, 2) == '0x') {
+            $dec = Util::decodeHex(substr($dec, 2));
         }
 
-        $tmp  = $num;
-        $iter = 0;
         $bin  = '';
-
-        while (gmp_cmp($tmp, 0) > 0) {
-            if (gmp_mod($tmp, 2) == 1) {
+        while (gmp_cmp($dec, '0') > 0) {
+            if (gmp_mod($dec, 2) == 1) {
                 $bin .= '1';
             } else {
                 $bin .= '0';
             }
-            $tmp = gmp_div($tmp, 2);
-            $iter++;
+            $dec = gmp_div($dec, 2);
         }
 
         return strrev($bin);
@@ -113,8 +105,8 @@ class Gmp
      *   yR = -yP + s(xP - xR) mod p
      *
      * @param PointInterface $point
-     *
-     * @return array
+     * @param CurveParameterInterface
+     * @return PointInterface
      */
     public static function gmpPointDouble(PointInterface $point, CurveParameterInterface $parameters = null)
     {
@@ -128,6 +120,7 @@ class Gmp
 
         $p = $parameters->pHex();
         $a = $parameters->aHex();
+
         $s = 0;
         $R = array(
             'x' => 0,
@@ -177,9 +170,6 @@ class Gmp
      */
     public static function gmpPointAdd(PointInterface $P, PointInterface $Q)
     {
-        $p = '0x'.Secp256k1::P;
-        $a = '0x'.Secp256k1::A;
-
         if ($P->isInfinity()) {
             return $Q;
         }
@@ -192,6 +182,8 @@ class Gmp
             return self::gmpPointDouble(new Point($P->getX(), $P->getY()));
         }
 
+        $p = '0x'.Secp256k1::P;
+        $a = '0x'.Secp256k1::A;
         $s = 0;
         $R = array(
             'x' => 0,
@@ -274,5 +266,38 @@ class Gmp
         }
 
         return strrev($byte);
+    }
+
+    /**
+     * y^2 (mod p) = x^3 + ax + b (mod p)
+     *
+     * @param PointInterface $point
+     * @param CurveParameterInterface $parameters
+     */
+    public static function pointTest(PointInterface $point, CurveParameterInterface $parameters = null)
+    {
+        if (null === $parameters) {
+            $parameters = new Secp256k1();
+        }
+
+        // y^2
+        $y2 = gmp_pow($point->getY(), 2);
+        // x^3
+        $x3 = gmp_pow($point->getX(), 3);
+        // ax
+        $ax = gmp_mul($parameters->aHex(), $point->getX());
+
+        $left  = gmp_strval(gmp_mod($y2, $parameters->pHex()));
+        $right = gmp_strval(
+            gmp_mod(
+                gmp_add(
+                    gmp_add($x3, $ax),
+                    $parameters->bHex()
+                ),
+                $parameters->pHex()
+            )
+        );
+
+        return ($left == $right);
     }
 }
