@@ -44,12 +44,7 @@ class PrivateKey extends Key
     /**
      * @var boolean
      */
-    protected $generated;
-
-    public function __construct()
-    {
-        $this->generated = false;
-    }
+    protected $generated = false;
 
     /**
      * @return string
