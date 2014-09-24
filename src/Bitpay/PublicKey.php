@@ -35,6 +35,11 @@ use Bitpay\Util\Util;
 class PublicKey extends Key
 {
     /**
+     * @var SinKey
+     */
+    protected $sin;
+
+    /**
      * @var PrivateKey
      */
     protected $privateKey;
@@ -91,6 +96,10 @@ class PublicKey extends Key
             throw new \Exception('Please `setPrivateKey` before you generate a public key');
         }
 
+        if (!$this->privateKey->isGenerated()) {
+            $this->privateKey->generate();
+        }
+
         if (!$this->privateKey->isValid()) {
             throw new \Exception('Private Key is invalid and cannot be used to generate a public key');
         }
@@ -134,5 +143,19 @@ class PublicKey extends Key
     public function isValid()
     {
         return ((!empty($this->hex) && !ctype_xdigit($this->hex)) && (!empty($this->dec) && !ctype_digit($this->dec)));
+    }
+
+    /**
+     * @return SinKey
+     */
+    public function getSin()
+    {
+        if (null === $this->sin) {
+            $this->sin = new SinKey();
+            $this->sin->setPublicKey($this);
+            $this->sin->generate();
+        }
+
+        return $this->sin;
     }
 }
