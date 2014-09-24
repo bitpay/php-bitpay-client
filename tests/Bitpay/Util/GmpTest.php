@@ -55,18 +55,16 @@ class GmpTest extends \PHPUnit_Framework_TestCase
 
     public function testPointDouble()
     {
-        $point = Gmp::gmpPointDouble(new Point(1, 1));
-
+        //$point = Gmp::gmpPointDouble(new Point(1, 1));
         //var_dump($point);
     }
 
     public function testGmpPointAdd()
     {
-        $point = Gmp::gmpPointAdd(
-            new Point(1, 1),
-            new Point(1, 1)
-        );
-
+        //$point = Gmp::gmpPointAdd(
+        //    new Point(1, 1),
+        //    new Point(1, 1)
+        //);
         //var_dump($point);
     }
 
