@@ -25,6 +25,9 @@
 
 namespace Bitpay;
 
+/**
+ * @see https://github.com/bitpay/bitcore/blob/master/test/test.Key.js
+ */
 class PublicKeyTest extends \PHPUnit_Framework_TestCase
 {
     public function testCreate()
@@ -35,13 +38,9 @@ class PublicKeyTest extends \PHPUnit_Framework_TestCase
     public function testGenerate()
     {
         $priKey = new PrivateKey();
-        $this->assertNotNull($priKey);
-
         $priKey->generate();
 
         $pubKey = new PublicKey();
-        $this->assertNotNull($pubKey);
-
         $pubKey->setPrivateKey($priKey);
 
         $this->assertNull($pubKey->getHex());
@@ -50,7 +49,21 @@ class PublicKeyTest extends \PHPUnit_Framework_TestCase
         $pubKey->generate();
 
         $this->assertEquals(130, strlen($pubKey->getHex()));
+        //$this->assertEquals(33, strlen($pubKey->getHex()));
         $this->assertGreaterThanOrEqual(155, strlen($pubKey->getDec()));
+
+        $this->assertLessThan(4, substr($pubKey->getHex(), 0, 1));
+        //$this->assertGreaterThan(1, substr($pubKey->getHex(), 0, 1));
+
+        $key = new PublicKey();
+        $key->setPrivateKey($this->getMockPrivateKey());
+        $key->generate();
+
+        //var_dump($key->getHex());
+        //$this->assertSame(
+        //    '02211c9570d24ba84a3ee31c8a08e93a6756b3f3beac76a4ab8d9748ca78203389',
+        //    $key->getHex()
+        //);
     }
 
     /**
@@ -150,7 +163,14 @@ class PublicKeyTest extends \PHPUnit_Framework_TestCase
 
     private function getMockPrivateKey()
     {
-        return $this->getMockBuilder('Bitpay\PrivateKey')
-            ->getMock();
+        $key = $this->getMock('Bitpay\PrivateKey');
+        $key->method('isValid')->will($this->returnValue(true));
+
+        $key
+            ->method('getHex')
+            // @see https://github.com/bitpay/bitcore/blob/master/test/test.Key.js for value
+            ->will($this->returnValue('b7dafe35d7d1aab78b53982c8ba554584518f86d50af565c98e053613c8f15e0'));
+
+        return $key;
     }
 }

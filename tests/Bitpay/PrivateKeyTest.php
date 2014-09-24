@@ -46,6 +46,15 @@ class PrivateKeyTest extends \PHPUnit_Framework_TestCase
         $this->assertGreaterThanOrEqual(76, strlen($priKey->getDec()));
     }
 
+    public function testGenerateCannotHappenTwice()
+    {
+        $privateKey = new PrivateKey();
+        $privateKey->generate();
+        $hex = $privateKey->getHex();
+        $privateKey->generate();
+        $this->assertSame($hex, $privateKey->getHex());
+    }
+
     public function testGetHex()
     {
         $priKey = new PrivateKey();
@@ -109,16 +118,10 @@ class PrivateKeyTest extends \PHPUnit_Framework_TestCase
     public function testSign()
     {
         $priKey = new PrivateKey();
-        $this->assertNotNull($priKey);
-
-        $auth = new BitAuth();
-
         $priKey->generate();
 
-        //$signature = $priKey->sign('BitPay');
-
-        $signature = $auth->sign('BitPay', $priKey);
-        $this->assertNotNull($signature);
+        // Make sure not exceptions are thrown
+        $priKey->sign('BitPay');
     }
 
     public function testHasValidHex()
@@ -150,10 +153,17 @@ class PrivateKeyTest extends \PHPUnit_Framework_TestCase
      */
     public function testCreateFromHex()
     {
-        $hex      = 'b9f4892c9e8282028fea1d2667c4dc5213564d41fc5783896a0d843fc15089f3';
-        $expected = 'cTpB4YiyKiBcPxnefsDpbnDxFDffjqJob8wGCEDXxgQ7zQoMXJdH';
-
-        $key = PrivateKey::createFromHex($hex);
+        //$hex      = 'b9f4892c9e8282028fea1d2667c4dc5213564d41fc5783896a0d843fc15089f3';
+        //$expected = 'cTpB4YiyKiBcPxnefsDpbnDxFDffjqJob8wGCEDXxgQ7zQoMXJdH';
+        //$key = PrivateKey::createFromHex($hex);
         //$this->assertSame($hex, (string) $key);
+    }
+
+    public function testGetPublicKey()
+    {
+        $key       = new PrivateKey();
+        $publicKey = $key->getPublicKey();
+
+        $this->assertInstanceOf('Bitpay\PublicKey', $publicKey);
     }
 }

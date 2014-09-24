@@ -61,7 +61,7 @@ class Fingerprint
         }
 
         if (function_exists('php_uname')) {
-            self::$sigData[] = php_uname('s') . php_uname('n') . php_uname('m') . PHP_OS . PHP_SAPI . ICONV_IMPL . ICONV_VERSION;
+            self::$sigData[] = php_uname('s').php_uname('n').php_uname('m').PHP_OS.PHP_SAPI.ICONV_IMPL.ICONV_VERSION;
         }
 
         if (function_exists('sha1_file')) {
@@ -75,10 +75,12 @@ class Fingerprint
         }
 
         if (function_exists('sha1')) {
-            self::$finHash = sha1(str_ireplace(' ', '', self::$finHash) . strlen(self::$finHash) . metaphone(self::$finHash));
+            self::$finHash = sha1(str_ireplace(' ', '', self::$finHash).strlen(self::$finHash).metaphone(self::$finHash));
+
             return sha1(self::$finHash);
         } else {
-            self::$finHash = md5(str_ireplace(' ', '', self::$finHash) . strlen(self::$finHash) . metaphone(self::$finHash));
+            self::$finHash = md5(str_ireplace(' ', '', self::$finHash).strlen(self::$finHash).metaphone(self::$finHash));
+
             return md5(self::$finHash);
         }
     }
@@ -91,7 +93,7 @@ class Fingerprint
         if (empty(self::$finHash)) {
             self::generate();
         }
-    
+
         return self::$finHash;
     }
 }

@@ -28,6 +28,7 @@ namespace Bitpay;
 use Bitpay\Util\Secp256k1;
 use Bitpay\Util\Gmp;
 use Bitpay\Util\Util;
+use Bitpay\Util\SecureRandom;
 
 /**
  * @package Bitcore
@@ -35,6 +36,21 @@ use Bitpay\Util\Util;
  */
 class PrivateKey extends Key
 {
+    /**
+     * @var PublicKey
+     */
+    protected $publicKey;
+
+    /**
+     * @var boolean
+     */
+    protected $generated;
+
+    public function __construct()
+    {
+        $this->generated = false;
+    }
+
     /**
      * @return string
      */
@@ -44,16 +60,17 @@ class PrivateKey extends Key
     }
 
     /**
-     * Creates a new PrivateKey from an already know hex value
-     *
-     * @TODO
-     *
-     * @param  string     $hex
-     * @return PrivateKey
+     * @return PublicKey
      */
-    public static function createFromHex($hex)
+    public function getPublicKey()
     {
-        $key = new self();
+        if (null === $this->publicKey) {
+            $this->publicKey = new PublicKey();
+            $this->publicKey->setPrivateKey($this);
+            $this->publicKey->generate();
+        }
+
+        return $this->publicKey;
     }
 
     /**
@@ -63,6 +80,10 @@ class PrivateKey extends Key
      */
     public function generate()
     {
+        if ($this->isGenerated()) {
+            return $this;
+        }
+
         do {
             $privateKey = \Bitpay\Util\SecureRandom::generateRandom(32);
             $this->hex  = strtolower(bin2hex($privateKey));
@@ -72,6 +93,8 @@ class PrivateKey extends Key
 
         $this->x = substr($this->hex, 0, 32);
         $this->y = substr($this->hex, 32, 64);
+
+        $this->generated = true;
 
         return $this;
     }
@@ -109,8 +132,85 @@ class PrivateKey extends Key
      *
      * @return string
      */
-    public function sign($message)
+    public function sign($data)
     {
+        if ($this->isGenerated()) {
+            $this->generate();
+        }
+
+        if (!ctype_xdigit($this->getHex())) {
+            throw new \Exception('The private key must be in hex format.');
+        }
+
+        if (empty($data)) {
+            throw new \Exception('You did not provide any data to sign.');
+        }
+
+        $e = Util::decodeHex(hash('sha256', $data));
+
+        do {
+            if (substr(strtolower($this->getHex()), 0, 2) != '0x') {
+                $d = '0x'.$this->getHex();
+            } else {
+                $d = $this->getHex();
+            }
+
+            $k = SecureRandom::generateRandom(32);
+
+            $k_hex = '0x'.strtolower(bin2hex($k));
+            $n_hex = '0x'.Secp256k1::N;
+            $a_hex = '0x'.Secp256k1::A;
+            $p_hex = '0x'.Secp256k1::P;
+
+            $Gx = '0x'.substr(Secp256k1::G, 0, 62);
+            $Gy = '0x'.substr(Secp256k1::G, 64, 62);
+
+            $P = new Point($Gx, $Gy);
+
+            // Calculate a new curve point from Q=k*G (x1,y1)
+            $R = Gmp::doubleAndAdd($k_hex, $P);
+
+            $Rx_hex = Util::encodeHex($R->getX());
+            $Ry_hex = Util::encodeHex($R->getY());
+
+            while (strlen($Rx_hex) < 64) {
+                $Rx_hex = '0'.$Rx_hex;
+            }
+
+            while (strlen($Ry_hex) < 64) {
+                $Ry_hex = '0'.$Ry_hex;
+            }
+
+            // r = x1 mod n
+            $r = gmp_strval(gmp_mod('0x'.$Rx_hex, $n_hex));
+
+            // s = k^-1 * (e+d*r) mod n
+            $edr = gmp_add($e, gmp_mul($d, $r));
+            $invk = gmp_invert($k_hex, $n_hex);
+            $kedr = gmp_mul($invk, $edr);
+            $s = gmp_strval(gmp_mod($kedr, $n_hex));
+
+            // The signature is the pair (r,s)
+            $signature = array(
+                'r' => Util::encodeHex($r),
+                's' => Util::encodeHex($s),
+            );
+
+            while (strlen($signature['r']) < 64) {
+                $signature['r'] = '0'.$signature['r'];
+            }
+
+            while (strlen($signature['s']) < 64) {
+                $signature['s'] = '0'.$signature['s'];
+            }
+        } while (gmp_cmp($r, '0') <= 0 || gmp_cmp($s, '0') <= 0);
+
+        $sig = array(
+            'sig_rs' => $signature,
+            'sig_hex' => self::serializeSig($signature['r'], $signature['s']),
+        );
+
+        return $sig['sig_hex']['seq'];
         // TODO: Signature code is already in Bitauth so is this needed here?
 
         if (empty($message)) {
@@ -126,13 +226,7 @@ class PrivateKey extends Key
                 $d = $this->hex;
             }
 
-            $k    = openssl_random_pseudo_bytes(32, $cstrong);
-
-            if (!$k || !$cstrong) {
-                throw new \Exception(
-                    'Could not generate a cryptographically-strong random number. Your OpenSSL extension might be old or broken.'
-                );
-            }
+            $k = SecureRandom::generateRandom(32);
 
             $kHex = '0x'.strtolower(bin2hex($k));
 
@@ -176,36 +270,71 @@ class PrivateKey extends Key
         return $signature;
     }
 
-    /**
-     * Returns true if the key is compressed
-     *
-     * @TODO
-     *
-     * @return boolean
-     */
-    public function isCompressed()
+    public function isGenerated()
     {
+        return $this->generated;
     }
 
     /**
-     * Compresses the current key
+     * ASN.1 DER encodes the signature based on the form:
+     * 0x30 + size(all) + 0x02 + size(r) + r + 0x02 + size(s) + s
+     * http://www.itu.int/ITU-T/studygroups/com17/languages/X.690-0207.pdf
      *
-     * @TODO
-     *
-     * @return PrivateKey
+     * @param string
+     * @param string
+     * @return string
      */
-    public function compress()
+    public static function serializeSig($r, $s)
     {
-    }
+        for ($x = 0; $x < 256; $x++) {
+            $digits[$x] = chr($x);
+        }
 
-    /**
-     * Uncompress the current key
-     *
-     * @TODO
-     *
-     * @return PrivateKey
-     */
-    public function uncompress()
-    {
+        $dec = Util::decodeHex($r);
+
+        $byte = '';
+        $seq = '';
+        $retval = array();
+
+        while (gmp_cmp($dec, '0') > 0) {
+            $dv = gmp_div($dec, '256');
+            $rem = gmp_strval(gmp_mod($dec, '256'));
+            $dec = $dv;
+            $byte = $byte.$digits[$rem];
+        }
+
+        $byte = strrev($byte);
+
+        // msb check
+        if (gmp_cmp('0x'.bin2hex($byte[0]), '0x80') >= 0) {
+            $byte = chr(0x00).$byte;
+        }
+
+        $retval['bin_r'] = bin2hex($byte);
+        $seq = chr(0x02).chr(strlen($byte)).$byte;
+        $dec = Util::decodeHex($s);
+
+        $byte = '';
+
+        while (gmp_cmp($dec, '0') > 0) {
+            $dv = gmp_div($dec, '256');
+            $rem = gmp_strval(gmp_mod($dec, '256'));
+            $dec = $dv;
+            $byte = $byte.$digits[$rem];
+        }
+
+        $byte = strrev($byte);
+
+        // msb check
+        if (gmp_cmp('0x'.bin2hex($byte[0]), '0x80') >= 0) {
+            $byte = chr(0x00).$byte;
+        }
+
+        $retval['bin_s'] = bin2hex($byte);
+        $seq = $seq.chr(0x02).chr(strlen($byte)).$byte;
+        $seq = chr(0x30).chr(strlen($seq)).$seq;
+        $retval['seq'] = bin2hex($seq);
+
+        return $retval;
     }
 }

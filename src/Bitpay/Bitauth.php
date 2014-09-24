@@ -25,6 +25,7 @@
 
 namespace Bitpay;
 
+use Bitpay\Util\SecureRandom;
 use Bitpay\Util\Util;
 use Bitpay\Util\Gmp;
 use Bitpay\Util\Secp256k1;
@@ -101,83 +102,81 @@ class Bitauth
      */
     public function sign($data, \Bitpay\PrivateKey $privateKey)
     {
-        if (!ctype_xdigit($privateKey->getHex())) {
-            die('FATAL error in Bitauth::sign(): The private key must be in hex format.');
-        }
+        return $privateKey->sign($data);
 
-        if (empty($data)) {
-            die('FATAL error in Bitauth::sign(): You did not provide any data to sign.');
-        }
+        //if (!ctype_xdigit($privateKey->getHex())) {
+        //    throw new \Exception('The private key must be in hex format.');
+        //}
 
-        $e = Util::decodeHex(hash('sha256', $data));
+        //if (empty($data)) {
+        //    throw new \Exception('You did not provide any data to sign.');
+        //}
 
-        do {
-            if (substr(strtolower($privateKey->getHex()), 0, 2) != '0x') {
-                $d = '0x'.$privateKey->getHex();
-            } else {
-                $d = $privateKey->getHex();
-            }
+        //$e = Util::decodeHex(hash('sha256', $data));
 
-            $k = openssl_random_pseudo_bytes(32, $cstrong);
+        //do {
+        //    if (substr(strtolower($privateKey->getHex()), 0, 2) != '0x') {
+        //        $d = '0x'.$privateKey->getHex();
+        //    } else {
+        //        $d = $privateKey->getHex();
+        //    }
 
-            if (!$k || !$cstrong) {
-                die('FATAL error in Bitauth::sign(): Could not generate a cryptographically-strong random number. Your OpenSSL extension might be old or broken.');
-            }
+        //    $k = SecureRandom::generateRandom(32);
 
-            $k_hex = '0x'.strtolower(bin2hex($k));
-            $n_hex = '0x'.Secp256k1::N;
-            $a_hex = '0x'.Secp256k1::A;
-            $p_hex = '0x'.Secp256k1::P;
+        //    $k_hex = '0x'.strtolower(bin2hex($k));
+        //    $n_hex = '0x'.Secp256k1::N;
+        //    $a_hex = '0x'.Secp256k1::A;
+        //    $p_hex = '0x'.Secp256k1::P;
 
-            $Gx = '0x'.substr(Secp256k1::G, 0, 62);
-            $Gy = '0x'.substr(Secp256k1::G, 64, 62);
+        //    $Gx = '0x'.substr(Secp256k1::G, 0, 62);
+        //    $Gy = '0x'.substr(Secp256k1::G, 64, 62);
 
-            $P = new Point($Gx, $Gy);
+        //    $P = new Point($Gx, $Gy);
 
-            // Calculate a new curve point from Q=k*G (x1,y1)
-            $R = Gmp::doubleAndAdd($k_hex, $P);
+        //    // Calculate a new curve point from Q=k*G (x1,y1)
+        //    $R = Gmp::doubleAndAdd($k_hex, $P);
 
-            $Rx_hex = Util::encodeHex($R->getX());
-            $Ry_hex = Util::encodeHex($R->getY());
+        //    $Rx_hex = Util::encodeHex($R->getX());
+        //    $Ry_hex = Util::encodeHex($R->getY());
 
-            while (strlen($Rx_hex) < 64) {
-                $Rx_hex = '0'.$Rx_hex;
-            }
+        //    while (strlen($Rx_hex) < 64) {
+        //        $Rx_hex = '0'.$Rx_hex;
+        //    }
 
-            while (strlen($Ry_hex) < 64) {
-                $Ry_hex = '0'.$Ry_hex;
-            }
+        //    while (strlen($Ry_hex) < 64) {
+        //        $Ry_hex = '0'.$Ry_hex;
+        //    }
 
-            // r = x1 mod n
-            $r = gmp_strval(gmp_mod('0x'.$Rx_hex, $n_hex));
+        //    // r = x1 mod n
+        //    $r = gmp_strval(gmp_mod('0x'.$Rx_hex, $n_hex));
 
-            // s = k^-1 * (e+d*r) mod n
-            $edr = gmp_add($e, gmp_mul($d, $r));
-            $invk = gmp_invert($k_hex, $n_hex);
-            $kedr = gmp_mul($invk, $edr);
-            $s = gmp_strval(gmp_mod($kedr, $n_hex));
+        //    // s = k^-1 * (e+d*r) mod n
+        //    $edr = gmp_add($e, gmp_mul($d, $r));
+        //    $invk = gmp_invert($k_hex, $n_hex);
+        //    $kedr = gmp_mul($invk, $edr);
+        //    $s = gmp_strval(gmp_mod($kedr, $n_hex));
 
-            // The signature is the pair (r,s)
-            $signature = array(
-                'r' => Util::encodeHex($r),
-                's' => Util::encodeHex($s),
-            );
+        //    // The signature is the pair (r,s)
+        //    $signature = array(
+        //        'r' => Util::encodeHex($r),
+        //        's' => Util::encodeHex($s),
+        //    );
 
-            while (strlen($signature['r']) < 64) {
-                $signature['r'] = '0'.$signature['r'];
-            }
+        //    while (strlen($signature['r']) < 64) {
+        //        $signature['r'] = '0'.$signature['r'];
+        //    }
 
-            while (strlen($signature['s']) < 64) {
-                $signature['s'] = '0'.$signature['s'];
-            }
-        } while (gmp_cmp($r, '0') <= 0 || gmp_cmp($s, '0') <= 0);
+        //    while (strlen($signature['s']) < 64) {
+        //        $signature['s'] = '0'.$signature['s'];
+        //    }
+        //} while (gmp_cmp($r, '0') <= 0 || gmp_cmp($s, '0') <= 0);
 
-        $sig = array(
-            'sig_rs' => $signature,
-            'sig_hex' => self::serializeSig($signature['r'], $signature['s']),
-        );
+        //$sig = array(
+        //    'sig_rs' => $signature,
+        //    'sig_hex' => self::serializeSig($signature['r'], $signature['s']),
+        //);
 
-        return $sig['sig_hex']['seq'];
+        //return $sig['sig_hex']['seq'];
     }
 
     /**

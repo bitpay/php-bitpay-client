@@ -27,10 +27,8 @@ namespace Bitpay\Util;
 
 class FingerprintTest extends \PHPUnit_Framework_TestCase
 {
-
     public function testGenerate()
     {
         $this->assertNotNull(Fingerprint::generate());
     }
-
 }
