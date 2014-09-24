@@ -40,7 +40,7 @@ class Gmp
      * Pure PHP implementation of the doubleAndAdd algorithm, see:
      * http://en.wikipedia.org/wiki/Elliptic_curve_point_multiplication#Double-and-add
      *
-     * @param string                  $hex        Number of times to double point
+     * @param string                  $hex
      * @param PointInterface          $point      Point to double
      * @param CurveParameterInterface $parameters Curve parameters
      *
@@ -170,9 +170,6 @@ class Gmp
      */
     public static function gmpPointAdd(PointInterface $P, PointInterface $Q)
     {
-        $p = '0x'.Secp256k1::P;
-        $a = '0x'.Secp256k1::A;
-
         if ($P->isInfinity()) {
             return $Q;
         }
@@ -185,6 +182,8 @@ class Gmp
             return self::gmpPointDouble(new Point($P->getX(), $P->getY()));
         }
 
+        $p = '0x'.Secp256k1::P;
+        $a = '0x'.Secp256k1::A;
         $s = 0;
         $R = array(
             'x' => 0,
