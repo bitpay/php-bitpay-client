@@ -28,7 +28,7 @@ namespace Bitpay;
 /**
  * @package Bitcore
  */
-interface PointInterface
+interface PointInterface extends \Serializable
 {
     /**
      * Infinity constant

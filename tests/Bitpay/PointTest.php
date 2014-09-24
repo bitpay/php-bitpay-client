@@ -73,4 +73,20 @@ class PointTest extends \PHPUnit_Framework_TestCase
         $point = new Point(PointInterface::INFINITY, PointInterface::INFINITY);
         $this->assertTrue($point->isInfinity());
     }
+
+    public function testSerializeAndUnserialize()
+    {
+        $point = new Point(1, 2);
+        $data  = serialize($point);
+
+        $this->assertSame(
+            'C:12:"Bitpay\Point":30:{a:2:{i:0;s:1:"1";i:1;s:1:"2";}}',
+            $data
+        );
+
+        $pointA = unserialize($data);
+        $this->assertInstanceOf('Bitpay\PointInterface', $pointA);
+        $this->assertSame('1', $pointA->getX());
+        $this->assertSame('2', $pointA->getY());
+    }
 }
