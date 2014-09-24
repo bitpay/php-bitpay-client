@@ -27,7 +27,6 @@ namespace Bitpay;
 
 class AccessTokenTest extends \PHPUnit_Framework_TestCase
 {
-
     public function testId()
     {
         $token = new AccessToken();

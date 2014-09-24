@@ -30,7 +30,6 @@ namespace Bitpay;
  */
 class Token implements TokenInterface
 {
-
     /**
      * @var string
      */

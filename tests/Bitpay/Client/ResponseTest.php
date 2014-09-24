@@ -27,7 +27,6 @@ namespace Bitpay\Client;
 
 class ResponseTest extends \PHPUnit_Framework_TestCase
 {
-
     public function setUp()
     {
         $this->response = new Response();

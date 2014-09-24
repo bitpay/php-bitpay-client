@@ -27,14 +27,13 @@ namespace Bitpay\Util;
 
 class Base58Test extends \PHPUnit_Framework_TestCase
 {
-
     public function testEncode()
     {
         foreach ($this->getTestData() as $datum) {
             $this->assertSame(
-                              $datum[1],
-                              Base58::encode($datum[0])
-                             );
+                $datum[1],
+                Base58::encode($datum[0])
+            );
         }
     }
 

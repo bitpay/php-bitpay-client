@@ -27,7 +27,6 @@ namespace Bitpay;
 
 class TokenTest extends \PHPUnit_Framework_TestCase
 {
-
     public function testConstruct()
     {
         $token = new Token();

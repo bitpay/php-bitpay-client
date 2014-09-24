@@ -27,10 +27,9 @@ namespace Bitpay\Client;
 
 class ClientTest extends \PHPUnit_Framework_TestCase
 {
-
     public function setUp()
     {
-        $bitpay = new \Bitpay\Bitpay(__DIR__ . '/../../../build/test.yml');
+        $bitpay = new \Bitpay\Bitpay(__DIR__.'/../../../build/test.yml');
         $this->client = new Client();
         $this->client->setContainer($bitpay->getContainer());
     }

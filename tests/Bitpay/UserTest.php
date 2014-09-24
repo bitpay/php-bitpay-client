@@ -125,7 +125,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
                      );
 
         $this->user->setAddress($addr);
-        $this->assertNotNull($this->user->getAddress());        
+        $this->assertNotNull($this->user->getAddress());
         $this->assertSame($addr, $this->user->getAddress());
     }
 
@@ -195,7 +195,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
     public function testSetCountry()
     {
         $this->assertNotNull($this->user);
-        
+
         $this->user->setCountry('US');
         $this->assertNotNull($this->user->getCountry());
         $this->assertSame('US', $this->user->getCountry());

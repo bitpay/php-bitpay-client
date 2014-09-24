@@ -30,7 +30,6 @@ namespace Bitpay;
  */
 class SinKeyTest extends \PHPUnit_Framework_TestCase
 {
-
     public function testToString()
     {
         $pubKey = PublicKey::create();

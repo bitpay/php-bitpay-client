@@ -23,27 +23,18 @@
  * SOFTWARE.
  */
 
-namespace Bitpay\Network;
+namespace Bitpay\Util;
 
-class LivenetTest extends \PHPUnit_Framework_TestCase
+/**
+ */
+interface CurveParameterInterface
 {
-    public function setUp()
-    {
-        $this->network = new Livenet();
-    }
-
-    public function testGetName()
-    {
-        $this->assertSame('livenet', $this->network->getName());
-    }
-
-    public function testGetAddressVersion()
-    {
-        $this->assertSame(0x00, $this->network->getAddressVersion());
-    }
-
-    public function testGetApiHost()
-    {
-        $this->assertSame('bitpay.com', $this->network->getApiHost());
-    }
+    public function aHex();
+    public function bHex();
+    public function gHex();
+    public function gxHex();
+    public function gyHex();
+    public function hHex();
+    public function nHex();
+    public function pHex();
 }

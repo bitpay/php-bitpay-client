@@ -26,11 +26,9 @@
 namespace Bitpay\Storage;
 
 use org\bovigo\vfs\vfsStream;
-use org\bovigo\vfs\visitor\vfsStreamStructureVisitor;
 
 class EncryptedFilesystemStorageTest extends \PHPUnit_Framework_TestCase
 {
-
     public function setUp()
     {
         $this->root = vfsStream::setup('tmp');

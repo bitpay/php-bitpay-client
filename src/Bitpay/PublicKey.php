@@ -58,6 +58,17 @@ class PublicKey extends Key
     }
 
     /**
+     * @param PrivateKey
+     */
+    public static function createFromPrivateKey(PrivateKey $private)
+    {
+        $public = new self();
+        $public->setPrivateKey($private);
+
+        return $public;
+    }
+
+    /**
      * @return KeyInterface
      */
     public function setPrivateKey(PrivateKey $privateKey)
@@ -84,15 +95,18 @@ class PublicKey extends Key
             throw new \Exception('Private Key is invalid and cannot be used to generate a public key');
         }
 
-        $P = array(
-                   'x' => '0x'.substr(Secp256k1::G, 0, 62),
-                   'y' => '0x'.substr(Secp256k1::G, 62, 62),
-                  );
+        $point = new Point(
+            '0x'.substr(Secp256k1::G, 0, 62),
+            '0x'.substr(Secp256k1::G, 62, 62)
+        );
 
-        $R = Gmp::doubleAndAdd('0x'.$this->privateKey->getHex(), $P, '0x'.Secp256k1::P, '0x'.Secp256k1::A);
+        $R = Gmp::doubleAndAdd(
+            '0x'.$this->privateKey->getHex(),
+            $point
+        );
 
-        $RxHex = Util::encodeHex($R['x']);
-        $RyHex = Util::encodeHex($R['y']);
+        $RxHex = Util::encodeHex($R->getX());
+        $RyHex = Util::encodeHex($R->getY());
 
         while (strlen($RxHex) < 64) {
             $RxHex .= 0;
@@ -106,7 +120,7 @@ class PublicKey extends Key
         $this->y   = $RyHex;
 
         $this->hex = sprintf('04%s%s', $RxHex, $RyHex);
-        $this->dec = Util::decodeHex(sprintf('04%s%s', $R['x'], $R['y']));
+        $this->dec = Util::decodeHex(sprintf('04%s%s', $R->getX(), $R->getY()));
 
         return $this;
     }

@@ -27,7 +27,6 @@ namespace Bitpay;
 
 class ApplicationTest extends \PHPUnit_Framework_TestCase
 {
-
     public function testGetUsers()
     {
         $application = new Application();

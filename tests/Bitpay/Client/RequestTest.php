@@ -27,7 +27,6 @@ namespace Bitpay\Client;
 
 class RequestTest extends \PHPUnit_Framework_TestCase
 {
-
     public function setUp()
     {
         $this->request = new Request();

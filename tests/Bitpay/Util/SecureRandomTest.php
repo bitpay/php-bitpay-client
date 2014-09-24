@@ -23,54 +23,21 @@
  * SOFTWARE.
  */
 
-namespace Bitpay;
+namespace Bitpay\Util;
 
-class PointTest extends \PHPUnit_Framework_TestCase
+/**
+ * @package Bitcore
+ */
+class SecureRandomTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     */
-    public function testConstruct()
+    public function testHasOpenSSL()
     {
-        $point = new Point(1, 2);
-        $this->assertNotNull($point);
+        $this->assertTrue(SecureRandom::hasOpenSSL());
     }
 
-    /**
-     * @depends testConstruct
-     */
-    public function testToString()
+    public function testGenerateRandom()
     {
-        $point = new Point(1, 2);
-        $this->assertNotNull($point);
-
-        $this->assertSame('(1, 2)', (string) $point);
-
-        $point = new Point(PointInterface::INFINITY, PointInterface::INFINITY);
-        $this->assertSame(PointInterface::INFINITY, (string) $point);
-    }
-
-    public function testGetX()
-    {
-        $point = new Point(1, 2);
-        $this->assertNotNull($point);
-
-        $this->assertSame('1', $point->getX());
-    }
-
-    public function testGetY()
-    {
-        $point = new Point(1, 2);
-        $this->assertNotNull($point);
-
-        $this->assertSame('2', $point->getY());
-    }
-
-    public function testInfinity()
-    {
-        $point = new Point(1, 2);
-        $this->assertFalse($point->isInfinity());
-
-        $point = new Point(PointInterface::INFINITY, PointInterface::INFINITY);
-        $this->assertTrue($point->isInfinity());
+        $randomNumber = SecureRandom::generateRandom();
+        $this->assertEquals(32, strlen($randomNumber));
     }
 }
