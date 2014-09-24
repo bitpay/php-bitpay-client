@@ -162,6 +162,7 @@ class UtilTest extends \PHPUnit_Framework_TestCase
     {
         $data = array(
             array('75bcd15', '123456789'),
+            array('0x75bcd15', '123456789'),
         );
 
         foreach ($data as $datum) {
@@ -170,5 +171,13 @@ class UtilTest extends \PHPUnit_Framework_TestCase
                 Util::decodeHex($datum[0])
             );
         }
+    }
+
+    /**
+     * @expectedException Exception
+     */
+    public function testDecodeHexException()
+    {
+        Util::decodeHex(new \StdClass());
     }
 }
