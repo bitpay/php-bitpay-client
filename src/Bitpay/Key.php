@@ -48,6 +48,7 @@ abstract class Key extends Point implements KeyInterface
     protected $id;
 
     /**
+     * @param string $id
      */
     public function __construct($id = null)
     {
@@ -65,13 +66,14 @@ abstract class Key extends Point implements KeyInterface
     /**
      * Returns a new instance of self.
      *
+     * @param string $id
      * @return \Bitpay\KeyInterface
      */
-    public static function create()
+    public static function create($id = null)
     {
         $class = get_called_class();
 
-        return new $class();
+        return new $class($id);
     }
 
     /**
@@ -90,6 +92,9 @@ abstract class Key extends Point implements KeyInterface
         return $this->dec;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function serialize()
     {
         return serialize(
@@ -103,6 +108,9 @@ abstract class Key extends Point implements KeyInterface
         );
     }
 
+    /**
+     * @inheritdoc
+     */
     public function unserialize($data)
     {
         list(
