@@ -91,4 +91,23 @@ class Point implements PointInterface
     {
         return (self::INFINITY == $this->x || self::INFINITY == $this->y);
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function serialize()
+    {
+        return serialize(array($this->x, $this->y));
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function unserialize($data)
+    {
+        list(
+            $this->x,
+            $this->y
+        ) = unserialize($data);
+    }
 }
