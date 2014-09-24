@@ -270,4 +270,37 @@ class Gmp
 
         return strrev($byte);
     }
+
+    /**
+     * y^2 (mod p) = x^3 + ax + b (mod p)
+     *
+     * @param PointInterface $point
+     * @param CurveParameterInterface $parameters
+     */
+    public static function pointTest(PointInterface $point, CurveParameterInterface $parameters = null)
+    {
+        if (null === $parameters) {
+            $parameters = new Secp256k1();
+        }
+
+        // y^2
+        $y2 = gmp_pow($point->getY(), 2);
+        // x^3
+        $x3 = gmp_pow($point->getX(), 3);
+        // ax
+        $ax = gmp_mul($parameters->aHex(), $point->getX());
+
+        $left  = gmp_strval(gmp_mod($y2, $parameters->pHex()));
+        $right = gmp_strval(
+            gmp_mod(
+                gmp_add(
+                    gmp_add($x3, $ax),
+                    $parameters->bHex()
+                ),
+                $parameters->pHex()
+            )
+        );
+
+        return ($left == $right);
+    }
 }
