@@ -93,7 +93,7 @@ class Client extends ContainerAware implements ClientInterface
         $this->response = $this->send($request);
 
         $body = json_decode($this->response->getBody(), true);
-        if (isset($body['error'])) {
+        if (isset($body['error']) || isset($body['errors'])) {
             throw new \Exception('Error with request');
         }
         $invoice
