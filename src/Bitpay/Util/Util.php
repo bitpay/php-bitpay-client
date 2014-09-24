@@ -177,28 +177,24 @@ class Util
      * Decodes a hexadecimal value into decimal.
      *
      * @param string $hex
-     *
      * @return string
      */
     public static function decodeHex($hex)
     {
         if (!ctype_xdigit($hex)) {
-            throw new \Exception(sprintf('Util::decodeHex(): Argument must be a string of hex digits.'));
-        }
-
-        if (empty($hex)) {
-            throw new \Exception(sprintf('Util::decodeHex(): Argument missing.'));
+            throw new \Exception('Argument must be a string of hex digits.');
         }
 
         $hex = strtolower($hex);
 
+        // if it has a prefix of 0x this needs to be trimed
         if (substr($hex, 0, 2) == '0x') {
             $hex = substr($hex, 2);
         }
 
-        for ($dec = 0, $i = 0; $i < strlen($hex); $i++) {
-            $c   = strpos(self::HEX_CHARS, $hex[$i]);
-            $dec = gmp_add(gmp_mul($dec, 16), $c);
+        for ($dec = '0', $i = 0; $i < strlen($hex); $i++) {
+            $current = strpos(self::HEX_CHARS, $hex[$i]);
+            $dec     = gmp_add(gmp_mul($dec, 16), $current);
         }
 
         return gmp_strval($dec);
