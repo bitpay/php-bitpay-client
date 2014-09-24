@@ -167,7 +167,7 @@ class UtilTest extends \PHPUnit_Framework_TestCase
         foreach ($data as $datum) {
             $this->assertSame(
                 $datum[1],
-                Util::encodeHex($datum[0])
+                Util::decodeHex($datum[0])
             );
         }
     }
