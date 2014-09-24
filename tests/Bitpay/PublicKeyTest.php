@@ -30,6 +30,12 @@ namespace Bitpay;
  */
 class PublicKeyTest extends \PHPUnit_Framework_TestCase
 {
+    public function testId()
+    {
+        $key = new PublicKey('/path/to/key.pub');
+        $this->assertSame('/path/to/key.pub', $key->getId());
+    }
+
     public function testCreate()
     {
         $this->assertInstanceOf('Bitpay\PublicKey', PublicKey::create());
