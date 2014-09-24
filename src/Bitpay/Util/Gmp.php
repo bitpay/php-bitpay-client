@@ -72,30 +72,27 @@ class Gmp
 
     /**
      * This method returns a binary string representation of
-     * the decimal number.  Used for the doubleAndAdd() method.
+     * the decimal number. Used for the doubleAndAdd() method.
+     *
+     * @see http://php.net/manual/en/function.decbin.php but for large numbers
      *
      * @param string
-     *
      * @return string
      */
-    public static function gmpD2B($num)
+    public static function gmpD2B($dec)
     {
-        if (substr(strtolower($num), 0, 2) == '0x') {
-            $num = Util::decodeHex(substr($num, 2));
+        if (substr(strtolower($dec), 0, 2) == '0x') {
+            $dec = Util::decodeHex(substr($dec, 2));
         }
 
-        $tmp  = $num;
-        $iter = 0;
         $bin  = '';
-
-        while (gmp_cmp($tmp, 0) > 0) {
-            if (gmp_mod($tmp, 2) == 1) {
+        while (gmp_cmp($dec, '0') > 0) {
+            if (gmp_mod($dec, 2) == 1) {
                 $bin .= '1';
             } else {
                 $bin .= '0';
             }
-            $tmp = gmp_div($tmp, 2);
-            $iter++;
+            $dec = gmp_div($dec, 2);
         }
 
         return strrev($bin);
@@ -108,8 +105,8 @@ class Gmp
      *   yR = -yP + s(xP - xR) mod p
      *
      * @param PointInterface $point
-     *
-     * @return array
+     * @param CurveParameterInterface
+     * @return PointInterface
      */
     public static function gmpPointDouble(PointInterface $point, CurveParameterInterface $parameters = null)
     {
@@ -123,6 +120,7 @@ class Gmp
 
         $p = $parameters->pHex();
         $a = $parameters->aHex();
+
         $s = 0;
         $R = array(
             'x' => 0,
