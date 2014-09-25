@@ -87,7 +87,7 @@ class Gmp
 
         $bin  = '';
         while (gmp_cmp($dec, '0') > 0) {
-            if (gmp_mod($dec, 2) == 1) {
+            if (gmp_mod($dec, 2) == '1') {
                 $bin .= '1';
             } else {
                 $bin .= '0';
@@ -95,7 +95,7 @@ class Gmp
             $dec = gmp_div($dec, 2);
         }
 
-        return strrev($bin);
+        return $bin;
     }
 
     /**

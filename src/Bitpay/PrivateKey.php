@@ -85,8 +85,6 @@ class PrivateKey extends Key
         } while (gmp_cmp('0x'.$this->hex, '1') <= 0 || gmp_cmp('0x'.$this->hex, '0x'.Secp256k1::N) >= 0);
 
         $this->dec = Util::decodeHex($this->hex);
-        $this->x   = substr($this->hex, 0, 32);
-        $this->y   = substr($this->hex, 32, 32);
 
         $this->generated = true;
 
