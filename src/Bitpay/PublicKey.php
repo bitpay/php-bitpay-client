@@ -45,6 +45,11 @@ class PublicKey extends Key
     protected $privateKey;
 
     /**
+     * @var boolean
+     */
+    protected $generated = false;
+
+    /**
      * Returns the compressed public key value
      *
      * @return string
@@ -92,6 +97,10 @@ class PublicKey extends Key
      */
     public function generate()
     {
+        if ($this->generated) {
+            return $this;
+        }
+
         if (is_null($this->privateKey)) {
             throw new \Exception('Please `setPrivateKey` before you generate a public key');
         }
@@ -117,19 +126,14 @@ class PublicKey extends Key
         $RxHex = Util::encodeHex($R->getX());
         $RyHex = Util::encodeHex($R->getY());
 
-        while (strlen($RxHex) < 64) {
-            $RxHex .= 0;
-        }
-
-        while (strlen($RyHex) < 64) {
-            $RyHex .= 0;
-        }
+        str_pad($RxHex, 64, '0', STR_PAD_LEFT);
+        str_pad($RyHex, 64, '0', STR_PAD_LEFT);
 
         $this->x   = $RxHex;
         $this->y   = $RyHex;
-
-        $this->hex = sprintf('04%s%s', $RxHex, $RyHex);
-        $this->dec = Util::decodeHex(sprintf('04%s%s', $R->getX(), $R->getY()));
+        $this->hex = sprintf('%s%s', $RxHex, $RyHex);
+        $this->dec = Util::decodeHex($this->hex);
+        $this->generated = true;
 
         return $this;
     }
@@ -150,6 +154,10 @@ class PublicKey extends Key
      */
     public function getSin()
     {
+        if (!$this->isGenerated()) {
+            $this->generate();
+        }
+
         if (null === $this->sin) {
             $this->sin = new SinKey();
             $this->sin->setPublicKey($this);
@@ -157,5 +165,13 @@ class PublicKey extends Key
         }
 
         return $this->sin;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isGenerated()
+    {
+        return $this->generated;
     }
 }

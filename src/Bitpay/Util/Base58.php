@@ -80,20 +80,20 @@ final class Base58
     {
         for ($return = '0', $i = 0; $i < strlen($data); $i++) {
             $current = strpos(self::BASE58_CHARS, $data[$i]);
-            $return  = gmp_mul($return, 58);
+            $return  = gmp_mul($return, '58');
             $return  = gmp_strval(gmp_add($return, $current));
         }
 
-        $return = strtolower(Util::encodeHex($return));
+        $return = Util::encodeHex($return);
 
-        for ($i = 0; $i < strlen($data) && substr($data, $i, 1) == '1'; $i += 1) {
-            $return .= '00';
+        for ($i = 0; $i < strlen($data) && substr($data, $i, 1) == '1'; $i++) {
+            $return = '00' . $return;
         }
 
         if (strlen($return) % 2 != 0) {
-            $return .= '0';
+            $return = '0' . $return;
         }
 
-        return strrev($return);
+        return $return;
     }
 }
