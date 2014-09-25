@@ -154,8 +154,8 @@ class PrivateKey extends Key
             $a_hex = '0x'.Secp256k1::A;
             $p_hex = '0x'.Secp256k1::P;
 
-            $Gx = '0x'.substr(Secp256k1::G, 0, 62);
-            $Gy = '0x'.substr(Secp256k1::G, 64, 62);
+            $Gx = '0x'.substr(Secp256k1::G, 2, 64);
+            $Gy = '0x'.substr(Secp256k1::G, 66, 64);
 
             $P = new Point($Gx, $Gy);
 
@@ -222,8 +222,8 @@ class PrivateKey extends Key
 
             $kHex = '0x'.strtolower(bin2hex($k));
 
-            $gX   = '0x'.substr(Secp256k1::G, 0, 62);
-            $gY   = '0x'.substr(Secp256k1::G, 64, 62);
+            $gX   = '0x'.substr(Secp256k1::G, 2, 64);
+            $gY   = '0x'.substr(Secp256k1::G, 66, 64);
 
             $p = new Point($gX, $gY);
             $r = Gmp::doubleAndAdd($this->hex, $p);
