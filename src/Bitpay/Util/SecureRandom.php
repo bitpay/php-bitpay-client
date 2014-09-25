@@ -31,6 +31,11 @@ namespace Bitpay\Util;
 class SecureRandom
 {
     /**
+     * @var boolean
+     */
+    protected static $hasOpenSSL;
+
+    /**
      * @return string
      */
     public static function generateRandom($bytes = 32)
@@ -53,6 +58,10 @@ class SecureRandom
      */
     public static function hasOpenSSL()
     {
-        return function_exists('openssl_random_pseudo_bytes');
+        if (null === self::$hasOpenSSL) {
+            self::$hasOpenSSL = function_exists('openssl_random_pseudo_bytes');
+        }
+
+        return self::$hasOpenSSL;
     }
 }
