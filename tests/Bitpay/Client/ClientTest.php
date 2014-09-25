@@ -31,6 +31,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
     {
         $bitpay = new \Bitpay\Bitpay(__DIR__.'/../../../build/test.yml');
         $this->client = new Client();
+        $this->client->setToken($this->getMockToken());
         $this->client->setContainer($bitpay->getContainer());
     }
 
@@ -224,5 +225,10 @@ class ClientTest extends \PHPUnit_Framework_TestCase
                 )
             )
             ->getMock();
+    }
+
+    private function getMockToken()
+    {
+        return $this->getMock('Bitpay\TokenInterface');
     }
 }

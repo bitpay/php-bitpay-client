@@ -25,6 +25,7 @@
 
 namespace Bitpay\Client;
 
+use Bitpay\TokenInterface;
 use Bitpay\InvoiceInterface;
 use Symfony\Component\DependencyInjection\ContainerAware;
 use Bitpay\Util\Util;
@@ -45,6 +46,18 @@ class Client extends ContainerAware implements ClientInterface
      * @var Response
      */
     protected $response;
+
+    /**
+     * @TokenInterface
+     */
+    protected $token;
+
+    public function setToken(TokenInterface $token)
+    {
+        $this->token = $token;
+
+        return $this;
+    }
 
     /**
      * @inheritdoc
@@ -84,6 +97,7 @@ class Client extends ContainerAware implements ClientInterface
             'buyerPhone'        => $buyer->getPhone(),
             'guid'              => Util::guid(),
             'nonce'             => Util::nonce(),
+            'token'             => $this->token->getToken(),
         );
 
         $request->setBody(json_encode($body));
