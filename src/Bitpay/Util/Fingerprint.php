@@ -30,8 +30,8 @@ namespace Bitpay\Util;
  */
 class Fingerprint
 {
-    public static $sigData = null;
-    public static $finHash = null;
+    protected static $sigData;
+    protected static $finHash;
 
     /**
      * Generates a string of environment information and
@@ -43,56 +43,35 @@ class Fingerprint
      */
     final public static function generate()
     {
+        if (null !== self::$finHash) {
+            return self::$finHash;
+        }
+
         self::$finHash = '';
         self::$sigData = array();
 
-        if (php_sapi_name() != 'cli') {
-            self::$sigData[] = $_SERVER['SERVER_SOFTWARE'];
-            self::$sigData[] = $_SERVER['SERVER_NAME'];
-            self::$sigData[] = $_SERVER['SERVER_ADDR'];
-            self::$sigData[] = $_SERVER['SERVER_PORT'];
-            self::$sigData[] = $_SERVER['DOCUMENT_ROOT'];
-        } else {
-            self::$sigData[] = phpversion();
+        $serverVariables = array(
+            'server_software',
+            'server_name',
+            'server_addr',
+            'server_port',
+            'document_root',
+        );
+
+        foreach ($_SERVER as $k => $v) {
+            if (in_array(strtolower($k), $serverVariables)) {
+                self::$sigData[] = $v;
+            }
         }
 
-        if (function_exists('get_current_user')) {
-            self::$sigData[] = get_current_user();
-        }
+        self::$sigData[] = phpversion();
+        self::$sigData[] = get_current_user();
+        self::$sigData[] = php_uname('s').php_uname('n').php_uname('m').PHP_OS.PHP_SAPI.ICONV_IMPL.ICONV_VERSION;
+        self::$sigData[] = sha1_file(__FILE__);
 
-        if (function_exists('php_uname')) {
-            self::$sigData[] = php_uname('s').php_uname('n').php_uname('m').PHP_OS.PHP_SAPI.ICONV_IMPL.ICONV_VERSION;
-        }
-
-        if (function_exists('sha1_file')) {
-            self::$sigData[] = sha1_file(__FILE__);
-        } else {
-            self::$sigData[] = md5_file(__FILE__);
-        }
-
-        foreach (self::$sigData as $key => $value) {
-            self::$finHash .= trim($value);
-        }
-
-        if (function_exists('sha1')) {
-            self::$finHash = sha1(str_ireplace(' ', '', self::$finHash).strlen(self::$finHash).metaphone(self::$finHash));
-
-            return sha1(self::$finHash);
-        } else {
-            self::$finHash = md5(str_ireplace(' ', '', self::$finHash).strlen(self::$finHash).metaphone(self::$finHash));
-
-            return md5(self::$finHash);
-        }
-    }
-
-    /**
-     *
-     */
-    public function __toString()
-    {
-        if (empty(self::$finHash)) {
-            self::generate();
-        }
+        self::$finHash = implode(self::$sigData);
+        self::$finHash = sha1(str_ireplace(' ', '', self::$finHash).strlen(self::$finHash).metaphone(self::$finHash));
+        self::$finHash = sha1(self::$finHash);
 
         return self::$finHash;
     }
