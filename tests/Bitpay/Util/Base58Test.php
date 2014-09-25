@@ -30,10 +30,20 @@ class Base58Test extends \PHPUnit_Framework_TestCase
     public function testEncode()
     {
         foreach ($this->getTestData() as $datum) {
-            $this->assertSame(
-                $datum[1],
-                Base58::encode($datum[0])
-            );
+            $this->assertSame($datum[1], Base58::encode($datum[0]));
+        }
+    }
+
+    /**
+     * @expectedException Exception
+     */
+    public function testEncodeSpecial()
+    {
+        $data = array(
+            array('', '', '3QJmnh'),
+        );
+        foreach ($data as $datum) {
+            $this->assertSame($datum[1], Base58::encode($datum[0]));
         }
     }
 
@@ -41,6 +51,21 @@ class Base58Test extends \PHPUnit_Framework_TestCase
     {
         foreach ($this->getTestData() as $datum) {
             $this->assertSame($datum[0], Base58::decode($datum[1]));
+        }
+    }
+
+    public function testDecodeSpecial()
+    {
+        $data = array(
+            // is this right?
+            array('', '0', ''),
+            array('', '00', ''),
+            array('3e', '25', ''),
+            array('39', 'z', ''),
+        );
+        foreach ($data as $datum) {
+            $decoded = Base58::decode($datum[1]);
+            $this->assertSame($datum[0], $decoded, sprintf('%s != %s', $datum[0], $decoded));
         }
     }
 
@@ -59,7 +84,6 @@ class Base58Test extends \PHPUnit_Framework_TestCase
             array('ecac89cad93923c02321', 'EJDM8drfXA6uyA', '2W1Yd5Zu6WGyKVtHGMrH'),
             array('10c8511e', 'Rt5zm', '3op3iuGMmhs'),
             array('00000000000000000000', '1111111111', '111111111146Momb'),
-            array('', '', '3QJmnh'),
         );
     }
 }
