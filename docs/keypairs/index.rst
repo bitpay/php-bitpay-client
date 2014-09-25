@@ -71,4 +71,4 @@ Encrypted on Filesystem
 
     $password   = 'satoshi';
     $keyManager = new \Bitpay\KeyManager(new \Bitpay\Storage\EncryptedFilesystemStorage($password));
-    $manager->persist($privateKey);
+    $keyManager->persist($privateKey);
