@@ -44,8 +44,8 @@ class GmpTest extends \PHPUnit_Framework_TestCase
     public function testGmpD2BWithInteger()
     {
         $data = array(
-            array('123456789', '111010110111100110100010101'),
-            array('0x123456789', '100100011010001010110011110001001'),
+            array('123456789', '101010001011001111011010111'),
+            array('0x123456789', '100100011110011010100010110001001'),
         );
 
         foreach ($data as $datum) {

@@ -114,8 +114,8 @@ class PublicKey extends Key
         }
 
         $point = new Point(
-            '0x'.substr(Secp256k1::G, 0, 62),
-            '0x'.substr(Secp256k1::G, 62, 62)
+            '0x'.substr(Secp256k1::G, 2, 64),
+            '0x'.substr(Secp256k1::G, 66, 64)
         );
 
         $R = Gmp::doubleAndAdd(

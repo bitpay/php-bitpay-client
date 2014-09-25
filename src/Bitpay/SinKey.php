@@ -82,13 +82,13 @@ class SinKey extends Key
             throw new \Exception('Public Key has not been set');
         }
 
-        $compressedValue = $this->publicKey->getX();
+        $compressedValue = $this->publicKey;
 
         if (empty($compressedValue)) {
             throw new \Exception('The Public Key needs to be generated.');
         }
 
-        $step1 = Util::sha256(Gmp::gmpBinconv($this->publicKey->getX()), true);
+        $step1 = Util::sha256(Gmp::gmpBinconv($compressedValue), true);
 
         $step2 = Util::ripe160($step1);
 
