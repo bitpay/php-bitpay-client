@@ -67,12 +67,26 @@ Create an instance of the Bitpay class.
         )
     );
 
+.. warning::
+
+    If you are running a command line script as a different user, you could get
+    a different $HOME directory. Please be aware. Also the keys are chmod'ed
+    when written to disk so the private key can only be read by the owner.
+
 Next you will need to get the client.
 
 .. code-block:: php
 
     // @var \Bitpay\Client\Client
     $client = $bitpay->get('client');
+
+Inject your ``TokenObject`` into the client.
+
+.. code-block:: php
+
+    $token = new \Bitpay\Token();
+    $token->setToken('Insert Token Here');
+    $client->setToken($token);
 
 Now all you need to do is send the ``$invoice`` object to Bitpay.
 
