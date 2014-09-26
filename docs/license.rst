@@ -27,6 +27,4 @@ THE SOFTWARE.
 3rd Parties
 -----------
 
-* `Monolog <https://github.com/Seldaek/monolog>`_ - Copyright (c) 2011-2014 Jordi Boggiano
-* `PSR Log <https://github.com/php-fig/log>`_ - Copyright (c) 2012 PHP Framework Interoperability Group
 * `Symfony <https://github.com/symfony/symfony>`_ Copyright (c) 2004-2014 Fabien Potencier
