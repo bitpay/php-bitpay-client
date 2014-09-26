@@ -32,3 +32,33 @@ your configuration options.
 
     ``configuration`` is either the path to a yaml file or an array of configuration
     options.
+
+Sending your own Requests
+=========================
+
+You can easily send your own requests to BitPay's API with a little work. For all
+the requests you can make, please see the `API Documentation <https://bitpay.com/api>`_
+on the website.
+
+To get started you need to create your `Request <https://github.com/bitpay/php-bitpay-client/blob/master/src/Bitpay/Client/Request.php>`_
+
+.. code-block:: php
+
+    $request = new \Bitpay\Client\Request();
+
+This is the object that you will pass to the Client.
+
+.. code-block:: php
+
+    $request->setHost('https://bitpay.com');
+    $request->setMethod(Request::METHOD_GET);
+    $request->setPath('/invoices/InvoiceIdHere');
+
+    $client = $bitpay->get('client');
+
+    // @var Bitpay\Client\ResponseInterface
+    $response = $client->sendRequest($request);
+
+That's all there is to it. Just make your Request object and have the Client send
+it. You'll get a `Response <https://github.com/bitpay/php-bitpay-client/blob/master/src/Bitpay/Client/ResponseInterface.php>`_
+object in return which you can use to do whatever it is you need to do.
