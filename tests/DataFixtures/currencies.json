@@ -1,0 +1,17 @@
+{
+  "data": [
+    {
+      "code": "BTC",
+      "symbol": "\u0e3f",
+      "precision": 4,
+      "exchangePctFee": 200,
+      "payoutEnabled": true,
+      "name": "Bitcoin",
+      "plural": "Bitcoin",
+      "alts": "btc",
+      "payoutFields": [
+        "bitcoinAddress"
+      ]
+    }
+  ]
+}

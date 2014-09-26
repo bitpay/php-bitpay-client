@@ -181,7 +181,7 @@ class Util
      */
     public static function decodeHex($hex)
     {
-        if (!ctype_xdigit($hex) && '0x' != substr($hex, 0, 2)) {
+        if (!is_string($hex) || !ctype_xdigit($hex) && '0x' != substr($hex, 0, 2)) {
             throw new \Exception('Argument must be a string of hex digits.');
         }
 

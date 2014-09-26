@@ -111,11 +111,14 @@ class ClientTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Exception
      */
-    public function testGetCurrenciesWithException()
+    public function testGetCurrenciesWithoutException()
     {
         $currencies = $this->client->getCurrencies();
+
+        $this->assertInternalType('array', $currencies);
+        $this->assertGreaterThan(0, count($currencies));
+        $this->assertInstanceOf('Bitpay\Currency', $currencies[0]);
     }
 
     private function getMockInvoice()

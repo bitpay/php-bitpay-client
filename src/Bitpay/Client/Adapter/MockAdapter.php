@@ -61,6 +61,8 @@ class MockAdapter implements AdapterInterface
     private function createMockCurrencies(RequestInterface $request)
     {
         $response = new Response();
+        $currencies = file_get_contents(__DIR__ . '/../../../../tests/DataFixtures/currencies.json');
+        $response->setBody($currencies);
 
         return $response;
     }
