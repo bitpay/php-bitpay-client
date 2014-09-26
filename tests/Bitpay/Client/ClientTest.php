@@ -29,10 +29,14 @@ class ClientTest extends \PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
-        $bitpay = new \Bitpay\Bitpay(__DIR__.'/../../../build/test.yml');
         $this->client = new Client();
+        $this->client->setNetwork(new \Bitpay\Network\Testnet());
         $this->client->setToken($this->getMockToken());
-        $this->client->setContainer($bitpay->getContainer());
+        $this->client->setPublicKey($this->getMockPublicKey());
+        $this->client->setPrivateKey($this->getMockPrivateKey());
+        $adapter = $this->getMockAdapter();
+        $adapter->method('sendRequest')->willReturn($this->getMock('Bitpay\Client\ResponseInterface'));
+        $this->client->setAdapter($adapter);
     }
 
     public function testCreateInvoice()
@@ -62,6 +66,43 @@ class ClientTest extends \PHPUnit_Framework_TestCase
 
         $invoice = $this->client->createInvoice($invoice);
         $this->assertInstanceOf('Bitpay\InvoiceInterface', $invoice);
+    }
+
+    /**
+     * @expectedException Exception
+     */
+    public function testCreateResponseWithException()
+    {
+        $item = $this->getMockItem();
+        $item->method('getPrice')->will($this->returnValue(1));
+
+        $buyer = $this->getMockBuyer();
+        $buyer->method('getAddress')->will($this->returnValue(array()));
+
+        $invoice = $this->getMockInvoice();
+        $invoice->method('getItem')->willReturn($item);
+        $invoice->method('getBuyer')->willReturn($buyer);
+        $invoice->method('setId')->will($this->returnSelf());
+        $invoice->method('setUrl')->will($this->returnSelf());
+        $invoice->method('setStatus')->will($this->returnSelf());
+        $invoice->method('setBtcPrice')->will($this->returnSelf());
+        $invoice->method('setPrice')->will($this->returnSelf());
+        $invoice->method('setInvoiceTime')->will($this->returnSelf());
+        $invoice->method('setExpirationTime')->will($this->returnSelf());
+        $invoice->method('setCurrentTime')->will($this->returnSelf());
+        $invoice->method('setBtcPaid')->will($this->returnSelf());
+        $invoice->method('setRate')->will($this->returnSelf());
+        $invoice->method('setExceptionStatus')->will($this->returnSelf());
+        $invoice->method('getCurrency')->willReturn($this->getMockCurrency());
+
+        $response = $this->getMockResponse();
+        $response->method('getBody')->will($this->returnValue('{"error":""}'));
+
+        $adapter = $this->getMockAdapter();
+        $adapter->method('sendRequest')->willReturn($response);
+        $this->client->setAdapter($adapter);
+
+        $this->client->createInvoice($invoice);
     }
 
     /**
@@ -106,19 +147,65 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $invoice->method('getItem')->willReturn($this->getMockItem());
         $invoice->method('getBuyer')->willReturn($this->getMockBuyer());
 
+        $adapter = $this->getMockAdapter();
+        $response = $this->getMockResponse();
+        $response->method('getBody')->will('{"error":""}');
+        $adapter->method('sendRequest')->willReturn($response);
+        $this->client->setAdapter($adapter);
+
         // throws exception
         $this->client->createInvoice($invoice);
     }
 
     /**
+     * @expectedException Exception
      */
-    public function testGetCurrenciesWithoutException()
+    public function testGetCurrenciesWithException()
     {
+        $this->client->getCurrencies();
+    }
+
+    public function testGetCurrencies()
+    {
+        $response = $this->getMockResponse();
+        $response->method('getBody')->willReturn(file_get_contents(__DIR__ . '/../../DataFixtures/currencies.json'));
+
+        $adapter = $this->getMockAdapter();
+        $adapter->method('sendRequest')->willReturn($response);
+        $this->client->setAdapter($adapter);
+
         $currencies = $this->client->getCurrencies();
 
         $this->assertInternalType('array', $currencies);
         $this->assertGreaterThan(0, count($currencies));
-        $this->assertInstanceOf('Bitpay\Currency', $currencies[0]);
+        $this->assertInstanceOf('Bitpay\CurrencyInterface', $currencies[0]);
+    }
+
+    public function testCreateToken()
+    {
+        $response = $this->getMockResponse();
+        $response->method('getBody')->willReturn(file_get_contents(__DIR__ . '/../../DataFixtures/tokens.json'));
+
+        $adapter = $this->getMockAdapter();
+        $adapter->method('sendRequest')->willReturn($response);
+        $this->client->setAdapter($adapter);
+
+        $token = $this->client->createToken();
+        $this->assertInstanceOf('Bitpay\TokenInterface', $token);
+    }
+
+    /**
+     * @expectedException Exception
+     */
+    public function testCreateTokenWithException()
+    {
+        $response = $this->getMockResponse();
+        $response->method('getBody')->willReturn('{"error":""}');
+
+        $adapter = $this->getMockAdapter();
+        $adapter->method('sendRequest')->willReturn($response);
+        $this->client->setAdapter($adapter);
+        $this->client->createToken(array('id'=>'','pairingCode'=>''));
     }
 
     private function getMockInvoice()
@@ -233,5 +320,25 @@ class ClientTest extends \PHPUnit_Framework_TestCase
     private function getMockToken()
     {
         return $this->getMock('Bitpay\TokenInterface');
+    }
+
+    private function getMockAdapter()
+    {
+        return $this->getMock('Bitpay\Client\Adapter\AdapterInterface');
+    }
+
+    private function getMockPublicKey()
+    {
+        return $this->getMock('Bitpay\PublicKey');
+    }
+
+    private function getMockPrivateKey()
+    {
+        return $this->getMock('Bitpay\PrivateKey');
+    }
+
+    private function getMockResponse()
+    {
+        return $this->getMock('Bitpay\Client\ResponseInterface');
     }
 }

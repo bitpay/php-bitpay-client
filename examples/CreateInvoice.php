@@ -1,4 +1,12 @@
 <?php
+/**
+ * WARNING - This example will NOT work until you have generated your public
+ * and private keys. Please see the example documentation on generating your
+ * keys and also see the documentation on how to save those keys.
+ *
+ * Also please be aware that you CANNOT create an invoice until you have paired
+ * the keys and received a token back. The token is usesd with the request.
+ */
 
 require __DIR__ . '/../vendor/autoload.php';
 
@@ -63,6 +71,7 @@ $bitpay = new \Bitpay\Bitpay(
             'network'     => 'testnet', // testnet or livenet, default is livenet
             'public_key'  => getenv('HOME').'/.bitpay/api.pub',
             'private_key' => getenv('HOME').'/.bitpay/api.key',
+            'key_storage' => 'filesystem',
         )
     )
 );
@@ -72,10 +81,18 @@ $bitpay = new \Bitpay\Bitpay(
  */
 $client = $bitpay->get('client');
 
+/**
+ * You will need to set the token that was returned when you paired your
+ * keys.
+ */
+$token = new \Bitpay\Token();
+$token->setToken('Put your token here');
+$client->setToken($token);
+
 // Send invoice
 $client->createInvoice($invoice);
 var_dump(
-    $client->getRequest(),
-    $client->getResponse(),
+    (string) $client->getRequest(),
+    (string) $client->getResponse(),
     $invoice
 );
