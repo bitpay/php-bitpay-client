@@ -13,6 +13,7 @@ Contents:
 
     installation
     configuration
+    usage
     invoices/index
     keypairs/index
     pairing/index
