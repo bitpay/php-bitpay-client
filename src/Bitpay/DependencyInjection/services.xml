@@ -42,7 +42,7 @@
         </service>
 
         <service id="key_storage" class="%key_storage.class%" public="false">
-            <argument>%bitpay.key_storage_password</argument>
+            <argument>%bitpay.key_storage_password%</argument>
         </service>
 
         <service id="key_manager" class="%key_manager.class%">
