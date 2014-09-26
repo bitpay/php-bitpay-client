@@ -1,0 +1,2111 @@
+{
+  "data": [
+    {
+      "code": "BTC",
+      "symbol": "\u0e3f",
+      "precision": 4,
+      "exchangePctFee": 200,
+      "payoutEnabled": true,
+      "name": "Bitcoin",
+      "plural": "Bitcoin",
+      "alts": "btc",
+      "payoutFields": [
+        "bitcoinAddress"
+      ]
+    },
+    {
+      "code": "AED",
+      "symbol": "\u062f.\u0625",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "UAE Dirham",
+      "plural": "UAE Dirham",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "AFN",
+      "symbol": "\u060b",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Afghan Afghani",
+      "plural": "Afghan Afghani",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "ALL",
+      "symbol": "LEK",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Albanian Lek",
+      "plural": "Albanian Lek",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "AMD",
+      "symbol": "\u0534\u0580\u0561\u0574",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Armenian Dram",
+      "plural": "Armenian Dram",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "ANG",
+      "symbol": "\u0192",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Netherlands Antillean Guilder",
+      "plural": "Netherlands Antillean Guilder",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "AOA",
+      "symbol": "Kz",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Angolan Kwanza",
+      "plural": "Angolan Kwanza",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "ARS",
+      "symbol": "$",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Argentine Peso",
+      "plural": "Argentine Peso",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "AUD",
+      "symbol": "$",
+      "precision": 2,
+      "exchangePctFee": 100,
+      "payoutEnabled": true,
+      "name": "Australian Dollar",
+      "plural": "Australian Dollars",
+      "alts": "aud aussie",
+      "payoutFields": [
+        "name",
+        "account",
+        "bank",
+        "sort",
+        "swift",
+        "address",
+        "city",
+        "postal"
+      ]
+    },
+    {
+      "code": "AWG",
+      "symbol": "\u0192",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Aruban Florin",
+      "plural": "Aruban Florin",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "AZN",
+      "symbol": "\u043c\u0430\u043d",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Azerbaijani Manat",
+      "plural": "Azerbaijani Manat",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "BAM",
+      "symbol": "KM",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Bosnia-Herzegovina Convertible Mark",
+      "plural": "Bosnia-Herzegovina Convertible Mark",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "BBD",
+      "symbol": "$",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Barbadian Dollar",
+      "plural": "Barbadian Dollar",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "BDT",
+      "symbol": "\u09f3",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Bangladeshi Taka",
+      "plural": "Bangladeshi Taka",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "BGN",
+      "symbol": "\u043b\u0432",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Bulgarian Lev",
+      "plural": "Bulgarian Lev",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "BHD",
+      "symbol": ".\u062f.\u0628",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Bahraini Dinar",
+      "plural": "Bahraini Dinar",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "BIF",
+      "symbol": "FBu",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Burundian Franc",
+      "plural": "Burundian Franc",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "BMD",
+      "symbol": "$",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Bermudan Dollar",
+      "plural": "Bermudan Dollar",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "BND",
+      "symbol": "$",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Brunei Dollar",
+      "plural": "Brunei Dollar",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "BOB",
+      "symbol": "$b",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Bolivian Boliviano",
+      "plural": "Bolivian Boliviano",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "BRL",
+      "symbol": "R$",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Brasilian Real",
+      "plural": "Brasilian Real",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "BSD",
+      "symbol": "$",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Bahamian Dollar",
+      "plural": "Bahamian Dollar",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "BTN",
+      "symbol": "Nu",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Bhutanese Ngultrum",
+      "plural": "Bhutanese Ngultrum",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "BWP",
+      "symbol": "P",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Botswanan Pula",
+      "plural": "Botswanan Pula",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "BYR",
+      "symbol": "p.",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Belarusian Ruble",
+      "plural": "Belarusian Ruble",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "BZD",
+      "symbol": "BZ$",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Belize Dollar",
+      "plural": "Belize Dollar",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "CAD",
+      "symbol": "$",
+      "precision": 2,
+      "exchangePctFee": 100,
+      "payoutEnabled": true,
+      "name": "Canadian Dollar",
+      "plural": "Canadian Dollars",
+      "alts": "cad",
+      "payoutFields": [
+        "name",
+        "account",
+        "bank",
+        "swift"
+      ]
+    },
+    {
+      "code": "CDF",
+      "symbol": "FC",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Congolese Franc",
+      "plural": "Congolese Franc",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "CHF",
+      "symbol": "CHF",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Swiss Franc",
+      "plural": "Swiss Franc",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "CLF",
+      "symbol": "UF",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Chilean Unit of Account (UF)",
+      "plural": "Chilean Unit of Account (UF)",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "CLP",
+      "symbol": "$",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Chilean Peso",
+      "plural": "Chilean Peso",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "CNY",
+      "symbol": "\u00a5",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Chinese Yuan",
+      "plural": "Chinese Yuan",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "COP",
+      "symbol": "$",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Colombian Peso",
+      "plural": "Colombian Peso",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "CRC",
+      "symbol": "\u20a1",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Costa Rican Col\u00f3n",
+      "plural": "Costa Rican Col\u00f3n",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "CVE",
+      "symbol": "$",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Cape Verdean Escudo",
+      "plural": "Cape Verdean Escudo",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "CZK",
+      "symbol": "K\u010d",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Czech Koruna",
+      "plural": "Czech Koruna",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "DJF",
+      "symbol": "Fdj",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Djiboutian Franc",
+      "plural": "Djiboutian Franc",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "DKK",
+      "symbol": "kr",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Danish Krone",
+      "plural": "Danish Krone",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "DOP",
+      "symbol": "RD$",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Dominican Peso",
+      "plural": "Dominican Peso",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "DZD",
+      "symbol": "\u062f\u062c",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Algerian Dinar",
+      "plural": "Algerian Dinar",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "EEK",
+      "symbol": "kr",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Estonian Kroon",
+      "plural": "Estonian Kroon",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "EGP",
+      "symbol": "\u00a3",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Egyptian Pound",
+      "plural": "Egyptian Pound",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "ETB",
+      "symbol": "Br ",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Ethiopian Birr",
+      "plural": "Ethiopian Birr",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "EUR",
+      "symbol": "\u20ac",
+      "precision": 2,
+      "exchangePctFee": 100,
+      "payoutEnabled": true,
+      "name": "Eurozone Euro",
+      "plural": "Eurozone Euros",
+      "alts": "eur",
+      "payoutFields": [
+        "name",
+        "account",
+        "bank",
+        "swift"
+      ]
+    },
+    {
+      "code": "FJD",
+      "symbol": "$",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Fijian Dollar",
+      "plural": "Fijian Dollar",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "FKP",
+      "symbol": "\u00a3",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Falkland Islands Pound",
+      "plural": "Falkland Islands Pound",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "GBP",
+      "symbol": "\u00a3",
+      "precision": 2,
+      "exchangePctFee": 100,
+      "payoutEnabled": true,
+      "name": "Pound Sterling",
+      "plural": "Pounds Sterling",
+      "alts": "gbp great british united kingdom uk",
+      "payoutFields": [
+        "name",
+        "account",
+        "bank",
+        "sort",
+        "address",
+        "city",
+        "postal"
+      ]
+    },
+    {
+      "code": "GEL",
+      "symbol": "\u10da",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Georgian Lari",
+      "plural": "Georgian Lari",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "GHS",
+      "symbol": "\u00a2",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Ghanaian Cedi",
+      "plural": "Ghanaian Cedi",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "GIP",
+      "symbol": "\u00a3",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Gibraltar Pound",
+      "plural": "Gibraltar Pound",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "GMD",
+      "symbol": "D",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Gambian Dalasi",
+      "plural": "Gambian Dalasi",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "GNF",
+      "symbol": "FG ",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Guinean Franc",
+      "plural": "Guinean Franc",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "GTQ",
+      "symbol": "Q",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Guatemalan Quetzal",
+      "plural": "Guatemalan Quetzal",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "GYD",
+      "symbol": "$",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Guyanaese Dollar",
+      "plural": "Guyanaese Dollar",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "HKD",
+      "symbol": "$",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Hong Kong Dollar",
+      "plural": "Hong Kong Dollar",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "HNL",
+      "symbol": "L",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Honduran Lempira",
+      "plural": "Honduran Lempira",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "HRK",
+      "symbol": "kn",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Croatian Kuna",
+      "plural": "Croatian Kuna",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "HTG",
+      "symbol": "G",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Haitian Gourde",
+      "plural": "Haitian Gourde",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "HUF",
+      "symbol": "Ft",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Hungarian Forint",
+      "plural": "Hungarian Forint",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "IDR",
+      "symbol": "Rp",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Indonesian Rupiah",
+      "plural": "Indonesian Rupiah",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "ILS",
+      "symbol": "\u20aa",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Israeli Shekel",
+      "plural": "Israeli Shekel",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "INR",
+      "symbol": "\u0af1",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Indian Rupee",
+      "plural": "Indian Rupee",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "IQD",
+      "symbol": "\u0639.\u062f",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Iraqi Dinar",
+      "plural": "Iraqi Dinar",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "ISK",
+      "symbol": "kr",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Icelandic Kr\u00f3na",
+      "plural": "Icelandic Kr\u00f3na",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "JEP",
+      "symbol": "\u00a3",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Jersey Pound",
+      "plural": "Jersey Pound",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "JMD",
+      "symbol": "J$",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Jamaican Dollar",
+      "plural": "Jamaican Dollar",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "JOD",
+      "symbol": "\u062f.\u0627",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Jordanian Dinar",
+      "plural": "Jordanian Dinar",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "JPY",
+      "symbol": "\u00a5",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Japanese Yen",
+      "plural": "Japanese Yen",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "KES",
+      "symbol": "KSh",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Kenyan Shilling",
+      "plural": "Kenyan Shilling",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "KGS",
+      "symbol": "\u043b\u0432",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Kyrgystani Som",
+      "plural": "Kyrgystani Som",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "KHR",
+      "symbol": "\u17db",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Cambodian Riel",
+      "plural": "Cambodian Riel",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "KMF",
+      "symbol": "CF",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Comorian Franc",
+      "plural": "Comorian Franc",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "KRW",
+      "symbol": "\u20a9",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "South Korean Won",
+      "plural": "South Korean Won",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "KWD",
+      "symbol": "\u062f.\u0643",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Kuwaiti Dinar",
+      "plural": "Kuwaiti Dinar",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "KYD",
+      "symbol": "$",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Cayman Islands Dollar",
+      "plural": "Cayman Islands Dollar",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "KZT",
+      "symbol": "\u043b\u0432",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Kazakhstani Tenge",
+      "plural": "Kazakhstani Tenge",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "LAK",
+      "symbol": "\u20ad",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Laotian Kip",
+      "plural": "Laotian Kip",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "LBP",
+      "symbol": "\u00a3",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Lebanese Pound",
+      "plural": "Lebanese Pound",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "LKR",
+      "symbol": "\u20a8",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Sri Lankan Rupee",
+      "plural": "Sri Lankan Rupee",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "LRD",
+      "symbol": "$",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Liberian Dollar",
+      "plural": "Liberian Dollar",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "LSL",
+      "symbol": "L",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Lesotho Loti",
+      "plural": "Lesotho Loti",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "LTL",
+      "symbol": "Lt",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Lithuanian Litas",
+      "plural": "Lithuanian Litas",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "LVL",
+      "symbol": "Ls",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Latvian Lats",
+      "plural": "Latvian Lats",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "LYD",
+      "symbol": "\u0644.\u062f",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Libyan Dinar",
+      "plural": "Libyan Dinar",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "MAD",
+      "symbol": "\u062f.\u0645",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Moroccan Dirham",
+      "plural": "Moroccan Dirham",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "MDL",
+      "symbol": "L",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Moldovan Leu",
+      "plural": "Moldovan Leu",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "MGA",
+      "symbol": "Ar",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Malagasy Ariary",
+      "plural": "Malagasy Ariary",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "MKD",
+      "symbol": "\u0434\u0435\u043d",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Macedonian Denar",
+      "plural": "Macedonian Denar",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "MMK",
+      "symbol": "K",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Myanma Kyat",
+      "plural": "Myanma Kyat",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "MNT",
+      "symbol": "\u20ae",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Mongolian Tugrik",
+      "plural": "Mongolian Tugrik",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "MOP",
+      "symbol": "MOP$",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Macanese Pataca",
+      "plural": "Macanese Pataca",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "MRO",
+      "symbol": "UM",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Mauritanian Ouguiya",
+      "plural": "Mauritanian Ouguiya",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "MUR",
+      "symbol": "\u20a8",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Mauritian Rupee",
+      "plural": "Mauritian Rupee",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "MVR",
+      "symbol": "MRf",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Maldivian Rufiyaa",
+      "plural": "Maldivian Rufiyaa",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "MWK",
+      "symbol": "MK",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Malawian Kwacha",
+      "plural": "Malawian Kwacha",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "MXN",
+      "symbol": "$",
+      "precision": 2,
+      "exchangePctFee": 100,
+      "payoutEnabled": true,
+      "name": "Mexican Peso",
+      "plural": "Mexican Pesos",
+      "alts": "mxn",
+      "payoutFields": [
+        "name",
+        "account",
+        "bank",
+        "swift",
+        "address",
+        "city",
+        "postal"
+      ]
+    },
+    {
+      "code": "MYR",
+      "symbol": "RM",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Malaysian Ringgit",
+      "plural": "Malaysian Ringgit",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "MZN",
+      "symbol": "MT",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Mozambican Metical",
+      "plural": "Mozambican Metical",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "NAD",
+      "symbol": "MT",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Namibian Dollar",
+      "plural": "Namibian Dollar",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "NGN",
+      "symbol": "\u20a6",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Nigerian Naira",
+      "plural": "Nigerian Naira",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "NIO",
+      "symbol": "C$",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Nicaraguan C\u00f3rdoba",
+      "plural": "Nicaraguan C\u00f3rdoba",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "NOK",
+      "symbol": "kr",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Norwegian Krone",
+      "plural": "Norwegian Krone",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "NPR",
+      "symbol": "\u20a8",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Nepalese Rupee",
+      "plural": "Nepalese Rupee",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "NZD",
+      "symbol": "$",
+      "precision": 2,
+      "exchangePctFee": 100,
+      "payoutEnabled": true,
+      "name": "New Zealand Dollar",
+      "plural": "New Zealand Dollars",
+      "alts": "nzd",
+      "payoutFields": [
+        "name",
+        "account",
+        "bank",
+        "swift",
+        "address",
+        "city",
+        "postal"
+      ]
+    },
+    {
+      "code": "OMR",
+      "symbol": "\ufdfc",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Omani Rial",
+      "plural": "Omani Rial",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "PAB",
+      "symbol": "B\/.",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Panamanian Balboa",
+      "plural": "Panamanian Balboa",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "PEN",
+      "symbol": "S\/.",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Peruvian Nuevo Sol",
+      "plural": "Peruvian Nuevo Sol",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "PGK",
+      "symbol": "K",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Papua New Guinean Kina",
+      "plural": "Papua New Guinean Kina",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "PHP",
+      "symbol": "\u20b1",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Philippine Peso",
+      "plural": "Philippine Peso",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "PKR",
+      "symbol": "\u20a8",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Pakistani Rupee",
+      "plural": "Pakistani Rupee",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "PLN",
+      "symbol": "z\u0142",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Polish Zloty",
+      "plural": "Polish Zloty",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "PYG",
+      "symbol": "Gs",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Paraguayan Guarani",
+      "plural": "Paraguayan Guarani",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "QAR",
+      "symbol": "\ufdfc",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Qatari Rial",
+      "plural": "Qatari Rial",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "RON",
+      "symbol": "lei",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Romanian Leu",
+      "plural": "Romanian Leu",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "RSD",
+      "symbol": "\u0414\u0438\u043d.",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Serbian Dinar",
+      "plural": "Serbian Dinar",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "RUB",
+      "symbol": "\u0440\u0443\u0431",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Russian Ruble",
+      "plural": "Russian Ruble",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "RWF",
+      "symbol": "RF",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Rwandan Franc",
+      "plural": "Rwandan Franc",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "SAR",
+      "symbol": "\ufdfc",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Saudi Riyal",
+      "plural": "Saudi Riyal",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "SBD",
+      "symbol": "$",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Solomon Islands Dollar",
+      "plural": "Solomon Islands Dollar",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "SCR",
+      "symbol": "\u20a8",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Seychellois Rupee",
+      "plural": "Seychellois Rupee",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "SDG",
+      "symbol": "\u00a3",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Sudanese Pound",
+      "plural": "Sudanese Pound",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "SEK",
+      "symbol": "kr",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Swedish Krona",
+      "plural": "Swedish Krona",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "SGD",
+      "symbol": "$",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Singapore Dollar",
+      "plural": "Singapore Dollar",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "SHP",
+      "symbol": "\u00a3",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Saint Helena Pound",
+      "plural": "Saint Helena Pound",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "SLL",
+      "symbol": "Le",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Sierra Leonean Leone",
+      "plural": "Sierra Leonean Leone",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "SOS",
+      "symbol": "S",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Somali Shilling",
+      "plural": "Somali Shilling",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "SRD",
+      "symbol": "$",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Surinamese Dollar",
+      "plural": "Surinamese Dollar",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "STD",
+      "symbol": "Db",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "S\u00e3o Tom\u00e9 and Pr\u00edncipe Dobra",
+      "plural": "S\u00e3o Tom\u00e9 and Pr\u00edncipe Dobra",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "SVC",
+      "symbol": "\u20a1",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Salvadoran Col\u00f3n",
+      "plural": "Salvadoran Col\u00f3n",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "SYP",
+      "symbol": "\u00a3",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Syrian Pound",
+      "plural": "Syrian Pound",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "SZL",
+      "symbol": "L",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Swazi Lilangeni",
+      "plural": "Swazi Lilangeni",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "THB",
+      "symbol": "\u0e3f",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Thai Baht",
+      "plural": "Thai Baht",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "TJS",
+      "symbol": "SM",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Tajikistani Somoni",
+      "plural": "Tajikistani Somoni",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "TMT",
+      "symbol": "m",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Turkmenistani Manat",
+      "plural": "Turkmenistani Manat",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "TND",
+      "symbol": "\u062f.\u062a",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Tunisian Dinar",
+      "plural": "Tunisian Dinar",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "TOP",
+      "symbol": "T$",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Tongan Pa\u02bbanga",
+      "plural": "Tongan Pa\u02bbanga",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "TRY",
+      "symbol": "\u20a4",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Turkish Lira",
+      "plural": "Turkish Lira",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "TTD",
+      "symbol": "TT$",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Trinidad and Tobago Dollar",
+      "plural": "Trinidad and Tobago Dollar",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "TWD",
+      "symbol": "NT$",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "New Taiwan Dollar",
+      "plural": "New Taiwan Dollar",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "TZS",
+      "symbol": "x\/y",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Tanzanian Shilling",
+      "plural": "Tanzanian Shilling",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "UAH",
+      "symbol": "\u20b4",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Ukrainian Hryvnia",
+      "plural": "Ukrainian Hryvnia",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "UGX",
+      "symbol": "USh",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Ugandan Shilling",
+      "plural": "Ugandan Shilling",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "USD",
+      "symbol": "$",
+      "precision": 2,
+      "exchangePctFee": 100,
+      "payoutEnabled": true,
+      "name": "US Dollar",
+      "plural": "US Dollars",
+      "alts": "usd bucks",
+      "payoutFields": [
+        "name",
+        "account",
+        "routing",
+        "merchantEIN"
+      ]
+    },
+    {
+      "code": "UYU",
+      "symbol": "$U",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Uruguayan Peso",
+      "plural": "Uruguayan Peso",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "UZS",
+      "symbol": "\u043b\u0432",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Uzbekistan Som",
+      "plural": "Uzbekistan Som",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "VEF",
+      "symbol": "Bs",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Venezuelan Bol\u00edvar Fuerte",
+      "plural": "Venezuelan Bol\u00edvar Fuerte",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "VND",
+      "symbol": "\u20ab",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Vietnamese Dong",
+      "plural": "Vietnamese Dong",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "VUV",
+      "symbol": "Vt",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Vanuatu Vatu",
+      "plural": "Vanuatu Vatu",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "WST",
+      "symbol": "WS$",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Samoan Tala",
+      "plural": "Samoan Tala",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "XAF",
+      "symbol": "FCFA",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "CFA Franc BEAC",
+      "plural": "CFA Franc BEAC",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "XAG",
+      "symbol": "oz.",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Silver (troy ounce)",
+      "plural": "Silver (troy ounce)",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "XAU",
+      "symbol": "oz.",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Gold (troy ounce)",
+      "plural": "Gold (troy ounce)",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "XCD",
+      "symbol": "$",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "East Caribbean Dollar",
+      "plural": "East Caribbean Dollar",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "XOF",
+      "symbol": "CFA",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "CFA Franc BCEAO",
+      "plural": "CFA Franc BCEAO",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "XPF",
+      "symbol": "F",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "CFP Franc",
+      "plural": "CFP Franc",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "YER",
+      "symbol": "\ufdfc",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Yemeni Rial",
+      "plural": "Yemeni Rial",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "ZAR",
+      "symbol": "R",
+      "precision": 2,
+      "exchangePctFee": 100,
+      "payoutEnabled": true,
+      "name": "South African Rand",
+      "plural": "South African Rand",
+      "alts": "zar",
+      "payoutFields": [
+        "name",
+        "account",
+        "bank",
+        "swift",
+        "address",
+        "city",
+        "postal"
+      ]
+    },
+    {
+      "code": "ZMW",
+      "symbol": "ZK",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Zambian Kwacha",
+      "plural": "Zambian Kwacha",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    },
+    {
+      "code": "ZWL",
+      "symbol": "Z$",
+      "precision": 2,
+      "exchangePctFee": 200,
+      "payoutEnabled": false,
+      "name": "Zimbabwean Dollar",
+      "plural": "Zimbabwean Dollar",
+      "alts": "",
+      "payoutFields": [
+        
+      ]
+    }
+  ]
+}
