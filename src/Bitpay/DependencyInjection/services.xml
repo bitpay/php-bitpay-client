@@ -39,6 +39,15 @@
             <call method="setContainer">
                 <argument type="service" id="service_container" />
             </call>
+            <call method="setAdapter">
+                <argument type="service" id="adapter" />
+            </call>
+            <call method="setPublicKey">
+                <argument type="service" id="public_key" />
+            </call>
+            <call method="setPrivateKey">
+                <argument type="service" id="private_key" />
+            </call>
         </service>
 
         <service id="key_storage" class="%key_storage.class%" public="false">
@@ -47,6 +56,14 @@
 
         <service id="key_manager" class="%key_manager.class%">
             <argument type="service" id="key_storage" />
+        </service>
+
+        <service id="public_key" class="Bitpay\PublicKey" factory-service="key_storage" factory-method="load">
+            <argument>%bitpay.public_key%</argument>
+        </service>
+
+        <service id="private_key" class="Bitpay\PrivateKey" factory-service="key_storage" factory-method="load">
+            <argument>%bitpay.private_key%</argument>
         </service>
     </services>
 </container>

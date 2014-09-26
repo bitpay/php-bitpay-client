@@ -25,33 +25,100 @@
 
 namespace Bitpay\Client;
 
+use Bitpay\Client\Adapter\AdapterInterface;
+use Bitpay\Network\NetworkInterface;
 use Bitpay\TokenInterface;
 use Bitpay\InvoiceInterface;
-use Symfony\Component\DependencyInjection\ContainerAware;
 use Bitpay\Util\Util;
+use Bitpay\PublicKey;
+use Bitpay\PrivateKey;
 
 /**
  * Client used to send requests and receive responses for BitPay's Web API
  *
  * @package Bitpay
  */
-class Client extends ContainerAware implements ClientInterface
+class Client implements ClientInterface
 {
     /**
-     * @var Request
+     * @var RequestInterface
      */
     protected $request;
 
     /**
-     * @var Response
+     * @var ResponseInterface
      */
     protected $response;
 
     /**
-     * @TokenInterface
+     * @var TokenInterface
      */
     protected $token;
 
+    /**
+     * @var AdapterInterface
+     */
+    protected $adapter;
+
+    /**
+     * @var PublicKey
+     */
+    protected $publicKey;
+
+    /**
+     * @var PrivateKey
+     */
+    protected $privateKey;
+
+    /**
+     * @var NetworkInterface
+     */
+    protected $network;
+
+    /**
+     * The network is either livenet or testnet and tells the client where to
+     * send the requests.
+     *
+     * @param NetworkInterface
+     */
+    public function setNetwork(NetworkInterface $network)
+    {
+        $this->network = $network;
+    }
+
+    /**
+     * Set the Public Key to use to help identify who you are to BitPay. Please
+     * note that you must first pair your keys and get a token in return to use.
+     *
+     * @param PublicKey $key
+     */
+    public function setPublicKey(PublicKey $key)
+    {
+        $this->publicKey = $key;
+    }
+
+    /**
+     * Set the Private Key to use, this is used when signing request strings
+     *
+     * @param PrivateKey $key
+     */
+    public function setPrivateKey(PrivateKey $key)
+    {
+        $this->privateKey = $key;
+    }
+
+    /**
+     * @param AdapterInterface $adapter
+     */
+    public function setAdapter(AdapterInterface $adapter)
+    {
+        $this->adapter = $adapter;
+    }
+
+    /**
+     * @param TokenInterface $token
+     * @return ClientInterface
+     */
     public function setToken(TokenInterface $token)
     {
         $this->token = $token;
@@ -104,7 +171,7 @@ class Client extends ContainerAware implements ClientInterface
         $this->addIdentityHeader($request);
         $this->addSignatureHeader($request);
         $this->request  = $request;
-        $this->response = $this->send($request);
+        $this->response = $this->sendRequest($request);
 
         $body = json_decode($this->response->getBody(), true);
         if (isset($body['error']) || isset($body['errors'])) {
@@ -136,7 +203,7 @@ class Client extends ContainerAware implements ClientInterface
         $this->request = $this->createNewRequest();
         $this->request->setMethod(Request::METHOD_GET);
         $this->request->setPath('currencies');
-        $this->response = $this->send($this->request);
+        $this->response = $this->sendRequest($this->request);
         $body           = json_decode($this->response->getBody(), true);
         if (empty($body['data'])) {
             throw new \Exception('Error with request');
@@ -173,10 +240,10 @@ class Client extends ContainerAware implements ClientInterface
         $this->request->setPath('tokens');
         $payload['guid'] = Util::guid();
         $this->request->setBody(json_encode($payload));
-        $this->response = $this->send($this->request);
+        $this->response = $this->sendRequest($this->request);
         $body           = json_decode($this->response->getBody(), true);
 
-        if (!empty($body['error'])) {
+        if (isset($body['error'])) {
             throw new \Exception($body['error']);
         }
 
@@ -194,6 +261,9 @@ class Client extends ContainerAware implements ClientInterface
     }
 
     /**
+     * Returns the Response object that BitPay returned from the request that
+     * was sent
+     *
      * @return ResponseInterface
      */
     public function getResponse()
@@ -202,6 +272,8 @@ class Client extends ContainerAware implements ClientInterface
     }
 
     /**
+     * Returns the request object that was sent to BitPay
+     *
      * @return RequestInterface
      */
     public function getRequest()
@@ -223,36 +295,54 @@ class Client extends ContainerAware implements ClientInterface
             'nonce' => Util::nonce(),
         );
         $this->request->setBody(json_encode($body));
-        $this->response = $this->send($this->request);
+        $this->response = $this->sendRequest($this->request);
         $body = json_decode($this->response->getBody(), true);
 
         return $body;
     }
 
-    protected function addIdentityHeader(RequestInterface $request)
+    /**
+     * @param RequestInterface $request
+     * @return ResponseInterface
+     */
+    public function sendRequest(RequestInterface $request)
     {
-        $manager = $this->container->get('key_manager');
-        $publicKey = $manager->load($this->container->getParameter('bitpay.public_key'));
-        $sin = new \Bitpay\SinKey();
-        $sin->setPublicKey($publicKey);
-        $sin->generate();
+        if (null === $this->adapter) {
+            // Uses the default adapter
+            $this->adapter = new \Bitpay\Client\Adapter\CurlAdapter();
+        }
 
-        //$request->setHeader('x-identity', (string) $sin);
-        $request->setHeader('x-identity', (string) $publicKey);
+        return $this->adapter->sendRequest($request);
     }
 
+    /**
+     * @param RequestInterface $request
+     */
+    protected function addIdentityHeader(RequestInterface $request)
+    {
+        if (null === $this->publicKey) {
+            throw new \Exception('Please set your Public Key.');
+        }
+
+        $request->setHeader('x-identity', (string) $this->publicKey);
+    }
+
+    /**
+     * @param RequestInterface $request
+     */
     protected function addSignatureHeader(RequestInterface $request)
     {
-        $manager    = $this->container->get('key_manager');
-        $privateKey = $manager->load($this->container->getParameter('bitpay.private_key'));
-        $bitauth    = new \Bitpay\Bitauth();
-        $message    = sprintf(
+        if (null === $this->privateKey) {
+            throw new \Exception('Please set your Private Key');
+        }
+
+        $message = sprintf(
             '%s%s',
             $request->getUri(),
             $request->getBody()
         );
 
-        $signature = $bitauth->sign($message, $privateKey);
+        $signature = $this->privateKey->sign($message);
 
         $request->setHeader('x-signature', $signature);
     }
@@ -263,8 +353,19 @@ class Client extends ContainerAware implements ClientInterface
     protected function createNewRequest()
     {
         $request = new Request();
-        $request->setHost($this->container->get('network')->getApiHost());
+        $request->setHost($this->network->getApiHost());
+        $this->prepareRequestHeaders($request);
 
+        return $request;
+    }
+
+    /**
+     * Prepares the request object by adding additional headers
+     *
+     * @param RequestInterface $request
+     */
+    protected function prepareRequestHeaders(RequestInterface $request)
+    {
         // @see http://en.wikipedia.org/wiki/User_agent
         $request->setHeader(
             'User-Agent',
@@ -273,17 +374,5 @@ class Client extends ContainerAware implements ClientInterface
         $request->setHeader('X-BitPay-Plugin-Info', sprintf('%s/%s', self::NAME, self::VERSION));
         $request->setHeader('Content-Type', 'application/json');
         $request->setHeader('X-Accept-Version', '2.0.0');
-
-        return $request;
-    }
-
-    /**
-     * @param RequestInterface $request
-     *
-     * @return ResponseInterface
-     */
-    protected function send(RequestInterface $request)
-    {
-        return $this->container->get('adapter')->sendRequest($request);
     }
 }
