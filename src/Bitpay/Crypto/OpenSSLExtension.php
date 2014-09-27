@@ -138,7 +138,7 @@ class OpenSSLExtension implements CryptoInterface
     {
         $random_data = openssl_random_pseudo_bytes($bytes, $cstrong);
 
-        if (!$cstrong || !$private_key) {
+        if (!$cstrong || !$random_data) {
             return false;
         } else {
             return bin2hex($random_data);
@@ -194,6 +194,6 @@ class OpenSSLExtension implements CryptoInterface
             return false;
         }
 
-        return openssl_csr_export($csr, string &$out, $notext);
+        return openssl_csr_export($csr, &$out, $notext);
     }
 }
