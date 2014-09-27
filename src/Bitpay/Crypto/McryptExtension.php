@@ -140,8 +140,8 @@ class McryptExtension implements CryptoInterface
             } else {
                 return $text;
             }
-        } catch (Exception $e) {
-            return 'Error: '.$e->getMessage();
+        } catch (\Exception $e) {
+            throw $e;
         }
     }
 
@@ -187,8 +187,8 @@ class McryptExtension implements CryptoInterface
             } else {
                 return $encrypted_text;
             }
-        } catch (Exception $e) {
-            return 'Error: '.$e->getMessage();
+        } catch (\Exception $e) {
+            throw $e;
         }
     }
 }
