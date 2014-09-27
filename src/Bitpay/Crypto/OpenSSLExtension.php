@@ -65,12 +65,10 @@ class OpenSSLExtension implements CryptoInterface
 
                 /* openssl keysize can't be smaller than 384 bits */
                 if ((int) $keybits < 384) {
-                    $this->addNotice('generateOpenSSLKeypair: Keybits param of "'.$keybits.'" is invalid. Setting to the minimum value of 384.');
                     $keybits = 384;
                 }
 
                 if (!isset($digest_alg) || trim($digest_alg) == '') {
-                    $this->addNotice('generateOpenSSLKeypair: Digest algorithm missing. Using sha512.');
                     $digest_alg = 'sha512';
                 }
 
@@ -87,11 +85,11 @@ class OpenSSLExtension implements CryptoInterface
                 $resource = openssl_pkey_new($config);
 
                 if (!$resource) {
-                    $this->addError('Error in generateOpenSSLKeypair: Could not create new OpenSSL resource.');
+                    throw new \Exception('Error in generateOpenSSLKeypair: Could not create new OpenSSL resource.');
 
                     /* with the openssl extension, you also have it's own errors returned */
                     while ($msg = openssl_error_string()) {
-                        $this->addError('Error in generateOpenSSLKeypair: OpenSSL reported error: '.$msg);
+                        throw new \Exception('Error in generateOpenSSLKeypair: OpenSSL reported error: '.$msg);
                     }
 
                     return false;
@@ -101,10 +99,10 @@ class OpenSSLExtension implements CryptoInterface
                     $publickey      = openssl_pkey_get_details($resource);
                     $keypair['pub'] = $publickey['key'];
                 } else {
-                    $this->addError('Error in generateOpenSSLKeypair: Private key could not be determined from OpenSSL key resource.');
+                    throw new \Exception('Error in generateOpenSSLKeypair: Private key could not be determined from OpenSSL key resource.');
 
                     while ($msg = openssl_error_string()) {
-                        $this->addError('Error in generateOpenSSLKeypair: OpenSSL reported error: '.$msg);
+                        throw new \Exception('Error in generateOpenSSLKeypair: OpenSSL reported error: '.$msg);
                     }
 
                     return false;
@@ -114,16 +112,16 @@ class OpenSSLExtension implements CryptoInterface
 
                 return $keypair;
             } else {
-                $this->addError('Error in generateOpenSSLKeypair: OpenSSL PHP extension missing. Cannot continue.');
+                throw new \Exception('Error in generateOpenSSLKeypair: OpenSSL PHP extension missing. Cannot continue.');
 
                 return false;
             }
         } catch (Exception $e) {
             while ($msg = openssl_error_string()) {
-                $this->addError('Error in generateOpenSSLKeypair: OpenSSL reported error: '.$msg);
+                throw new \Exception('Error in generateOpenSSLKeypair: OpenSSL reported error: '.$msg);
             }
 
-            $this->addError('Error in generateOpenSSLKeypair(): '.$e->getMessage());
+            throw $e;
 
             return false;
         }
