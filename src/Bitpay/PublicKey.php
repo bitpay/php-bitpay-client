@@ -107,8 +107,8 @@ class PublicKey extends Key
         $RxHex = Util::encodeHex($R->getX());
         $RyHex = Util::encodeHex($R->getY());
 
-        str_pad($RxHex, 64, '0', STR_PAD_LEFT);
-        str_pad($RyHex, 64, '0', STR_PAD_LEFT);
+        $RxHex = str_pad($RxHex, 64, '0', STR_PAD_LEFT);
+        $RyHex = str_pad($RyHex, 64, '0', STR_PAD_LEFT);
 
         $this->x   = $RxHex;
         $this->y   = $RyHex;
