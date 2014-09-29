@@ -72,3 +72,11 @@ Encrypted on Filesystem
     $password   = 'satoshi';
     $keyManager = new \Bitpay\KeyManager(new \Bitpay\Storage\EncryptedFilesystemStorage($password));
     $keyManager->persist($privateKey);
+
+Cookbook
+========
+
+.. toctree::
+    :maxdepth: 1
+
+    storage
