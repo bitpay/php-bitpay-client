@@ -171,15 +171,17 @@ class Bitauth
      */
     public static function serializeSig($r, $s)
     {
+        $byte = '';
+        $seq = '';
+        $dec = '';
+        $retval = array();
+        $digits = array();
+
         for ($x = 0; $x < 256; $x++) {
             $digits[$x] = chr($x);
         }
 
         $dec = Util::decodeHex($r);
-
-        $byte = '';
-        $seq = '';
-        $retval = array();
 
         while (gmp_cmp($dec, '0') > 0) {
             $dv = gmp_div($dec, '256');
