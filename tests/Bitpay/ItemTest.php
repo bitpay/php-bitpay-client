@@ -1,6 +1,6 @@
 <?php
 /**
- * @license Copyright 2011-2014 BitPay Inc., MIT License 
+ * @license Copyright 2011-2014 BitPay Inc., MIT License
  * see https://github.com/bitpay/php-bitpay-client/blob/master/LICENSE
  */
 
@@ -61,6 +61,15 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $this->item->setPrice(9.99);
         $this->assertNotNull($this->item->getPrice());
         $this->assertSame(9.99, $this->item->getPrice());
+        $float = (9.99 === $this->item->getPrice() ? true: false);
+
+        $this->item->setPrice("9.99");
+        $this->assertNotNull($this->item->getPrice());
+        $this->assertSame("9.99", $this->item->getPrice());
+        $string = ("9.99" === $this->item->getPrice() ? true: false);
+        if((true === $string) && (true === $float)) {
+          echo "setPrice accepts both strings and floats";
+        }
     }
 
     public function testGetQuantity()
