@@ -227,22 +227,23 @@ class Gmp
      */
     public static function gmpBinconv($hex)
     {
+        $rem = '';
+        $dv = '';
+        $byte = '';
+        $digits = array();
+
         for ($x = 0; $x < 256; $x++) {
             $digits[$x] = chr($x);
         }
 
-        $dec  = $hex;
-        $byte = '';
-        $seq  = '';
-
-        if (substr(strtolower($dec), 0, 2) != '0x') {
-            $dec = '0x'.strtolower($dec);
+        if (substr(strtolower($hex), 0, 2) != '0x') {
+            $hex = '0x'.strtolower($hex);
         }
 
-        while (gmp_cmp($dec, 0) > 0) {
-            $dv   = gmp_div($dec, 256);
-            $rem  = gmp_strval(gmp_mod($dec, 256));
-            $dec  = $dv;
+        while (gmp_cmp($hex, 0) > 0) {
+            $dv   = gmp_div($hex, 256);
+            $rem  = gmp_strval(gmp_mod($hex, 256));
+            $hex  = $dv;
             $byte = $byte.$digits[$rem];
         }
 
