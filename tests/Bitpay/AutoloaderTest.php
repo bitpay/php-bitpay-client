@@ -8,6 +8,30 @@ namespace Bitpay;
 
 class AutoloaderTest extends \PHPUnit_Framework_TestCase
 {
+
+    protected function teardown()
+    {
+        Autoloader::unregister();
+    }
+
+    /**
+     * Make sure that our autoloader is first in the queue
+     */
+    public function testRegister()
+    {
+        Autoloader::register();
+        $functions = spl_autoload_functions();
+        $this->assertSame(array('Bitpay\Autoloader','autoload'), $functions[0]);
+    }
+
+    public function testUnregister()
+    {
+        Autoloader::register();
+        $numOfAutoloaders = count(spl_autoload_functions());
+        Autoloader::unregister();
+        $this->assertCount($numOfAutoloaders - 1, spl_autoload_functions());
+    }
+
     public function testAutoload()
     {
         Autoloader::register();
