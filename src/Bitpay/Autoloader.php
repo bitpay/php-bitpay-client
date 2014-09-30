@@ -43,7 +43,7 @@ class Autoloader
     {
         $isBitpay = false;
 
-        if (0 === strpos($class, 'Bitpay')) {
+        if (0 === strpos($class, 'Bitpay\\')) {
             $isBitpay = true;
         }
 
