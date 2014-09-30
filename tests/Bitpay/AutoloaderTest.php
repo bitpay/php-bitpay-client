@@ -36,16 +36,16 @@ class AutoloaderTest extends \PHPUnit_Framework_TestCase
     {
         Autoloader::register();
 
-        Autoloader::autoload('Bitpay/Bitpay');
+        Autoloader::autoload('Bitpay\Bitpay');
         // Is only required once
-        Autoloader::autoload('Bitpay/Bitpay');
+        Autoloader::autoload('Bitpay\Bitpay');
     }
 
     /**
      */
     public function testNoClass()
     {
-        Autoloader::autoload('Foo/Bar');
+        Autoloader::autoload('Foo\Bar');
     }
 
     /**
@@ -53,6 +53,14 @@ class AutoloaderTest extends \PHPUnit_Framework_TestCase
      */
     public function testException()
     {
-        Autoloader::autoload('Bitpay/ClassThatWillNeverBeCreated');
+        Autoloader::autoload('Bitpay\ClassThatWillNeverBeCreated');
+    }
+
+    public function testNoExceptionForBitpayClasslike()
+    {
+        Autoloader::register();
+
+        // Magento Classes
+        Autoloader::autoload('Bitpay_Core_Model');
     }
 }
