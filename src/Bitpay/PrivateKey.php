@@ -259,15 +259,17 @@ class PrivateKey extends Key
      */
     public static function serializeSig($r, $s)
     {
+        $dec = '';
+        $byte = '';
+        $seq = '';
+        $digits = array();
+        $retval = array();
+
         for ($x = 0; $x < 256; $x++) {
             $digits[$x] = chr($x);
         }
 
         $dec = Util::decodeHex($r);
-
-        $byte = '';
-        $seq = '';
-        $retval = array();
 
         while (gmp_cmp($dec, '0') > 0) {
             $dv = gmp_div($dec, '256');
