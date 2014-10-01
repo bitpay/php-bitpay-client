@@ -158,18 +158,19 @@ class Client implements ClientInterface
         if (isset($body['error']) || isset($body['errors'])) {
             throw new \Exception('Error with request');
         }
+        $data = $body['data'];
         $invoice
-            ->setId($body['id'])
-            ->setUrl($body['url'])
-            ->setStatus($body['status'])
-            ->setBtcPrice($body['btcPrice'])
-            ->setPrice($body['price'])
-            ->setInvoiceTime($body['invoiceTime'])
-            ->setExpirationTime($body['expirationTime'])
-            ->setCurrentTime($body['currentTime'])
-            ->setBtcPaid($body['btcPaid'])
-            ->setRate($body['rate'])
-            ->setExceptionStatus($body['exceptionStatus']);
+            ->setId($data['id'])
+            ->setUrl($data['url'])
+            ->setStatus($data['status'])
+            ->setBtcPrice($data['btcPrice'])
+            ->setPrice($data['price'])
+            ->setInvoiceTime($data['invoiceTime'])
+            ->setExpirationTime($data['expirationTime'])
+            ->setCurrentTime($data['currentTime'])
+            ->setBtcPaid($data['btcPaid'])
+            ->setRate($data['rate'])
+            ->setExceptionStatus($data['exceptionStatus']);
 
         return $invoice;
     }
