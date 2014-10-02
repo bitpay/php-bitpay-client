@@ -61,15 +61,12 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $this->item->setPrice(9.99);
         $this->assertNotNull($this->item->getPrice());
         $this->assertSame(9.99, $this->item->getPrice());
-        $float = (9.99 === $this->item->getPrice() ? true: false);
+        $this->assertInternalType('float', $this->item->getPrice());
 
         $this->item->setPrice("9.99");
         $this->assertNotNull($this->item->getPrice());
         $this->assertSame("9.99", $this->item->getPrice());
-        $string = ("9.99" === $this->item->getPrice() ? true: false);
-        if((true === $string) && (true === $float)) {
-          echo "setPrice accepts both strings and floats";
-        }
+        $this->assertInternalType('string', $this->item->getPrice());
     }
 
     public function testGetQuantity()
