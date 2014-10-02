@@ -42,10 +42,11 @@ Used mostly for testing. You shouldn't need to change or update this.
 key_storage
 -----------
 
-The keys that this library generates can be stored on the filesystem and custom
-storage options can be created such as saving the keys to a database or even
-S3. This is still experimental and the only options that are supported are
-``mock`` and ``encypted_filesystem`` with filesystem being the default.
+The ``key_storage`` option allows you to give a class for persisting keys and
+loading them. The class must also implement ``Bitpay\Storage\StorageInterface``.
+
+By default this uses the ``Bitpay\Storage\EncryptedFilesystemStorage``.
+
 
 key_storage_password
 --------------------
