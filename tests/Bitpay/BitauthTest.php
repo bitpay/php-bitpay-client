@@ -35,26 +35,6 @@ class BitauthTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Bitpay\SinKey', $keys['sin']);
     }
 
-    public function testEncrypt()
-    {
-        $data = array(
-            // password, string, expected
-            array('', 'o hai, nsa. how i do teh cryptos?', '3uzFC7hwYwVQ57TfdSFwm4ntSeTXZohFhdZ6nvmeGDWjq9Lu8TENcKtPoRFvtRcHTf'),
-            array('s4705hiru13z!', 'o hai, nsa. how i do teh cryptos?', '68whtGQvJEXHGQrY9hPLJRhvzzbhygyG2pbAXkjUcEwYSmEKVLcri9nULpxKoxD3Ac'),
-        );
-
-        $bitauth = new Bitauth();
-
-        $this->assertNotNull($bitauth);
-
-        foreach ($data as $datum) {
-            //$this->assertSame($datum[2], $bitauth->encrypt($datum[0], $datum[1]));
-
-            // TODO: get value and use for assert. checking not null for now...
-            $this->assertNotNull($bitauth->Encrypt($datum, '12345', '123'));
-        }
-    }
-
     /**
      * Signatures are variable everytime...
      *
