@@ -1,6 +1,6 @@
 <?php
 /**
- * @license Copyright 2011-2014 BitPay Inc., MIT License 
+ * @license Copyright 2011-2014 BitPay Inc., MIT License
  * see https://github.com/bitpay/php-bitpay-client/blob/master/LICENSE
  */
 
@@ -14,7 +14,6 @@ use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 
 /**
- *
  * @package Bitpay
  */
 class BitpayExtension implements ExtensionInterface
@@ -36,10 +35,7 @@ class BitpayExtension implements ExtensionInterface
             'adapter.class',
             'Bitpay\Client\Adapter\\'.ContainerBuilder::camelize($config['adapter']).'Adapter'
         );
-        $container->setParameter(
-            'key_storage.class',
-            'Bitpay\Storage\\'.ContainerBuilder::camelize($config['key_storage']).'Storage'
-        );
+        $container->setParameter('key_storage.class', $config['key_storage']);
     }
 
     /**

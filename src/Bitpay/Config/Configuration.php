@@ -1,6 +1,6 @@
 <?php
 /**
- * @license Copyright 2011-2014 BitPay Inc., MIT License 
+ * @license Copyright 2011-2014 BitPay Inc., MIT License
  * see https://github.com/bitpay/php-bitpay-client/blob/master/LICENSE
  */
 
@@ -14,8 +14,9 @@ use Symfony\Component\Config\Definition\Builder\TreeBuilder;
  * If you update this file to add new settings, please make sure you update the
  * documentation as well.
  *
+ * @see http://symfony.com/doc/current/components/config/definition.html
+ *
  * @package Bitpay
- * @codeCoverageIgnore
  */
 class Configuration implements ConfigurationInterface
 {
@@ -49,11 +50,7 @@ class Configuration implements ConfigurationInterface
                     ->info('Client Adapter')
                     ->defaultValue('curl')
                 ->end()
-                ->enumNode('key_storage')
-                    ->values(array('filesystem', 'mock', 'encrypted_filesystem'))
-                    ->info('Where to store the keys at')
-                    ->defaultValue('encrypted_filesystem')
-                ->end()
+                ->append($this->addKeyStorageNode())
                 ->scalarNode('key_storage_password')
                     ->info('Used to encrypt and decrypt keys when saving to filesystem')
                     ->defaultNull()
@@ -61,5 +58,49 @@ class Configuration implements ConfigurationInterface
             ->end();
 
         return $treeBuilder;
+    }
+
+    /**
+     * Adds the key_storage node with validation rules
+     *
+     * key_storage MUST:
+     *     * implement Bitpay\Storage\StorageInterface
+     *     * be a class that can be loaded
+     */
+    protected function addKeyStorageNode()
+    {
+        $builder = new TreeBuilder();
+        $node    = $builder->root('key_storage', 'scalar');
+
+        $node
+            ->info('Class that is used to store your keys')
+            ->defaultValue('Bitpay\Storage\EncryptedFilesystemStorage')
+            ->validate()
+                ->always()
+                ->then(function ($value) {
+                    if (!class_exists($value, false)) {
+                        throw new \Exception(
+                            sprintf(
+                                'Could not find class "%s".',
+                                $value
+                            )
+                        );
+                    }
+
+                    // requires PHP >= 5.3.7
+                    if (!is_subclass_of($value, 'Bitpay\Storage\StorageInterface')) {
+                        throw new \Exception(
+                            sprintf(
+                                '"%s" does not implement "Bitpay\Storage\StorageInterface"',
+                                $value
+                            )
+                        );
+                    }
+
+                    return $value;
+                })
+            ->end();
+
+        return $node;
     }
 }
