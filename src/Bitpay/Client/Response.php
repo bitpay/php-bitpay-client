@@ -1,6 +1,6 @@
 <?php
 /**
- * @license Copyright 2011-2014 BitPay Inc., MIT License 
+ * @license Copyright 2011-2014 BitPay Inc., MIT License
  * see https://github.com/bitpay/php-bitpay-client/blob/master/LICENSE
  */
 
@@ -60,9 +60,7 @@ class Response implements ResponseInterface
         for ($i = 0; $i < count($lines); $i++) {
             if (0 == $i) {
                 preg_match('/^HTTP\/(\d\.\d)\s(\d+)\s(.+)/', $lines[$i], $statusLine);
-                $version    = $statusLine[1];
                 $response->setStatusCode($statusCode = $statusLine[2]);
-                $statusTest = $statusLine[3];
                 continue;
             }
 

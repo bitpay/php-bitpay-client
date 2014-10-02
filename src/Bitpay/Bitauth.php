@@ -24,13 +24,11 @@ class Bitauth
     public function __construct()
     {
         if (!function_exists('openssl_open')) {
-            // TODO: Throw exception
-            die('FATAL Error in Bitauth::construct(): Your OpenSSL implementation is either too old or broken. Please contact your server administrator.');
+            throw new Exception('Your OpenSSL implementation is either too old or broken. Please contact your server administrator.');
         }
 
         if (!function_exists('mcrypt_list_algorithms')) {
-            // TODO: Throw exception
-            die('FATAL Error in Bitauth::construct(): Missing mcrypt PHP extension. Cannot continue.');
+            throw new Exception('Missing mcrypt PHP extension. Cannot continue.');
         }
     }
 
@@ -245,11 +243,11 @@ class Bitauth
 
         // check to see if r,s are in [1,n-1]
         if (gmp_cmp($r, 1) <= 0 && gmp_cmp($r, $n_hex) > 0) {
-            die('FATAL Error in Bitauth::verifySignature(): r is out of range!');
+            throw new Exception('r is out of range!');
         }
 
         if (gmp_cmp($s, 1) <= 0 && gmp_cmp($s, $n_hex) > 0) {
-            die('FATAL Error in Bitauth::verifySignature():s is out of range!');
+            throw new Exception('s is out of range!');
         }
 
         // convert the hash of the hex message to decimal
