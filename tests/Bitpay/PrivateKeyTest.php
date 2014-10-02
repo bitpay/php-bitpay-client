@@ -30,7 +30,7 @@ class PrivateKeyTest extends \PHPUnit_Framework_TestCase
         $priKey->generate();
 
         $this->assertEquals(64, strlen($priKey->getHex()));
-        $this->assertGreaterThanOrEqual(76, strlen($priKey->getDec()));
+        $this->assertGreaterThanOrEqual(72, strlen($priKey->getDec()));
     }
 
     public function testGenerateCannotHappenTwice()
