@@ -329,7 +329,7 @@ class PrivateKey extends Key
      * @param  string $pem_data The data to decode.
      * @return array            The keypair info.
      */
-    private function pemDecode($pem_data)
+    public function pemDecode($pem_data)
     {
         $beg_ec_text = '-----BEGIN EC PRIVATE KEY-----';
         $end_ec_text = '-----END EC PRIVATE KEY-----';
