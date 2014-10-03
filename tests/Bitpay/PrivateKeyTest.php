@@ -87,7 +87,7 @@ class PrivateKeyTest extends \PHPUnit_Framework_TestCase
 
         $priKey->generate();
 
-        $this->assertGreaterThanOrEqual(76, strlen($priKey->getDec()));
+        $this->assertGreaterThanOrEqual(72, strlen($priKey->getDec()));
     }
 
     public function testIsValid()
