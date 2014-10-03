@@ -342,7 +342,7 @@ class PrivateKey extends Key
         $pem_data = str_ireplace($end_ec_text, '', $pem_data);
         $pem_data = str_ireplace("\r", '', trim($pem_data));
         $pem_data = str_ireplace("\n", '', trim($pem_data));
-        $pem_data = str_ireplace(' ',  '', trim($pem_data));
+        $pem_data = str_ireplace(' ', '', trim($pem_data));
 
         $decoded = bin2hex(base64_decode($pem_data));
 
@@ -351,9 +351,9 @@ class PrivateKey extends Key
         }
 
         $ecpemstruct = array(
-                'oct_sec_val'  => substr($decoded,14,64),
-                'obj_id_val'   => substr($decoded,86,10),
-                'bit_str_val'  => substr($decoded,106),
+                'oct_sec_val'  => substr($decoded, 14, 64),
+                'obj_id_val'   => substr($decoded, 86, 10),
+                'bit_str_val'  => substr($decoded, 106),
         );
 
         if ($ecpemstruct['obj_id_val'] != '2b8104000a') {
