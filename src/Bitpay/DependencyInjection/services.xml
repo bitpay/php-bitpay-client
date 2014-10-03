@@ -17,8 +17,8 @@
         <service id="adapter" class="%adapter.class%" />
 
         <service id="client" class="Bitpay\Client\Client">
-            <call method="setContainer">
-                <argument type="service" id="service_container" />
+            <call method="setNetwork">
++                <argument type="service" id="network" />
             </call>
             <call method="setAdapter">
                 <argument type="service" id="adapter" />
