@@ -13,4 +13,4 @@ script:
     - php bin/phpcs -n --standard=PSR1,PSR2 --report=full src/
 
 notifications:
-    email: false
+    email: true
