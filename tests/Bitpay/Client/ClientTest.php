@@ -130,7 +130,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
 
         $adapter = $this->getMockAdapter();
         $response = $this->getMockResponse();
-        $response->method('getBody')->will('{"error":""}');
+        $response->method('getBody')->will($this->returnValue('{"error":""}'));
         $adapter->method('sendRequest')->willReturn($response);
         $this->client->setAdapter($adapter);
 
