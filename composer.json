@@ -39,7 +39,7 @@
     },
     "require-dev": {
         "codegyre/robo": "*",
-        "phpunit/phpunit": "*",
+        "phpunit/phpunit": "~4.2",
         "fzaninotto/faker": "*",
         "mikey179/vfsStream": "*",
         "squizlabs/php_codesniffer": "*"
