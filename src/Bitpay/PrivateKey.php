@@ -194,63 +194,6 @@ class PrivateKey extends Key
         );
 
         return $sig['sig_hex']['seq'];
-        // TODO: Signature code is already in Bitauth so is this needed here?
-
-        if (empty($message)) {
-            throw new \Exception('You did not provide a message to hash.');
-        }
-
-        $e = Util::decodeHex(hash('sha256', $message));
-
-        do {
-            if (substr(strtolower($this->hex), 0, 2) != '0x') {
-                $d = '0x'.$this->hex;
-            } else {
-                $d = $this->hex;
-            }
-
-            $k = SecureRandom::generateRandom(32);
-
-            $kHex = '0x'.strtolower(bin2hex($k));
-
-            $gX   = '0x'.substr(Secp256k1::G, 2, 64);
-            $gY   = '0x'.substr(Secp256k1::G, 66, 64);
-
-            $p = new Point($gX, $gY);
-            $r = Gmp::doubleAndAdd($this->hex, $p);
-
-            $rXHex = Util::encodeHex($r->getX());
-            $rYHex = Util::encodeHex($r->getY());
-
-            while (strlen($rXHex) < 64) {
-                $rXHex = '0'.$rXHex;
-            }
-
-            while (strlen($rYHex) < 64) {
-                $rYHex = '0'.$rYHex;
-            }
-
-            $r2   = gmp_strval(gmp_mod('0x'.$rXHex, '0x'.Secp256k1::N));
-            $edr  = gmp_add($e, gmp_mul($d, $r2));
-            $invk = gmp_invert($kHex, '0x'.Secp256k1::N);
-            $kedr = gmp_mul($invk, $edr);
-            $s    = gmp_strval(gmp_mod($kedr, '0x'.Secp256k1::N));
-
-            $signature = array(
-                'r' => Util::encodeHex($r2),
-                's' => Util::encodeHex($s),
-            );
-
-            while (strlen($signature['r']) < 64) {
-                $signature['r'] = '0'.$signature['r'];
-            }
-
-            while (strlen($signature['s']) < 64) {
-                $signature['s'] = '0'.$signature['s'];
-            }
-        } while (gmp_cmp($r2, '0') <= 0 || gmp_cmp($s, '0') <= 0);
-
-        return $signature;
     }
 
     public function isGenerated()
