@@ -436,7 +436,7 @@ class PrivateKey extends Key
             $byte = $byte.$digits[$rem];
         }
 
-        $byte = $beg_ec_text . "\r\n" . chunk_splt(base64_encode(strrev($byte)), 64) . $end_ec_text;
+        $byte = $beg_ec_text . "\r\n" . chunk_split(base64_encode(strrev($byte)), 64) . $end_ec_text;
 
         $this->pemEncoded = $byte;
 
