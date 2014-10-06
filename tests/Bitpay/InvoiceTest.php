@@ -504,6 +504,13 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(600.00, $this->invoice->getRate());
     }
 
+    public function testSetFullNotifications()
+    {
+        $this->assertFalse($this->invoice->isFullNotifications());
+        $this->invoice->setFullNotifications(true);
+        $this->assertTrue($this->invoice->isFullNotifications());
+    }
+
     private function getMockItem()
     {
         return new \Bitpay\Item();
