@@ -34,6 +34,7 @@
         "ext-json": "*",
         "ext-openssl": "*",
         "ext-mcrypt": "*",
+        "bitpay/php-client": "~2.0@dev",
         "symfony/config": "~2.3",
         "symfony/dependency-injection": "~2.3"
     },
