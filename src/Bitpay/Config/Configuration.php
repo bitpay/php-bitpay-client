@@ -78,7 +78,7 @@ class Configuration implements ConfigurationInterface
             ->validate()
                 ->always()
                 ->then(function ($value) {
-                    if (!class_exists($value, false)) {
+                    if (!class_exists($value)) {
                         throw new \Exception(
                             sprintf(
                                 'Could not find class "%s".',

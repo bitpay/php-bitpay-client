@@ -22,3 +22,24 @@ Contents:
     contributing
     testing
     license
+
+Documentation Conventions
+=========================
+
+.. note::
+
+    Notes are used to provide some extra information.
+
+.. warning::
+
+    Warnings are used when things might get a little tricky or when a lot of
+    people are having issues.
+
+.. versionadded:: 2.0.0
+    Sometimes things are added
+
+.. versionchanged:: 2.1.0
+    Sometimes things get updated
+
+.. deprecated:: 2.2.0
+    And sometimes things need to go away

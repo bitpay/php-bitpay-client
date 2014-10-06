@@ -23,11 +23,6 @@ private_key
 
 Default for this is ``$HOME/.bitpay/bitpay.key``
 
-sin_key
--------
-
-Default is ``$HOME/.bitpay/bitpay.sin``
-
 network
 -------
 
