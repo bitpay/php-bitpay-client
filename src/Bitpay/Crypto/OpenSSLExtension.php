@@ -35,7 +35,7 @@ class OpenSSLExtension implements CryptoInterface
      *
      * @param int
      * @param string
-     * @return array
+     * @return array|boolean array of keys on success, boolean false on failure
      */
     final public function generateKeypair($keybits = 512, $digest_alg = 'sha512')
     {
