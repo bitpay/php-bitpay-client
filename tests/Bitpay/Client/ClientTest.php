@@ -22,31 +22,43 @@ class ClientTest extends \PHPUnit_Framework_TestCase
 
     public function testCreateInvoice()
     {
-        $item = $this->getMockItem();
-        $item->method('getPrice')->will($this->returnValue(1));
 
         $buyer = $this->getMockBuyer();
         $buyer->method('getAddress')->will($this->returnValue(array()));
 
-        $invoice = $this->getMockInvoice();
-        $invoice->method('getItem')->willReturn($item);
-        $invoice->method('getBuyer')->willReturn($buyer);
+        $currency = $this->getMockCurrency();
+        $currency->method('getCode')->will($this->returnValue('USD'));
 
-        $invoice->method('setId')->will($this->returnSelf());
-        $invoice->method('setUrl')->will($this->returnSelf());
-        $invoice->method('setStatus')->will($this->returnSelf());
-        $invoice->method('setBtcPrice')->will($this->returnSelf());
-        $invoice->method('setPrice')->will($this->returnSelf());
-        $invoice->method('setInvoiceTime')->will($this->returnSelf());
-        $invoice->method('setExpirationTime')->will($this->returnSelf());
-        $invoice->method('setCurrentTime')->will($this->returnSelf());
-        $invoice->method('setBtcPaid')->will($this->returnSelf());
-        $invoice->method('setRate')->will($this->returnSelf());
-        $invoice->method('setExceptionStatus')->will($this->returnSelf());
-        $invoice->method('getCurrency')->willReturn($this->getMockCurrency());
+        $invoice = new \Bitpay\Invoice();
+        $invoice->setOrderId('TEST-01');
+
+        $invoice->setCurrency($currency);
+
+        $item = new \Bitpay\Item();
+        $item->setPrice('19.95');
+        $invoice->setItem($item);
+
+
+        $response = $this->getMockResponse();
+        $response->method('getBody')->willReturn(file_get_contents(__DIR__ . '/../../DataFixtures/invoice.json'));
+
+        $adapter = $this->getMockAdapter();
+        $adapter->method('sendRequest')->willReturn($response);
+        $this->client->setAdapter($adapter);
 
         $invoice = $this->client->createInvoice($invoice);
         $this->assertInstanceOf('Bitpay\InvoiceInterface', $invoice);
+        $this->assertEquals('abcdefghijkmnopqrstuvw', $invoice->getId());
+        $this->assertEquals('https://test.bitpay.com/invoice?id=abcdefghijkmnopqrstuvw', $invoice->getUrl());
+        $this->assertEquals('new', $invoice->getStatus());
+        $this->assertEquals('0.0632', $invoice->getBtcPrice());
+        $this->assertEquals(19.95, $invoice->getPrice());
+        $this->assertEquals(1412594514486, $invoice->getInvoiceTime());
+        $this->assertEquals(1412595414486, $invoice->getExpirationTime());
+        $this->assertEquals(1412594514518, $invoice->getCurrentTime());
+        $this->assertEquals('0.0000', $invoice->getBtcPaid());
+        $this->assertEquals(315.7, $invoice->getRate());
+        $this->assertEquals(false, $invoice->getExceptionStatus());
     }
 
     /**
