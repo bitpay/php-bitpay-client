@@ -34,9 +34,7 @@ For this example, we will use ``USD`` as our currency of choice.
 
 .. code-block:: php
 
-    $currency = new \Bitpay\Currency();
-    $currency->setCode('USD');
-    $invoice->setCurrency($currency);
+    $invoice->setCurrency(new \Bitpay\Currency('USD'));
 
 Now the invoice knows what currency to use. Next it needs a price.
 

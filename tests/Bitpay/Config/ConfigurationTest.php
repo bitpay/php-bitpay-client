@@ -31,14 +31,43 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException Exception
      */
-    public function testInvalidKeyStorageClass()
+    public function testClassNotFoundKeyStorageConfig()
     {
-        $processor       = new Processor();
-        $processedConfig = $processor->processConfiguration(
+        $processor = new Processor();
+        $processor->processConfiguration(
             new Configuration(),
             array(
                 'bitpay' => array(
                     'key_storage' => 'Foo\Bar'
+                )
+            )
+        );
+    }
+
+    /**
+     * @expectedException Exception
+     */
+    public function testClassDoesNotImplementInterfaceKeyStorageConfig()
+    {
+        $processor = new Processor();
+        $processor->processConfiguration(
+            new Configuration(),
+            array(
+                'bitpay' => array(
+                    'key_storage' => 'stdClass'
+                )
+            )
+        );
+    }
+
+    public function testAcceptableKeyStorageConfig()
+    {
+        $processor = new Processor();
+        $processor->processConfiguration(
+            new Configuration(),
+            array(
+                'bitpay' => array(
+                    'key_storage' => '\\Bitpay\\Storage\\EncryptedFilesystemStorage'
                 )
             )
         );
