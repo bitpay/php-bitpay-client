@@ -117,7 +117,7 @@ class PrivateKey extends Key
      */
     public function sign($data)
     {
-        if ($this->isGenerated()) {
+        if ($this->isGenerated() === false) {
             $this->generate();
         }
 
