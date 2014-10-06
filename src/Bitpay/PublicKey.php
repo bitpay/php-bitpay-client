@@ -141,5 +141,4 @@ class PublicKey extends Key
 
         return $this->sin;
     }
-
 }
