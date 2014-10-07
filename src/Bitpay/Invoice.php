@@ -48,7 +48,7 @@ class Invoice implements InvoiceInterface
     protected $redirectUrl;
 
     /**
-     * @var array|object
+     * @var string
      */
     protected $posData;
 
@@ -317,7 +317,7 @@ class Invoice implements InvoiceInterface
     }
 
     /**
-     * @param array|object $posData
+     * @param string $posData
      *
      * @return InvoiceInterface
      */

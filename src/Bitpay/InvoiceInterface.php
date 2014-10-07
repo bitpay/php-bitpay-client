@@ -15,10 +15,10 @@ interface InvoiceInterface
 {
     /**
      * An invoice starts in this state.  When in this state and only in this state, payments
-     * to the associated bitcoin address are credited to the invoice.  If an invoice has�
-     * received a partial payment, it will still reflect a status of new to the merchant�
+     * to the associated bitcoin address are credited to the invoice.  If an invoice has
+     * received a partial payment, it will still reflect a status of new to the merchant
      * (from a merchant system perspective, an invoice is either paid or not paid, partial
-     * payments and over payments are handled by bitpay.com by either refunding the�
+     * payments and over payments are handled by bitpay.com by either refunding the
      * customer or applying the funds to a new invoice.
      */
     const STATUS_NEW = 'new';
@@ -31,13 +31,13 @@ interface InvoiceInterface
 
     /**
      * The transaction speed preference of an invoice determines when an invoice is
-     * confirmed.  For the high speed setting, it will be confirmed as soon as full�
+     * confirmed.  For the high speed setting, it will be confirmed as soon as full
      * payment is received on the bitcoin network (note, the invoice will go from a status
-     * of new to confirmed, bypassing the paid status).  For the medium speed setting,�
+     * of new to confirmed, bypassing the paid status).  For the medium speed setting,
      * the invoice is confirmed after the payment transaction(s) have been confirmed by
      * 1 block on the bitcoin network.  For the low speed setting, 6 blocks on the bitcoin
-     * network are required.  Invoices are considered complete after 6 blocks on the�
-     * bitcoin network, therefore an invoice will go from a paid status directly to a�
+     * network are required.  Invoices are considered complete after 6 blocks on the
+     * bitcoin network, therefore an invoice will go from a paid status directly to a
      * complete status if the transaction speed is set to low.
      */
     const STATUS_CONFIRMED = 'confirmed';
@@ -46,7 +46,7 @@ interface InvoiceInterface
      * When an invoice is complete, it means that BitPay.com has credited the
      * merchant’s account for the invoice.  Currently, 6 confirmation blocks on the
      * bitcoin network are required for an invoice to be complete.  Note, in the future (for
-     * qualified payers), invoices may move to a complete status immediately upon�
+     * qualified payers), invoices may move to a complete status immediately upon
      * payment, in which case the invoice will move directly from a new status to a
      * complete status.
      */
@@ -60,10 +60,10 @@ interface InvoiceInterface
 
     /**
      * An invoice is considered invalid when it was paid, but payment was not confirmed
-     * within 1 hour after receipt.  It is possible that some transactions on the bitcoin�
-     * network can take longer than 1 hour to be included in a block.  In such�
-     * circumstances, once payment is confirmed, BitPay.com will make arrangements�
-     * with the merchant regarding the funds (which can either be credited to the�
+     * within 1 hour after receipt.  It is possible that some transactions on the bitcoin
+     * network can take longer than 1 hour to be included in a block.  In such
+     * circumstances, once payment is confirmed, BitPay.com will make arrangements
+     * with the merchant regarding the funds (which can either be credited to the
      * merchant account on another invoice, or returned to the buyer).
      */
     const STATUS_INVALID = 'invalid';
@@ -77,7 +77,7 @@ interface InvoiceInterface
 
     /**
      * This is the amount that is required to be collected from the buyer. Note, if this is
-     * specified in a currency other than BTC, the price will be converted into BTC at�
+     * specified in a currency other than BTC, the price will be converted into BTC at
      * market exchange rates to determine the amount collected from the buyer.
      *
      * @return string
