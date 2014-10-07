@@ -26,11 +26,6 @@ class PublicKey extends Key
     protected $privateKey;
 
     /**
-     * @var boolean
-     */
-    protected $generated = false;
-
-    /**
      * Returns the compressed public key value
      *
      * @return string
@@ -78,7 +73,7 @@ class PublicKey extends Key
      */
     public function generate()
     {
-        if ($this->generated) {
+        if (!empty($this->hex)) {
             return $this;
         }
 
@@ -114,7 +109,6 @@ class PublicKey extends Key
         $this->y   = $RyHex;
         $this->hex = sprintf('%s%s', $RxHex, $RyHex);
         $this->dec = Util::decodeHex($this->hex);
-        $this->generated = true;
 
         return $this;
     }
@@ -135,7 +129,7 @@ class PublicKey extends Key
      */
     public function getSin()
     {
-        if (!$this->isGenerated()) {
+        if (empty($this->hex)) {
             $this->generate();
         }
 
@@ -146,13 +140,5 @@ class PublicKey extends Key
         }
 
         return $this->sin;
-    }
-
-    /**
-     * @return boolean
-     */
-    public function isGenerated()
-    {
-        return $this->generated;
     }
 }

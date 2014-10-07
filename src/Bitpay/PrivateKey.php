@@ -23,11 +23,6 @@ class PrivateKey extends Key
     protected $publicKey;
 
     /**
-     * @var boolean
-     */
-    protected $generated = false;
-
-    /**
      * @var string
      */
     public $pemEncoded = '';
@@ -66,7 +61,7 @@ class PrivateKey extends Key
      */
     public function generate()
     {
-        if ($this->isGenerated()) {
+        if (!empty($this->hex)) {
             return $this;
         }
 
@@ -76,8 +71,6 @@ class PrivateKey extends Key
         } while (gmp_cmp('0x'.$this->hex, '1') <= 0 || gmp_cmp('0x'.$this->hex, '0x'.Secp256k1::N) >= 0);
 
         $this->dec = Util::decodeHex($this->hex);
-
-        $this->generated = true;
 
         return $this;
     }
@@ -117,7 +110,7 @@ class PrivateKey extends Key
      */
     public function sign($data)
     {
-        if (!ctype_xdigit($this->getHex())) {
+        if (!ctype_xdigit($this->hex)) {
             throw new \Exception('The private key must be in hex format.');
         }
 
@@ -128,10 +121,10 @@ class PrivateKey extends Key
         $e = Util::decodeHex(hash('sha256', $data));
 
         do {
-            if (substr(strtolower($this->getHex()), 0, 2) != '0x') {
-                $d = '0x'.$this->getHex();
+            if (substr(strtolower($this->hex), 0, 2) != '0x') {
+                $d = '0x'.$this->hex;
             } else {
-                $d = $this->getHex();
+                $d = $this->hex;
             }
 
             $k = SecureRandom::generateRandom(32);
@@ -152,21 +145,17 @@ class PrivateKey extends Key
             $Rx_hex = Util::encodeHex($R->getX());
             $Ry_hex = Util::encodeHex($R->getY());
 
-            while (strlen($Rx_hex) < 64) {
-                $Rx_hex = '0'.$Rx_hex;
-            }
-
-            while (strlen($Ry_hex) < 64) {
-                $Ry_hex = '0'.$Ry_hex;
-            }
+            $Rx_hex = str_pad($Rx_hex, 64, '0', STR_PAD_LEFT);
+            $Ry_hex = str_pad($Ry_hex, 64, '0', STR_PAD_LEFT);
 
             // r = x1 mod n
             $r = gmp_strval(gmp_mod('0x'.$Rx_hex, $n_hex));
 
             // s = k^-1 * (e+d*r) mod n
-            $edr = gmp_add($e, gmp_mul($d, $r));
+            $edr  = gmp_add($e, gmp_mul($d, $r));
             $invk = gmp_invert($k_hex, $n_hex);
             $kedr = gmp_mul($invk, $edr);
+
             $s = gmp_strval(gmp_mod($kedr, $n_hex));
 
             // The signature is the pair (r,s)
@@ -175,26 +164,17 @@ class PrivateKey extends Key
                 's' => Util::encodeHex($s),
             );
 
-            while (strlen($signature['r']) < 64) {
-                $signature['r'] = '0'.$signature['r'];
-            }
+            $signature['r'] = str_pad($signature['r'], 64, '0', STR_PAD_LEFT);
+            $signature['s'] = str_pad($signature['s'], 64, '0', STR_PAD_LEFT);
 
-            while (strlen($signature['s']) < 64) {
-                $signature['s'] = '0'.$signature['s'];
-            }
         } while (gmp_cmp($r, '0') <= 0 || gmp_cmp($s, '0') <= 0);
 
         $sig = array(
-            'sig_rs' => $signature,
+            'sig_rs'  => $signature,
             'sig_hex' => self::serializeSig($signature['r'], $signature['s']),
         );
 
         return $sig['sig_hex']['seq'];
-    }
-
-    public function isGenerated()
-    {
-        return $this->generated;
     }
 
     /**
@@ -208,9 +188,10 @@ class PrivateKey extends Key
      */
     public static function serializeSig($r, $s)
     {
-        $dec = '';
+        $dec  = '';
         $byte = '';
-        $seq = '';
+        $seq  = '';
+
         $digits = array();
         $retval = array();
 
