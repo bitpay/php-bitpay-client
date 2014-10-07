@@ -360,6 +360,13 @@ class Invoice implements InvoiceInterface
         return $this->fullNotifications;
     }
 
+    public function setFullNotifications($notifications)
+    {
+        $this->fullNotifications = (boolean) $notifications;
+
+        return $this;
+    }
+
     /**
      * @inheritdoc
      */

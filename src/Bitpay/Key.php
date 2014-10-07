@@ -102,4 +102,12 @@ abstract class Key extends Point implements KeyInterface
             $this->dec
         ) = unserialize($data);
     }
+    
+    /**
+     * @return boolean
+     */
+    public function isGenerated()
+    {
+        return (!empty($this->hex));
+    }
 }
