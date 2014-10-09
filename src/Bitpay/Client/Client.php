@@ -272,11 +272,6 @@ class Client implements ClientInterface
         $this->request = $this->createNewRequest();
         $this->request->setMethod(Request::METHOD_GET);
         $this->request->setPath(sprintf('invoices/%s', $invoiceId));
-        $body = array(
-            'guid'  => Util::guid(),
-            'nonce' => Util::nonce(),
-        );
-        $this->request->setBody(json_encode($body));
         $this->response = $this->sendRequest($this->request);
         $body = json_decode($this->response->getBody(), true);
 
@@ -284,7 +279,29 @@ class Client implements ClientInterface
             throw new \Exception($body['error']);
         }
 
-        return $body['data'];
+        $data = $body['data'];
+
+        $invoice = new \Bitpay\Invoice();
+        $invoice
+            //->setToken($data['token'])
+            //->setBtcDue($data['btcDue'])
+            //->setExRates($data['exRates'])
+            ->setUrl($data['url'])
+            ->setPosData($data['posData'])
+            ->setStatus($data['status'])
+            ->setBtcPrice($data['btcPrice'])
+            ->setPrice($data['price'])
+            ->setCurrency(new \Bitpay\Currency($data['currency']))
+            ->setOrderId($data['orderId'])
+            ->setInvoiceTime($data['invoiceTime'])
+            ->setExpirationTime($data['expirationTime'])
+            ->setCurrentTime($data['currentTime'])
+            ->setId($data['id'])
+            ->setBtcPaid($data['btcPrice'])
+            ->setRate($data['rate'])
+            ->setExceptionStatus($data['exceptionStatus']);
+
+        return $invoice;
     }
 
     /**

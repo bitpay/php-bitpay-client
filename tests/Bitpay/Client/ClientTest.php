@@ -209,7 +209,8 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $adapter = $this->getMockAdapter();
         $adapter->method('sendRequest')->willReturn($response);
         $this->client->setAdapter($adapter);
-        $this->client->getInvoice('5NxFkXcJbCSivtQRJa4kHP');
+        $invoice = $this->client->getInvoice('5NxFkXcJbCSivtQRJa4kHP');
+        $this->assertInstanceOf('Bitpay\InvoiceInterface', $invoice);
     }
 
     /**
