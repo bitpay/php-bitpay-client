@@ -1,6 +1,6 @@
 <?php
 /**
- * @license Copyright 2011-2014 BitPay Inc., MIT License 
+ * @license Copyright 2011-2014 BitPay Inc., MIT License
  * see https://github.com/bitpay/php-bitpay-client/blob/master/LICENSE
  */
 
@@ -279,6 +279,10 @@ class Client implements ClientInterface
         $this->request->setBody(json_encode($body));
         $this->response = $this->sendRequest($this->request);
         $body = json_decode($this->response->getBody(), true);
+
+        if (isset($body['error'])) {
+            throw new \Exception($body['error']);
+        }
 
         return $body['data'];
     }
