@@ -280,7 +280,7 @@ class Client implements ClientInterface
         $this->response = $this->sendRequest($this->request);
         $body = json_decode($this->response->getBody(), true);
 
-        return $body;
+        return $body['data'];
     }
 
     /**
