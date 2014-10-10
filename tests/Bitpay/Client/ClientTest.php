@@ -201,6 +201,31 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $this->client->createToken(array('id'=>'','pairingCode'=>''));
     }
 
+    public function testGetInvoice()
+    {
+        $response = $this->getMockResponse();
+        $response->method('getBody')->willReturn(file_get_contents(__DIR__ . '/../../DataFixtures/invoices/5NxFkXcJbCSivtQRJa4kHP.json'));
+
+        $adapter = $this->getMockAdapter();
+        $adapter->method('sendRequest')->willReturn($response);
+        $this->client->setAdapter($adapter);
+        $invoice = $this->client->getInvoice('5NxFkXcJbCSivtQRJa4kHP');
+        $this->assertInstanceOf('Bitpay\InvoiceInterface', $invoice);
+    }
+
+    /**
+     * @expectedException Exception
+     */
+    public function testGetInvoiceException()
+    {
+        $response = $this->getMockResponse();
+        $response->method('getBody')->willReturn('{"error":"Object not found"}');
+        $adapter = $this->getMockAdapter();
+        $adapter->method('sendRequest')->willReturn($response);
+        $this->client->setAdapter($adapter);
+        $this->client->getInvoice('5NxFkXcJbCSivtQRJa4kHP');
+    }
+
     private function getMockInvoice()
     {
         $invoice = $this->getMockBuilder('Bitpay\InvoiceInterface')
