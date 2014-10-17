@@ -57,7 +57,7 @@ class CurlAdapter implements AdapterInterface
 
         if (false === $raw) {
             curl_close($curl);
-            throw \Exception(curl_error($curl));
+            throw new \Exception(curl_error($curl));
         }
 
         /** @var ResponseInterface */
