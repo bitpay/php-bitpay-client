@@ -53,8 +53,15 @@ class CurlAdapter implements AdapterInterface
             );
         }
 
+        $raw = curl_exec($curl);
+
+        if (false === $raw) {
+            curl_close($curl);
+            throw \Exception(curl_error($curl));
+        }
+
         /** @var ResponseInterface */
-        $response = Response::createFromRawResponse(curl_exec($curl));
+        $response = Response::createFromRawResponse($raw);
 
         curl_close($curl);
 
