@@ -12,24 +12,43 @@ namespace Bitpay\Crypto;
 class McryptExtensionTest extends \PHPUnit_Framework_TestCase
 {
 
-    public function testEncrypt()
+    public function testHasSupport()
     {
-        $data = array(
-            // password, string, expected
-            array('', 'o hai, nsa. how i do teh cryptos?', '3uzFC7hwYwVQ57TfdSFwm4ntSeTXZohFhdZ6nvmeGDWjq9Lu8TENcKtPoRFvtRcHTf'),
-            array('s4705hiru13z!', 'o hai, nsa. how i do teh cryptos?', '68whtGQvJEXHGQrY9hPLJRhvzzbhygyG2pbAXkjUcEwYSmEKVLcri9nULpxKoxD3Ac'),
-        );
+        $mcrypt = new McryptExtension();
+        $this->assertSame(extension_loaded('mcrypt'), $mcrypt->hasSupport());
+    }
+
+    public function testEncryptAndDecrypt()
+    {
 
         $mcrypt = new McryptExtension();
 
         $this->assertNotNull($mcrypt);
 
-        foreach ($data as $datum) {
-            //$this->assertSame($datum[2], $mcrypt->encrypt($datum[0], $datum[1]));
+        for ($i=1; $i<=20; $i++) {
+            $plaintext = $this->generateRandomString($i);
+            $key = $this->generateRandomString(8);
 
-            // TODO: get value and use for assert. checking not null for now...
-            $this->assertNotNull($mcrypt->Encrypt($datum, '12345', '123'));
+            $iv_size = $mcrypt->getIVSize();
+            $iv = mcrypt_create_iv($iv_size);
+
+            $encryptedtext = $mcrypt->encrypt($plaintext, $key, $iv);
+            $this->assertNotEquals($plaintext, $encryptedtext);
+
+            $decryptedtext = $mcrypt->decrypt($encryptedtext, $key, $iv);
+            $this->assertEquals($plaintext, $decryptedtext);
         }
+    }
+
+    private function generateRandomString($length = 10)
+    {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, strlen($characters) - 1)];
+        }
+
+        return $randomString;
     }
 
 }

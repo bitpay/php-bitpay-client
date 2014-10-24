@@ -1,6 +1,6 @@
 <?php
 /**
- * @license Copyright 2011-2014 BitPay Inc., MIT License 
+ * @license Copyright 2011-2014 BitPay Inc., MIT License
  * see https://github.com/bitpay/php-bitpay-client/blob/master/LICENSE
  */
 
@@ -38,7 +38,7 @@ class McryptExtension implements CryptoInterface
      * @param  string   $cipher_type
      * @return int|bool
      */
-    public function getIVSize($cipher_type = 'MCRYPT_TRIPLEDES')
+    public function getIVSize($cipher_type = MCRYPT_TRIPLEDES)
     {
         $block_mode = 'cbc';
 
@@ -55,7 +55,7 @@ class McryptExtension implements CryptoInterface
      * @param  string $cipher_type
      * @return int
      */
-    public function getKeySize($cipher_type = 'MCRYPT_TRIPLEDES')
+    public function getKeySize($cipher_type = MCRYPT_TRIPLEDES)
     {
         $block_mode = 'cbc';
 
@@ -76,7 +76,7 @@ class McryptExtension implements CryptoInterface
      * @param  string  $cipher_type
      * @return boolean
      */
-    public function algoSelfTest($cipher_type = 'MCRYPT_TRIPLEDES')
+    public function algoSelfTest($cipher_type = MCRYPT_TRIPLEDES)
     {
         return mcrypt_module_self_test($cipher_type);
     }
@@ -97,7 +97,7 @@ class McryptExtension implements CryptoInterface
      * @throws Exception $e
      *
      */
-    public function encrypt($text, $key = '', $iv = '', $bit_check = 8, $cipher_type = 'MCRYPT_TRIPLEDES')
+    public function encrypt($text, $key = '', $iv = '', $bit_check = 8, $cipher_type = MCRYPT_TRIPLEDES)
     {
         try {
             /* Ensure the key & IV is the same for both encrypt & decrypt. */
@@ -142,7 +142,7 @@ class McryptExtension implements CryptoInterface
      * @throws Exception $e
      *
      */
-    public function decrypt($encrypted_text, $key = '', $iv = '', $bit_check = 8, $cipher_type = 'MCRYPT_TRIPLEDES')
+    public function decrypt($encrypted_text, $key = '', $iv = '', $bit_check = 8, $cipher_type = MCRYPT_TRIPLEDES)
     {
         try {
             /* Ensure the key & IV is the same for both encrypt & decrypt. */
@@ -155,7 +155,7 @@ class McryptExtension implements CryptoInterface
                 mcrypt_generic_deinit($cipher);
                 $last_char = substr($decrypted, -1);
 
-                for ($i = 0; $i < $bit_check - 1; $i++) {
+                for ($i = 0; $i < $bit_check; $i++) {
                     if (chr($i) == $last_char) {
                         $decrypted = substr($decrypted, 0, strlen($decrypted) - $i);
                         break;
