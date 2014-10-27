@@ -7,6 +7,7 @@
 namespace Bitpay\Client;
 
 use Bitpay\InvoiceInterface;
+use Bitpay\PayoutInterface;
 
 /**
  * Sends request(s) to bitpay server
@@ -40,9 +41,20 @@ interface ClientInterface
 
     public function getCurrencies();
 
+    /**
+     * @param InvoiceInterface $invoiceId
+     * @return \Bitpay\Invoice
+     * @throws \Exception
+     */
     public function createInvoice(InvoiceInterface $invoice);
     //public function getInvoices();
-    //public function getInvoice($invoiceId);
+
+    /**
+     * @param $invoiceId
+     * @return InvoiceInterface
+     * @throws \Exception
+     */
+    public function getInvoice($invoiceId);
 
     //public function getLedgers();
     //public function getLedger(CurrencyInterface $currency);
@@ -51,15 +63,46 @@ interface ClientInterface
     //public function getOrg($orgId);
     //public function updateOrg(OrgInterface $org);
 
-    //public function createPayout(PayoutInterface $payout);
-    //public function getPayouts($status = null);
-    //public function getPayout($payoutId);
+    /**
+     * Create a Payout Request on Bitpay
+     * @param PayoutInterface $payout
+     * @return PayoutInterface|mixed
+     * @throws \Exception
+     */
+    public function createPayout(PayoutInterface $payout);
+
+    /**
+     * @param null $status
+     * @return array
+     * @throws \Exception
+     */
+    public function getPayouts($status = null);
+
+    /**
+     * @param $payoutId
+     * @return \Bitpay\Payout
+     * @throws \Exception
+     */
+    public function getPayout($payoutId);
+
+    /**
+     * @param PayoutInterface
+     * @return PayoutInterface|mixed
+     * @throws \Exception
+     */
+    public function deletePayout(PayoutInterface $payout);
+
     //public function updatePayout(PayoutInterface $payout);
 
     //public function getRates();
     //public function getRate(CurrencyInterface $currency);
 
-    //public function getTokens();
+    /**
+     * Get an array of tokens indexed by facade
+     * @return array
+     * @throws \Exception
+     */
+    public function getTokens();
 
     //public function getUser();
     //public function updateUser(UserInterface $user);
