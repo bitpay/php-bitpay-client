@@ -4,6 +4,7 @@
 /build/dist/
 /build/logs/
 /docs/_build/
+/node_modules/
 /vendor/
 /.settings/
 .project

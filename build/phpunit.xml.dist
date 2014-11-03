@@ -9,8 +9,11 @@
     bootstrap="../vendor/autoload.php"
     colors="true">
     <testsuites>
-        <testsuite name="Bitpay Package">
-            <directory>../tests</directory>
+        <testsuite name="unit">
+            <directory>../tests/Bitpay</directory>
+        </testsuite>
+        <testsuite name="integration">
+            <directory>../tests/integrations</directory>
         </testsuite>
     </testsuites>
 
