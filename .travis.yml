@@ -6,7 +6,12 @@ php:
     - 5.5
     - 5.6
 
-install: composer install
+install:
+    - composer install
+    - npm install
+
+before_script:
+    - make phantomjs
 
 script:
     - php bin/phpunit -c build/

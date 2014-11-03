@@ -15,7 +15,6 @@ use Bitpay\Client\Response;
  *
  * @TODO add way to configure curl with options
  *
- * @codeCoverageIgnore
  * @package Bitpay
  */
 class CurlAdapter implements AdapterInterface

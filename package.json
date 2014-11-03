@@ -1,0 +1,35 @@
+{
+  "name": "php-bitpay-client",
+  "description": "PHP Client Library",
+  "directories": {
+    "lib": "src",
+    "doc": "docs",
+    "example": "examples",
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bitpay/php-bitpay-client.git"
+  },
+  "keywords": [
+    "bitpay",
+    "bitcoin",
+    "php"
+  ],
+  "author": "BitPay Inc Ecommerce Development Team",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bitpay/php-bitpay-client/issues"
+  },
+  "homepage": "https://github.com/bitpay/php-bitpay-client",
+  "engines": {
+    "node": ">=0.10.33",
+    "npm": "~2.1.5"
+  },
+  "devDependencies": {
+    "phantomjs": "^1.9.12"
+  }
+}

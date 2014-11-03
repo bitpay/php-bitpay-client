@@ -14,11 +14,18 @@ install the required development dependencies.
 .. code-block:: bash
 
     composer.phar install
+    npm install
 
 .. note::
 
     By default Composer will install the development packages. You should
     not need to run ``install`` or ``update``.
+
+.. note::
+
+    node is used for PhantomJS and a few other tools that help out with the
+    required testing to make sure that the code is able to talk to BitPay servers
+    and should give us an early warning if things update or change without notice.
 
 PHPUnit
 =======
@@ -40,6 +47,18 @@ You can also run phpunit on just one file, for example:
 
 Running tests on just one file can be helpful since you are not running the
 entire test suite.
+
+.. note::
+
+    You can run `unit` tests or `integration` tests by providing the testsuite
+    command line option like so:
+
+        php bin/phpunit -c build/ --testsuite unit
+        php bin/phpunit -c build/ --testsuite integration
+
+    Also, please be aware that to have integration tests work, you will need to
+    have PhantomJS running, see `Makefile` for getting it setup or just run
+    `make phantomjs` in a terminal window.
 
 PHP_CodeSniffer
 ===============
