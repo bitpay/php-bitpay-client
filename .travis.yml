@@ -12,7 +12,6 @@ install:
 
 before_script:
     - make phantomjs
-    - mkdir -pv build/logs
 
 script:
     - php bin/phpunit -c build/
