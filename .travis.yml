@@ -19,7 +19,7 @@ script:
     #- php bin/phpmd src/ text build/rulesets/phpmd.xml
 
 after_script:
-    php bin/coveralls
+    php bin/coveralls -v
 
 notifications:
     email: true
