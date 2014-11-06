@@ -76,7 +76,7 @@ interface BillInterface
     public function getShowRate();
 
     /**
-     * @return string
+     * @return boolean
      */
     public function getArchived();
 }
