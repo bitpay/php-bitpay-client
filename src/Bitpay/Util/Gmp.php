@@ -33,9 +33,6 @@ class Gmp
             $parameters = new Secp256k1();
         }
 
-        $p = $parameters->pHex();
-        $a = $parameters->aHex();
-
         $tmp = self::gmpD2B($hex);
         $n   = strlen($tmp) - 1;
         $S   = new Point(PointInterface::INFINITY, PointInterface::INFINITY);
@@ -127,12 +124,10 @@ class Gmp
             $ymul   = gmp_mul($s, $ysub);
             $ysub2  = gmp_sub(0, $point->getY());
             $yadd   = gmp_add($ysub2, $ymul);
-
             $R['x'] = gmp_strval($R['x']);
             $R['y'] = gmp_strval(gmp_mod($yadd, $p));
         } catch (\Exception $e) {
-            // TODO throw exception
-            return 'Error in Util::gmpPointDouble(): '.$e->getMessage();
+            throw new \Exception('Error in Util::gmpPointDouble(): '.$e->getMessage());
         }
 
         return new Point($R['x'], $R['y']);
@@ -211,8 +206,7 @@ class Gmp
             $R['x'] = gmp_strval($R['x']);
             $R['y'] = gmp_strval($R['y']);
         } catch (Exception $e) {
-            // TODO throw exception
-            return 'Error in Util::gmpPointAdd(): '.$e->getMessage();
+            throw new \Exception('Error in Util::gmpPointAdd(): '.$e->getMessage());
         }
 
         return new Point($R['x'], $R['y']);
@@ -227,9 +221,9 @@ class Gmp
      */
     public static function gmpBinconv($hex)
     {
-        $rem = '';
-        $dv = '';
-        $byte = '';
+        $rem    = '';
+        $dv     = '';
+        $byte   = '';
         $digits = array();
 
         for ($x = 0; $x < 256; $x++) {
