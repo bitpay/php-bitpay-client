@@ -71,8 +71,12 @@ class PublicKey extends Key
      *
      * @return Bitpay\PublicKey
      */
-    public function generate()
+    public function generate(PrivateKey $privateKey = null)
     {
+        if ($privateKey instanceof PrivateKey) {
+            $this->setPrivateKey($privateKey);
+        }
+
         if (!empty($this->hex)) {
             return $this;
         }
