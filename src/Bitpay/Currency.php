@@ -53,7 +53,7 @@ class Currency implements CurrencyInterface
     protected $precision;
 
     /**
-     * @var float
+     * @var string
      */
     protected $exchangePercentageFee;
 
@@ -203,9 +203,7 @@ class Currency implements CurrencyInterface
      */
     public function setPayoutEnabled($enabled)
     {
-        if (!empty($enabled) && is_bool($enabled)) {
-            $this->payoutEnabled = (boolean) $enabled;
-        }
+        $this->payoutEnabled = (boolean) $enabled;
 
         return $this;
     }
@@ -263,15 +261,13 @@ class Currency implements CurrencyInterface
     }
 
     /**
-     * @param string $alts
+     * @param array $alts
      *
      * @return CurrencyInterface
      */
     public function setAlts($alts)
     {
-        if (!empty($alts) && ctype_print($alts)) {
-            $this->alts = trim($alts);
-        }
+        $this->alts = $alts;
 
         return $this;
     }
@@ -291,9 +287,7 @@ class Currency implements CurrencyInterface
      */
     public function setPayoutFields(array $payoutFields)
     {
-        if (!empty($payoutFields) && is_array($payoutFields)) {
-            $this->payoutFields = $payoutFields;
-        }
+        $this->payoutFields = $payoutFields;
 
         return $this;
     }
