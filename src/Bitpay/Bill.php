@@ -73,7 +73,7 @@ class Bill implements BillInterface
     protected $showRate;
 
     /**
-     * @var string
+     * @var boolean
      */
     protected $archived;
 
@@ -366,9 +366,7 @@ class Bill implements BillInterface
      */
     public function setArchived($archived)
     {
-        if (!empty($archived) && is_bool($archived)) {
-            $this->archived = $archived;
-        }
+        $this->archived = $archived;
 
         return $this;
     }
