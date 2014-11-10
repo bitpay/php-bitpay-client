@@ -366,7 +366,7 @@ class Bill implements BillInterface
      */
     public function setArchived($archived)
     {
-        $this->archived = $archived;
+        $this->archived = (boolean) $archived;
 
         return $this;
     }
