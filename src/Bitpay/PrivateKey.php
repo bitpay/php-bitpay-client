@@ -141,7 +141,7 @@ class PrivateKey extends Key
             $P = new Point($Gx, $Gy);
 
             // Calculate a new curve point from Q=k*G (x1,y1)
-            $R = Gmp::doubleAndAdd($k_hex, $P);
+            $R = Util::doubleAndAdd($k_hex, $P);
 
             $Rx_hex = Util::encodeHex($R->getX());
             $Ry_hex = Util::encodeHex($R->getY());
