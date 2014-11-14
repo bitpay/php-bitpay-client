@@ -150,7 +150,9 @@ class Util
         $hex = '';
 
         while (Math::cmp($dec, 0) > 0) {
-            list ($dec, $rem) = Math::mod($dec, 16);
+            $dec = Math::div($dec, 16);
+            $rem = Math::mod($dec, 16);
+
             $hex = substr(self::HEX_CHARS, intval($rem), 1) . $hex;
         }
 
@@ -311,7 +313,7 @@ class Util
         }
 
         if ($P->getX() == $Q->getX() && $P->getY() == $Q->getY()) {
-            return self::gmpPointDouble(new Point($P->getX(), $P->getY()));
+            return self::pointDouble(new Point($P->getX(), $P->getY()));
         }
 
         $p = '0x'.Secp256k1::P;

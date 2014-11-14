@@ -5,6 +5,7 @@
  */
 
 namespace Bitpay\Util;
+use Bitpay\Math\Math;
 
 /**
  * Utility class for encoding/decoding BASE-58 data
@@ -35,9 +36,10 @@ final class Base58
         $x = Util::decodeHex($data);
         $output_string = '';
 
-        while (gmp_cmp($x, '0') > 0) {
-            list($x, $r) = gmp_div_qr($x, 58);
-            $output_string .= substr($code_string, gmp_intval($r), 1);
+        while (Math::cmp($x, '0') > 0) {
+            $x = Math::div($x, 58);
+            $r = Math::mod($x, 58);
+            $output_string .= substr($code_string, intval($r), 1);
         }
 
         for ($i = 0; $i < strlen($data) && substr($data, $i, 2) == '00'; $i += 2) {
@@ -60,8 +62,8 @@ final class Base58
     {
         for ($return = '0', $i = 0; $i < strlen($data); $i++) {
             $current = strpos(self::BASE58_CHARS, $data[$i]);
-            $return  = gmp_mul($return, '58');
-            $return  = gmp_strval(gmp_add($return, $current));
+            $return  = Math::mul($return, '58');
+            $return  = Math::add($return, $current);
         }
 
         $return = Util::encodeHex($return);

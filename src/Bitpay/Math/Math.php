@@ -20,7 +20,11 @@ class Math
     public static function __callStatic($name, $arguments)
     {
     	if (is_null(static::$engine)) {
-			static::$engine = new GmpEngine();
+            if (function_exists('gmp_add')) {
+			    static::$engine = new GmpEngine();
+            } else {
+                static::$engine = new BcEngine();
+            }
 		}
     	return call_user_func_array(array(static::$engine, $name), $arguments);
     }

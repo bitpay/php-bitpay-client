@@ -7,10 +7,9 @@
 namespace Bitpay;
 
 use Bitpay\Util\Secp256k1;
-use Bitpay\Util\Gmp;
 use Bitpay\Util\Util;
 use Bitpay\Util\SecureRandom;
-use Bitpay\Math\Math as Math;
+use Bitpay\Math\Math;
 
 /**
  * @package Bitcore

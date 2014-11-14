@@ -6,9 +6,9 @@
 
 namespace Bitpay;
 
-use Bitpay\Util\Gmp;
 use Bitpay\Util\Secp256k1;
 use Bitpay\Util\Util;
+use Bitpay\Math\Math;
 
 /**
  * @package Bitcore
@@ -36,7 +36,7 @@ class PublicKey extends Key
             return '';
         }
 
-        if (gmp_strval(gmp_mod('0x'.$this->y, '0x02')) == '1') {
+        if (Math::mod('0x'.$this->y, '0x02') == '1') {
             return sprintf('03%s', $this->x);
         } else {
             return sprintf('02%s', $this->x);
@@ -60,7 +60,6 @@ class PublicKey extends Key
     public function setPrivateKey(PrivateKey $privateKey)
     {
         $this->privateKey = $privateKey;
-
         return $this;
     }
 
@@ -98,7 +97,7 @@ class PublicKey extends Key
             '0x'.substr(Secp256k1::G, 66, 64)
         );
 
-        $R = Gmp::doubleAndAdd(
+        $R = Util::doubleAndAdd(
             '0x'.$this->privateKey->getHex(),
             $point
         );
