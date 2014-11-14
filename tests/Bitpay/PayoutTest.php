@@ -15,51 +15,6 @@ class PayoutTest extends \PHPUnit_Framework_TestCase
         $this->payout = new Payout();
     }
 
-    public function testGetAmount()
-    {
-        $this->assertNotNull($this->payout);
-        $this->assertNull($this->payout->getAmount());
-    }
-
-    /**
-     * @depends testGetAmount
-     */
-    public function testGetAmountWithInstructions()
-    {
-        $this->assertNotNull($this->payout);
-        $this->assertNull($this->payout->getAmount());
-
-        $ins1 = new PayoutInstruction();
-        $ins1->setAmount(10);
-
-        $ins2 = new PayoutInstruction();
-        $ins2->setAmount(25);
-
-        $this->payout->addInstruction($ins1);
-        $this->assertSame(10, $this->payout->getAmount());
-
-        $this->payout->addInstruction($ins2);
-        $this->assertSame(35, $this->payout->getAmount());
-    }
-
-    public function testGetInstructions()
-    {
-        $this->assertEmpty($this->payout->getInstructions());
-
-        $i = new PayoutInstruction();
-        $i  ->setAddress('bitcoin address')
-            ->setAmount(101.99)
-            ->setLabel('employee identifier');
-        $this->payout->addInstruction($i);
-
-        $l = $this->payout->getInstructions();
-        $this->assertSame($l[0], $i);
-        $this->assertSame('bitcoin address', $l[0]->getAddress());
-        $this->assertSame(101.99, $l[0]->getAmount());
-        $this->assertSame('employee identifier', $l[0]->getLabel());
-        $this->assertTrue(count($this->payout->getInstructions()) == 1);
-    }
-
     public function testGetId()
     {
         $this->assertNotNull($this->payout);
@@ -71,9 +26,10 @@ class PayoutTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetId()
     {
-        $this->payout->setId('a4kFiay3KOueG');
+        $id = 'a4kFiay3KOueG';
+        $this->payout->setId($id);
         $this->assertNotNull($this->payout->getId());
-        $this->assertSame('a4kFiay3KOueG', $this->payout->getId());
+        $this->assertSame($id, $this->payout->getId());
     }
 
     public function testGetAccountId()
@@ -87,51 +43,125 @@ class PayoutTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetAccountId()
     {
-        $this->payout->setAccountId('a4kFiay3KOueG');
+        $account = 'a4kFiay3KOueG';
+        $this->payout->setAccountId($account);
         $this->assertNotNull($this->payout->getAccountId());
-        $this->assertSame('a4kFiay3KOueG', $this->payout->getAccountId());
+        $this->assertSame($account, $this->payout->getAccountId());
     }
 
+    public function testGetAmount()
+    {
+        $this->assertNotNull($this->payout);
+        $this->assertNull($this->payout->getAmount());
+    }
+
+    public function testGetInstructionsEmpty()
+    {
+        $this->assertEmpty($this->payout->getInstructions());
+        $this->assertInternalType('array', $this->payout->getInstructions());
+    }
+
+    /**
+     * @depends testGetInstructionsEmpty
+     */
+    public function testGetInstructions()
+    {
+        $label   = 'employee identifier';
+        $amount  = 101.99;
+        $address = '1AcAj9p6zJn4xLXdvmdiuPCtY7YkBPTAJo';
+
+        $instruction = new PayoutInstruction();
+        $instruction
+            ->setAddress($address)
+            ->setAmount($amount)
+            ->setLabel($label);
+
+        $this->payout->addInstruction($instruction);
+
+        $this->assertInternalType('array', $this->payout->getInstructions());
+        $this->assertTrue(count($this->payout->getInstructions()) == 1);
+
+        $list = $this->payout->getInstructions();
+        $this->assertSame($list[0], $instruction);
+
+    }
+
+    /**
+     * @depends testGetInstructions
+     */
     public function testAddInstruction()
     {
         $this->assertTrue(count($this->payout->getInstructions()) == 0);
 
         $instruction = new PayoutInstruction();
         $instruction
-            ->setAddress('address test')
+            ->setAddress('1LbEH8w3KGfTTt2L69bSR3d73njvvpm5tU')
             ->setLabel('payout label')
             ->setAmount(10);
 
         $this->payout->addInstruction($instruction);
         $this->assertTrue(count($this->payout->getInstructions()) == 1);
+
         $instructions = $this->payout->getInstructions();
         $this->assertSame($instruction, $instructions[0]);
 
+
         $other = new PayoutInstruction();
         $other
-            ->setAddress('other address')
+            ->setAddress('1L3cPDuruzGLfmmGbJgwoAjU51D6AqxaKK')
             ->setLabel('id for employee')
             ->setAmount(50);
 
         $this->payout->addInstruction($other);
         $this->assertTrue(count($this->payout->getInstructions()) == 2);
+
         $instructions = $this->payout->getInstructions();
         $this->assertSame($other, $instructions[1]);
     }
 
+    /**
+     * @depends testAddInstruction
+     */
     public function testUpdateInstruction()
     {
+        $address1 = '1NCNN8UKCZAjGkcgzA2RMZSHy9ao4YSWj7';
+        $address2 = '1FXXRhvwtrGzBH65aK6kVwDeHq7hEXLuF9';
+
         $instruction = new PayoutInstruction();
         $instruction
-            ->setAddress('address test')
-            ->setLabel('payout label')
+            ->setAddress($address1)
             ->setAmount(10);
 
         $this->payout->addInstruction($instruction);
-        $this->payout->updateInstruction(0, 'setAddress', 'new address');
+        $this->payout->updateInstruction(0, 'setAddress', $address2);
+
         $out = $this->payout->getInstructions();
-        $this->assertNotSame($out[0]->getAddress(), 'address test');
-        $this->assertSame($out[0]->getAddress(), 'new address');
+        $this->assertNotSame($out[0]->getAddress(), $address1);
+        $this->assertSame($out[0]->getAddress(), $address2);
+    }
+
+    /**
+     * @depends testGetAmount
+     */
+    public function testGetAmountWithInstructions()
+    {
+        // Test side effect of adding an instruction: should increase amount.
+        $this->assertNotNull($this->payout);
+        $this->assertNull($this->payout->getAmount());
+
+        $amount1 = 10;
+        $ins1 = new PayoutInstruction();
+        $ins1->setAmount($amount1);
+
+        $amount2 = 35;
+        $ins2 = new PayoutInstruction();
+        $ins2->setAmount($amount2);
+
+        $this->payout->addInstruction($ins1);
+        $this->assertSame($amount1, $this->payout->getAmount());
+
+        $this->payout->addInstruction($ins2);
+        $this->assertSame(($amount1 + $amount2), $this->payout->getAmount());
     }
 
     public function testGetPricingMethod()
@@ -145,9 +175,10 @@ class PayoutTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetPricingMethod()
     {
-        $this->payout->setPricingMethod('pricing method for payout');
+        $method = 'bitcoinbestbuy';
+        $this->payout->setPricingMethod($method);
         $this->assertNotNull($this->payout->getPricingMethod());
-        $this->assertSame('pricing method for payout', $this->payout->getPricingMethod());
+        $this->assertSame($method, $this->payout->getPricingMethod());
     }
 
     public function testGetNotificationEmail()
@@ -161,9 +192,10 @@ class PayoutTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetNotificationEmail()
     {
-        $this->payout->setNotificationEmail('testemail@example.com');
+        $email = 'support@bitpay.com';
+        $this->payout->setNotificationEmail($email);
         $this->assertNotNull($this->payout->getNotificationEmail());
-        $this->assertSame('testemail@example.com', $this->payout->getNotificationEmail());
+        $this->assertSame($email, $this->payout->getNotificationEmail());
     }
 
     public function testGetNotificationUrl()
@@ -177,9 +209,10 @@ class PayoutTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetNotificationUrl()
     {
-        $this->payout->setNotificationUrl('https://somesite.com/url.php');
+        $url = 'https://bitpay.com/';
+        $this->payout->setNotificationUrl($url);
         $this->assertNotNull($this->payout->getNotificationUrl());
-        $this->assertSame('https://somesite.com/url.php', $this->payout->getNotificationUrl());
+        $this->assertSame($url, $this->payout->getNotificationUrl());
     }
 
     public function testGetCurrency()
@@ -193,11 +226,7 @@ class PayoutTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetCurrency()
     {
-        $currency = new Currency();
-        $currency
-            ->setCode('USD')
-            ->getSymbol('$');
-
+        $currency = $this->getMockCurrency();
         $this->payout->setCurrency($currency);
         $this->assertNotNull($this->payout->getCurrency());
         $this->assertSame($currency, $this->payout->getCurrency());
@@ -214,9 +243,10 @@ class PayoutTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetEffectiveDate()
     {
-        $this->payout->setEffectiveDate('199999999');
+        $date = new \DateTime();
+        $this->payout->setEffectiveDate($date);
         $this->assertNotNull($this->payout->getEffectiveDate());
-        $this->assertSame('199999999', $this->payout->getEffectiveDate());
+        $this->assertSame($date, $this->payout->getEffectiveDate());
 
     }
 
@@ -231,9 +261,10 @@ class PayoutTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetRequestDate()
     {
-        $this->payout->setRequestDate('199999999');
+        $date = new \DateTime();
+        $this->payout->setRequestDate($date);
         $this->assertNotNull($this->payout->getRequestDate());
-        $this->assertSame('199999999', $this->payout->getRequestDate());
+        $this->assertSame($date, $this->payout->getRequestDate());
     }
 
     public function testGetRate()
@@ -247,9 +278,10 @@ class PayoutTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetRate()
     {
-        $this->payout->setRate('1253.61');
+        $rate = '1253.61';
+        $this->payout->setRate($rate);
         $this->assertNotNull($this->payout->getRate());
-        $this->assertSame('1253.61', $this->payout->getRate());
+        $this->assertSame($rate, $this->payout->getRate());
     }
 
     public function testGetToken()
@@ -264,7 +296,8 @@ class PayoutTest extends \PHPUnit_Framework_TestCase
     public function testSetToken()
     {
         $token = new Token();
-        $token->setFacade('payroll')
+        $token
+            ->setFacade('payroll')
             ->setToken('40aufgbkadfkjgakjhg');
 
         $this->payout->setToken($token);
@@ -301,5 +334,10 @@ class PayoutTest extends \PHPUnit_Framework_TestCase
         $this->payout->setReference('your reference for the payout');
         $this->assertNotNull($this->payout->getReference());
         $this->assertSame('your reference for the payout', $this->payout->getReference());
+    }
+
+    private function getMockCurrency()
+    {
+        return new \Bitpay\Currency();
     }
 }

@@ -40,84 +40,98 @@ interface PayoutInterface
 
     /**
      * The batch ID of the payout assigned by bitpay.com
+     *
      * @return string
      */
     public function getId();
 
     /**
      * Return the account parameter given by bitpay.
+     *
      * @return string
      */
     public function getAccountId();
 
     /**
      * Get total amount of payout based on instructions.
+     *
      * @return string
      */
     public function getAmount();
 
     /**
      * Get the current total of the Payout. This can only change by adding instructions.
+     *
      * @return \Bitpay\CurrencyInterface
      */
     public function getCurrency();
 
     /**
      * Get the effective date for this payout request - ie, when employees are paid.
+     *
      * @return string
      */
     public function getEffectiveDate();
 
     /**
      * Get the timestamp for when this request was created.
+     *
      * @return string
      */
     public function getRequestDate();
 
     /**
      * Get Instructions for payout.
+     *
      * @return array
      */
     public function getInstructions();
 
     /**
      * Get Notification URL, where updates are POSTED.
+     *
      * @return string
      */
     public function getNotificationEmail();
 
     /**
      * Get Notification URL, where updates are POSTED.
+     *
      * @return string
      */
     public function getNotificationUrl();
 
     /**
      * Return the pricing method when converting Instruction amount to bitcoin.
+     *
      * @return string
      */
     public function getPricingMethod();
 
     /**
      * Get the payee supplied reference for this payout request
+     *
      * @return string
      */
     public function getReference();
 
     /**
      * Get the status for this payout
+     *
      * @return $string;
      */
     public function getStatus();
 
     /**
      * Get the payroll token
+     *
      * @return mixed
      */
     public function getToken();
 
     /**
      * Get the response token, for cancelling payout requests later
+     *
      * @return string
      */
     public function getResponseToken();

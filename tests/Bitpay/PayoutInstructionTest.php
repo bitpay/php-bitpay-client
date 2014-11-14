@@ -21,6 +21,12 @@ class PayoutInstructionTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($this->instruction->getId());
     }
 
+    public function testBtc()
+    {
+        $this->assertNotNull($this->instruction);
+        $this->assertNull($this->instruction->getBtc());
+    }
+
     public function testGetLabel()
     {
         $this->assertNotNull($this->instruction);
@@ -48,17 +54,19 @@ class PayoutInstructionTest extends \PHPUnit_Framework_TestCase
     public function testGetTransactions()
     {
         $this->assertEmpty($this->instruction->getTransactions());
+        $this->assertInternalType('array', $this->instruction->getTransactions());
     }
 
     public function testAddTransaction()
     {
         $this->assertTrue(count($this->instruction->getTransactions()) == 0);
 
+        $date = new \DateTime();
         $tx = new PayoutTransaction();
         $tx
             ->setTransactionId('00000000b456d28e2769762d1de5c8c668282c5dca566c226c455da4bd20aa78')
             ->setAmount(10)
-            ->setDate(19999990);
+            ->setDate($date);
 
         $this->instruction->addTransaction($tx);
         $this->assertTrue(count($this->instruction->getTransactions()) == 1);
@@ -69,7 +77,7 @@ class PayoutInstructionTest extends \PHPUnit_Framework_TestCase
         $tx2
             ->setTransactionId('41414141b456d28e2769762d1de5c8c668282c5dca566c226c455da4bd20aa78')
             ->setAmount(10.50)
-            ->setDate(19999990);
+            ->setDate($date);
 
         $this->instruction->addTransaction($tx2);
         $this->assertTrue(count($this->instruction->getTransactions()) == 2);
@@ -108,19 +116,30 @@ class PayoutInstructionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @depends testGetBtc
+     */
+    public function testSetBtc()
+    {
+        $btc = array('unpaid' => null, 'paid' => '0');
+        $this->instruction->setBtc($btc);
+        $this->assertNotNull($this->instruction->getBtc());
+        $this->assertSame($btc, $this->instruction->getBtc());
+    }
+    /**
      * @depends testGetAmount
      */
     public function testSetAmount()
     {
         $this->instruction->setAmount('10.99');
         $this->assertNotNull($this->instruction->getAmount());
+        $this->assertInternalType('string', $this->instruction->getAmount());
         $this->assertSame('10.99', $this->instruction->getAmount());
 
-        $this->instruction->setAmount(25.29);
+        $this->instruction->setAmount(10.99);
         $this->assertNotNull($this->instruction->getAmount());
-        $this->assertSame(25.29, $this->instruction->getAmount());
+        $this->assertInternalType('float', $this->instruction->getAmount());
+        $this->assertSame(10.99, $this->instruction->getAmount());
     }
-
     /**
      * @depends testGetStatus
      */

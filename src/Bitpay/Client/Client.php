@@ -230,12 +230,15 @@ class Client implements ClientInterface
             'effectiveDate' => $effectiveDate,
             'pricingMethod' => $payout->getPricingMethod(),
             'guid'          => Util::guid(),
-            'nonce'         => Util::nonce(),
-            // optional
-            'reference'         => $payout->getReference(),
-            'notificationUrl'   => $payout->getNotificationUrl(),
-            'notificationEmail' => $payout->getNotificationEmail(),
+            'nonce'         => Util::nonce()
         );
+
+        // Optional
+        foreach (array('reference','notificationURL','notificationEmail') as $value) {
+            $function = 'get' . ucfirst($value);
+            if ($payout->$function() != null)
+                $body['value'] = $payout->$function();
+        }
 
         // Add instructions
         foreach ($payout->getInstructions() as $instruction) {
@@ -299,15 +302,16 @@ class Client implements ClientInterface
             $payout
                 ->setId($value['id'])
                 ->setAccountId($value['account'])
-                ->setReference($value['reference'])
-                ->setStatus($value['status'])
                 ->setCurrency(new \Bitpay\Currency($value['currency']))
-                ->setRequestdate($value['requestDate'])
                 ->setEffectiveDate($value['effectiveDate'])
                 ->setPricingMethod($value['pricingMethod'])
-                ->setNotificationUrl(@$value['notificationUrl'])
-                ->setNotificationEmail(@$value['notificationEmail'])
-                ->setResponseToken($value['token']);
+                ->setRate(@$value['rate'])
+                ->setRequestdate($value['requestDate'])
+                ->setStatus($value['status'])
+                ->setResponseToken($value['token'])
+                ->setReference(@$value['reference'])
+                ->setNotificationURL(@$value['notificationURL'])
+                ->setNotificationEmail(@$value['notificationEmail']);
 
             array_walk($value['instructions'], function ($value, $key) use (&$payout) {
                 $instruction = new \Bitpay\PayoutInstruction();
@@ -389,9 +393,9 @@ class Client implements ClientInterface
             ->setStatus($data['status'])
             ->setCurrency(new \Bitpay\Currency($data['currency']))
             ->setPricingMethod(@$data['pricingMethod'])
-            ->setReference($data['reference'])
+            ->setReference(@$data['reference'])
             ->setNotificationEmail(@$data['notificationEmail'])
-            ->setNotificationUrl(@$data['notificationUrl'])
+            ->setNotificationUrl(@$data['notificationURL'])
             ->setRequestDate($data['requestDate'])
             ->setEffectiveDate($data['effectiveDate'])
             ->setResponseToken($data['token']);
@@ -403,7 +407,8 @@ class Client implements ClientInterface
                 ->setLabel($value['label'])
                 ->setAddress($value['address'])
                 ->setStatus($value['status'])
-                ->setAmount($value['amount']);
+                ->setAmount($value['amount'])
+                ->setBtc($value['btc']);
 
             array_walk($value['transactions'], function ($value, $key) use (&$instruct) {
                 $transaction = new \Bitpay\PayoutTransaction();
@@ -442,12 +447,12 @@ class Client implements ClientInterface
         $tokens = array();
 
         array_walk($body['data'], function ($value, $key) use (&$tokens) {
-            $keys   = array_keys($value);
-            $values = array_values($value);
-            $token  = new \Bitpay\Token();
+            $key   = current(array_keys($value));
+            $value = current(array_values($value));
+            $token = new \Bitpay\Token();
             $token
-                ->setFacade($keys[0])
-                ->setToken($values[0]);
+                ->setFacade($key)
+                ->setToken($value);
 
             $tokens[$token->getFacade()] = $token;
         });

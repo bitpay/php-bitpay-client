@@ -35,8 +35,20 @@ interface PayoutInstructionInterface
     public function getAmount();
 
     /**
+     * Get the BTC array (once rates are set)
+     * @return array
+     */
+    public function getBtc();
+
+    /**
      * Return the status of this payout instruction
      * @return string
      */
     public function getStatus();
+
+    /**
+     * Return the transactions for this payout
+     * @return array
+     */
+    public function getTransactions();
 }

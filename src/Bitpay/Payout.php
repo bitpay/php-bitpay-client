@@ -42,7 +42,7 @@ class Payout implements PayoutInterface
     /**
      * @var array
      */
-    protected $instructions;
+    protected $instructions = array();
 
     /**
      * @var string

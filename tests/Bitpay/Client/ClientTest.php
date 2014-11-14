@@ -20,6 +20,104 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $this->client->setAdapter($adapter);
     }
 
+    /**
+     * @expectedException \Exception
+     */
+    public function testCreatePayoutWithException()
+    {
+        $response = $this->getMockResponse();
+        $response->method('getBody')->willReturn('{"error":"Error with request"}');
+
+        $adapter = $this->getMockAdapter();
+        $adapter->method('sendRequest')->willReturn($response);
+        $this->client->setAdapter($adapter);
+
+        $currency = $this->getMockCurrency();
+        $currency->method('getCode')->will($this->returnValue('USD'));
+
+        $token = $this->getMockToken();
+
+        $payout = new \Bitpay\Payout();
+        $payout
+            ->setCurrency($currency)
+            ->setEffectiveDate("1415853007000")
+            ->setPricingMethod('bitcoinbestbuy')
+            ->setToken($token);
+
+        $this->client->createPayout($payout);
+    }
+
+    public function testCreatePayout()
+    {
+        $currency = $this->getMockCurrency();
+        $currency->method('getCode')->will($this->returnValue('USD'));
+
+        $token = $this->getMockToken();
+
+        $payout = new \Bitpay\Payout();
+        $payout
+            ->setCurrency($currency)
+            ->setEffectiveDate("1415853007000")
+            ->setPricingMethod('bitcoinbestbuy')
+            ->setToken($token);
+
+        $btc_amounts = array(
+            \Bitpay\PayoutInstruction::STATUS_UNPAID => null,
+            \Bitpay\PayoutInstruction::STATUS_PAID => '0'
+        );
+        $instruction0 = new \Bitpay\PayoutInstruction();
+        $instruction0
+            ->setId('Sra19AFU57Rx53rKQbbRKZ')
+            ->setAmount(1875)
+            ->setLabel('2')
+            ->setStatus(\Bitpay\PayoutInstruction::STATUS_UNPAID)
+            ->setBtc($btc_amounts)
+            ->setAddress('mzzsJ8G9KBmHPPVYaMxpYRetWRRec78FvF');
+
+        $instruction1 = new \Bitpay\PayoutInstruction();
+        $instruction1
+            ->setId('5SCdU1xNsEwrUFqKChYuAR')
+            ->setAmount(1875)
+            ->setLabel('3')
+            ->setStatus(\Bitpay\PayoutInstruction::STATUS_UNPAID)
+            ->setBtc($btc_amounts)
+            ->setAddress('mre3amN8KCFuy7gWCjhFXjuqkmoJMkd2gx');
+
+        $instruction2 = new \Bitpay\PayoutInstruction();
+        $instruction2
+            ->setId('5cHNbnmNuo8gRawnrFZsPy')
+            ->setAmount(1875)
+            ->setLabel('4')
+            ->setStatus(\Bitpay\PayoutInstruction::STATUS_UNPAID)
+            ->setBtc($btc_amounts)
+            ->setAddress('mre3amN8KCFuy7gWCjhFXjuqkmoJMkd2gx');
+
+        $payout
+            ->addInstruction($instruction0)
+            ->addInstruction($instruction1)
+            ->addInstruction($instruction2);
+
+        $response = $this->getMockResponse();
+        $response->method('getBody')->willReturn(file_get_contents(__DIR__ . '/../../DataFixtures/payouts/7m7hSF3ws1LhnWUf17CXsJ.json'));
+
+        $adapter = $this->getMockAdapter();
+        $adapter->method('sendRequest')->willReturn($response);
+        $this->client->setAdapter($adapter);
+
+        $payout = $this->client->createPayout($payout);
+        $this->assertInstanceOf('Bitpay\PayoutInterface', $payout);
+        $this->assertEquals('7m7hSF3ws1LhnWUf17CXsJ', $payout->getId());
+        $this->assertEquals('Lwbnf9XAPCxDmy8wsRH3ct', $payout->getAccountId());
+        $this->assertEquals(\Bitpay\Payout::STATUS_NEW, $payout->getStatus());
+        $this->assertEquals('bitcoinbestbuy', $payout->getPricingMethod());
+        $this->assertEquals('1415853007000', $payout->getEffectiveDate());
+        $this->assertEquals('8mZ37Gt91Wr7GXGPnB9zj1zwTcLGweRDka4axVBPi9Uxiiv7zZWvEKSgmFddQZA1Jy', $payout->getResponseToken());
+        $instructions = $payout->getInstructions();
+        $this->assertSame($instruction0, $instructions[0]);
+        $this->assertSame($instruction1, $instructions[1]);
+        $this->assertSame($instruction2, $instructions[2]);
+    }
+
     public function testCreateInvoice()
     {
 
@@ -174,6 +272,39 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Bitpay\CurrencyInterface', $currencies[0]);
     }
 
+    public function testGetTokens()
+    {
+        $response = $this->getMockResponse();
+        $response->method('getBody')->willReturn(file_get_contents(__DIR__ . '/../../DataFixtures/with_tokens.json'));
+
+        $adapter = $this->getMockAdapter();
+        $adapter->method('sendRequest')->willReturn($response);
+        $this->client->setAdapter($adapter);
+
+        $tokens = $this->client->getTokens();
+        $this->assertInternalType('array', $tokens);
+        $this->assertSame('39zPuHaBbO8VMZe8Bdr9RjmRY6pHT7Gs3ifcbKM6PYSg2', $tokens['payroll']->getToken());
+        $this->assertSame('payroll', $tokens['payroll']->getFacade());
+
+        $this->assertSame('5QziWnr75x7c4B9DdJ5QUo', $tokens['payroll/payoutRequest']->getToken());
+        $this->assertSame('payroll/payoutRequest', $tokens['payroll/payoutRequest']->getFacade());
+    }
+
+    /**
+     * @expectedException \Exception
+     */
+    public function testGetTokensWithException()
+    {
+        $response = $this->getMockResponse();
+        $response->method('getBody')->willReturn('{"error":""}');
+
+        $adapter = $this->getMockAdapter();
+        $adapter->method('sendRequest')->willReturn($response);
+        $this->client->setAdapter($adapter);
+
+        $tokens = $this->client->getTokens();
+    }
+
     public function testCreateToken()
     {
         $response = $this->getMockResponse();
@@ -224,6 +355,32 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $adapter->method('sendRequest')->willReturn($response);
         $this->client->setAdapter($adapter);
         $this->client->getInvoice('5NxFkXcJbCSivtQRJa4kHP');
+    }
+
+    public function testGetPayout()
+    {
+        $response = $this->getMockResponse();
+        $response->method('getBody')->willReturn(file_get_contents(__DIR__ . '/../../DataFixtures/payouts/7m7hSF3ws1LhnWUf17CXsJ.json'));
+
+        $adapter = $this->getMockAdapter();
+        $adapter->method('sendRequest')->willReturn($response);
+        $this->client->setAdapter($adapter);
+        $invoice = $this->client->getPayout('');
+        $this->assertInstanceOf('Bitpay\PayoutInterface', $invoice);
+    }
+
+    /**
+     * @expectedException Exception
+     */
+    public function testGetPayoutException()
+    {
+        $response = $this->getMockResponse();
+        $response->method('getBody')->willReturn('{"error":"Object not found"}');
+
+        $adapter = $this->getMockAdapter();
+        $adapter->method('sendRequest')->willReturn($response);
+        $this->client->setAdapter($adapter);
+        $this->client->getPayout('5NxFkXcJbCSivtQRJa4kHP');
     }
 
     private function getMockInvoice()

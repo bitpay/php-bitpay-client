@@ -11,18 +11,23 @@ class PayoutInstruction implements PayoutInstructionInterface
     /**
      * A transaction is unpaid when the payout in bitcoin has not yet occured.
      */
-    const INSTRUCTION_STATUS_UNPAID = 'unpaid';
+    const STATUS_UNPAID = 'unpaid';
 
     /**
      * A transaction is marked as paid once the payroll is complete and bitcoins are
      * sent to the recipient
      */
-    const INSTRUCTION_STATUS_PAID = 'paid';
+    const STATUS_PAID = 'paid';
 
     /**
      * @var string
      */
     protected $id;
+
+    /**
+     * @var array
+     */
+    protected $btc;
 
     /**
      * @var string
@@ -47,7 +52,7 @@ class PayoutInstruction implements PayoutInstructionInterface
     /**
      * @var array
      */
-    protected $transactions;
+    protected $transactions = array();
 
     public function __construct()
     {
@@ -145,6 +150,28 @@ class PayoutInstruction implements PayoutInstructionInterface
     /**
      * @inheritdoc
      */
+    public function getBtc()
+    {
+        return $this->btc;
+    }
+
+    /**
+     * Set BTC array (available once rates are set)
+     * @param $btc
+     * @return $this
+     */
+    public function setBtc($btc)
+    {
+        if (!empty($btc) && is_array($btc)){
+            $this->btc = $btc;
+        }
+
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function getStatus()
     {
         return $this->status;
@@ -157,7 +184,7 @@ class PayoutInstruction implements PayoutInstructionInterface
      */
     public function setStatus($status)
     {
-        if (!empty($status)) {
+        if (!empty($status) && ctype_print($status)) {
             $this->status = trim($status);
         }
 
@@ -185,4 +212,5 @@ class PayoutInstruction implements PayoutInstructionInterface
 
         return $this;
     }
+
 }
