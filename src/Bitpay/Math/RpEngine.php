@@ -6,9 +6,16 @@
 
 namespace Bitpay\Math;
 
-class BcEngine implements EngineInterface
+class RpEngine implements EngineInterface
 {
     const HEX_CHARS = '0123456789abcdef';
+    public $rp;
+
+    /* public constructor method to initialize important class properties */
+    public function __construct()
+    {
+        $this->math = new RichArbitraryPrecisionIntegerMath();
+    }
     /**
      * @param String $a Numeric String
      * @param String $b Numeric String
@@ -18,7 +25,7 @@ class BcEngine implements EngineInterface
         $a = $this->input($a);
         $b = $this->input($b);
 
-        return bcadd($a, $b);
+        return $this->math->rpadd($a, $b);
     }
 
     /**
@@ -30,7 +37,7 @@ class BcEngine implements EngineInterface
         $a = $this->input($a);
         $b = $this->input($b);
 
-        return bccomp($a, $b);
+        return $this->math->rpcomp($a, $b);
     }
 
     /**
@@ -42,7 +49,7 @@ class BcEngine implements EngineInterface
         $a = $this->input($a);
         $b = $this->input($b);
 
-        return bcdiv($a, $b);
+        return $this->math->rpdiv($a, $b);
     }
 
     /**
@@ -63,16 +70,16 @@ class BcEngine implements EngineInterface
         $mod = $modulus;
         $num = $number;
         do {
-            $z = bcmod($num, $mod);
-            $c = bcdiv($num, $mod);
+            $z = $this->math->rpmod($num, $mod);
+            $c = $this->math->rpdiv($num, $mod);
             $mod = $z;
-            $z = bcsub($a, bcmul($b, $c));
+            $z = $this->math->rpsub($a, $this->math->rpmul($b, $c));
             $num = $mod;
             $a = $b;
             $b = $z;
-        } while (bccomp($mod, '0') > 0);
-        if (bccomp($a, '0') < 0) {
-            $a = bcadd($a, $modulus);
+        } while ($this->math->rpcomp($mod, '0') > 0);
+        if ($this->math->rpccomp($a, '0') < 0) {
+            $a = $this->math->rpadd($a, $modulus);
         }
 
         return (string) $a;
@@ -87,7 +94,7 @@ class BcEngine implements EngineInterface
         $a = $this->input($a);
         $b = $this->input($b);
 
-        return bcmod($a, $b);
+        return $this->math->rpmod($a, $b);
     }
 
     /**
@@ -99,7 +106,7 @@ class BcEngine implements EngineInterface
         $a = $this->input($a);
         $b = $this->input($b);
 
-        return bcmul($a, $b);
+        return $this->math->rpmul($a, $b);
     }
 
     /**
@@ -111,7 +118,7 @@ class BcEngine implements EngineInterface
         $a = $this->input($a);
         $b = $this->input($b);
 
-        return bcpow($a, $b);
+        return $this->math->rppow($a, $b);
     }
 
     /**
@@ -123,7 +130,7 @@ class BcEngine implements EngineInterface
         $a = $this->input($a);
         $b = $this->input($b);
 
-        return bcsub($a, $b);
+        return $this->math->rpsub($a, $b);
     }
 
     private function input($x)
@@ -134,7 +141,7 @@ class BcEngine implements EngineInterface
 
             for ($dec = '0', $i = 0; $i < strlen($hex); $i++) {
                 $current = strpos('0123456789abcdef', $hex[$i]);
-                $dec     = bcadd(bcmul($dec, 16), $current);
+                $dec     = $this->math->rpadd($this->math->rpmul($dec, 16), $current);
             }
 
             return $dec;
@@ -155,23 +162,23 @@ class BcEngine implements EngineInterface
     {
         $small = 0;
         $diff  = 0;
-        while (bccomp($a, '0') > 0 && bccomp($b, '0') > 0) {
-            if (bccomp($a, $b) == -1) {
+        while ($this->math->rpcomp($a, '0') > 0 && $this->math->rpcomp($b, '0') > 0) {
+            if ($this->math->rpcomp($a, $b) == -1) {
                 $small = $a;
-                $diff  = bcmod($b, $a);
+                $diff  = $this->math->rpmod($b, $a);
             }
-            if (bccomp($a, $b) == 1) {
+            if ($this->math->rpcomp($a, $b) == 1) {
                 $small = $b;
-                $diff = bcmod($a, $b);
+                $diff = $this->math->rpmod($a, $b);
             }
-            if (bccomp($a, $b) == 0) {
+            if ($this->math->rpcomp($a, $b) == 0) {
                 $small = $a;
-                $diff  = bcmod($b, $a);
+                $diff  = $this->math->rpmod($b, $a);
             }
             $a = $small;
             $b = $diff;
         }
-        if (bccomp($a, '1') == 0) {
+        if ($this->math->rpcomp($a, '1') == 0) {
             return true;
         }
 

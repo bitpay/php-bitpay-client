@@ -14,17 +14,16 @@ class Math
     {
         static::$engine = $engine;
     }
-    /**
-     * @param String $a Numeric String
-     * @param String $b Numeric String
-     */
+
     public static function __callStatic($name, $arguments)
     {
         if (is_null(static::$engine)) {
             if (function_exists('gmp_add')) {
                 static::$engine = new GmpEngine();
-            } else {
+            } elseif (function_exists('bcadd')) {
                 static::$engine = new BcEngine();
+            } else {
+                static::$engine = new RpEngine();
             }
         }
 
