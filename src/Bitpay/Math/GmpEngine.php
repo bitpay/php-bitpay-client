@@ -1,6 +1,6 @@
 <?php
 /**
- * @license Copyright 2011-2014 BitPay Inc., MIT License 
+ * @license Copyright 2011-2014 BitPay Inc., MIT License
  * see https://github.com/bitpay/php-bitpay-client/blob/master/LICENSE
  */
 
@@ -14,7 +14,7 @@ class GmpEngine implements EngineInterface
      */
     public function add($a, $b)
     {
-    	return gmp_strval(gmp_add($a, $b));
+        return gmp_strval(gmp_add($a, $b));
     }
 
     /**
@@ -23,7 +23,7 @@ class GmpEngine implements EngineInterface
      */
     public function cmp($a, $b)
     {
-    	return gmp_strval(gmp_cmp($a, $b));
+        return gmp_strval(gmp_cmp($a, $b));
     }
 
     /**
@@ -32,7 +32,7 @@ class GmpEngine implements EngineInterface
      */
     public function div($a, $b)
     {
-    	return gmp_strval(gmp_div($a, $b));
+        return gmp_strval(gmp_div($a, $b));
     }
 
     /**
@@ -41,7 +41,7 @@ class GmpEngine implements EngineInterface
      */
     public function invertm($a, $b)
     {
-    	return gmp_strval(gmp_invert($a, $b));
+        return gmp_strval(gmp_invert($a, $b));
     }
 
     /**
@@ -50,7 +50,7 @@ class GmpEngine implements EngineInterface
      */
     public function mod($a, $b)
     {
-    	return gmp_strval(gmp_mod($a, $b));
+        return gmp_strval(gmp_mod($a, $b));
     }
 
     /**
@@ -59,7 +59,7 @@ class GmpEngine implements EngineInterface
      */
     public function mul($a, $b)
     {
-    	return gmp_strval(gmp_mul($a, $b));
+        return gmp_strval(gmp_mul($a, $b));
     }
 
     /**
@@ -68,7 +68,7 @@ class GmpEngine implements EngineInterface
      */
     public function pow($a, $b)
     {
-    	return gmp_strval(gmp_pow($a, $b));
+        return gmp_strval(gmp_pow($a, $b));
     }
 
     /**
@@ -77,6 +77,6 @@ class GmpEngine implements EngineInterface
      */
     public function sub($a, $b)
     {
-    	return gmp_strval(gmp_sub($a, $b));
+        return gmp_strval(gmp_sub($a, $b));
     }
 }

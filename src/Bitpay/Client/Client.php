@@ -97,7 +97,7 @@ class Client implements ClientInterface
     }
 
     /**
-     * @param TokenInterface $token
+     * @param  TokenInterface  $token
      * @return ClientInterface
      */
     public function setToken(TokenInterface $token)
@@ -305,7 +305,7 @@ class Client implements ClientInterface
     }
 
     /**
-     * @param RequestInterface $request
+     * @param  RequestInterface  $request
      * @return ResponseInterface
      */
     public function sendRequest(RequestInterface $request)

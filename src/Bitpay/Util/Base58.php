@@ -1,10 +1,11 @@
 <?php
 /**
- * @license Copyright 2011-2014 BitPay Inc., MIT License 
+ * @license Copyright 2011-2014 BitPay Inc., MIT License
  * see https://github.com/bitpay/php-bitpay-client/blob/master/LICENSE
  */
 
 namespace Bitpay\Util;
+
 use Bitpay\Math\Math;
 
 /**
@@ -70,11 +71,11 @@ final class Base58
         $return = Util::encodeHex($return);
 
         for ($i = 0; $i < strlen($data) && substr($data, $i, 1) == '1'; $i++) {
-            $return = '00' . $return;
+            $return = '00'.$return;
         }
 
         if (strlen($return) % 2 != 0) {
-            $return = '0' . $return;
+            $return = '0'.$return;
         }
 
         return $return;

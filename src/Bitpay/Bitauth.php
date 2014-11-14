@@ -6,7 +6,6 @@
 
 namespace Bitpay;
 
-use Bitpay\Util\SecureRandom;
 use Bitpay\Util\Util;
 use Bitpay\Util\Gmp;
 use Bitpay\Util\Secp256k1;
@@ -18,7 +17,6 @@ use Bitpay\Util\Secp256k1;
  */
 class Bitauth
 {
-
     /**
      */
     public function __construct()

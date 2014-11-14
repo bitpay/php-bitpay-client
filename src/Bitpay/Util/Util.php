@@ -1,10 +1,11 @@
 <?php
 /**
- * @license Copyright 2011-2014 BitPay Inc., MIT License 
+ * @license Copyright 2011-2014 BitPay Inc., MIT License
  * see https://github.com/bitpay/php-bitpay-client/blob/master/LICENSE
  */
 
 namespace Bitpay\Util;
+
 use Bitpay\PointInterface;
 use Bitpay\Point;
 use Bitpay\Math\Math;
@@ -138,7 +139,7 @@ class Util
     /**
      * Encodes a decimal value into hexadecimal.
      *
-     * @param string $dec
+     * @param  string $dec
      * @return string
      */
     public static function encodeHex($dec)
@@ -154,7 +155,7 @@ class Util
             $rem = Math::mod($dec, 16);
             $dec = $q;
 
-            $hex = substr(self::HEX_CHARS, intval($rem), 1) . $hex;
+            $hex = substr(self::HEX_CHARS, intval($rem), 1).$hex;
         }
 
         return $hex;
@@ -163,7 +164,7 @@ class Util
     /**
      * Decodes a hexadecimal value into decimal.
      *
-     * @param string $hex
+     * @param  string $hex
      * @return string
      */
     public static function decodeHex($hex)
@@ -242,7 +243,7 @@ class Util
      *   xR = s2 - 2xP mod p
      *   yR = -yP + s(xP - xR) mod p
      *
-     * @param PointInterface $point
+     * @param  PointInterface $point
      * @param CurveParameterInterface
      * @return PointInterface
      */
@@ -362,7 +363,6 @@ class Util
             );
 
             $R['s'] = $s;
-
         } catch (Exception $e) {
             throw new \Exception('Error in Util::pointAdd(): '.$e->getMessage());
         }
@@ -405,7 +405,7 @@ class Util
     /**
      * y^2 (mod p) = x^3 + ax + b (mod p)
      *
-     * @param PointInterface $point
+     * @param PointInterface          $point
      * @param CurveParameterInterface $parameters
      */
     public static function pointTest(PointInterface $point, CurveParameterInterface $parameters = null)

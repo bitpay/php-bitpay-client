@@ -1,6 +1,6 @@
 <?php
 /**
- * @license Copyright 2011-2014 BitPay Inc., MIT License 
+ * @license Copyright 2011-2014 BitPay Inc., MIT License
  * see https://github.com/bitpay/php-bitpay-client/blob/master/LICENSE
  */
 
@@ -60,6 +60,7 @@ class PublicKey extends Key
     public function setPrivateKey(PrivateKey $privateKey)
     {
         $this->privateKey = $privateKey;
+
         return $this;
     }
 

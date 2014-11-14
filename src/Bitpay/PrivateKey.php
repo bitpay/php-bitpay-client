@@ -166,7 +166,6 @@ class PrivateKey extends Key
 
             $signature['r'] = str_pad($signature['r'], 64, '0', STR_PAD_LEFT);
             $signature['s'] = str_pad($signature['s'], 64, '0', STR_PAD_LEFT);
-
         } while (Math::cmp($r, '0') <= 0 || Math::cmp($s, '0') <= 0);
 
         $sig = array(
@@ -247,7 +246,7 @@ class PrivateKey extends Key
      * Decodes PEM data to retrieve the keypair.
      *
      * @param  string $pem_data The data to decode.
-     * @return array            The keypair info.
+     * @return array  The keypair info.
      */
     public function pemDecode($pem_data)
     {
@@ -296,7 +295,7 @@ class PrivateKey extends Key
      * Encodes keypair data to PEM format.
      *
      * @param  array  $keypair The keypair info.
-     * @return string          The data to decode.
+     * @return string The data to decode.
      */
     public function pemEncode($keypair)
     {
@@ -356,7 +355,7 @@ class PrivateKey extends Key
             $byte = $byte.$digits[$rem];
         }
 
-        $byte = $beg_ec_text . "\r\n" . chunk_split(base64_encode(strrev($byte)), 64) . $end_ec_text;
+        $byte = $beg_ec_text."\r\n".chunk_split(base64_encode(strrev($byte)), 64).$end_ec_text;
 
         $this->pemEncoded = $byte;
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * @license Copyright 2011-2014 BitPay Inc., MIT License 
+ * @license Copyright 2011-2014 BitPay Inc., MIT License
  * see https://github.com/bitpay/php-bitpay-client/blob/master/LICENSE
  */
 
@@ -17,7 +17,8 @@ class BcEngine implements EngineInterface
     {
         $a = $this->input($a);
         $b = $this->input($b);
-    	return bcadd($a, $b);
+
+        return bcadd($a, $b);
     }
 
     /**
@@ -28,7 +29,8 @@ class BcEngine implements EngineInterface
     {
         $a = $this->input($a);
         $b = $this->input($b);
-    	return bccomp($a, $b);
+
+        return bccomp($a, $b);
     }
 
     /**
@@ -39,7 +41,8 @@ class BcEngine implements EngineInterface
     {
         $a = $this->input($a);
         $b = $this->input($b);
-    	return bcdiv($a, $b);
+
+        return bcdiv($a, $b);
     }
 
     /**
@@ -71,7 +74,8 @@ class BcEngine implements EngineInterface
         if (bccomp($a, '0') < 0) {
             $a = bcadd($a, $modulus);
         }
-        return (string)$a;
+
+        return (string) $a;
     }
 
     /**
@@ -82,7 +86,8 @@ class BcEngine implements EngineInterface
     {
         $a = $this->input($a);
         $b = $this->input($b);
-    	return bcmod($a, $b);
+
+        return bcmod($a, $b);
     }
 
     /**
@@ -93,7 +98,8 @@ class BcEngine implements EngineInterface
     {
         $a = $this->input($a);
         $b = $this->input($b);
-    	return bcmul($a, $b);
+
+        return bcmul($a, $b);
     }
 
     /**
@@ -104,7 +110,8 @@ class BcEngine implements EngineInterface
     {
         $a = $this->input($a);
         $b = $this->input($b);
-    	return bcpow($a, $b);
+
+        return bcpow($a, $b);
     }
 
     /**
@@ -115,12 +122,13 @@ class BcEngine implements EngineInterface
     {
         $a = $this->input($a);
         $b = $this->input($b);
-    	return bcsub($a, $b);
+
+        return bcsub($a, $b);
     }
 
     private function input($x)
     {
-        if(is_string($x) && strtolower(substr($x, 0, 2)) == '0x') {
+        if (is_string($x) && strtolower(substr($x, 0, 2)) == '0x') {
             $hex = strtolower($x);
             $hex = substr($hex, 2);
 
@@ -128,8 +136,10 @@ class BcEngine implements EngineInterface
                 $current = strpos('0123456789abcdef', $hex[$i]);
                 $dec     = Math::add(Math::mul($dec, 16), $current);
             }
+
             return $dec;
         }
+
         return $x;
     }
 
@@ -137,9 +147,9 @@ class BcEngine implements EngineInterface
      * Function to determine if two numbers are
      * co-prime according to the Euclidean algo.
      *
-     * @param  string $a  First param to check.
-     * @param  string $b  Second param to check.
-     * @return bool       Whether the params are cp.
+     * @param  string $a First param to check.
+     * @param  string $b Second param to check.
+     * @return bool   Whether the params are cp.
      */
     public function coprime($a, $b)
     {
@@ -156,7 +166,7 @@ class BcEngine implements EngineInterface
             }
             if (bccomp($a, $b) == 0) {
                 $small = $a;
-                $diff  = bcmod($b, $a); 
+                $diff  = bcmod($b, $a);
             }
             $a = $small;
             $b = $diff;
@@ -164,6 +174,7 @@ class BcEngine implements EngineInterface
         if (bccomp($a, '1') == 0) {
             return true;
         }
+
         return false;
     }
 }
