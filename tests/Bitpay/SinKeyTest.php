@@ -94,7 +94,6 @@ class SinKeyTest extends \PHPUnit_Framework_TestCase
         $sinKey->setPublicKey($pubKey);
 
         $sinKey->generate();
-        var_dump($sinKey);
 
         $this->assertTrue($sinKey->isValid());
     }
