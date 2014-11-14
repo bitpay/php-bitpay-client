@@ -37,9 +37,10 @@ final class Base58
         $output_string = '';
 
         while (Math::cmp($x, '0') > 0) {
-            $x = Math::div($x, 58);
+            $q = Math::div($x, 58);
             $r = Math::mod($x, 58);
             $output_string .= substr($code_string, intval($r), 1);
+            $x = $q;
         }
 
         for ($i = 0; $i < strlen($data) && substr($data, $i, 2) == '00'; $i += 2) {

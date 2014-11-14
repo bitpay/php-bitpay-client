@@ -150,8 +150,9 @@ class Util
         $hex = '';
 
         while (Math::cmp($dec, 0) > 0) {
-            $dec = Math::div($dec, 16);
+            $q = Math::div($dec, 16);
             $rem = Math::mod($dec, 16);
+            $dec = $q;
 
             $hex = substr(self::HEX_CHARS, intval($rem), 1) . $hex;
         }
