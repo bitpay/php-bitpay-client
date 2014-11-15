@@ -1,4 +1,8 @@
 <?php
+/**
+ * @license Copyright 2011-2014 BitPay Inc., MIT License
+ * see https://github.com/bitpay/php-bitpay-client/blob/master/LICENSE
+ */
 
 namespace Bitpay;
 
@@ -162,7 +166,7 @@ class PayoutInstruction implements PayoutInstructionInterface
      */
     public function setBtc($btc)
     {
-        if (!empty($btc) && is_array($btc)){
+        if (!empty($btc) && is_array($btc)) {
             $this->btc = $btc;
         }
 
@@ -212,5 +216,4 @@ class PayoutInstruction implements PayoutInstructionInterface
 
         return $this;
     }
-
 }
