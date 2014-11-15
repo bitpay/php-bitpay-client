@@ -48,7 +48,7 @@
     },
     "suggest": {
         "ext-gmp": "Quickest PHP math library for doing Elliptic Curve calculations.",
-        "ext-bcmath": "PHP math library for doing Elliptic Curve calculations.",
+        "ext-bcmath": "PHP math library for doing Elliptic Curve calculations."
     },
     "config": {
         "bin-dir": "bin"
