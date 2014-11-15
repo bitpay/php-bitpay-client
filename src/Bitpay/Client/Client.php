@@ -236,8 +236,9 @@ class Client implements ClientInterface
         // Optional
         foreach (array('reference','notificationURL','notificationEmail') as $value) {
             $function = 'get' . ucfirst($value);
-            if ($payout->$function() != null)
-                $body['value'] = $payout->$function();
+            if ($payout->$function() != null) {
+                $body[$value] = $payout->$function();
+            }
         }
 
         // Add instructions
@@ -292,11 +293,12 @@ class Client implements ClientInterface
         $this->request  = $request;
         $this->response = $this->sendRequest($this->request);
         $body           = json_decode($this->response->getBody(), true);
-        if (json_last_error() !== JSON_ERROR_NONE) {
+        if (isset($body['error']) || isset($body['errors'])) {
             throw new \Exception('Error with request');
         }
 
         $payouts = array();
+
         array_walk($body['data'], function ($value, $key) use (&$payouts) {
             $payout = new \Bitpay\Payout();
             $payout
@@ -322,14 +324,14 @@ class Client implements ClientInterface
                     ->setAmount($value['amount'])
                     ->setStatus($value['status']);
 
-                array_walk($value['transactions'], function ($value, $key) use (&$instruct) {
+                array_walk($value['transactions'], function ($value, $key) use (&$instruction) {
                     $transaction = new \Bitpay\PayoutTransaction();
                     $transaction
                         ->setTransactionId($value['txid'])
                         ->setAmount($value['amount'])
                         ->setDate($value['date']);
 
-                    $instruct->addTransaction($transaction);
+                    $instruction->addTransaction($transaction);
                 });
 
                 $payout->addInstruction($instruction);
@@ -360,7 +362,9 @@ class Client implements ClientInterface
         if (empty($body['data'])) {
             throw new \Exception('Error with request');
         }
+
         $data   = $body['data'];
+
         $payout->setStatus($data['status']);
 
         return $payout;
@@ -401,8 +405,8 @@ class Client implements ClientInterface
             ->setResponseToken($data['token']);
 
         array_walk($data['instructions'], function ($value, $key) use (&$payout) {
-            $instruct = new \Bitpay\PayoutInstruction();
-            $instruct
+            $instruction = new \Bitpay\PayoutInstruction();
+            $instruction
                 ->setId($value['id'])
                 ->setLabel($value['label'])
                 ->setAddress($value['address'])
@@ -410,17 +414,17 @@ class Client implements ClientInterface
                 ->setAmount($value['amount'])
                 ->setBtc($value['btc']);
 
-            array_walk($value['transactions'], function ($value, $key) use (&$instruct) {
+            array_walk($value['transactions'], function ($value, $key) use (&$instruction) {
                 $transaction = new \Bitpay\PayoutTransaction();
                 $transaction
                     ->setTransactionId($value['txid'])
                     ->setAmount($value['amount'])
                     ->setDate($value['date']);
 
-                $instruct->addTransaction($transaction);
+                $instruction->addTransaction($transaction);
             });
 
-            $payout->addInstruction($instruct);
+            $payout->addInstruction($instruction);
         });
 
         return $payout;
@@ -461,10 +465,7 @@ class Client implements ClientInterface
     }
 
     /**
-     * Used to create a token. These method needs to be refactored to
-     * work better
-     * @param array $payload
-     * @return TokenInterface
+     * @inheritdoc
      */
     public function createToken(array $payload = array())
     {
