@@ -8,6 +8,8 @@ namespace Bitpay\Client;
 
 class ClientTest extends \PHPUnit_Framework_TestCase
 {
+    protected $client;
+
     public function setUp()
     {
         $this->client = new Client();
@@ -272,6 +274,37 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Bitpay\CurrencyInterface', $currencies[0]);
     }
 
+    public function testGetPayouts()
+    {
+        $response = $this->getMockResponse();
+        $response->method('getBody')->willReturn(file_get_contents(__DIR__ . '/../../DataFixtures/payouts/getpayouts.json'));
+
+        $adapter = $this->getMockAdapter();
+        $adapter->method('sendRequest')->willReturn($response);
+        $this->client->setAdapter($adapter);
+
+        $payouts = $this->client->getPayouts();
+        $this->assertInternalType('array', $payouts);
+        $this->assertInstanceOf('Bitpay\PayoutInterface', $payouts[0]);
+
+    }
+
+    /**
+     * @expectedException \Exception
+     */
+    public function testGetPayoutsWithException()
+    {
+        $response = $this->getMockResponse();
+        $response->method('getBody')->willReturn('{"error":""}');
+
+        $adapter = $this->getMockAdapter();
+        $adapter->method('sendRequest')->willReturn($response);
+        $this->client->setAdapter($adapter);
+
+        $payouts = $this->client->getPayouts();
+
+    }
+
     public function testGetTokens()
     {
         $response = $this->getMockResponse();
@@ -360,12 +393,12 @@ class ClientTest extends \PHPUnit_Framework_TestCase
     public function testGetPayout()
     {
         $response = $this->getMockResponse();
-        $response->method('getBody')->willReturn(file_get_contents(__DIR__ . '/../../DataFixtures/payouts/7m7hSF3ws1LhnWUf17CXsJ.json'));
+        $response->method('getBody')->willReturn(file_get_contents(__DIR__ . '/../../DataFixtures/payouts/complete.json'));
 
         $adapter = $this->getMockAdapter();
         $adapter->method('sendRequest')->willReturn($response);
         $this->client->setAdapter($adapter);
-        $invoice = $this->client->getPayout('');
+        $invoice = $this->client->getPayout('7m7hSF3ws1LhnWUf17CXsJ');
         $this->assertInstanceOf('Bitpay\PayoutInterface', $invoice);
     }
 
@@ -382,6 +415,61 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $this->client->setAdapter($adapter);
         $this->client->getPayout('5NxFkXcJbCSivtQRJa4kHP');
     }
+
+    public function testDeletePayout()
+    {
+        // Set up using getPayout
+        $response = $this->getMockResponse();
+        $response->method('getBody')->willReturn(file_get_contents(__DIR__ . '/../../DataFixtures/payouts/7m7hSF3ws1LhnWUf17CXsJ.json'));
+
+        $adapter = $this->getMockAdapter();
+        $adapter->method('sendRequest')->willReturn($response);
+        $this->client->setAdapter($adapter);
+
+        $payout = $this->client->getPayout('7m7hSF3ws1LhnWUf17CXsJ');
+
+
+        // Test deletePayout
+        $response = $this->getMockResponse();
+        $response->method('getBody')->willReturn(file_get_contents(__DIR__ . '/../../DataFixtures/payouts/cancelled.json'));
+
+        $adapter = $this->getMockAdapter();
+        $adapter->method('sendRequest')->willReturn($response);
+        $this->client->setAdapter($adapter);
+
+        $payout = $this->client->deletePayout($payout);
+
+        $this->assertSame($payout->getStatus(), \Bitpay\Payout::STATUS_CANCELLED);
+    }
+
+    /**
+     * @expectedException \Exception
+     */
+    public function testDeletePayoutWithException()
+    {
+        // Setup using getPayout
+        $response = $this->getMockResponse();
+        $response->method('getBody')->willReturn(file_get_contents(__DIR__ . '/../../DataFixtures/payouts/7m7hSF3ws1LhnWUf17CXsJ.json'));
+
+        $adapter = $this->getMockAdapter();
+        $adapter->method('sendRequest')->willReturn($response);
+        $this->client->setAdapter($adapter);
+
+        $payout = $this->client->getPayout('7m7hSF3ws1LhnWUf17CXsJ');
+
+        // Test with exception
+
+        $response = $this->getMockResponse();
+        $response->method('getBody')->willReturn('{"error":"Object not found"}');
+
+        $adapter = $this->getMockAdapter();
+        $adapter->method('sendRequest')->willReturn($response);
+        $this->client->setAdapter($adapter);
+
+        $payout = $this->client->deletePayout($payout);
+        $this->assertSame($payout->getStatus(), \Bitpay\Payout::STATUS_CANCELLED);
+    }
+
 
     private function getMockInvoice()
     {
@@ -432,6 +520,48 @@ class ClientTest extends \PHPUnit_Framework_TestCase
                     'setBtcPaid',
                     'setRate',
                     'setExceptionStatus',
+                )
+            )
+            ->getMock();
+
+        return $invoice;
+    }
+
+    private function getMockPayout()
+    {
+        $invoice = $this->getMockBuilder('Bitpay\PayoutInterface')
+            ->setMethods(
+                array(
+                    'getId',
+                    'setId',
+                    'getAccountId',
+                    'setAccountId',
+                    'getAmount',
+                    'getCurrency',
+                    'setCurrency',
+                    'getEffectiveDate',
+                    'setEffectiveDate',
+                    'getRate',
+                    'setRate',
+                    'getRequestDate',
+                    'setRequestDate',
+                    'getInstructions',
+                    'addInstruction',
+                    'updateInstruction',
+                    'getStatus',
+                    'setStatus',
+                    'getToken',
+                    'setToken',
+                    'getResponseToken',
+                    'setResponseToken',
+                    'getPricingMethod',
+                    'setPricingMethod',
+                    'getReference',
+                    'setReference',
+                    'getNotificationEmail',
+                    'setNotificationEmail',
+                    'getNotificationUrl',
+                    'setNotificationUrl',
                 )
             )
             ->getMock();
