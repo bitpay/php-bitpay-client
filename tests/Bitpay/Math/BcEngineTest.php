@@ -51,7 +51,7 @@ class BcEngineTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($math->invertm($b, $b), gmp_strval(gmp_invert($b, $b)));
         $this->assertEquals($math->invertm($c, $c), gmp_strval(gmp_invert($c, $c)));
 
-        $a = "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141";
+        $a = 'FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141';
         $b = 'FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFC2F';
         $math = new BcEngine();
         $this->assertEquals($math->invertm($a, $b), gmp_strval(gmp_invert($a, $b)));
