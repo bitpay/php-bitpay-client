@@ -50,6 +50,11 @@ class BcEngineTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($math->invertm($a, $a), gmp_strval(gmp_invert($a, $a)));
         $this->assertEquals($math->invertm($b, $b), gmp_strval(gmp_invert($b, $b)));
         $this->assertEquals($math->invertm($c, $c), gmp_strval(gmp_invert($c, $c)));
+
+        $a = '0x14';
+        $b = '0x15';
+        $math = new BcEngine();
+        $this->assertEquals($math->invertm($a, $b), gmp_strval(gmp_invert($a, $b)));
     }
 
     public function testmod()
@@ -95,4 +100,23 @@ class BcEngineTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($math->sub($b, $b), gmp_strval(gmp_sub($b, $b)));
         $this->assertEquals($math->sub($c, $c), gmp_strval(gmp_sub($c, $c)));
     }
+
+    public function testcoprime()
+    {
+        $a = '14';
+        $b = '21';
+        $math = new BcEngine();
+        $this->assertFalse($math->coprime($a, $b));
+
+        $a = '1';
+        $b = '-1';
+        $math = new BcEngine();
+        $this->assertTrue($math->coprime($a, $b));
+
+        $a = '14';
+        $b = '15';
+        $math = new BcEngine();
+        $this->assertTrue($math->coprime($a, $b));
+    }
+
 }
