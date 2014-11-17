@@ -52,7 +52,6 @@ class BitpayTest extends \PHPUnit_Framework_TestCase
                     'network'     => 'testnet',
                     'private_key' => vfsStream::url('tmp/key.pri'),
                     'public_key'  => vfsStream::url('tmp/key.pub'),
-                    'key_storage' => 'Bitpay\Storage\FilesystemStorage',
                 )
             )
         );
