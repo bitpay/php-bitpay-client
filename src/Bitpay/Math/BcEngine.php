@@ -46,8 +46,8 @@ class BcEngine implements EngineInterface
     }
 
     /**
-     * @param String $a Numeric String
-     * @param String $b Numeric String
+     * @param String $a is number to be inverted
+     * @param String $b is Modulus
      */
     public function invertm($a, $b)
     {

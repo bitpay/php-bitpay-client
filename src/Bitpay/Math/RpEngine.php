@@ -78,7 +78,7 @@ class RpEngine implements EngineInterface
             $a = $b;
             $b = $z;
         } while ($this->math->rpcomp($mod, '0') > 0);
-        if ($this->math->rpccomp($a, '0') < 0) {
+        if ($this->math->rpcomp($a, '0') < 0) {
             $a = $this->math->rpadd($a, $modulus);
         }
 
