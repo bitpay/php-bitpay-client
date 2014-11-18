@@ -62,10 +62,10 @@ class RpEngineTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($math->invertm($b, $b), gmp_strval(gmp_invert($b, $b)));
         $this->assertEquals($math->invertm($c, $c), gmp_strval(gmp_invert($c, $c)));
 
-	$a = "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141";
-	$b = 'FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFC2F';
-	$this->assertEquals($math->invertm(15, 14), gmp_strval(gmp_invert(15, 14)));
-	$this->assertEquals($math->invertm(-1, 1), gmp_strval(gmp_invert(-1, 1)));
+    	$a = "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141";
+    	$b = 'FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFC2F';
+    	$this->assertEquals($math->invertm(15, 14), gmp_strval(gmp_invert(15, 14)));
+    	$this->assertEquals($math->invertm(-1, 1), gmp_strval(gmp_invert(-1, 1)));
 	}
 
     public function testmod()
@@ -114,19 +114,19 @@ class RpEngineTest extends \PHPUnit_Framework_TestCase
 
     public function testcoprime()
     {
-	$a = '14';
-	$b = '21';
-	$math = new RpEngine();
-	$this->assertFalse($math->coprime($a, $b));
+    	$a = '14';
+    	$b = '21';
+    	$math = new RpEngine();
+    	$this->assertFalse($math->coprime($a, $b));
 
-	$a = '1';
-	$b = '-1';
-	$math = new RpEngine();
-	$this->assertTrue($math->coprime($a, $b));
+    	$a = '1';
+    	$b = '-1';
+    	$math = new RpEngine();
+    	$this->assertTrue($math->coprime($a, $b));
 
-	$a = '14';
-	$b = '15';
-	$math = new RpEngine();
-	$this->assertTrue($math->coprime($a, $b));
+    	$a = '14';
+    	$b = '15';
+    	$math = new RpEngine();
+    	$this->assertTrue($math->coprime($a, $b));
     }
 }

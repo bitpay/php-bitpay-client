@@ -41,13 +41,13 @@ class MathTest extends \PHPUnit_Framework_TestCase
    * @runInSeparateProcess
    */
 	public function testGmpMath()
-  {
-    if (!extension_loaded('gmp'))
-    {
-      $this->markTestSkipped('The GMP extension is NOT loaded! You must enable it to run this test');
-    }
-    Math::add("3324234234234234234", "3324234234234234234");
-    $this->assertEquals(new GmpEngine(), Math::getEngine());
+  	{
+	    if (!extension_loaded('gmp'))
+	    {
+	      $this->markTestSkipped('The GMP extension is NOT loaded! You must enable it to run this test');
+	    }
+	    Math::add("3324234234234234234", "3324234234234234234");
+	    $this->assertEquals(new GmpEngine(), Math::getEngine());
 	}
 
   /**
@@ -56,30 +56,30 @@ class MathTest extends \PHPUnit_Framework_TestCase
    */
 	public function testBcMath()
 	{
-    if (!extension_loaded('bcmath'))
-    {
-      $this->markTestSkipped('The Bcmath extension is NOT loaded! You must enable it to run this test');
-    } elseif (extension_loaded('gmp')) {
-      $this->markTestSkipped('The GMP extension is loaded! You must remove it to run this test');
-    }
-    Math::add("3324234234234234234", "3324234234234234234");
-    $this->assertEquals(new BcEngine(), Math::getEngine());
-  }
+	    if (!extension_loaded('bcmath'))
+	    {
+	      $this->markTestSkipped('The Bcmath extension is NOT loaded! You must enable it to run this test');
+	    } elseif (extension_loaded('gmp')) {
+	      $this->markTestSkipped('The GMP extension is loaded! You must remove it to run this test');
+	    }
+	    Math::add("3324234234234234234", "3324234234234234234");
+	    $this->assertEquals(new BcEngine(), Math::getEngine());
+  	}
 
   /**
    * @runInSeparateProcess
    */
 	public function testRpMath()
-  {
-    if (extension_loaded('gmp'))
-    {
-      $this->markTestSkipped('The GMP extension is loaded! You must remove it to run this test');
-    } elseif (extension_loaded('bcmath'))
-    {
-      $this->markTestSkipped('The Bcmath extension is loaded! You must remove it to run this test');
-    }
-    Math::add("3324234234234234234", "3324234234234234234");
-    $this->assertEquals(new RpEngine(), Math::getEngine());
-  }
+  	{
+    	if (extension_loaded('gmp'))
+	    {
+	      $this->markTestSkipped('The GMP extension is loaded! You must remove it to run this test');
+	    } elseif (extension_loaded('bcmath'))
+	    {
+	      $this->markTestSkipped('The Bcmath extension is loaded! You must remove it to run this test');
+	    }
+	    Math::add("3324234234234234234", "3324234234234234234");
+	    $this->assertEquals(new RpEngine(), Math::getEngine());
+  	}
 
 }
