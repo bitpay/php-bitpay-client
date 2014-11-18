@@ -8,19 +8,23 @@ namespace Bitpay\Math;
 
 class Math
 {
-    private static $engine = null;
+    private static $engine;
 
     public static function setEngine(EngineInterface $engine)
     {
         static::$engine = $engine;
     }
+    public static function getEngine()
+    {
+        return static::$engine;
+    }
 
     public static function __callStatic($name, $arguments)
     {
         if (is_null(static::$engine)) {
-            if (function_exists('gmp_add')) {
+            if (extension_loaded('gmp')) {
                 static::$engine = new GmpEngine();
-            } elseif (function_exists('bcadd')) {
+            } elseif (extension_loaded('bcmath')) {
                 static::$engine = new BcEngine();
             } else {
                 static::$engine = new RpEngine();
