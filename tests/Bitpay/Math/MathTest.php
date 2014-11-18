@@ -37,4 +37,31 @@ class MathTest extends \PHPUnit_Framework_TestCase
 		$this->assertEquals(2, $output);
 	}
 
+	public function testGmpMath()
+	{
+		Math::add("3324234234234234234", "3324234234234234234");
+		var_dump(Math::getEngine());
+
+		Math::setEngine(new GmpEngine());
+		$output = Math::add("3324234234234234234", "3324234234234234234");
+	}
+
+	public function testBcMath()
+	{
+		$message=shell_exec("sudo php5dismod gmp");
+      	print_r($message);
+      	var_dump(Math::getEngine());
+      	Math::add("3324234234234234234", "3324234234234234234");
+
+		Math::setEngine(new BcEngine());
+		$output = Math::add("3324234234234234234", "3324234234234234234");
+	}
+
+	public function testRpMath()
+	{
+		Math::add("3324234234234234234", "3324234234234234234");
+
+		Math::setEngine(new RpEngine());
+		$output = Math::add("3324234234234234234", "3324234234234234234");
+	}
 }
