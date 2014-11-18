@@ -39,6 +39,8 @@ class MathTest extends \PHPUnit_Framework_TestCase
 
 	public function testGmpMath()
 	{
+		$message=shell_exec("sudo php5enmod gmp");
+      	print_r($message);
 		Math::add("3324234234234234234", "3324234234234234234");
 		var_dump(Math::getEngine());
 
