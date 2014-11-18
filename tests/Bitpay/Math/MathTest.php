@@ -62,9 +62,6 @@ class MathTest extends \PHPUnit_Framework_TestCase
     } elseif (extension_loaded('gmp')) {
       $this->markTestSkipped('The GMP extension is loaded! You must remove it to run this test');
     }
-    Math::setEngine(null);
-    $message=shell_exec("sudo php5dismod gmp");
-    print_r($message);
     Math::add("3324234234234234234", "3324234234234234234");
     $this->assertEquals(new BcEngine(), Math::getEngine());
   }
@@ -81,14 +78,8 @@ class MathTest extends \PHPUnit_Framework_TestCase
     {
       $this->markTestSkipped('The Bcmath extension is loaded! You must remove it to run this test');
     }
-    Math::setEngine(null);
     Math::add("3324234234234234234", "3324234234234234234");
     $this->assertEquals(new RpEngine(), Math::getEngine());
   }
 
-  public function testenablemods()
-  {
-    $message=shell_exec("sudo php5enmod gmp");
-    print_r($message);
-  }
 }
