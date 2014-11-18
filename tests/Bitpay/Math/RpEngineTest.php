@@ -8,6 +8,17 @@ namespace Bitpay\Math;
 
 class RpEngineTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @requires  extension gmp
+     */
+    protected function setUp()
+    {
+      if (!extension_loaded('gmp'))
+      {
+        $this->markTestSkipped('The GMP extension is NOT loaded! You must enable it to run this test');
+      }
+    }
+
     public function testadd()
     {
         $a = 1234;
@@ -50,11 +61,11 @@ class RpEngineTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($math->invertm($a, $a), gmp_strval(gmp_invert($a, $a)));
         $this->assertEquals($math->invertm($b, $b), gmp_strval(gmp_invert($b, $b)));
         $this->assertEquals($math->invertm($c, $c), gmp_strval(gmp_invert($c, $c)));
-    
+
 	$a = "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141";
-	$b = 'FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFC2F'; 
+	$b = 'FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFC2F';
 	$this->assertEquals($math->invertm(15, 14), gmp_strval(gmp_invert(15, 14)));
-	$this->assertEquals($math->invertm(-1, 1), gmp_strval(gmp_invert(-1, 1))); 
+	$this->assertEquals($math->invertm(-1, 1), gmp_strval(gmp_invert(-1, 1)));
 	}
 
     public function testmod()

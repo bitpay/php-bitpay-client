@@ -8,7 +8,18 @@ namespace Bitpay\Math;
 
 class GmpEngineTest extends \PHPUnit_Framework_TestCase
 {
-	public function testadd()
+    /**
+     * @requires  extension gmp
+     */
+    protected function setUp()
+    {
+      if (!extension_loaded('gmp'))
+      {
+        $this->markTestSkipped('The GMP extension is NOT loaded! You must enable it to run this test');
+      }
+    }
+
+   	public function testadd()
     {
         $a = 1234;
         $b = '1234123412341234123412341234123412412341234213412421341342342';

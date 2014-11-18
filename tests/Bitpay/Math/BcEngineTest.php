@@ -8,6 +8,21 @@ namespace Bitpay\Math;
 
 class BcEngineTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @requires  extension gmp
+     * @requires  extension bcmath
+     */
+    protected function setUp()
+    {
+      if (!extension_loaded('bcmath'))
+      {
+        $this->markTestSkipped('The Bcmath extension is NOT loaded! You must enable it to run this test');
+      } elseif (!extension_loaded('gmp'))
+      {
+        $this->markTestSkipped('The GMPmath extension is NOT loaded! You must enable it to run this test');
+      }
+
+    }
     public function testadd()
     {
         $a = 1234;

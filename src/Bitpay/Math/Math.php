@@ -10,7 +10,7 @@ class Math
 {
     private static $engine;
 
-    public static function setEngine(EngineInterface $engine)
+    public static function setEngine($engine)
     {
         static::$engine = $engine;
     }

@@ -36,34 +36,59 @@ class MathTest extends \PHPUnit_Framework_TestCase
         $output = Math::add(1,1);
 		$this->assertEquals(2, $output);
 	}
-
+  /**
+   * @requires  extension gmp
+   * @runInSeparateProcess
+   */
 	public function testGmpMath()
-	{
-		$message=shell_exec("sudo php5enmod gmp");
-      	print_r($message);
-		Math::add("3324234234234234234", "3324234234234234234");
-		var_dump(Math::getEngine());
-
-		Math::setEngine(new GmpEngine());
-		$output = Math::add("3324234234234234234", "3324234234234234234");
+  {
+    if (!extension_loaded('gmp'))
+    {
+      $this->markTestSkipped('The GMP extension is NOT loaded! You must enable it to run this test');
+    }
+    Math::add("3324234234234234234", "3324234234234234234");
+    $this->assertEquals(new GmpEngine(), Math::getEngine());
 	}
 
+  /**
+   * @requires  extension bcmath
+   * @runInSeparateProcess
+   */
 	public function testBcMath()
 	{
-		$message=shell_exec("sudo php5dismod gmp");
-      	print_r($message);
-      	var_dump(Math::getEngine());
-      	Math::add("3324234234234234234", "3324234234234234234");
+    if (!extension_loaded('bcmath'))
+    {
+      $this->markTestSkipped('The Bcmath extension is NOT loaded! You must enable it to run this test');
+    } elseif (extension_loaded('gmp')) {
+      $this->markTestSkipped('The GMP extension is loaded! You must remove it to run this test');
+    }
+    Math::setEngine(null);
+    $message=shell_exec("sudo php5dismod gmp");
+    print_r($message);
+    Math::add("3324234234234234234", "3324234234234234234");
+    $this->assertEquals(new BcEngine(), Math::getEngine());
+  }
 
-		Math::setEngine(new BcEngine());
-		$output = Math::add("3324234234234234234", "3324234234234234234");
-	}
-
+  /**
+   * @runInSeparateProcess
+   */
 	public function testRpMath()
-	{
-		Math::add("3324234234234234234", "3324234234234234234");
+  {
+    if (extension_loaded('gmp'))
+    {
+      $this->markTestSkipped('The GMP extension is loaded! You must remove it to run this test');
+    } elseif (extension_loaded('bcmath'))
+    {
+      $this->markTestSkipped('The Bcmath extension is loaded! You must remove it to run this test');
+    }
+    Math::setEngine(null);
+    Math::add("3324234234234234234", "3324234234234234234");
+    $this->assertEquals(new RpEngine(), Math::getEngine());
+  }
 
-		Math::setEngine(new RpEngine());
-		$output = Math::add("3324234234234234234", "3324234234234234234");
-	}
+  public function testenablemods()
+  {
+    $message=shell_exec("sudo php5enmod gmp");
+    print_r($message);
+  }
 }
