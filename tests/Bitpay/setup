@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+echo "Running with GMP and BCMath enabled"
+sudo php5enmod gmp
+./compilewithbcmath
+php bin/phpunit --verbose -c build/ tests/Bitpay/Math/
+echo "Running with only GMPenabled"
+sudo php5enmod gmp
+./compilewithoutbcmath
+php bin/phpunit --verbose -c build/ tests/Bitpay/Math/
+echo "Running with only BCMath enabled"
+sudo php5dismod gmp
+./compilewithbcmath
+php bin/phpunit --verbose -c build/ tests/Bitpay/Math/
+echo "Running without BCMath or GMP enabled"
+sudo php5dismod gmp
+./compilewithoutbcmath
+php bin/phpunit --verbose -c build/ tests/Bitpay/Math/
