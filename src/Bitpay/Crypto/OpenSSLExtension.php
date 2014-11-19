@@ -169,12 +169,12 @@ class OpenSSLExtension implements CryptoInterface
      * @param bool
      * @return bool
      */
-    final public function saveCSRtoString($csr, &$out, $notext = true)
+    final public function saveCSRtoString($csr, $out, $notext = true)
     {
         if (!is_resource($csr)) {
             return false;
         }
 
-        return openssl_csr_export($csr, &$out, $notext);
+        return openssl_csr_export($csr, $out, $notext);
     }
 }
