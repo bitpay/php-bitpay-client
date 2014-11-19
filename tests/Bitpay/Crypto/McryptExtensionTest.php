@@ -18,25 +18,41 @@ class McryptExtensionTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(extension_loaded('mcrypt'), $mcrypt->hasSupport());
     }
 
-    public function testEncryptAndDecrypt()
+    public function testEncrypt()
     {
 
         $mcrypt = new McryptExtension();
+        $key = 'testEncrypt';
+        $data = array(
+            'lsdkjflaslkfslj' => 'kz2DG4D3vkA6bkDbhrvD+Q==',
+            'a340932084093280' => 'gNaNgXFc7ecle8SaAJAJOw==',
+            '*&($*@*%&*$*#*&@(*#*(' => 'cVGF2lnyH6OHLYWHa+8XxHbFzVNK5IYL',
+            '___asdfa234($*(#__' => 'I8OFg5parn9b0Qk8mJnQH0+SgQWwYER5'
+        );
 
-        $this->assertNotNull($mcrypt);
+        foreach($data as $unencrypted => $encrypted )
+        {
+            $encryptedtext = $mcrypt->encrypt($unencrypted, $key, '00000000');
+            $this->assertEquals($encrypted, $encryptedtext);
+        }
+    }
 
-        for ($i=1; $i<=20; $i++) {
-            $plaintext = $this->generateRandomString($i);
-            $key = $this->generateRandomString(8);
+    public function testDecrypt()
+    {
 
-            $iv_size = $mcrypt->getIVSize();
-            $iv = mcrypt_create_iv($iv_size);
+        $mcrypt = new McryptExtension();
+        $key = 'testEncrypt';
+        $data = array(
+            'lsdkjflaslkfslj' => 'kz2DG4D3vkA6bkDbhrvD+Q==',
+            'a340932084093280' => 'gNaNgXFc7ecle8SaAJAJOw==',
+            '*&($*@*%&*$*#*&@(*#*(' => 'cVGF2lnyH6OHLYWHa+8XxHbFzVNK5IYL',
+            '___asdfa234($*(#__' => 'I8OFg5parn9b0Qk8mJnQH0+SgQWwYER5'
+        );
 
-            $encryptedtext = $mcrypt->encrypt($plaintext, $key, $iv);
-            $this->assertNotEquals($plaintext, $encryptedtext);
-
-            $decryptedtext = $mcrypt->decrypt($encryptedtext, $key, $iv);
-            $this->assertEquals($plaintext, $decryptedtext);
+        foreach($data as $unencrypted => $encrypted )
+        {
+            $plaintext = $mcrypt->decrypt($encrypted, $key, '00000000');
+            $this->assertEquals($unencrypted, $plaintext);
         }
     }
 
