@@ -21,21 +21,6 @@ class MathTest extends \PHPUnit_Framework_TestCase
 		$this->assertInstanceOf('Bitpay\Math\EngineInterface', Math::getEngine());
 	}
 
-	public function testcallStatic()
-	{
-		Math::getEngine()->expects($this->any())
-             ->method('add')
-             ->will($this->returnValue(2));
-        $output = Math::add(1,1);
-		$this->assertEquals(2, $output);
-
-		$ref = new \ReflectionProperty('Bitpay\Math\Math', 'engine');
-		$ref->setAccessible(true);
-        $ref->setValue(null);
-        $ref->setAccessible(false);
-        $output = Math::add(1,1);
-		$this->assertEquals(2, $output);
-	}
   /**
    * @requires  extension gmp
    * @runInSeparateProcess
