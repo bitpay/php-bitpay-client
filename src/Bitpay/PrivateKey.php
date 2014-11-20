@@ -68,7 +68,9 @@ class PrivateKey extends Key
         do {
             $privateKey = \Bitpay\Util\SecureRandom::generateRandom(32);
             $this->hex  = strtolower(bin2hex($privateKey));
-        } while (Math::cmp('0x'.$this->hex, '1') <= 0 || Math::cmp('0x'.$this->hex, '0x'.Secp256k1::N) >= 0);
+            $a = Math::cmp('0x'.$this->hex, '1');
+            var_dump($a);
+        } while ($a <= 0 || Math::cmp('0x'.$this->hex, '0x'.Secp256k1::N) >= 0);
 
         $this->dec = Util::decodeHex($this->hex);
 
