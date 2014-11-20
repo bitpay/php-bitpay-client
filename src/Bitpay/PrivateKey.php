@@ -61,6 +61,7 @@ class PrivateKey extends Key
      */
     public function generate()
     {
+        var_dump($this->hex);
         if (!empty($this->hex)) {
             return $this;
         }
