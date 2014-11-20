@@ -21,13 +21,15 @@ class PrivateKeyTest extends \PHPUnit_Framework_TestCase
 
     public function testGenerate()
     {
+        \Bitpay\Math\Math::setEngine(new \Bitpay\Math\GmpEngine());
         $priKey = new PrivateKey();
-        var_dump('priKey initialized');
+        $this->assertNotNull($priKey);
+
         $this->assertNull($priKey->getHex());
-        var_dump('getHex success');
         $this->assertNull($priKey->getDec());
-        var_dump('getDec success');
+
         $priKey->generate();
+
         $this->assertEquals(64, strlen($priKey->getHex()));
         $this->assertGreaterThanOrEqual(72, strlen($priKey->getDec()));
     }

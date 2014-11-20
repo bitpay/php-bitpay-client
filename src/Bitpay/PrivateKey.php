@@ -61,23 +61,15 @@ class PrivateKey extends Key
      */
     public function generate()
     {
-        var_dump($this->hex);
         if (!empty($this->hex)) {
             return $this;
         }
 
-        var_dump('before loop');
         do {
-            var_dump('before generate random');
             $privateKey = \Bitpay\Util\SecureRandom::generateRandom(32);
             $this->hex  = strtolower(bin2hex($privateKey));
-            var_dump($this->hex); // Tells us that the above 2 lines ran
-            $a = Math::cmp('0x'.$this->hex, '1');
-            var_dump($a);
-            $b = Math::cmp('0x'.$this->hex, '0x'.Secp256k1::N);
-            var_dump($b);
-        } while ($a <= 0 || $b >= 0);
-        var_dump('after loop');
+        } while (Math::cmp('0x'.$this->hex, '1') <= 0 || Math::cmp('0x'.$this->hex, '0x'.Secp256k1::N) >= 0);
+
         $this->dec = Util::decodeHex($this->hex);
 
         return $this;
