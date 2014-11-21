@@ -32,6 +32,7 @@ class BcEngineTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($math->add($a, $a), gmp_strval(gmp_add($a, $a)));
         $this->assertEquals($math->add($b, $b), gmp_strval(gmp_add($b, $b)));
         $this->assertEquals($math->add($c, $c), gmp_strval(gmp_add($c, $c)));
+        $this->assertEquals($math->add(1, 1), 2);
     }
 
     public function testcmp()
@@ -43,6 +44,7 @@ class BcEngineTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($math->cmp($a, $a), gmp_strval(gmp_cmp($a, $a)));
         $this->assertEquals($math->cmp($b, $b), gmp_strval(gmp_cmp($b, $b)));
         $this->assertEquals($math->cmp($c, $c), gmp_strval(gmp_cmp($c, $c)));
+        $this->assertEquals($math->cmp(1, 1), 0);
     }
 
     public function testdiv()
@@ -54,6 +56,7 @@ class BcEngineTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($math->div($a, $a), gmp_strval(gmp_div($a, $a)));
         $this->assertEquals($math->div($b, $b), gmp_strval(gmp_div($b, $b)));
         $this->assertEquals($math->div($c, $c), gmp_strval(gmp_div($c, $c)));
+        $this->assertEquals($math->div(1, 1), 1);
     }
 
     public function testinvertm()
@@ -68,6 +71,7 @@ class BcEngineTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($math->invertm(15, 14), gmp_strval(gmp_invert(15, 14)));
     	$this->assertEquals($math->invertm(-1, 1), gmp_strval(gmp_invert(-1, 1)));
+        $this->assertEquals($math->invertm(1, 1), 0);
     }
 
     public function testmod()
@@ -79,6 +83,7 @@ class BcEngineTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($math->mod($a, $a), gmp_strval(gmp_mod($a, $a)));
         $this->assertEquals($math->mod($b, $b), gmp_strval(gmp_mod($b, $b)));
         $this->assertEquals($math->mod($c, $c), gmp_strval(gmp_mod($c, $c)));
+        $this->assertEquals($math->mod(1, 1), 0);
     }
 
     public function testmul()
@@ -90,6 +95,7 @@ class BcEngineTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($math->mul($a, $a), gmp_strval(gmp_mul($a, $a)));
         $this->assertEquals($math->mul($b, $b), gmp_strval(gmp_mul($b, $b)));
         $this->assertEquals($math->mul($c, $c), gmp_strval(gmp_mul($c, $c)));
+        $this->assertEquals($math->mul(1, 1), 1);
     }
 
     public function testpow()
@@ -101,6 +107,7 @@ class BcEngineTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($math->pow($a, $a), gmp_strval(gmp_pow($a, $a)));
         $this->assertEquals($math->pow($b, $b), gmp_strval(gmp_pow($b, $b)));
         $this->assertEquals($math->pow($c, $c), gmp_strval(gmp_pow($c, $c)));
+        $this->assertEquals($math->pow(1, 1), 1);
     }
 
     public function testsub()
@@ -112,6 +119,7 @@ class BcEngineTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($math->sub($a, $a), gmp_strval(gmp_sub($a, $a)));
         $this->assertEquals($math->sub($b, $b), gmp_strval(gmp_sub($b, $b)));
         $this->assertEquals($math->sub($c, $c), gmp_strval(gmp_sub($c, $c)));
+        $this->assertEquals($math->sub(1, 1), 0);
     }
 
     public function testcoprime()

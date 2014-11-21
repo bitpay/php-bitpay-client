@@ -107,6 +107,7 @@ class Error
                     default:
                         return false;
                 }
+                break;
             case 'exception':
                 switch (strtolower($action)) {
                     case 'restore':
@@ -116,6 +117,7 @@ class Error
                     default:
                         return false;
                 }
+                break;
             default:
                 return false;
         }
