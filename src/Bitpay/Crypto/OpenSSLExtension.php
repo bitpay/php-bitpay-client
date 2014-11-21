@@ -1,6 +1,6 @@
 <?php
 /**
- * @license Copyright 2011-2014 BitPay Inc., MIT License 
+ * @license Copyright 2011-2014 BitPay Inc., MIT License
  * see https://github.com/bitpay/php-bitpay-client/blob/master/LICENSE
  */
 
@@ -97,7 +97,7 @@ class OpenSSLExtension implements CryptoInterface
 
                 return false;
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             while ($msg = openssl_error_string()) {
                 throw new \Exception('Error in generateOpenSSLKeypair: OpenSSL reported error: '.$msg);
             }

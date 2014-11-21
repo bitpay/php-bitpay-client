@@ -1,6 +1,6 @@
 <?php
 /**
- * @license Copyright 2011-2014 BitPay Inc., MIT License 
+ * @license Copyright 2011-2014 BitPay Inc., MIT License
  * see https://github.com/bitpay/php-bitpay-client/blob/master/LICENSE
  */
 
@@ -102,10 +102,8 @@ class Error
                 switch (strtolower($action)) {
                     case 'restore':
                         return restore_error_handler();
-                        break;
                     case 'set':
                         return set_error_handler($callable_handler, $error_types);
-                        break;
                     default:
                         return false;
                 }
@@ -114,10 +112,8 @@ class Error
                 switch (strtolower($action)) {
                     case 'restore':
                         return restore_exception_handler();
-                        break;
                     case 'set':
                         return set_exception_handler($callable_handler);
-                        break;
                     default:
                         return false;
                 }

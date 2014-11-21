@@ -21,6 +21,7 @@ class PrivateKeyTest extends \PHPUnit_Framework_TestCase
 
     public function testGenerate()
     {
+        \Bitpay\Math\Math::setEngine(new \Bitpay\Math\GmpEngine());
         $priKey = new PrivateKey();
         $this->assertNotNull($priKey);
 
@@ -133,17 +134,6 @@ class PrivateKeyTest extends \PHPUnit_Framework_TestCase
         $priKey->generate();
 
         $this->assertTrue($priKey->hasValidDec());
-    }
-
-    /**
-     * @see https://github.com/bitpay/bitcore/blob/master/test/test.PrivateKey.js
-     */
-    public function testCreateFromHex()
-    {
-        //$hex      = 'b9f4892c9e8282028fea1d2667c4dc5213564d41fc5783896a0d843fc15089f3';
-        //$expected = 'cTpB4YiyKiBcPxnefsDpbnDxFDffjqJob8wGCEDXxgQ7zQoMXJdH';
-        //$key = PrivateKey::createFromHex($hex);
-        //$this->assertSame($hex, (string) $key);
     }
 
     public function testGetPublicKey()
