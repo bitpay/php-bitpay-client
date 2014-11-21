@@ -14,7 +14,7 @@ namespace Bitpay;
 class KeyManager
 {
     /**
-     * @var Bitpay\Storage\StorageInterface
+     * @var \Bitpay\Storage\StorageInterface
      */
     protected $storage;
 
