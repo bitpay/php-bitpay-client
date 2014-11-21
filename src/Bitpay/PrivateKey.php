@@ -131,8 +131,7 @@ class PrivateKey extends Key
 
             $k_hex = '0x'.strtolower(bin2hex($k));
             $n_hex = '0x'.Secp256k1::N;
-            $a_hex = '0x'.Secp256k1::A;
-            $p_hex = '0x'.Secp256k1::P;
+
 
             $Gx = '0x'.substr(Secp256k1::G, 2, 64);
             $Gy = '0x'.substr(Secp256k1::G, 66, 64);
@@ -143,10 +142,8 @@ class PrivateKey extends Key
             $R = Util::doubleAndAdd($k_hex, $P);
 
             $Rx_hex = Util::encodeHex($R->getX());
-            $Ry_hex = Util::encodeHex($R->getY());
 
             $Rx_hex = str_pad($Rx_hex, 64, '0', STR_PAD_LEFT);
-            $Ry_hex = str_pad($Ry_hex, 64, '0', STR_PAD_LEFT);
 
             // r = x1 mod n
             $r = Math::mod('0x'.$Rx_hex, $n_hex);
@@ -305,8 +302,6 @@ class PrivateKey extends Key
 
         $dec         = '';
         $byte        = '';
-        $seq         = '';
-        $decoded     = '';
         $beg_ec_text = '';
         $end_ec_text = '';
         $ecpemstruct = array();
