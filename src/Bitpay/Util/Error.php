@@ -102,10 +102,8 @@ class Error
                 switch (strtolower($action)) {
                     case 'restore':
                         return restore_error_handler();
-                        break;
                     case 'set':
                         return set_error_handler($callable_handler, $error_types);
-                        break;
                     default:
                         return false;
                 }
@@ -114,14 +112,11 @@ class Error
                 switch (strtolower($action)) {
                     case 'restore':
                         return restore_exception_handler();
-                        break;
                     case 'set':
                         return set_exception_handler($callable_handler);
-                        break;
                     default:
                         return false;
                 }
-                break;
             default:
                 return false;
         }
