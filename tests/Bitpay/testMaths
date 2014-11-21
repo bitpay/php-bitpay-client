@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+phpbrew install 5.6.3 +default +gmp
+php bin/phpunit --verbose -c build/ tests/Bitpay/Math/
+echo "Running with GMP and BCMath enabled"
+phpbrew purge php-5.6.3
+phpbrew install 5.6.3 +default +gmp
+phpbrew use php-5.6.3
+php bin/phpunit --verbose -c build/ tests/Bitpay/Math/
+phpbrew purge php-5.6.3
+echo "Running with only GMPenabled"
+phpbrew install 5.6.3 +default +gmp -bcmath
+phpbrew use php-5.6.3
+php bin/phpunit --verbose -c build/ tests/Bitpay/Math/
+phpbrew purge php-5.6.3
+echo "Running with only BCMath enabled"
+phpbrew install 5.6.3 +default
+phpbrew use php-5.6.3
+php bin/phpunit --verbose -c build/ tests/Bitpay/Math/
+phpbrew purge php-5.6.3
+echo "Running without BCMath or GMP enabled"
+phpbrew install 5.6.3 +default -bcmath
+phpbrew use php-5.6.3 
+php bin/phpunit --verbose -c build/ tests/Bitpay/Math/

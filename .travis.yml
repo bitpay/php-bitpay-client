@@ -14,7 +14,7 @@ before_script:
     - make phantomjs
 
 script:
-    - php bin/phpunit --process-isolation --verbose --debug -c build/
+    - php bin/phpunit -c build/
     - php bin/phpcs -n --standard=PSR1,PSR2 --report=full src/
     #- php bin/phpmd src/ text build/rulesets/phpmd.xml
 

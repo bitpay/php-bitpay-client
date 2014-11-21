@@ -91,3 +91,17 @@ please try to use phpmd. You can see the rules in ``build/rulesets/phpmd.xml``.
 .. code-block:: bash
 
     php bin/phpmd src/ text build/rulesets/phpmd.xml
+
+PHPbrew
+=======
+
+In order to test that a math library is isused when the others aren't installed 
+phpbrew can be used to install bcmath and gmp or uninstall either of them.
+
+.. code-block:: bash
+
+    ./tests/Bitpay/testMaths
+
+.. note::
+    
+    phpbrew is required for testMaths to run properly.
