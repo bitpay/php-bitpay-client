@@ -35,7 +35,7 @@ class CurlAdapter implements AdapterInterface
                 CURLOPT_TIMEOUT        => 10,
                 CURLOPT_SSL_VERIFYPEER => 1,
                 CURLOPT_SSL_VERIFYHOST => 2,
-                CURLOPT_CAINFO         => __DIR__.'/ca-bundle.crt',
+                CURLOPT_CAINFO         => __DIR__ . '/ca-bundle.crt',
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_FORBID_REUSE   => 1,
                 CURLOPT_FRESH_CONNECT  => 1,

@@ -1,6 +1,6 @@
 <?php
 /**
- * @license Copyright 2011-2014 BitPay Inc., MIT License
+ * @license Copyright 2011-2014 BitPay Inc., MIT License 
  * see https://github.com/bitpay/php-bitpay-client/blob/master/LICENSE
  */
 
@@ -26,41 +26,41 @@ class Secp256k1 implements CurveParameterInterface
 
     public function aHex()
     {
-        return '0x'.strtolower(self::A);
+        return '0x' . strtolower(self::A);
     }
 
     public function bHex()
     {
-        return '0x'.strtolower(self::B);
+        return '0x' . strtolower(self::B);
     }
 
     public function gHex()
     {
-        return '0x'.strtolower(self::G);
+        return '0x' . strtolower(self::G);
     }
 
     public function gxHex()
     {
-        return '0x'.substr(strtolower(self::G), 0, 64);
+        return '0x' . substr(strtolower(self::G), 0, 64);
     }
 
     public function gyHex()
     {
-        return '0x'.substr(strtolower(self::G), 66, 64);
+        return '0x' . substr(strtolower(self::G), 66, 64);
     }
 
     public function hHex()
     {
-        return '0x'.strtolower(self::H);
+        return '0x' . strtolower(self::H);
     }
 
     public function nHex()
     {
-        return '0x'.strtolower(self::N);
+        return '0x' . strtolower(self::N);
     }
 
     public function pHex()
     {
-        return '0x'.strtolower(self::P);
+        return '0x' . strtolower(self::P);
     }
 }
