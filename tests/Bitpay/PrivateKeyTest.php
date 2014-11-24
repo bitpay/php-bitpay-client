@@ -103,13 +103,45 @@ class PrivateKeyTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($priKey->isValid());
     }
 
+    public function testSignatureWithGMP()
+    {
+        if (!extension_loaded('gmp')) {
+            $this->markSkipped('GMP extension needs to be loaded.');
+        }
+
+        \Bitpay\Math\Math::setEngine(new \Bitpay\Math\GmpEngine());
+        $priKey = \Bitpay\PrivateKey::create()->generate();
+
+        $sig = $priKey->sign('satoshi lives');
+    }
+
+    public function testSignatureWithBcMath()
+    {
+        if (!extension_loaded('bcmath')) {
+            $this->markSkipped('BC Math extension needs to be loaded.');
+        }
+
+        \Bitpay\Math\Math::setEngine(new \Bitpay\Math\BcEngine());
+        $priKey = \Bitpay\PrivateKey::create()->generate();
+
+        $sig = $priKey->sign('satoshi lives');
+    }
+
     public function testSign()
     {
-        $priKey = new PrivateKey();
-        $priKey->generate();
+        if (!extension_loaded('gmp') && !extension_loaded('bcmath')) {
+            $this->markSkipped('GMP and BC Math extension needs to be loaded.');
+        }
 
-        // Make sure not exceptions are thrown
-        $priKey->sign('BitPay');
+        \Bitpay\Math\Math::setEngine(new \Bitpay\Math\GmpEngine());
+        $priKey = \Bitpay\PrivateKey::create()->generate();
+        $gmpSig = $priKey->sign('satoshi lives');
+
+        \Bitpay\Math\Math::setEngine(new \Bitpay\Math\BcEngine());
+        $priKey = \Bitpay\PrivateKey::create()->generate();
+        $bcSig  = $priKey->sign('satoshi lives');
+
+        $this->assertEquals($gmpSig, $bcSig);
     }
 
     public function testHasValidHex()
