@@ -10,6 +10,7 @@ use Bitpay\Client\Adapter\AdapterInterface;
 use Bitpay\Network\NetworkInterface;
 use Bitpay\TokenInterface;
 use Bitpay\InvoiceInterface;
+use Bitpay\PayoutInterface;
 use Bitpay\Util\Util;
 use Bitpay\PublicKey;
 use Bitpay\PrivateKey;
@@ -176,9 +177,7 @@ class Client implements ClientInterface
     }
 
     /**
-     * Returns an array of Currency objects
-     *
-     * @return array
+     * @inheritdoc
      */
     public function getCurrencies()
     {
@@ -210,10 +209,263 @@ class Client implements ClientInterface
     }
 
     /**
-     * Used to create a token. These method needs to be refactored to
-     * work better
-     *
-     * @return TokenInterface
+     * @inheritdoc
+     */
+    public function createPayout(PayoutInterface $payout)
+    {
+        $request = $this->createNewRequest();
+        $request->setMethod($request::METHOD_POST);
+        $request->setPath('payouts');
+
+        $amount         = $payout->getAmount();
+        $currency       = $payout->getCurrency();
+        $effectiveDate  = $payout->getEffectiveDate();
+        $token          = $payout->getToken();
+
+        $body = array(
+            'token'         => $token->getToken(),
+            'amount'        => $amount,
+            'currency'      => $currency->getCode(),
+            'instructions'  => array(),
+            'effectiveDate' => $effectiveDate,
+            'pricingMethod' => $payout->getPricingMethod(),
+            'guid'          => Util::guid(),
+            'nonce'         => Util::nonce()
+        );
+
+        // Optional
+        foreach (array('reference','notificationURL','notificationEmail') as $value) {
+            $function = 'get' . ucfirst($value);
+            if ($payout->$function() != null) {
+                $body[$value] = $payout->$function();
+            }
+        }
+
+        // Add instructions
+        foreach ($payout->getInstructions() as $instruction) {
+            $body['instructions'][] = array(
+                'label'   => $instruction->getLabel(),
+                'address' => $instruction->getAddress(),
+                'amount'  => $instruction->getAmount()
+            );
+        }
+
+        $request->setBody(json_encode($body));
+        $this->addIdentityHeader($request);
+        $this->addSignatureHeader($request);
+
+        $this->request  = $request;
+        $this->response = $this->sendRequest($request);
+        $body = json_decode($this->response->getBody(), true);
+        if (isset($body['error']) || isset($body['errors'])) {
+            throw new \Exception('Error with request');
+        }
+
+        $data = $body['data'];
+        $payout
+            ->setId($data['id'])
+            ->setAccountId($data['account'])
+            ->setResponseToken($data['token'])
+            ->setStatus($data['status']);
+
+        foreach ($data['instructions'] as $c => $instruction) {
+            $payout->updateInstruction($c, 'setId', $instruction['id']);
+        }
+
+        return $payout;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getPayouts($status = null)
+    {
+        $request = $this->createNewRequest();
+        $request->setMethod(Request::METHOD_GET);
+        $path = 'payouts?token='
+                    . $this->token->getToken()
+                    . (($status == null) ? '' : '&status=' . $status);
+        $request->setPath($path);
+
+        $this->addIdentityHeader($request);
+        $this->addSignatureHeader($request);
+
+        $this->request  = $request;
+        $this->response = $this->sendRequest($this->request);
+        $body           = json_decode($this->response->getBody(), true);
+        if (isset($body['error']) || isset($body['errors'])) {
+            throw new \Exception('Error with request');
+        }
+
+        $payouts = array();
+
+        array_walk($body['data'], function ($value, $key) use (&$payouts) {
+            $payout = new \Bitpay\Payout();
+            $payout
+                ->setId($value['id'])
+                ->setAccountId($value['account'])
+                ->setCurrency(new \Bitpay\Currency($value['currency']))
+                ->setEffectiveDate($value['effectiveDate'])
+                ->setPricingMethod($value['pricingMethod'])
+                ->setRate(@$value['rate'])
+                ->setRequestdate($value['requestDate'])
+                ->setStatus($value['status'])
+                ->setResponseToken($value['token'])
+                ->setReference(@$value['reference'])
+                ->setNotificationURL(@$value['notificationURL'])
+                ->setNotificationEmail(@$value['notificationEmail']);
+
+            array_walk($value['instructions'], function ($value, $key) use (&$payout) {
+                $instruction = new \Bitpay\PayoutInstruction();
+                $instruction
+                    ->setId($value['id'])
+                    ->setLabel($value['label'])
+                    ->setAddress($value['address'])
+                    ->setAmount($value['amount'])
+                    ->setStatus($value['status']);
+
+                array_walk($value['transactions'], function ($value, $key) use (&$instruction) {
+                    $transaction = new \Bitpay\PayoutTransaction();
+                    $transaction
+                        ->setTransactionId($value['txid'])
+                        ->setAmount($value['amount'])
+                        ->setDate($value['date']);
+
+                    $instruction->addTransaction($transaction);
+                });
+
+                $payout->addInstruction($instruction);
+            });
+
+            $payouts[] = $payout;
+        });
+
+        return $payouts;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function deletePayout(PayoutInterface $payout)
+    {
+        $request = $this->createNewRequest();
+        $request->setMethod(Request::METHOD_DELETE);
+        $request->setPath(sprintf('payouts/%s?token=%s', $payout->getId(), $payout->getResponseToken()));
+
+        $this->addIdentityHeader($request);
+        $this->addSignatureHeader($request);
+
+        $this->request  = $request;
+        $this->response = $this->sendRequest($this->request);
+
+        $body           = json_decode($this->response->getBody(), true);
+        if (empty($body['data'])) {
+            throw new \Exception('Error with request');
+        }
+
+        $data   = $body['data'];
+
+        $payout->setStatus($data['status']);
+
+        return $payout;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getPayout($payoutId)
+    {
+        $request = $this->createNewRequest();
+        $request->setMethod(Request::METHOD_GET);
+        $request->setPath(sprintf('payouts/%s?token=%s', $payoutId, $this->token->getToken()));
+        $this->addIdentityHeader($request);
+        $this->addSignatureHeader($request);
+
+        $this->request  = $request;
+        $this->response = $this->sendRequest($this->request);
+
+        $body           = json_decode($this->response->getBody(), true);
+        if (empty($body['data'])) {
+            throw new \Exception('Error with request');
+        }
+        $data   = $body['data'];
+
+        $payout = new \Bitpay\Payout();
+        $payout
+            ->setId($data['id'])
+            ->setAccountId($data['account'])
+            ->setStatus($data['status'])
+            ->setCurrency(new \Bitpay\Currency($data['currency']))
+            ->setPricingMethod(@$data['pricingMethod'])
+            ->setReference(@$data['reference'])
+            ->setNotificationEmail(@$data['notificationEmail'])
+            ->setNotificationUrl(@$data['notificationURL'])
+            ->setRequestDate($data['requestDate'])
+            ->setEffectiveDate($data['effectiveDate'])
+            ->setResponseToken($data['token']);
+
+        array_walk($data['instructions'], function ($value, $key) use (&$payout) {
+            $instruction = new \Bitpay\PayoutInstruction();
+            $instruction
+                ->setId($value['id'])
+                ->setLabel($value['label'])
+                ->setAddress($value['address'])
+                ->setStatus($value['status'])
+                ->setAmount($value['amount'])
+                ->setBtc($value['btc']);
+
+            array_walk($value['transactions'], function ($value, $key) use (&$instruction) {
+                $transaction = new \Bitpay\PayoutTransaction();
+                $transaction
+                    ->setTransactionId($value['txid'])
+                    ->setAmount($value['amount'])
+                    ->setDate($value['date']);
+
+                $instruction->addTransaction($transaction);
+            });
+
+            $payout->addInstruction($instruction);
+        });
+
+        return $payout;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getTokens()
+    {
+        $request = $this->createNewRequest();
+        $request->setMethod(Request::METHOD_GET);
+        $request->setPath('tokens');
+        $this->addIdentityHeader($request);
+        $this->addSignatureHeader($request);
+
+        $this->request  = $request;
+        $this->response = $this->sendRequest($this->request);
+        $body           = json_decode($this->response->getBody(), true);
+        if (empty($body['data'])) {
+            throw new \Exception('Error with request');
+        }
+
+        $tokens = array();
+
+        array_walk($body['data'], function ($value, $key) use (&$tokens) {
+            $key   = current(array_keys($value));
+            $value = current(array_values($value));
+            $token = new \Bitpay\Token();
+            $token
+                ->setFacade($key)
+                ->setToken($value);
+
+            $tokens[$token->getFacade()] = $token;
+        });
+
+        return $tokens;
+    }
+
+    /**
+     * @inheritdoc
      */
     public function createToken(array $payload = array())
     {
@@ -264,8 +516,7 @@ class Client implements ClientInterface
     }
 
     /**
-     * @param  string           $invoiceId
-     * @return InvoiceInterface
+     * @inheritdoc
      */
     public function getInvoice($invoiceId)
     {

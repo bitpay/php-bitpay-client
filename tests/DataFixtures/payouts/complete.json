@@ -1,0 +1,57 @@
+{
+  "facade":"payroll/payoutRequest",
+  "data":
+  {
+    "id":"7AboMecD4jSMXbH7DaJJvm",
+    "account":"Lwbnf9XAPCxDmy8wsRH3ct",
+    "reference":"",
+    "status":"complete",
+    "amount":5625,
+    "rate":352.23,
+    "btc":15.9696,
+    "currency":"USD",
+    "requestDate":"2014-10-27T18:57:02.764Z",
+    "effectiveDate":"2014-10-31T04:00:00.000Z",
+    "pricingMethod":"bitcoinbestbuy",
+    "notificationEmail":"",
+    "instructions":[
+      { "id":"CE1A29vqtJ8kqhPAvrYNqT",
+        "amount":1875,
+        "btc":{"unpaid":0,"paid":5.3232},
+        "address":"mzzsJ8G9KBmHPPVYaMxpYRetWRRec78FvF",
+        "label":"2",
+        "transactions":[
+          {
+            "txid": "1111111111111111111111111111111111111111111121111111111111111111",
+            "amount": 5.3232,
+            "date": "2014-10-31T04:00:00.000Z"
+          }
+        ],
+        "status":"unpaid"},
+      { "id":"R1GQs6gZ1riFsDuSGqmEU9",
+        "amount":1875,
+        "btc":{"unpaid":0,"paid":5.3232},
+        "address":"mre3amN8KCFuy7gWCjhFXjuqkmoJMkd2gx",
+        "label":"3",
+        "transactions":[{
+          "txid": "1111111111111111111111111111111111111111111113111111111111111111",
+          "amount": 5.3232,
+          "date": "2014-10-31T04:00:00.000Z"
+        }],
+        "status":"unpaid"},
+      { "id":"41JTD2XwDvMt8Bm5KvPBLb",
+        "amount":1875,
+        "btc":{"unpaid":0,"paid":5.3232},
+        "address":"mre3amN8KCFuy7gWCjhFXjuqkmoJMkd2gx",
+        "label":"4",
+        "transactions":[{
+          "txid": "1111111111111111111111111111111111111111111111411111111111111111",
+          "amount": 5.3232,
+          "date": "2014-10-31T04:00:00.000Z"
+        }],
+        "status":"unpaid"}
+    ]
+    ,"token":"8mZ37Gt91Wr7GXGPnB9zj28H5dWUmEN3xLHQU5tMh2jqwATvomqdBKWyePgBvwq3PM"
+  }
+
+}

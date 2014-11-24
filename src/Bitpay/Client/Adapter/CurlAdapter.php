@@ -30,6 +30,7 @@ class CurlAdapter implements AdapterInterface
             array(
                 CURLOPT_URL            => $request->getUri(),
                 CURLOPT_PORT           => 443,
+                CURLOPT_CUSTOMREQUEST  => $request->getMethod(),
                 CURLOPT_HTTPHEADER     => $request->getHeaderFields(),
                 CURLOPT_TIMEOUT        => 10,
                 CURLOPT_SSL_VERIFYPEER => 1,

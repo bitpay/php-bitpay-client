@@ -78,12 +78,12 @@ class Invoice implements InvoiceInterface
     protected $btcPrice;
 
     /**
-     * @var DateTime
+     * @var \DateTime
      */
     protected $invoiceTime;
 
     /**
-     * @var DateTime
+     * @var \DateTime
      */
     protected $expirationTime;
 
