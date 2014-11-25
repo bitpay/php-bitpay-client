@@ -22,13 +22,9 @@ class PrivateKeyTest extends \PHPUnit_Framework_TestCase
     public function testGenerate()
     {
         $priKey = new PrivateKey();
-        $this->assertNotNull($priKey);
-
         $this->assertNull($priKey->getHex());
         $this->assertNull($priKey->getDec());
-
         $priKey->generate();
-
         $this->assertEquals(64, strlen($priKey->getHex()));
         $this->assertGreaterThanOrEqual(72, strlen($priKey->getDec()));
     }
@@ -45,14 +41,9 @@ class PrivateKeyTest extends \PHPUnit_Framework_TestCase
     public function testGetHex()
     {
         $priKey = new PrivateKey();
-        $this->assertNotNull($priKey);
-
         $this->assertNull($priKey->getHex());
-
         $this->assertEquals(0, strlen($priKey->getHex()));
-
         $priKey->generate();
-
         $this->assertEquals(64, strlen($priKey->getHex()));
     }
 
@@ -63,13 +54,10 @@ class PrivateKeyTest extends \PHPUnit_Framework_TestCase
     public function testToString()
     {
         $priKey = new PrivateKey();
-        $this->assertNotNull($priKey);
 
         // Make sure this is a string
         $this->assertInternalType('string', $priKey->__toString());
-
         $this->assertSame('', (string) $priKey);
-
         $priKey->generate();
 
         // make sure it's still a string after generating hex
@@ -79,24 +67,16 @@ class PrivateKeyTest extends \PHPUnit_Framework_TestCase
     public function testGetDec()
     {
         $priKey = new PrivateKey();
-        $this->assertNotNull($priKey);
-
         $this->assertNull($priKey->getDec());
-
         $this->assertEquals(0, strlen($priKey->getDec()));
-
         $priKey->generate();
-
         $this->assertGreaterThanOrEqual(72, strlen($priKey->getDec()));
     }
 
     public function testIsValid()
     {
         $priKey = new PrivateKey();
-        $this->assertNotNull($priKey);
-
         $this->assertFalse($priKey->isValid());
-
         $priKey->generate();
 
         $this->assertTrue($priKey->isValid());
@@ -114,24 +94,16 @@ class PrivateKeyTest extends \PHPUnit_Framework_TestCase
     public function testHasValidHex()
     {
         $priKey = new PrivateKey();
-        $this->assertNotNull($priKey);
-
         $this->assertFalse($priKey->hasValidHex());
-
         $priKey->generate();
-
         $this->assertTrue($priKey->hasValidHex());
     }
 
     public function testHasValidDec()
     {
         $priKey = new PrivateKey();
-        $this->assertNotNull($priKey);
-
         $this->assertFalse($priKey->hasValidDec());
-
         $priKey->generate();
-
         $this->assertTrue($priKey->hasValidDec());
     }
 
@@ -166,10 +138,8 @@ class PrivateKeyTest extends \PHPUnit_Framework_TestCase
         $public_key  = '048d970d6ba29dcfa190c177140fd889fadd6d2590b1ee1a6a06e255dbf22b4017ee7bc8e1f07ed0ff8bd77c002b98d31a1a8b53a63767ca65a531fb33cd726197';
 
         $pkey = new PrivateKey();
-        $this->assertNotNull($pkey);
 
         $keys = $pkey->pemDecode($data);
-        $this->assertNotNull($pkey);
 
         // Ensure it's an array
         $this->assertInternalType('array', $keys);
@@ -195,7 +165,6 @@ class PrivateKeyTest extends \PHPUnit_Framework_TestCase
         $keypair = array($private_key, $public_key);
 
         $pkey = new PrivateKey();
-        $this->assertNotNull($pkey);
 
         $pemdata = $pkey->pemEncode($keypair);
         $this->assertNotNull($pemdata);
