@@ -110,10 +110,6 @@ class PrivateKey extends Key
      */
     public function sign($data)
     {
-        if (!ctype_xdigit($this->hex)) {
-            throw new \Exception('The private key must be in hex format.');
-        }
-
         if (empty($data)) {
             throw new \Exception('You did not provide any data to sign.');
         }
