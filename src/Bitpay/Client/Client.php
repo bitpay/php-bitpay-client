@@ -236,7 +236,7 @@ class Client implements ClientInterface
         // Optional
         foreach (array('reference','notificationURL','notificationEmail') as $value) {
             $function = 'get' . ucfirst($value);
-            if ($payout->$function() != null) {
+            if ($payout->$function() !== null) {
                 $body[$value] = $payout->$function();
             }
         }
@@ -284,7 +284,7 @@ class Client implements ClientInterface
         $request->setMethod(Request::METHOD_GET);
         $path = 'payouts?token='
                     . $this->token->getToken()
-                    . (($status == null) ? '' : '&status=' . $status);
+                    . (($status === null) ? '' : '&status=' . $status);
         $request->setPath($path);
 
         $this->addIdentityHeader($request);

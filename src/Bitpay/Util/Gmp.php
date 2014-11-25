@@ -114,7 +114,7 @@ class Gmp
             $st     = gmp_mul($m, $n);
             $st2    = gmp_mul($m, $n2);
             $s      = gmp_mod($st, $p);
-            $s2     = gmp_mod($st2, $p);
+            //$s2     = gmp_mod($st2, $p);
             $xmul   = gmp_mul(2, $point->getX());
             $smul   = gmp_mul($s, $s);
             $xsub   = gmp_sub($smul, $xmul);
@@ -159,7 +159,7 @@ class Gmp
         }
 
         $p = '0x'.Secp256k1::P;
-        $a = '0x'.Secp256k1::A;
+        //$a = '0x'.Secp256k1::A;
         $s = 0;
         $R = array(
             'x' => 0,
@@ -205,7 +205,7 @@ class Gmp
             $R['s'] = gmp_strval($s);
             $R['x'] = gmp_strval($R['x']);
             $R['y'] = gmp_strval($R['y']);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             throw new \Exception('Error in Util::gmpPointAdd(): '.$e->getMessage());
         }
 
