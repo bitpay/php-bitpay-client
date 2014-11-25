@@ -91,9 +91,11 @@ $token->setToken('Put your token here');
 $client->setToken($token);
 
 // Send invoice
-$client->createInvoice($invoice);
-var_dump(
-    (string) $client->getRequest(),
-    (string) $client->getResponse(),
-    $invoice
-);
+try {
+    $client->createInvoice($invoice);
+} catch (\Exception $e) {
+    echo (string) $client->getRequest().PHP_EOL.PHP_EOL.PHP_EOL;
+    echo (string) $client->getResponse().PHP_EOL.PHP_EOL;
+    exit(1);
+}
+echo 'Invoice ID: "'.$invoice->getId().'" created, see '.$invoice->getUrl().' to view'.PHP_EOL;
