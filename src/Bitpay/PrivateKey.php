@@ -120,6 +120,8 @@ class PrivateKey extends Key
             if (substr(strtolower($this->hex), 0, 2) != '0x') {
                 $d = '0x'.$this->hex;
             } else {
+                // This will never execute because $this->hex will never start
+                // with 0x the current way this class is currently setup.
                 $d = $this->hex;
             }
 

@@ -91,6 +91,15 @@ class PrivateKeyTest extends \PHPUnit_Framework_TestCase
         $priKey->sign('BitPay');
     }
 
+    /**
+     * @expectedException Exception
+     */
+    public function testSignWithEmptyData()
+    {
+        $pri = \Bitpay\PrivateKey::create()->generate();
+        $pri->sign(null);
+    }
+
     public function testHasValidHex()
     {
         $priKey = new PrivateKey();
