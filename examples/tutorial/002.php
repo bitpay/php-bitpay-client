@@ -84,8 +84,8 @@ try {
      * You can use the entire request/response to help figure out what went
      * wrong, but for right now, we will just var_dump them.
      */
-    var_dump((string) $request);
-    var_dump((string) $response);
+    echo (string) $request.PHP_EOL.PHP_EOL.PHP_EOL;
+    echo (string) $response.PHP_EOL.PHP_EOL;
     /**
      * NOTE: The `(string)` is include so that the objects are converted to a
      *       user friendly string.
