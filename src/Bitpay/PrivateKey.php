@@ -110,10 +110,6 @@ class PrivateKey extends Key
      */
     public function sign($data)
     {
-        if (!ctype_xdigit($this->hex)) {
-            throw new \Exception('The private key must be in hex format.');
-        }
-
         if (empty($data)) {
             throw new \Exception('You did not provide any data to sign.');
         }
@@ -124,6 +120,8 @@ class PrivateKey extends Key
             if (substr(strtolower($this->hex), 0, 2) != '0x') {
                 $d = '0x'.$this->hex;
             } else {
+                // This will never execute because $this->hex will never start
+                // with 0x the current way this class is currently setup.
                 $d = $this->hex;
             }
 
@@ -131,8 +129,8 @@ class PrivateKey extends Key
 
             $k_hex = '0x'.strtolower(bin2hex($k));
             $n_hex = '0x'.Secp256k1::N;
-            $a_hex = '0x'.Secp256k1::A;
-            $p_hex = '0x'.Secp256k1::P;
+            //$a_hex = '0x'.Secp256k1::A;
+            //$p_hex = '0x'.Secp256k1::P;
 
             $Gx = '0x'.substr(Secp256k1::G, 2, 64);
             $Gy = '0x'.substr(Secp256k1::G, 66, 64);
@@ -306,8 +304,8 @@ class PrivateKey extends Key
 
         $dec         = '';
         $byte        = '';
-        $seq         = '';
-        $decoded     = '';
+        //$seq         = '';
+        //$decoded     = '';
         $beg_ec_text = '';
         $end_ec_text = '';
         $ecpemstruct = array();
