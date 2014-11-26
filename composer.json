@@ -47,6 +47,9 @@
         "squizlabs/php_codesniffer": "~1.5.5",
         "satooshi/php-coveralls": "~0.6.1"
     },
+    "suggest": {
+        "ext-gmp": "Quickest PHP math library for doing Elliptic Curve calculations."
+    },
     "config": {
         "bin-dir": "bin"
     },
