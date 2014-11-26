@@ -183,7 +183,7 @@ class BcEngineTest extends \PHPUnit_Framework_TestCase
     public function testInputFloat()
     {
         $math = new BcEngine();
-        echo 'This is: '.$math->input(1.3)."\n";
+        $math->input(1.3);
     }
 
     public function testCoprime()
