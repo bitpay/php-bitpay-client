@@ -23,7 +23,7 @@ class BcEngineTest extends \PHPUnit_Framework_TestCase
       }
 
     }
-    public function testadd()
+    public function testAdd()
     {
         $a = 1234;
         $b = '1234123412341234123412341234123412412341234213412421341342342';
@@ -35,7 +35,7 @@ class BcEngineTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(2, $math->add(1, 1));
     }
 
-    public function testcmp()
+    public function testCmp()
     {
         $a = 1234;
         $b = '1234123412341234123412341234123412412341234213412421341342342';
@@ -47,7 +47,7 @@ class BcEngineTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(0, $math->cmp(1, 1));
     }
 
-    public function testdiv()
+    public function testDiv()
     {
         $a = 1234;
         $b = '1234123412341234123412341234123412412341234213412421341342342';
@@ -59,7 +59,7 @@ class BcEngineTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(1, $math->div(1, 1));
     }
 
-    public function testinvertm()
+    public function testiInvertm()
     {
         $math = new BcEngine();
         
@@ -85,7 +85,7 @@ class BcEngineTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('93736451599995461267424215486556527005103980679329099329644578865571485201981', $math->invertm($o, $p));
     }
 
-    public function testmod()
+    public function testMod()
     {
         $a = 1234;
         $b = '-1675975991242824637446753124775730765934920727574049172215445180465096172921808707643480960976619010162856846742450225672776411590632518780962349126898196';
@@ -98,7 +98,7 @@ class BcEngineTest extends \PHPUnit_Framework_TestCase
 
     }
 
-    public function testmul()
+    public function testMul()
     {
         $a = 1234;
         $b = '1234123412341234123412341234123412412341234213412421341342342';
@@ -110,7 +110,7 @@ class BcEngineTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(1, $math->mul(1, 1));
     }
 
-    public function testpow()
+    public function testPow()
     {
         $a = 1234;
         $b = '1234';
@@ -122,7 +122,7 @@ class BcEngineTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(1, $math->pow(1, 1));
     }
 
-    public function testsub()
+    public function testSub()
     {
         $a = 1234;
         $b = '1234123412341234123412341234123412412341234213412421341342342';
@@ -134,7 +134,59 @@ class BcEngineTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(0, $math->sub(1, 1));
     }
 
-    public function testcoprime()
+    public function testInput()
+    {
+        $inputs = array(
+            1234,
+            '1234123412341234123412341234123412412341234213412421341342342',
+            '0x1234123412341234123412341234123412412341234213412',
+            -1234,
+            '-1234123412341234123412341234123412412341234213412421341342342',
+            '-0x1234123412341234123412341234123412412341234213412',
+            false,
+            null,
+            0,
+            ''
+        );
+
+        $outputs = array(
+            '1234',
+            '1234123412341234123412341234123412412341234213412421341342342',
+            '7141538191659890405914342860980599801397657411485029184530',
+            '-1234',
+            '-1234123412341234123412341234123412412341234213412421341342342',
+            '-7141538191659890405914342860980599801397657411485029184530',
+            '0',
+            '0',
+            '0',
+            '0'
+        );
+
+        $math = new BcEngine();
+        for($i = 0, $size = count($inputs); $i < $size; $i++) {
+            $this->assertEquals($outputs[$i], $math->input($inputs[$i]));
+        }
+    }
+
+    /**
+     * @expectedException Exception
+     */
+    public function testInputNonNumeric()
+    {
+        $math = new BcEngine();
+        $math->input("safasdf");
+    }
+
+    /**
+     * @expectedException Exception
+     */
+    public function testInputFloat()
+    {
+        $math = new BcEngine();
+        echo 'This is: '.$math->input(1.3)."\n";
+    }
+
+    public function testCoprime()
     {
         $a = '14';
         $b = '21';

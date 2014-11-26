@@ -139,34 +139,24 @@ class BcEngine implements EngineInterface
         return bcsub($a, $b);
     }
 
-    private function input($x)
+    public function input($x)
     {
-        $x = strtolower($x);
-        if (is_string($x) && substr($x, 0, 2) == '0x' && ctype_xdigit(substr($x, 2))) {
-            $hex = strtolower($x);
-            $hex = substr($hex, 2);
+        if (empty($x)) {
+            return '0';
+        }
+        $x = strtolower(trim($x));
+        if (preg_match('/^(-?)0x([0-9a-f]+)$/', $x, $matches)) {
+            $sign = $matches[1];
+            $hex = $matches[2];
 
             for ($dec = '0', $i = 0; $i < strlen($hex); $i++) {
                 $current = strpos('0123456789abcdef', $hex[$i]);
                 $dec     = bcadd(bcmul($dec, 16), $current);
             }
 
-            return $dec;
-        } elseif (is_string($x) && substr($x, 0, 3) == '-0x' && ctype_xdigit(substr($x, 3))) {
-            $hex = strtolower($x);
-            $hex = substr($hex, 3);
+            return $sign.$dec;
 
-            for ($dec = '0', $i = 0; $i < strlen($hex); $i++) {
-                $current = strpos('0123456789abcdef', $hex[$i]);
-                $dec     = bcadd(bcmul($dec, 16), $current);
-            }
-
-            return '-'.$dec;
-        } elseif (is_string($x) && preg_match('/^-?[0-9]+/', $x)) {
-            return $x;
-        } elseif (is_int($x)) {
-            return (string) $x;
-        } elseif ($x === '') {
+        } elseif (preg_match('/^-?[0-9]+$/', $x)) {
             return $x;
         } else {
             throw new \Exception("The input must be a numeric string in decimal or hexadecimal (with leading 0x) format.\n".var_export($x, false));
