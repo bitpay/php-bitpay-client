@@ -404,34 +404,4 @@ class Util
         return strrev($byte);
     }
 
-    /**
-     * y^2 (mod p) = x^3 + ax + b (mod p)
-     *
-     * @param PointInterface          $point
-     * @param CurveParameterInterface $parameters
-     */
-    public static function pointTest(PointInterface $point, CurveParameterInterface $parameters = null)
-    {
-        if (null === $parameters) {
-            $parameters = new Secp256k1();
-        }
-
-        // y^2
-        $y2 = Math::pow($point->getY(), 2);
-        // x^3
-        $x3 = Math::pow($point->getX(), 3);
-        // ax
-        $ax = Math::mul($parameters->aHex(), $point->getX());
-
-        $left  = Math::mod($y2, $parameters->pHex());
-        $right = Math::mod(
-            Math::add(
-                Math::add($x3, $ax),
-                $parameters->bHex()
-            ),
-            $parameters->pHex()
-        );
-
-        return ($left == $right);
-    }
 }
