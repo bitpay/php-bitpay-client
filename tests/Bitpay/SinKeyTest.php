@@ -39,8 +39,6 @@ class SinKeyTest extends \PHPUnit_Framework_TestCase
     {
         $sinKey = new SinKey();
         $this->assertNotNull($sinKey);
-
-        //$sinKey->setPublicKey(PublicKey::create());
         $sinKey->generate();
     }
 

@@ -70,18 +70,7 @@ class EncryptedFilesystemStorage implements StorageInterface
         }
 
         $encoded = file_get_contents($id);
-
-        //if (function_exists('hex2bin')) {
-        //    $decoded = openssl_decrypt(
-        //        hex2bin($encoded),
-        //        self::METHOD,
-        //        $this->password,
-        //        1,
-        //        self::IV
-        //    );
-        //} else {
-            $decoded = openssl_decrypt(\Bitpay\Util\Gmp::gmpBinconv($encoded), self::METHOD, $this->password, 1, self::IV);
-        //}
+        $decoded = openssl_decrypt(\Bitpay\Util\Util::binConv($encoded), self::METHOD, $this->password, 1, self::IV);
 
         if (false === $decoded) {
             throw new \Exception('Could not decode key');

@@ -7,9 +7,9 @@
 namespace Bitpay;
 
 use Bitpay\Util\Secp256k1;
-use Bitpay\Util\Gmp;
 use Bitpay\Util\Util;
 use Bitpay\Util\SecureRandom;
+use Bitpay\Math\Math;
 
 /**
  * @package Bitcore
@@ -68,7 +68,7 @@ class PrivateKey extends Key
         do {
             $privateKey = \Bitpay\Util\SecureRandom::generateRandom(32);
             $this->hex  = strtolower(bin2hex($privateKey));
-        } while (gmp_cmp('0x'.$this->hex, '1') <= 0 || gmp_cmp('0x'.$this->hex, '0x'.Secp256k1::N) >= 0);
+        } while (Math::cmp('0x'.$this->hex, '1') <= 0 || Math::cmp('0x'.$this->hex, '0x'.Secp256k1::N) >= 0);
 
         $this->dec = Util::decodeHex($this->hex);
 
@@ -131,8 +131,7 @@ class PrivateKey extends Key
 
             $k_hex = '0x'.strtolower(bin2hex($k));
             $n_hex = '0x'.Secp256k1::N;
-            $a_hex = '0x'.Secp256k1::A;
-            $p_hex = '0x'.Secp256k1::P;
+
 
             $Gx = '0x'.substr(Secp256k1::G, 2, 64);
             $Gy = '0x'.substr(Secp256k1::G, 66, 64);
@@ -140,23 +139,21 @@ class PrivateKey extends Key
             $P = new Point($Gx, $Gy);
 
             // Calculate a new curve point from Q=k*G (x1,y1)
-            $R = Gmp::doubleAndAdd($k_hex, $P);
+            $R = Util::doubleAndAdd($k_hex, $P);
 
             $Rx_hex = Util::encodeHex($R->getX());
-            $Ry_hex = Util::encodeHex($R->getY());
 
             $Rx_hex = str_pad($Rx_hex, 64, '0', STR_PAD_LEFT);
-            $Ry_hex = str_pad($Ry_hex, 64, '0', STR_PAD_LEFT);
 
             // r = x1 mod n
-            $r = gmp_strval(gmp_mod('0x'.$Rx_hex, $n_hex));
+            $r = Math::mod('0x'.$Rx_hex, $n_hex);
 
             // s = k^-1 * (e+d*r) mod n
-            $edr  = gmp_add($e, gmp_mul($d, $r));
-            $invk = gmp_invert($k_hex, $n_hex);
-            $kedr = gmp_mul($invk, $edr);
+            $edr  = Math::add($e, Math::mul($d, $r));
+            $invk = Math::invertm($k_hex, $n_hex);
+            $kedr = Math::mul($invk, $edr);
 
-            $s = gmp_strval(gmp_mod($kedr, $n_hex));
+            $s = Math::mod($kedr, $n_hex);
 
             // The signature is the pair (r,s)
             $signature = array(
@@ -166,8 +163,7 @@ class PrivateKey extends Key
 
             $signature['r'] = str_pad($signature['r'], 64, '0', STR_PAD_LEFT);
             $signature['s'] = str_pad($signature['s'], 64, '0', STR_PAD_LEFT);
-
-        } while (gmp_cmp($r, '0') <= 0 || gmp_cmp($s, '0') <= 0);
+        } while (Math::cmp($r, '0') <= 0 || Math::cmp($s, '0') <= 0);
 
         $sig = array(
             'sig_rs'  => $signature,
@@ -175,6 +171,127 @@ class PrivateKey extends Key
         );
 
         return $sig['sig_hex']['seq'];
+    }
+
+    /**
+     * Verifies an ECDSA signature previously generated.
+     *
+     * @param string $r   The signature r coordinate in hex.
+     * @param string $s   The signature s coordinate in hex.
+     * @param string $msg The message signed.
+     * @param array  $Q   The base point.
+     */
+    public function verify($r, $s, $msg)
+    {
+        if (!ctype_xdigit($r) || !ctype_xdigit($s)) {
+            throw new \Exception('The (r, s) parameters must be in hex format.');
+        }
+        if (empty($Q) || empty($msg)) {
+            throw new \Exception('The point and message parameters are required.');
+        }
+        $e         = '';
+        $w         = '';
+        $u1        = '';
+        $u2        = '';
+        $Zx_hex    = '';
+        $Zy_hex    = '';
+        $rsubx     = '';
+        $rsubx_rem = '';
+        $Za        = array();
+        $Zb        = array();
+        $Z         = array();
+        $r = $this->coordinateCheck(trim(strtolower($r)));
+        $s = $this->coordinateCheck(trim(strtolower($s)));
+        $this->rangeCheck($r);
+        $this->rangeCheck($s);
+        /* Convert the hash of the hex message to decimal */
+        $e = Util::decodeHex(hash('sha256', $msg));
+        /* Calculate w = s^-1 (mod n) */
+        $w = Math::invertm($s, Secp256k1::N);
+        /* Calculate u1 = e*w (mod n) */
+        $u1 = Math::mod(Math::mul($e, $w), Secp256k1::N);
+        /* Calculate u2 = r*w (mod n) */
+        $u2 = Math::mod(Math::mul($r, $w), Secp256k1::N);
+        /* Get new point Z(x1,y1) = (u1 * G) + (u2 * Q) */
+        $Gx = '0x'.substr(Secp256k1::G, 2, 64);
+        $Gy = '0x'.substr(Secp256k1::G, 66, 64);
+
+        $P = new Point($Gx, $Gy);
+        $Q = $P;
+        $Za = Util::doubleAndAdd($u1, $P);
+        $Zb = Util::doubleAndAdd($u2, $Q);
+        $Z  = Util::PointAdd($Za, $Zb);
+        $Zx_hex = $this->zeroPad(Util::encodeHex($Z['x']), 64);
+        $Zy_hex = $this->zeroPad(Util::encodeHex($Z['y']), 64);
+        /* 
+         * A signature is valid if r is congruent to x1 (mod n)
+         * or in other words, if r - x1 is an integer multiple of n.
+         */
+        $rsubx     = Math::sub($r, '0x' . $Zx_hex);
+        $rsubx_rem = Math::mod($rsubx, Secp256k1::N);
+        return (math::cmp($rsubx_rem, '0') == 0);
+    }
+
+    /**
+     * Basic coordinate check.
+     *
+     * @param  string $hex The coordinate to check.
+     * @return string $hex The checked coordinate.
+     */
+    private function coordinateCheck($hex)
+    {
+        if ($this->testOx($hex) != $hex) {
+            $hex = '0x' . $hex;
+            if (strlen($hex) < 64) {
+                throw new \Exception('The r parameter is invalid. Expected hex string of 64 characters (32-bytes).');   
+            }
+        }
+        return $hex;
+    }
+
+    /**
+     * Determines if the hex value needs '0x'.
+     *
+     * @param  string $value The value to check.
+     * @return string $value If the value is present.
+     */
+    public function testOx($value)
+    {
+        if (substr(strtolower($value), 0, 2) != '0x') {
+            $value = '0x' . strtolower($value);
+        }
+        
+        return $value;
+    }
+
+    /**
+     * Consistent string padding workaround.
+     * 
+     * @param  string $value The value to pad.
+     * @param  int    $amt   The amount to pad.
+     * @return string $value The padded value.
+     */
+    public function zeroPad($value, $amt)
+    {
+        $val_len = strlen($value);
+        while ($value < $amt) {
+            $value = '0' . $value;
+            $val_len++;
+        }
+        return $value;
+    }
+
+    /**
+     * Basic range check. Throws exception if out of range.
+     *
+     * @param string $value The coordinate to check.
+     */
+    public function rangeCheck($value)
+    {
+        /* Check to see if $value is in the range [1, n-1] */
+        if (Math::cmp($value, '1') <= 0 && Math::cmp($value, $this->n) > 0) {
+            throw new \Exception('The parameter is out of range. Should be 1 < r < n-1.');
+        }
     }
 
     /**
@@ -201,9 +318,9 @@ class PrivateKey extends Key
 
         $dec = Util::decodeHex($r);
 
-        while (gmp_cmp($dec, '0') > 0) {
-            $dv = gmp_div($dec, '256');
-            $rem = gmp_strval(gmp_mod($dec, '256'));
+        while (Math::cmp($dec, '0') > 0) {
+            $dv = Math::div($dec, '256');
+            $rem = Math::mod($dec, '256');
             $dec = $dv;
             $byte = $byte.$digits[$rem];
         }
@@ -211,7 +328,7 @@ class PrivateKey extends Key
         $byte = strrev($byte);
 
         // msb check
-        if (gmp_cmp('0x'.bin2hex($byte[0]), '0x80') >= 0) {
+        if (Math::cmp('0x'.bin2hex($byte[0]), '0x80') >= 0) {
             $byte = chr(0x00).$byte;
         }
 
@@ -221,9 +338,9 @@ class PrivateKey extends Key
 
         $byte = '';
 
-        while (gmp_cmp($dec, '0') > 0) {
-            $dv = gmp_div($dec, '256');
-            $rem = gmp_strval(gmp_mod($dec, '256'));
+        while (Math::cmp($dec, '0') > 0) {
+            $dv = Math::div($dec, '256');
+            $rem = Math::mod($dec, '256');
             $dec = $dv;
             $byte = $byte.$digits[$rem];
         }
@@ -231,7 +348,7 @@ class PrivateKey extends Key
         $byte = strrev($byte);
 
         // msb check
-        if (gmp_cmp('0x'.bin2hex($byte[0]), '0x80') >= 0) {
+        if (Math::cmp('0x'.bin2hex($byte[0]), '0x80') >= 0) {
             $byte = chr(0x00).$byte;
         }
 
@@ -306,8 +423,6 @@ class PrivateKey extends Key
 
         $dec         = '';
         $byte        = '';
-        $seq         = '';
-        $decoded     = '';
         $beg_ec_text = '';
         $end_ec_text = '';
         $ecpemstruct = array();
@@ -349,14 +464,14 @@ class PrivateKey extends Key
 
         $dec = Util::decodeHex('0x'.$dec);
 
-        while (gmp_cmp($dec, '0') > 0) {
-            $dv = gmp_div($dec, '256');
-            $rem = gmp_strval(gmp_mod($dec, '256'));
+        while (Math::cmp($dec, '0') > 0) {
+            $dv = Math::div($dec, '256');
+            $rem = Math::mod($dec, '256');
             $dec = $dv;
             $byte = $byte.$digits[$rem];
         }
 
-        $byte = $beg_ec_text . "\r\n" . chunk_split(base64_encode(strrev($byte)), 64) . $end_ec_text;
+        $byte = $beg_ec_text."\r\n".chunk_split(base64_encode(strrev($byte)), 64).$end_ec_text;
 
         $this->pemEncoded = $byte;
 

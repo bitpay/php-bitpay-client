@@ -29,7 +29,7 @@
     },
     "require": {
         "php": ">=5.4",
-        "ext-gmp": "*",
+        "ext-bcmath": "*",
         "ext-curl": "*",
         "ext-json": "*",
         "ext-openssl": "*",
