@@ -55,9 +55,10 @@ class Response implements ResponseInterface
      */
     public static function createFromRawResponse($rawResponse)
     {
-        $response = new self($rawResponse);
-        $lines    = preg_split('/(\\r?\\n)/', $rawResponse);
-        for ($i = 0; $i < count($lines); $i++) {
+        $response      = new self($rawResponse);
+        $lines         = preg_split('/(\\r?\\n)/', $rawResponse);
+        $lengthOfLines = count($lines);
+        for ($i = 0; $i < $lengthOfLines; $i++) {
             if (0 == $i) {
                 preg_match('/^HTTP\/(\d\.\d)\s(\d+)\s(.+)/', $lines[$i], $statusLine);
                 $response->setStatusCode($statusCode = $statusLine[2]);

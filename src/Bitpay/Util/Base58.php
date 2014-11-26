@@ -58,7 +58,8 @@ final class Base58
      */
     public static function decode($data)
     {
-        for ($return = '0', $i = 0; $i < strlen($data); $i++) {
+        $lengthOfData = strlen($data);
+        for ($return = '0', $i = 0; $i < $lengthOfData; $i++) {
             $current = strpos(self::BASE58_CHARS, $data[$i]);
             $return  = gmp_mul($return, '58');
             $return  = gmp_strval(gmp_add($return, $current));

@@ -172,7 +172,7 @@ class Invoice implements InvoiceInterface
         // If there is not an item already set, we need to use a default item
         // so that some methods do not throw errors about methods and
         // non-objects.
-        if (null == $this->item) {
+        if (null === $this->item) {
             $this->item = new Item();
         }
 
@@ -199,7 +199,7 @@ class Invoice implements InvoiceInterface
     public function getBuyer()
     {
         // Same logic as getItem method
-        if (null == $this->buyer) {
+        if (null === $this->buyer) {
             $this->buyer = new Buyer();
         }
 
