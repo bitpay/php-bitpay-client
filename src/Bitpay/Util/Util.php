@@ -403,5 +403,4 @@ class Util
 
         return strrev($byte);
     }
-
 }
