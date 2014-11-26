@@ -223,7 +223,7 @@ class PrivateKey extends Key
         $Z  = Util::PointAdd($Za, $Zb);
         $Zx_hex = $this->zeroPad(Util::encodeHex($Z['x']), 64);
         $Zy_hex = $this->zeroPad(Util::encodeHex($Z['y']), 64);
-        /* 
+        /*
          * A signature is valid if r is congruent to x1 (mod n)
          * or in other words, if r - x1 is an integer multiple of n.
          */
@@ -243,7 +243,7 @@ class PrivateKey extends Key
         if ($this->testOx($hex) != $hex) {
             $hex = '0x' . $hex;
             if (strlen($hex) < 64) {
-                throw new \Exception('The r parameter is invalid. Expected hex string of 64 characters (32-bytes).');   
+                throw new \Exception('The r parameter is invalid. Expected hex string of 64 characters (32-bytes).');
             }
         }
         return $hex;

@@ -52,7 +52,7 @@ class GmpEngine implements EngineInterface
     {
         // gmp_mod has weird behavior when the left operand is negative - https://bugs.php.net/bug.php?id=52906
         if (substr($a, 0, 1) === '-') {
-            return gmp_strval(gmp_sub(gmp_mod($a,$b),$b));
+            return gmp_strval(gmp_sub(gmp_mod($a, $b), $b));
         }
 
         return gmp_strval(gmp_mod($a, $b));
