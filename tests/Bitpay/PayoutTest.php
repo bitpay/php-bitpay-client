@@ -140,28 +140,24 @@ class PayoutTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($out[0]->getAddress(), $address2);
     }
 
-    /**
-     * @depends testGetAmount
-     */
-    public function testGetAmountWithInstructions()
+    public function testGetBtcAmountNull()
     {
-        // Test side effect of adding an instruction: should increase amount.
         $this->assertNotNull($this->payout);
-        $this->assertNull($this->payout->getAmount());
+        $this->assertNull($this->payout->getBtcAmount());
+    }
 
-        $amount1 = 10;
-        $ins1 = new PayoutInstruction();
-        $ins1->setAmount($amount1);
+    /**
+     * @depends testGetBtcAmountNull
+     */
+    public function testGetBtcAmount()
+    {
+        $amount = '4.3';
+        $this->payout->setBtcAmount($amount);
+        $this->assertSame($this->payout->getBtcAmount(), $amount);
 
-        $amount2 = 35;
-        $ins2 = new PayoutInstruction();
-        $ins2->setAmount($amount2);
-
-        $this->payout->addInstruction($ins1);
-        $this->assertSame($amount1, $this->payout->getAmount());
-
-        $this->payout->addInstruction($ins2);
-        $this->assertSame(($amount1 + $amount2), $this->payout->getAmount());
+        $amount = 4.3;
+        $this->payout->setBtcAmount($amount);
+        $this->assertSame($this->payout->getBtcAmount(), $amount);
     }
 
     public function testGetPricingMethod()
