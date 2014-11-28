@@ -11,6 +11,22 @@ namespace Bitpay;
  */
 class PublicKeyTest extends \PHPUnit_Framework_TestCase
 {
+
+    private $hexKeys = array(
+        array(
+            'private' => 'b7dafe35d7d1aab78b53982c8ba554584518f86d50af565c98e053613c8f15e0',
+            'public' => '02211c9570d24ba84a3ee31c8a08e93a6756b3f3beac76a4ab8d9748ca78203389'
+        ),
+        array(
+            'private' => '876156ccb16bb1760ddda6ad3e561c026fc0d679ad7860b71dd11c30e42f6589',
+            'public' => '0394615227fd5ff4d4dfac88cf148e43d35a7a059788dd2479f60cea807b09d0c2'
+        ),
+        array(
+            'private' => 'c6d202e281efee7a77934d1bbc8c958823a784899533c2bef087eb219856e168',
+            'public' => '02513706c80e2d06338726ba345dc2ea1b598a4d783c76cbd25844ae3531e13045'
+        ),
+    );
+
     public function testId()
     {
         $key = new PublicKey('/path/to/key.pub');
@@ -24,19 +40,12 @@ class PublicKeyTest extends \PHPUnit_Framework_TestCase
 
     public function testGenerate()
     {
-        $pubKey = new PublicKey();
-        $pubKey->setPrivateKey($this->getMockPrivateKey());
-
-        $this->assertNull($pubKey->getHex());
-        $this->assertNull($pubKey->getDec());
-
-        $pubKey->generate();
-
-        //$this->assertEquals(130, strlen($pubKey->getHex()));
-        //$this->assertEquals(33, strlen($pubKey->getHex()));
-        //$this->assertGreaterThanOrEqual(155, strlen($pubKey->getDec()));
-        //$this->assertLessThan(4, substr($pubKey->getHex(), 0, 1));
-        //$this->assertGreaterThan(1, substr($pubKey->getHex(), 0, 1));
+        foreach($this->hexKeys as $hexKey) {
+            $pubKey = new PublicKey();
+            $pubKey->setPrivateKey($this->getMockPrivateKey($hexKey['private']));
+            $pubKey->generate();
+            $this->assertEquals($hexKey['public'], (string) $pubKey);
+        }
     }
 
     public function testGenerateOnlyOnce()
@@ -106,10 +115,8 @@ class PublicKeyTest extends \PHPUnit_Framework_TestCase
         }
 
         $this->assertSame($compressed, (string) $pubKey);
-        // compress is 33 length
-        //$this->assertEquals(33, strlen((string) $pubKey));
-        // uncompresses is 66 length
-        //$this->assertEquals(66, strlen((string) $pubKey));
+
+        $this->assertEquals(66, strlen((string) $pubKey));
     }
 
     /**
@@ -158,8 +165,7 @@ class PublicKeyTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($key->isValid());
         $key->setPrivateKey($this->getMockPrivateKey());
         $key->generate();
-        // Fails
-        //$this->assertTrue($key->isValid());
+        $this->assertTrue($key->isValid());
     }
 
     public function testGetSin()
@@ -193,16 +199,17 @@ class PublicKeyTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($pub->isGenerated());
     }
 
-    private function getMockPrivateKey()
+    private function getMockPrivateKey($hex = null)
     {
+        $hex = ($hex === null) ? $this->hexKeys[0]['private'] : $hex;
         $key = $this->getMock('Bitpay\PrivateKey');
         $key->method('isValid')->will($this->returnValue(true));
 
         $key
             ->method('getHex')
-            // @see https://github.com/bitpay/bitcore/blob/master/test/test.Key.js for value
-            ->will($this->returnValue('b7dafe35d7d1aab78b53982c8ba554584518f86d50af565c98e053613c8f15e0'));
-
+            ->will($this->returnValue($hex));
+            
         return $key;
     }
+
 }

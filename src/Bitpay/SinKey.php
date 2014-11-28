@@ -69,7 +69,7 @@ class SinKey extends Key
             throw new \Exception('The Public Key needs to be generated.');
         }
 
-        $step1 = Util::sha256(Gmp::gmpBinconv($compressedValue), true);
+        $step1 = Util::sha256(Util::binConv($compressedValue), true);
 
         $step2 = Util::ripe160($step1);
 
@@ -80,7 +80,7 @@ class SinKey extends Key
             $step2
         );
 
-        $step4 = Util::twoSha256(Gmp::gmpBinconv($step3), true);
+        $step4 = Util::twoSha256(Util::binConv($step3), true);
 
         $step5 = substr(bin2hex($step4), 0, 8);
 

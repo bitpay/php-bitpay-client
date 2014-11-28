@@ -1,10 +1,14 @@
 <?php
 /**
- * @license Copyright 2011-2014 BitPay Inc., MIT License 
+ * @license Copyright 2011-2014 BitPay Inc., MIT License
  * see https://github.com/bitpay/php-bitpay-client/blob/master/LICENSE
  */
 
 namespace Bitpay\Util;
+
+use Bitpay\PointInterface;
+use Bitpay\Point;
+use Bitpay\Math\Math;
 
 /**
  * Utility class used by string and arbitrary integer methods.
@@ -95,9 +99,6 @@ class Util
      */
     public static function twoSha256($data, $binary = false)
     {
-        //$pass1 = self::sha256(hex2bin($data), true);
-        //$pass2 = strrev(bin2hex(self::sha256($pass1, true)));
-
         return self::sha256(self::sha256($data, $binary), $binary);
     }
 
@@ -135,7 +136,7 @@ class Util
     /**
      * Encodes a decimal value into hexadecimal.
      *
-     * @param string $dec
+     * @param  string $dec
      * @return string
      */
     public static function encodeHex($dec)
@@ -146,9 +147,12 @@ class Util
 
         $hex = '';
 
-        while (gmp_cmp($dec, 0) > 0) {
-            list ($dec, $rem) = gmp_div_qr($dec, 16);
-            $hex = substr(self::HEX_CHARS, gmp_intval($rem), 1) . $hex;
+        while (Math::cmp($dec, 0) > 0) {
+            $q = Math::div($dec, 16);
+            $rem = Math::mod($dec, 16);
+            $dec = $q;
+
+            $hex = substr(self::HEX_CHARS, intval($rem), 1).$hex;
         }
 
         return $hex;
@@ -157,7 +161,7 @@ class Util
     /**
      * Decodes a hexadecimal value into decimal.
      *
-     * @param string $hex
+     * @param  string $hex
      * @return string
      */
     public static function decodeHex($hex)
@@ -175,9 +179,228 @@ class Util
 
         for ($dec = '0', $i = 0; $i < strlen($hex); $i++) {
             $current = strpos(self::HEX_CHARS, $hex[$i]);
-            $dec     = gmp_add(gmp_mul($dec, 16), $current);
+            $dec     = Math::add(Math::mul($dec, 16), $current);
         }
 
-        return gmp_strval($dec);
+        return $dec;
+    }
+
+    public static function doubleAndAdd($hex, PointInterface $point, CurveParameterInterface $parameters = null)
+    {
+        if (null === $parameters) {
+            $parameters = new Secp256k1();
+        }
+
+        $tmp = self::decToBin($hex);
+
+        $n   = strlen($tmp) - 1;
+        $old = 11;
+        $S   = new Point(PointInterface::INFINITY, PointInterface::INFINITY);
+        $gmpS = new Point(PointInterface::INFINITY, PointInterface::INFINITY);
+
+        while ($n >= 0) {
+            $S = self::pointDouble($S);
+            if ($tmp[$n] == 1) {
+                $S = self::pointAdd($S, $point);
+            }
+            $n--;
+        }
+
+        return new Point($S->getX(), $S->getY());
+    }
+
+    /**
+     * This method returns a binary string representation of
+     * the decimal number. Used for the doubleAndAdd() method.
+     *
+     * @see http://php.net/manual/en/function.decbin.php but for large numbers
+     *
+     * @param string
+     * @return string
+     */
+    public static function decToBin($dec)
+    {
+        if (substr(strtolower($dec), 0, 2) == '0x') {
+            $dec = self::decodeHex(substr($dec, 2));
+        }
+
+        $bin  = '';
+        while (Math::cmp($dec, '0') > 0) {
+            if (Math::mod($dec, 2) == '1') {
+                $bin .= '1';
+            } else {
+                $bin .= '0';
+            }
+            $dec = Math::div($dec, 2);
+        }
+
+        return $bin;
+    }
+
+    /**
+     * Point multiplication method 2P = R where
+     *   s = (3xP2 + a)/(2yP) mod p
+     *   xR = s2 - 2xP mod p
+     *   yR = -yP + s(xP - xR) mod p
+     *
+     * @param  PointInterface $point
+     * @param CurveParameterInterface
+     * @return PointInterface
+     */
+    public static function pointDouble(PointInterface $point, CurveParameterInterface $parameters = null)
+    {
+        if ($point->isInfinity()) {
+            return $point;
+        }
+
+        if (null === $parameters) {
+            $parameters = new Secp256k1();
+        }
+
+        $p = $parameters->pHex();
+        $a = $parameters->aHex();
+
+        $s = 0;
+        $R = array(
+            'x' => 0,
+            'y' => 0,
+        );
+
+        // Critical math section
+        try {
+            $m      = Math::add(Math::mul(3, Math::mul($point->getX(), $point->getX())), $a);
+            $o      = Math::mul(2, $point->getY());
+            $n      = Math::invertm($o, $p);
+            $n2     = Math::mod($o, $p);
+            $st     = Math::mul($m, $n);
+            $st2    = Math::mul($m, $n2);
+            $s      = Math::mod($st, $p);
+            $s2     = Math::mod($st2, $p);
+            $xmul   = Math::mul(2, $point->getX());
+            $smul   = Math::mul($s, $s);
+            $xsub   = Math::sub($smul, $xmul);
+            $xmod   = Math::mod($xsub, $p);
+            $R['x'] = $xmod;
+            $ysub   = Math::sub($point->getX(), $R['x']);
+            $ymul   = Math::mul($s, $ysub);
+            $ysub2  = Math::sub(0, $point->getY());
+            $yadd   = Math::add($ysub2, $ymul);
+
+            $R['y'] = Math::mod($yadd, $p);
+
+        } catch (\Exception $e) {
+            throw new \Exception('Error in Util::pointDouble(): '.$e->getMessage());
+        }
+
+        return new Point($R['x'], $R['y']);
+    }
+
+        /**
+     * Point addition method P + Q = R where:
+     *   s = (yP - yQ)/(xP - xQ) mod p
+     *   xR = s2 - xP - xQ mod p
+     *   yR = -yP + s(xP - xR) mod p
+     *
+     * @param PointInterface
+     * @param PointInterface
+     *
+     * @return PointInterface
+     */
+    public static function pointAdd(PointInterface $P, PointInterface $Q)
+    {
+        if ($P->isInfinity()) {
+            return $Q;
+        }
+
+        if ($Q->isInfinity()) {
+            return $P;
+        }
+
+        if ($P->getX() == $Q->getX() && $P->getY() == $Q->getY()) {
+            return self::pointDouble(new Point($P->getX(), $P->getY()));
+        }
+
+        $p = '0x'.Secp256k1::P;
+        $a = '0x'.Secp256k1::A;
+        $s = 0;
+        $R = array(
+            'x' => 0,
+            'y' => 0,
+            's' => 0,
+        );
+
+        // Critical math section
+        try {
+            $m      = Math::sub($P->getY(), $Q->getY());
+            $n      = Math::sub($P->getX(), $Q->getX());
+            $o      = Math::invertm($n, $p);
+            $st     = Math::mul($m, $o);
+            $s      = Math::mod($st, $p);
+
+            $R['x'] = Math::mod(
+                Math::sub(
+                    Math::sub(
+                        Math::mul($s, $s),
+                        $P->getX()
+                    ),
+                    $Q->getX()
+                ),
+                $p
+            );
+            $R['y'] = Math::mod(
+                Math::add(
+                    Math::sub(
+                        0,
+                        $P->getY()
+                    ),
+                    Math::mul(
+                        $s,
+                        Math::sub(
+                            $P->getX(),
+                            $R['x']
+                        )
+                    )
+                ),
+                $p
+            );
+
+            $R['s'] = $s;
+        } catch (Exception $e) {
+            throw new \Exception('Error in Util::pointAdd(): '.$e->getMessage());
+        }
+
+        return new Point($R['x'], $R['y']);
+    }
+
+    /**
+     * Converts hex value into octet (byte) string
+     *
+     * @param string
+     *
+     * @return string
+     */
+    public static function binConv($hex)
+    {
+        $rem    = '';
+        $dv     = '';
+        $byte   = '';
+        $digits = array();
+
+        for ($x = 0; $x < 256; $x++) {
+            $digits[$x] = chr($x);
+        }
+
+        if (substr(strtolower($hex), 0, 2) != '0x') {
+            $hex = '0x'.strtolower($hex);
+        }
+
+        while (Math::cmp($hex, 0) > 0) {
+            $dv   = Math::div($hex, 256);
+            $rem  = Math::mod($hex, 256);
+            $hex  = $dv;
+            $byte = $byte.$digits[$rem];
+        }
+
+        return strrev($byte);
     }
 }

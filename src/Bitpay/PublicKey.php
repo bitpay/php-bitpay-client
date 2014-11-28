@@ -6,7 +6,7 @@
 
 namespace Bitpay;
 
-use Bitpay\Util\Gmp;
+use Bitpay\Math\Math;
 use Bitpay\Util\Secp256k1;
 use Bitpay\Util\Util;
 
@@ -36,7 +36,7 @@ class PublicKey extends Key
             return '';
         }
 
-        if (gmp_strval(gmp_mod('0x'.$this->y, '0x02')) == '1') {
+        if (Math::mod('0x'.$this->y, '0x02') == '1') {
             return sprintf('03%s', $this->x);
         } else {
             return sprintf('02%s', $this->x);
@@ -98,7 +98,7 @@ class PublicKey extends Key
             '0x'.substr(Secp256k1::G, 66, 64)
         );
 
-        $R = Gmp::doubleAndAdd(
+        $R = Util::doubleAndAdd(
             '0x'.$this->privateKey->getHex(),
             $point
         );
@@ -125,7 +125,7 @@ class PublicKey extends Key
      */
     public function isValid()
     {
-        return ((!empty($this->hex) && !ctype_xdigit($this->hex)) && (!empty($this->dec) && !ctype_digit($this->dec)));
+        return ((!empty($this->hex) && ctype_xdigit($this->hex)) && (!empty($this->dec) && ctype_digit($this->dec)));
     }
 
     /**

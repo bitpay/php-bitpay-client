@@ -7,9 +7,9 @@
 namespace Bitpay;
 
 use Bitpay\Util\Secp256k1;
-use Bitpay\Util\Gmp;
 use Bitpay\Util\Util;
 use Bitpay\Util\SecureRandom;
+use Bitpay\Math\Math;
 
 /**
  * @package Bitcore
@@ -68,7 +68,7 @@ class PrivateKey extends Key
         do {
             $privateKey = \Bitpay\Util\SecureRandom::generateRandom(32);
             $this->hex  = strtolower(bin2hex($privateKey));
-        } while (gmp_cmp('0x'.$this->hex, '1') <= 0 || gmp_cmp('0x'.$this->hex, '0x'.Secp256k1::N) >= 0);
+        } while (Math::cmp('0x'.$this->hex, '1') <= 0 || Math::cmp('0x'.$this->hex, '0x'.Secp256k1::N) >= 0);
 
         $this->dec = Util::decodeHex($this->hex);
 
@@ -131,8 +131,7 @@ class PrivateKey extends Key
 
             $k_hex = '0x'.strtolower(bin2hex($k));
             $n_hex = '0x'.Secp256k1::N;
-            $a_hex = '0x'.Secp256k1::A;
-            $p_hex = '0x'.Secp256k1::P;
+
 
             $Gx = '0x'.substr(Secp256k1::G, 2, 64);
             $Gy = '0x'.substr(Secp256k1::G, 66, 64);
@@ -140,23 +139,21 @@ class PrivateKey extends Key
             $P = new Point($Gx, $Gy);
 
             // Calculate a new curve point from Q=k*G (x1,y1)
-            $R = Gmp::doubleAndAdd($k_hex, $P);
+            $R = Util::doubleAndAdd($k_hex, $P);
 
             $Rx_hex = Util::encodeHex($R->getX());
-            $Ry_hex = Util::encodeHex($R->getY());
 
             $Rx_hex = str_pad($Rx_hex, 64, '0', STR_PAD_LEFT);
-            $Ry_hex = str_pad($Ry_hex, 64, '0', STR_PAD_LEFT);
 
             // r = x1 mod n
-            $r = gmp_strval(gmp_mod('0x'.$Rx_hex, $n_hex));
+            $r = Math::mod('0x'.$Rx_hex, $n_hex);
 
             // s = k^-1 * (e+d*r) mod n
-            $edr  = gmp_add($e, gmp_mul($d, $r));
-            $invk = gmp_invert($k_hex, $n_hex);
-            $kedr = gmp_mul($invk, $edr);
+            $edr  = Math::add($e, Math::mul($d, $r));
+            $invk = Math::invertm($k_hex, $n_hex);
+            $kedr = Math::mul($invk, $edr);
 
-            $s = gmp_strval(gmp_mod($kedr, $n_hex));
+            $s = Math::mod($kedr, $n_hex);
 
             // The signature is the pair (r,s)
             $signature = array(
@@ -166,8 +163,7 @@ class PrivateKey extends Key
 
             $signature['r'] = str_pad($signature['r'], 64, '0', STR_PAD_LEFT);
             $signature['s'] = str_pad($signature['s'], 64, '0', STR_PAD_LEFT);
-
-        } while (gmp_cmp($r, '0') <= 0 || gmp_cmp($s, '0') <= 0);
+        } while (Math::cmp($r, '0') <= 0 || Math::cmp($s, '0') <= 0);
 
         $sig = array(
             'sig_rs'  => $signature,
@@ -201,9 +197,9 @@ class PrivateKey extends Key
 
         $dec = Util::decodeHex($r);
 
-        while (gmp_cmp($dec, '0') > 0) {
-            $dv = gmp_div($dec, '256');
-            $rem = gmp_strval(gmp_mod($dec, '256'));
+        while (Math::cmp($dec, '0') > 0) {
+            $dv = Math::div($dec, '256');
+            $rem = Math::mod($dec, '256');
             $dec = $dv;
             $byte = $byte.$digits[$rem];
         }
@@ -211,7 +207,7 @@ class PrivateKey extends Key
         $byte = strrev($byte);
 
         // msb check
-        if (gmp_cmp('0x'.bin2hex($byte[0]), '0x80') >= 0) {
+        if (Math::cmp('0x'.bin2hex($byte[0]), '0x80') >= 0) {
             $byte = chr(0x00).$byte;
         }
 
@@ -221,9 +217,9 @@ class PrivateKey extends Key
 
         $byte = '';
 
-        while (gmp_cmp($dec, '0') > 0) {
-            $dv = gmp_div($dec, '256');
-            $rem = gmp_strval(gmp_mod($dec, '256'));
+        while (Math::cmp($dec, '0') > 0) {
+            $dv = Math::div($dec, '256');
+            $rem = Math::mod($dec, '256');
             $dec = $dv;
             $byte = $byte.$digits[$rem];
         }
@@ -231,7 +227,7 @@ class PrivateKey extends Key
         $byte = strrev($byte);
 
         // msb check
-        if (gmp_cmp('0x'.bin2hex($byte[0]), '0x80') >= 0) {
+        if (Math::cmp('0x'.bin2hex($byte[0]), '0x80') >= 0) {
             $byte = chr(0x00).$byte;
         }
 
@@ -306,8 +302,6 @@ class PrivateKey extends Key
 
         $dec         = '';
         $byte        = '';
-        $seq         = '';
-        $decoded     = '';
         $beg_ec_text = '';
         $end_ec_text = '';
         $ecpemstruct = array();
@@ -349,14 +343,14 @@ class PrivateKey extends Key
 
         $dec = Util::decodeHex('0x'.$dec);
 
-        while (gmp_cmp($dec, '0') > 0) {
-            $dv = gmp_div($dec, '256');
-            $rem = gmp_strval(gmp_mod($dec, '256'));
+        while (Math::cmp($dec, '0') > 0) {
+            $dv = Math::div($dec, '256');
+            $rem = Math::mod($dec, '256');
             $dec = $dv;
             $byte = $byte.$digits[$rem];
         }
 
-        $byte = $beg_ec_text . "\r\n" . chunk_split(base64_encode(strrev($byte)), 64) . $end_ec_text;
+        $byte = $beg_ec_text."\r\n".chunk_split(base64_encode(strrev($byte)), 64).$end_ec_text;
 
         $this->pemEncoded = $byte;
 

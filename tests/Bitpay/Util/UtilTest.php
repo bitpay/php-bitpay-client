@@ -6,11 +6,28 @@
 
 namespace Bitpay\Util;
 
+use Bitpay\Point;
+
 /**
  * @package Bitcore
  */
 class UtilTest extends \PHPUnit_Framework_TestCase
 {
+
+    public function testSha256()
+    {
+        $data = array(
+            array(
+                '03d95e184cce34c3cfa58e9a277a09a7c5ed1b2a8134ea1e52887bc66fa3f47071',
+                'a5c756101065ac5b8f689139e6d856fa99e54b5000b6428b43729d334cc9277d',
+            ),
+        );
+
+        foreach ($data as $datum) {
+            $this->assertSame($datum[1], Util::sha256($datum[0]));
+        }
+    }
+
     public function testSha512()
     {
         $data = array(
@@ -33,35 +50,16 @@ class UtilTest extends \PHPUnit_Framework_TestCase
         }
     }
 
-    public function testSha256()
+    public function testRipe160()
     {
         $data = array(
-            array(
-                '03d95e184cce34c3cfa58e9a277a09a7c5ed1b2a8134ea1e52887bc66fa3f47071',
-                'a5c756101065ac5b8f689139e6d856fa99e54b5000b6428b43729d334cc9277d',
-            ),
+            array('somemessage123', '12fd01a7ec6b9ba23b3a5c16fbfab3ac19624a88'),
+            array('', '9c1185a5c5e9fc54612808977ee8f548b2258d31'),
+            array('0000', 'ab20e58c9eeb4776e719deff3158e26ca9edb636'),
         );
 
         foreach ($data as $datum) {
-            $this->assertSame($datum[1], Util::sha256($datum[0]));
-        }
-    }
-
-    /**
-     * @see https://github.com/bitpay/bitcore/blob/master/test/test.util.js
-     */
-    public function testTwoSha256()
-    {
-        $this->markTestIncomplete();
-        $data = array(
-            array(
-                '907c2bc503ade11cc3b04eb2918b6f547b0630ab569273824748c87ea14b0696526c66ba740200000000fd1f9bdd4ef073c7afc4ae00da8a66f429c917a0081ad1e1dabce28d373eab81d8628de80200000000ad042b5f25efb33beec9f3364e8a9139e8439d9d7e26529c3c30b6c3fd89f8684cfd68ea0200000000599ac2fe02a526ed040000000008535300516352515164370e010000000003006300ab2ec2291fe51c6f',
-                '31af167a6cf3f9d5f6875caa4d31704ceb0eba078d132b78dab52c3b8997317e',
-            ),
-        );
-
-        foreach ($data as $datum) {
-            //$this->assertSame($datum[1], Util::twoSha256($datum[0]));
+            $this->assertSame($datum[1], Util::ripe160($datum[0]));
         }
     }
 
@@ -79,22 +77,27 @@ class UtilTest extends \PHPUnit_Framework_TestCase
         }
     }
 
-    public function testRipe160()
+    /**
+     * @see https://github.com/bitpay/bitcore/blob/master/test/test.util.js
+     */
+    public function testTwoSha256()
     {
         $data = array(
-            array('somemessage123', '12fd01a7ec6b9ba23b3a5c16fbfab3ac19624a88'),
-            array('', '9c1185a5c5e9fc54612808977ee8f548b2258d31'),
-            array('0000', 'ab20e58c9eeb4776e719deff3158e26ca9edb636'),
+            array(
+                '907c2bc503ade11cc3b04eb2918b6f547b0630ab569273824748c87ea14b0696526c66ba740200000000fd1f9bdd4ef073c7afc4ae00da8a66f429c917a0081ad1e1dabce28d373eab81d8628de80200000000ad042b5f25efb33beec9f3364e8a9139e8439d9d7e26529c3c30b6c3fd89f8684cfd68ea0200000000599ac2fe02a526ed040000000008535300516352515164370e010000000003006300ab2ec2291fe51c6f',
+                '60d8ec2b9241235914528efcc7b32315062d78c8dc12e09bbfdd4cb00563be5b',
+            ),
         );
 
         foreach ($data as $datum) {
-            $this->assertSame($datum[1], Util::ripe160($datum[0]));
+            $this->assertSame($datum[1], Util::twoSha256($datum[0]));
         }
     }
 
     public function testNonce()
     {
         $a = Util::nonce();
+        usleep(1);
         $b = Util::nonce();
 
         // ensure a < b
@@ -117,14 +120,6 @@ class UtilTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(12, strlen($guid[4]));
     }
 
-    /**
-     * @expectedException Exception
-     */
-    public function testEncodeException()
-    {
-        Util::encodeHex(new \StdClass());
-    }
-
     public function testEncodeHex()
     {
         $data = array(
@@ -137,6 +132,14 @@ class UtilTest extends \PHPUnit_Framework_TestCase
                 Util::encodeHex($datum[0])
             );
         }
+    }
+
+    /**
+     * @expectedException Exception
+     */
+    public function testEncodeException()
+    {
+        Util::encodeHex(new \StdClass());
     }
 
     public function testDecodeHex()
@@ -161,4 +164,87 @@ class UtilTest extends \PHPUnit_Framework_TestCase
     {
         Util::decodeHex(new \StdClass());
     }
+
+    public function testDoubleAndAdd()
+    {
+        $point = Util::doubleAndAdd('0', new Point(0, 0));
+        $this->assertInstanceOf('Bitpay\PointInterface', $point);
+        $this->assertTrue($point->isInfinity());
+        $point = Util::doubleAndAdd('1', new Point(1, 1));
+        $this->assertEquals('1', $point->getX());
+        $this->assertEquals('1', $point->getY());
+        $point = new Point(
+            '0x'.substr(Secp256k1::G, 2, 64),
+            '0x'.substr(Secp256k1::G, 66, 64)
+        );
+
+        $R = Util::doubleAndAdd(
+            '0xb7dafe35d7d1aab78b53982c8ba554584518f86d50af565c98e053613c8f15e0',
+            $point
+        );
+        $this->assertEquals('14976827122927988984909748681266837395089399768482149532452617485742004777865', $R->getX());
+        $this->assertEquals('5009713401941157350243425146365130573323232660945282226881202857781593637456', $R->getY());
+    }
+
+    public function testDecToBin()
+    {
+        $data = array(
+            array('123456789', '101010001011001111011010111'),
+            array('0x123456789', '100100011110011010100010110001001'),
+        );
+        foreach ($data as $datum) {
+            $this->assertSame($datum[1], Util::decToBin($datum[0]));
+        }
+    }
+
+    public function testPointDouble()
+    {
+        $point = Util::PointDouble(new Point('89565891926547004231252920425935692360644145829622209833684329913297188986597', '-103633689937622365100603176395974509217114616778598935862658712053120463017733'));
+        $expectedpoint = new Point("103388573995635080359749164254216598308788835304023601477803095234286494993683", "-78734948092074072410555668377823578303129767736939410369584297579653005861645");
+        $this->assertEquals($expectedpoint, $point);
+
+        $point = Util::PointDouble(new Point(1, 1));
+        $expectedpoint = new Point("28948022309329048855892746252171976963317496166410141009864396001977208667916", "-101318078082651670995624611882601919371611236582435493534525386006920230337705");
+        $this->assertEquals($expectedpoint, $point);
+
+        $point = Util::PointDouble(new Point(0, 0));
+        $expectedpoint = new Point("0", "0");
+        $this->assertEquals($expectedpoint, $point);
+    }
+
+    public function testPointAdd()
+    {
+        $point = Util::pointAdd(
+           new Point(1, 1),
+           new Point(1, 1)
+        );
+        $expectedpoint = new Point("28948022309329048855892746252171976963317496166410141009864396001977208667916", "-101318078082651670995624611882601919371611236582435493534525386006920230337705");
+        $this->assertEquals($expectedpoint, $point);
+
+        $point = Util::pointAdd(
+           new Point(0, 0),
+           new Point(1, 1)
+        );
+        $expectedpoint = new Point("0", "0");
+        $this->assertEquals($expectedpoint, $point);
+
+        $point = Util::pointAdd(
+           new Point(1, 0),
+           new Point(0, 1)
+        );
+        $expectedpoint = new Point("0", "-1");
+        $this->assertEquals($expectedpoint, $point);
+    }
+
+    public function testBinConv()
+    {
+        $data = array(
+            array('7361746f736869', 'satoshi'),
+            array('0x7361746f736869', 'satoshi'),
+        );
+        foreach ($data as $datum) {
+            $this->assertSame($datum[1], Util::binConv($datum[0]));
+        }
+    }
+
 }
