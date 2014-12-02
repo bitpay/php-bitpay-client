@@ -83,6 +83,8 @@ class Currency implements CurrencyInterface
     protected $payoutFields;
 
     /**
+     * @param  string    $code The Currency Code to use, ie USD
+     * @throws Exception       Throws an exception if the Currency Code is not supported
      */
     public function __construct($code = null)
     {
@@ -105,8 +107,8 @@ class Currency implements CurrencyInterface
     /**
      * This will change the $code to all uppercase
      *
-     * @param string $code
-     *
+     * @param  string            $code The Currency Code to use, ie USD
+     * @throws Exception               Throws an exception if the Currency Code is not supported
      * @return CurrencyInterface
      */
     public function setCode($code)
