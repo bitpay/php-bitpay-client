@@ -25,13 +25,18 @@ class CurlAdapter implements AdapterInterface
     protected $curlOptions;
 
     /**
-     * @param array $options
+     * @param array $curlOptions
      */
     public function __construct(array $curlOptions = array())
     {
         $this->curlOptions = $curlOptions;
     }
 
+    /**
+     * Returns an array of curl settings to use
+     *
+     * @return array
+     */
     public function getCurlOptions()
     {
         return $this->curlOptions;

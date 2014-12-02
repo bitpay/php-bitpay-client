@@ -72,8 +72,6 @@ class Request implements RequestInterface
 
         // Default method is POST
         $this->method = self::METHOD_POST;
-
-
     }
 
     /**
