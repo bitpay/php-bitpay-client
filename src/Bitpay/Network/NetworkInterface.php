@@ -33,4 +33,11 @@ interface NetworkInterface
      * @return string
      */
     public function getApiHost();
+
+    /**
+     * The port of the host
+     *
+     * @return integer
+     */
+    public function getApiPort();
 }

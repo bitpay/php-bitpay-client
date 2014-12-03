@@ -53,9 +53,6 @@ class CurlAdapter implements AdapterInterface
 
         foreach ($this->getCurlOptions() as $curl_option_key => $curl_option_value) {
             if (!is_null($curl_option_value)) {
-                if (CURLOPT_PORT === $curl_option_key) {
-                    $request->setPort($curl_option_value);
-                }
                 $default_curl_options[$curl_option_key] = $curl_option_value;
             }
         }

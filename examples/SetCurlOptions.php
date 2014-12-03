@@ -2,18 +2,17 @@
 
 require __DIR__ . '/../vendor/autoload.php';
 
+//When running bitpay on your local server
+$network = new Bitpay\Network\Customnet("alex.bp", 8088, true);
+
 //Customize the curl options
 $curl_options = array(
-            CURLOPT_PORT           => 443,
-            CURLOPT_TIMEOUT        => 10,
-            CURLOPT_SSL_VERIFYPEER => 1,
-            CURLOPT_SSL_VERIFYHOST => 2,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_FORBID_REUSE   => 1,
-            CURLOPT_FRESH_CONNECT  => 1,
-            CURLOPT_HEADER         => true,
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_SSL_VERIFYHOST => false,
             );
 
 // If nothing is passed into the CurlAdapter 
 // then default values are used
 $adapter = new Bitpay\Client\Adapter\CurlAdapter($curl_options);
+var_dump($network);
+var_dump($adapter->getCurlOptions());

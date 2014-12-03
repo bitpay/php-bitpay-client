@@ -35,8 +35,7 @@ class CurlAdapterTest extends \PHPUnit_Framework_TestCase
         $this->setExpectedException('Exception');
         
         $curl_options = array(
-            CURLOPT_URL            => "example.com",
-            CURLOPT_PORT           => 443,
+            CURLOPT_URL            => "www.example.com",
             CURLOPT_SSL_VERIFYPEER => 1,
             CURLOPT_SSL_VERIFYHOST => 2,
         );
@@ -51,7 +50,6 @@ class CurlAdapterTest extends \PHPUnit_Framework_TestCase
         
         $curl_options = array(
             CURLOPT_URL            => "www.bitpay.com",
-            CURLOPT_PORT           => 443,
             CURLOPT_SSL_VERIFYPEER => 1,
             CURLOPT_SSL_VERIFYHOST => 2,
         );
