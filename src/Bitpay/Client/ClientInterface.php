@@ -56,6 +56,16 @@ interface ClientInterface
      */
     public function getInvoice($invoiceId);
 
+    /**
+     * @param $invoiceId
+     * @param $bitcoinAddress
+     * @param $amount
+     * @param $currency
+     * @return string
+     * @throws \Exception
+     */
+    public function createRefund($invoiceId, $bitcoinAddress, $amount, $currency);
+    
     //public function getLedgers();
     //public function getLedger(CurrencyInterface $currency);
 
