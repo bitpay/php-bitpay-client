@@ -179,6 +179,40 @@ class Client implements ClientInterface
     /**
      * @inheritdoc
      */
+    public function createRefund($invoiceId, $bitcoinAddress, $amount, $currency)
+    {
+       $request = $this->createNewRequest();
+        $request->setMethod(Request::METHOD_POST);
+        $request->setPath(sprintf('invoices/%s/refunds', $invoiceId));
+
+        try {
+            $body = [
+                'bitcoinAddress' => $bitcoinAddress,
+                'amount'         => $amount,
+                'currency'       => $currency
+            ];
+            $request->setBody(json_encode($body));
+            
+            $this->addIdentityHeader($request);
+            $this->addSignatureHeader($request);
+            
+            $this->request = $request;
+            $response      = $this->sendRequest($request);
+            $body          = json_decode($response->getBody(), true);
+
+            if (isset($body['error'])) {
+                throw new \Exception($body['error']);
+            }
+
+            $data = $body['data'];
+            return $data;
+        } catch (\Exception $ex) {
+            throw $ex;
+        } 
+    }
+    /**
+     * @inheritdoc
+     */
     public function getCurrencies()
     {
         $this->request = $this->createNewRequest();
