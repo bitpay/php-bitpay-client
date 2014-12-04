@@ -20,28 +20,44 @@ use Bitpay\Client\Response;
 class CurlAdapter implements AdapterInterface
 {
     /**
+     * @var array
+     */
+    protected $curlOptions;
+
+    /**
+     * @param array $curlOptions
+     */
+    public function __construct(array $curlOptions = array())
+    {
+        $this->curlOptions = $curlOptions;
+    }
+
+    /**
+     * Returns an array of curl settings to use
+     *
+     * @return array
+     */
+    public function getCurlOptions()
+    {
+        return $this->curlOptions;
+    }
+
+    /**
      * @inheritdoc
      */
     public function sendRequest(RequestInterface $request)
     {
         $curl = curl_init();
-        curl_setopt_array(
-            $curl,
-            array(
-                CURLOPT_URL            => $request->getUri(),
-                CURLOPT_PORT           => 443,
-                CURLOPT_CUSTOMREQUEST  => $request->getMethod(),
-                CURLOPT_HTTPHEADER     => $request->getHeaderFields(),
-                CURLOPT_TIMEOUT        => 10,
-                CURLOPT_SSL_VERIFYPEER => 1,
-                CURLOPT_SSL_VERIFYHOST => 2,
-                CURLOPT_CAINFO         => __DIR__ . '/ca-bundle.crt',
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_FORBID_REUSE   => 1,
-                CURLOPT_FRESH_CONNECT  => 1,
-                CURLOPT_HEADER         => true,
-            )
-        );
+
+        $default_curl_options = $this->getCurlDefaultOptions($request);
+
+        foreach ($this->getCurlOptions() as $curl_option_key => $curl_option_value) {
+            if (!is_null($curl_option_value)) {
+                $default_curl_options[$curl_option_key] = $curl_option_value;
+            }
+        }
+
+        curl_setopt_array($curl, $default_curl_options);
 
         if (RequestInterface::METHOD_POST == $request->getMethod()) {
             curl_setopt_array(
@@ -67,5 +83,29 @@ class CurlAdapter implements AdapterInterface
         curl_close($curl);
 
         return $response;
+    }
+
+    /**
+     * Returns an array of default curl settings to use
+     *
+     * @param RequestInterface $request
+     * @return array
+     */
+    private function getCurlDefaultOptions(RequestInterface $request)
+    {
+        return array(
+            CURLOPT_URL            => $request->getUri(),
+            CURLOPT_PORT           => $request->getPort(),
+            CURLOPT_CUSTOMREQUEST  => $request->getMethod(),
+            CURLOPT_HTTPHEADER     => $request->getHeaderFields(),
+            CURLOPT_TIMEOUT        => 10,
+            CURLOPT_SSL_VERIFYPEER => 1,
+            CURLOPT_SSL_VERIFYHOST => 2,
+            CURLOPT_CAINFO         => __DIR__.'/ca-bundle.crt',
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_FORBID_REUSE   => 1,
+            CURLOPT_FRESH_CONNECT  => 1,
+            CURLOPT_HEADER         => true,
+        );
     }
 }

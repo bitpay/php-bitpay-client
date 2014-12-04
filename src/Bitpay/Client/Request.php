@@ -52,6 +52,13 @@ class Request implements RequestInterface
     protected $path;
 
     /**
+     * Default is 443 but should be changed by whatever is passed in through the Adapter. 
+     *
+     * @var integer
+     */
+    protected $port;
+
+    /**
      */
     public function __construct()
     {
@@ -60,6 +67,8 @@ class Request implements RequestInterface
             'Content-Type'         => 'application/json',
             'X-BitPay-Plugin-Info' => null,
         );
+
+        $this->port = 443;
 
         // Default method is POST
         $this->method = self::METHOD_POST;
@@ -93,7 +102,17 @@ class Request implements RequestInterface
      */
     public function getPort()
     {
-        return 443;
+        return $this->port;
+    }
+
+    /**
+     * This is called in the Adapter
+     *
+     * @inheritdoc
+     */
+    public function setPort($port)
+    {
+        $this->port = $port;
     }
 
     /**

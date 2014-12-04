@@ -26,4 +26,9 @@ class Testnet implements NetworkInterface
     {
         return 'test.bitpay.com';
     }
+
+    public function getApiPort()
+    {
+        return 443;
+    }
 }

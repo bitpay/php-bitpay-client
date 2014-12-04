@@ -26,4 +26,9 @@ class Livenet implements NetworkInterface
     {
         return 'bitpay.com';
     }
+
+    public function getApiPort()
+    {
+        return 443;
+    }
 }

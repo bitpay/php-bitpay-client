@@ -590,9 +590,17 @@ class Client implements ClientInterface
             throw new \Exception('Please set your Private Key');
         }
 
+        if (isset($this->network->isPortRequiredInUrl)) {
+            if ($this->network->isPortRequiredInUrl === true) {
+                $url = $request->getUriWithPort();
+            }
+        } else {
+            $url = $request->getUri();
+        }
+
         $message = sprintf(
             '%s%s',
-            $request->getUri(),
+            $url,
             $request->getBody()
         );
 
@@ -608,6 +616,7 @@ class Client implements ClientInterface
     {
         $request = new Request();
         $request->setHost($this->network->getApiHost());
+        $request->setPort($this->network->getApiPort());
         $this->prepareRequestHeaders($request);
 
         return $request;
