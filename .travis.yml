@@ -1,7 +1,6 @@
 language: php
 
 php:
-    - 5.3
     - 5.4
     - 5.5
     - 5.6
@@ -16,7 +15,6 @@ before_script:
 script:
     - php bin/phpunit -c build/
     - php bin/phpcs -n --standard=PSR1,PSR2 --report=full src/
-    #- php bin/phpmd src/ text build/rulesets/phpmd.xml
 
 after_script:
     - ls -alh build/logs
@@ -27,8 +25,6 @@ notifications:
 
 matrix:
     fast_finish: true
-    allow_failures:
-        - php: 5.3
 
 # Only build the master branch and pull requests for the master branch
 branches:
