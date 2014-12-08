@@ -181,7 +181,7 @@ class Client implements ClientInterface
      */
     public function createRefund($invoiceId, $bitcoinAddress, $amount, $currency)
     {
-       $request = $this->createNewRequest();
+        $request = $this->createNewRequest();
         $request->setMethod(Request::METHOD_POST);
         $request->setPath(sprintf('invoices/%s/refunds', $invoiceId));
 
@@ -208,7 +208,7 @@ class Client implements ClientInterface
             return $data;
         } catch (\Exception $ex) {
             throw $ex;
-        } 
+        }
     }
     /**
      * @inheritdoc
@@ -524,15 +524,14 @@ class Client implements ClientInterface
             ->setFacade($tkn['facade'])
             ->setCreatedAt($tkn['dateCreated']);
 
-        if(isset($tkn['resource']))
-        {
+        if(isset($tkn['resource'])){
             $token->setResource($tkn['resource']);
         }
         
-        if(isset($tkn['pairingCode']))
-        {
+        if(isset($tkn['pairingCode'])){
             $token->setPairingCode($tkn['pairingCode']);
         }
+        
         return $token;
     }
 
