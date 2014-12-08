@@ -526,7 +526,7 @@ class Client implements ClientInterface
 
         if(isset($tkn['resource']))
         {
-            $token->setResource($tkn['resource'])
+            $token->setResource($tkn['resource']);
         }
         
         if(isset($tkn['pairingCode']))
