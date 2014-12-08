@@ -204,8 +204,7 @@ class Client implements ClientInterface
                 throw new \Exception($body['error']);
             }
 
-            $data = $body['data'];
-            return $data;
+            return $body['data'];
         } catch (\Exception $ex) {
             throw $ex;
         }
@@ -524,11 +523,11 @@ class Client implements ClientInterface
             ->setFacade($tkn['facade'])
             ->setCreatedAt($tkn['dateCreated']);
 
-        if(isset($tkn['resource'])) {
+        if (isset($tkn['resource'])) {
             $token->setResource($tkn['resource']);
         }
         
-        if(isset($tkn['pairingCode'])) {
+        if (isset($tkn['pairingCode'])) {
             $token->setPairingCode($tkn['pairingCode']);
         }
         
