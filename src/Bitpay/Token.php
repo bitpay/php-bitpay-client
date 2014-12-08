@@ -37,6 +37,11 @@ class Token implements TokenInterface
     protected $policies;
 
     /**
+     * @var string
+     */
+    protected $pairingCode;
+    
+    /**
      */
     public function __construct()
     {
@@ -125,4 +130,20 @@ class Token implements TokenInterface
 
         return $this;
     }
+    
+    /**
+     * @return string
+     */
+    public function getPairingCode()
+    {
+        return $this->pairingCode;
+    }
+    
+    public function setPairingCode($pairingCode)
+    {
+        $this->pairingCode = $pairingCode;
+        
+        return $this;
+    }
+    
 }
