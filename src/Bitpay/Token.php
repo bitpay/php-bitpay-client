@@ -145,5 +145,4 @@ class Token implements TokenInterface
         
         return $this;
     }
-    
 }
