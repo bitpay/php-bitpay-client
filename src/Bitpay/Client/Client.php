@@ -524,11 +524,11 @@ class Client implements ClientInterface
             ->setFacade($tkn['facade'])
             ->setCreatedAt($tkn['dateCreated']);
 
-        if(isset($tkn['resource'])){
+        if(isset($tkn['resource'])) {
             $token->setResource($tkn['resource']);
         }
         
-        if(isset($tkn['pairingCode'])){
+        if(isset($tkn['pairingCode'])) {
             $token->setPairingCode($tkn['pairingCode']);
         }
         
