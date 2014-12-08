@@ -520,11 +520,19 @@ class Client implements ClientInterface
         $token = new \Bitpay\Token();
         $token
             ->setPolicies($tkn['policies'])
-            ->setResource($tkn['resource'])
             ->setToken($tkn['token'])
             ->setFacade($tkn['facade'])
             ->setCreatedAt($tkn['dateCreated']);
 
+        if(isset($tkn['resource']))
+        {
+            $token->setResource($tkn['resource'])
+        }
+        
+        if(isset($tkn['pairingCode']))
+        {
+            $token->setPairingCode($tkn['pairingCode']);
+        }
         return $token;
     }
 
