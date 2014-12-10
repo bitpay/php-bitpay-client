@@ -49,6 +49,7 @@ $item
     ->setCode('skuNumber')
     ->setDescription('General Description of Item')
     ->setPrice('1.99');
+$invoice->setItem($item);
 
 /**
  * BitPay supports multiple different currencies. Most shopping cart applications
