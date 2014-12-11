@@ -38,8 +38,12 @@
         "symfony/dependency-injection": "~2.3"
     },
     "require-dev": {
-        "behat/mink": "1.6.*@stable",
-        "behat/mink-selenium2-driver": "~1.1",
+        "behat/behat": "2.4.*@stable",
+        "behat/mink": "1.4.*@stable",
+        "behat/mink-extension": "@stable",
+        "behat/mink-goutte-driver": "*",
+        "behat/mink-selenium-driver": "*",
+        "behat/mink-selenium2-driver": "*",
         "phpmd/phpmd": "~2.1.3",
         "phpunit/phpunit": "~4.3.1",
         "fzaninotto/faker": "~1.4.0",

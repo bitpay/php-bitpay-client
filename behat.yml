@@ -1,0 +1,15 @@
+phantomjs:
+  context:
+    parameters:
+      user: ''
+      password: ''
+      features_path: %behat.paths.features%
+  paths:
+    features: tests/integrations
+    bootstrap: %behat.paths.features%/bootstrap
+  extensions:
+    Behat\MinkExtension\Extension:
+      base_url: 'test.bitpay.com'
+      goutte: ~
+      selenium2:
+        wd_host: "http://localhost:8643/wd/hub"
