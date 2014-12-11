@@ -1,4 +1,4 @@
-bitpay/php-client
+bitpay/php-bitpay-client
 =================
 
 [![Coverage Status](https://coveralls.io/repos/bitpay/php-bitpay-client/badge.png)](https://coveralls.io/r/bitpay/php-bitpay-client) [![Build Status](https://travis-ci.org/bitpay/php-bitpay-client.svg?branch=master)](https://travis-ci.org/bitpay/php-bitpay-client) [![Documentation Status](https://readthedocs.org/projects/php-bitpay-client/badge/?version=latest)](https://readthedocs.org/projects/php-bitpay-client/?badge=latest) [![Latest Stable Version](https://poser.pugx.org/bitpay/php-client/v/stable.svg)](https://packagist.org/packages/bitpay/php-client) [![Total Downloads](https://poser.pugx.org/bitpay/php-client/downloads.svg)](https://packagist.org/packages/bitpay/php-client) [![Latest Unstable Version](https://poser.pugx.org/bitpay/php-client/v/unstable.svg)](https://packagist.org/packages/bitpay/php-client) [![License](https://poser.pugx.org/bitpay/php-client/license.svg)](https://packagist.org/packages/bitpay/php-client)
