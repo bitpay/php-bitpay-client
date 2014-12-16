@@ -113,6 +113,11 @@ class Invoice implements InvoiceInterface
     protected $rate;
 
     /**
+     * @var
+     */
+    protected $token;
+
+    /**
      */
     public function __construct()
     {
@@ -686,6 +691,25 @@ class Invoice implements InvoiceInterface
         if (!empty($rate)) {
             $this->rate = $rate;
         }
+
+        return $this;
+    }
+
+    /**
+     * @return TokenInterface
+     */
+    public function getToken()
+    {
+        return $this->token;
+    }
+
+    /**
+     * @param TokenInterface $token
+     * @return InvoiceInterface
+     */
+    public function setToken(TokenInterface $token)
+    {
+        $this->token = $token;
 
         return $this;
     }
