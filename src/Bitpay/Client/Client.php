@@ -181,6 +181,12 @@ class Client implements ClientInterface
      */
     public function createRefund($invoiceId, $bitcoinAddress, $amount, $currency)
     {
+        try {
+            $invoice = $this->getInvoice($invoiceId);
+        } catch (\Exception $ex) {
+            throw $ex;
+        }
+
         $request = $this->createNewRequest();
         $request->setMethod(Request::METHOD_POST);
         $request->setPath(sprintf('invoices/%s/refunds', $invoiceId));
@@ -189,16 +195,17 @@ class Client implements ClientInterface
             $body = [
                 'bitcoinAddress' => $bitcoinAddress,
                 'amount'         => $amount,
-                'currency'       => $currency
+                'currency'       => $currency,
+                'token'          => $invoice->getToken()->getToken()
             ];
             $request->setBody(json_encode($body));
             
             $this->addIdentityHeader($request);
             $this->addSignatureHeader($request);
             
-            $this->request = $request;
-            $response      = $this->sendRequest($request);
-            $body          = json_decode($response->getBody(), true);
+            $this->request       = $request;
+            $this->response      = $this->sendRequest($request);
+            $body                = json_decode($this->response->getBody(), true);
 
             if (isset($body['error'])) {
                 throw new \Exception($body['error']);
@@ -209,6 +216,7 @@ class Client implements ClientInterface
             throw $ex;
         }
     }
+
     /**
      * @inheritdoc
      */
@@ -562,7 +570,9 @@ class Client implements ClientInterface
     {
         $this->request = $this->createNewRequest();
         $this->request->setMethod(Request::METHOD_GET);
-        $this->request->setPath(sprintf('invoices/%s', $invoiceId));
+        $this->request->setPath(sprintf('invoices/%s?token=%s', $invoiceId, $this->token->getToken()));
+        $this->addIdentityHeader($this->request);
+        $this->addSignatureHeader($this->request);
         $this->response = $this->sendRequest($this->request);
         $body = json_decode($this->response->getBody(), true);
 
@@ -573,8 +583,9 @@ class Client implements ClientInterface
         $data = $body['data'];
 
         $invoice = new \Bitpay\Invoice();
+        $invoiceToken = new \Bitpay\Token();
         $invoice
-            //->setToken($data['token'])
+            ->setToken($invoiceToken->setToken($data['token']))
             //->setBtcDue($data['btcDue'])
             //->setExRates($data['exRates'])
             ->setUrl($data['url'])
