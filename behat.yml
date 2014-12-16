@@ -1,15 +1,51 @@
-phantomjs:
+# behat.yml
+# default:
+#   context:
+#     parameters:
+#       user: 'alex@bitpay.com'
+#       password: 'abc123ABC!@#'
+#       features_path: %behat.paths.features%
+#       base_url: 'alex.bp:8088'
+#   paths:
+#     features: tests/integrations
+#     bootstrap: %behat.paths.features%/bootstrap
+#   extensions:
+#     Behat\MinkExtension\Extension:
+#       base_url: 'alex.bp:8088'
+#       goutte: ~
+#       zombie: ~
+
+default:
   context:
     parameters:
-      user: ''
-      password: ''
+      user: 'alex@bitpay.com'
+      password: 'abc123ABC!@#'
       features_path: %behat.paths.features%
+      base_url: 'https://alex.bp:8088'
+      driver: 'selenium2'
   paths:
     features: tests/integrations
     bootstrap: %behat.paths.features%/bootstrap
   extensions:
     Behat\MinkExtension\Extension:
-      base_url: 'test.bitpay.com'
+      base_url: 'alex.bp:8088'
+      goutte: ~
+      selenium2: ~
+
+phantomjs:
+  context:
+    parameters:
+      user: 'https://alex@bitpay.com'
+      password: 'abc123ABC!@#'
+      features_path: %behat.paths.features%
+      base_url: 'alex.bp:8088'
+      driver: 'phantomjs'
+  paths:
+    features: tests/integrations
+    bootstrap: %behat.paths.features%/bootstrap
+  extensions:
+    Behat\MinkExtension\Extension:
+      base_url: 'alex.bp:8088'
       goutte: ~
       selenium2:
         wd_host: "http://localhost:8643/wd/hub"

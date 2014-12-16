@@ -9,7 +9,8 @@ use Behat\Gherkin\Node\PyStringNode,
 
 use Behat\MinkExtension\Context\MinkContext;
 
-require __DIR__ . '/../../../vendor/autoload.php';
+require_once __DIR__ . '/../../../vendor/autoload.php';
+require_once __DIR__ . '/StepHelper.php';
 //
 // Require 3rd-party libraries here:
 //
@@ -23,6 +24,11 @@ require __DIR__ . '/../../../vendor/autoload.php';
 class FeatureContext extends MinkContext
 {
     private $params = array();
+
+    protected $mink;
+
+    public $pairingCode;
+
     /**
      * Initializes context.
      * Every scenario gets it's own context object.
@@ -32,73 +38,54 @@ class FeatureContext extends MinkContext
     public function __construct(array $parameters)
     {
         $this->params = $parameters;
-    }
-    /**
-     * @Then /^I wait for the suggestion box to appear$/
-     */
-    public function iWaitForTheSuggestionBoxToAppear()
-    {
-        $this->getSession()->wait(5000,
-            "$('.suggestions-results').children().length > 0"
+
+        $isEmailConfigured    = $this->params['user'];
+        $isPasswordConfigured = $this->params['password'];
+
+        if (!$isEmailConfigured || !$isPasswordConfigured) {
+            throw new Exception("Your email or password are not configured.");
+            return;
+        }
+
+        $phantomjsDriver = new \Behat\Mink\Driver\Selenium2Driver('phantomJS', null, 'http://127.0.0.1:8643');
+        $selenium2driver = new \Behat\Mink\Driver\Selenium2Driver('firefox');
+        $this->mink      = new \Behat\Mink\Mink(
+            array(
+                'phantomjs' => new \Behat\Mink\Session($phantomjsDriver),
+                'selenium2' => new \Behat\Mink\Session($selenium2driver),
+            )
         );
+
+        $this->mink->setDefaultSessionName($this->params['driver']);
+
+        //$this->mink->setDefaultSessionName('phantomjs');
     }
 
-    /**
-     * @Given /^that there is no token saved locally$/
-     */
-    public function thatThereIsNoTokenSavedLocally()
+    protected function tearDown()
     {
-        $token_path = $this->params['features_path'].'token.txt';
-        if (file_exists($token_path))
-            unlink($token_path);
+        $this->mink->getSession()->restart();
     }
 
     /**
-     * @Given /^that there is a local keyfile$/
+     * @Given /^the user is authenticated with BitPay$/
      */
-    public function thatThereIsALocalKeyfile()
-    {
-        $token_path = $this->params['features_path'].'pri.pem';
-    }
-
-    /**
-     * @When /^the user pairs with BitPay with a valid pairing code$/
-     */
-    public function theUserPairsWithBitpayWithAValidPairingCode()
+    public function theUserIsAuthenticatedWithBitpay()
     {
         throw new PendingException();
     }
 
     /**
-     * @Given /^tokens will be saved locally$/
+     * @When /^the user creates an invoice for "([^"]*)" "([^"]*)"$/
      */
-    public function tokensWillBeSavedLocally()
+    public function theUserCreatesAnInvoiceFor($arg1, $arg2)
     {
         throw new PendingException();
     }
 
     /**
-     * @Given /^that there is no local keyfile$/
+     * @Then /^they should recieve an invoice in response for "([^"]*)" "([^"]*)"$/
      */
-    public function thatThereIsNoLocalKeyfile()
-    {
-        $key_path = $this->params['features_path'].'pri.pem';
-        if (file_exists($key_path))
-            unlink($key_path);
-    }
-
-    /**
-     * @Then /^the keyfile will be saved locally$/
-     */
-    public function theKeyfileWillBeSavedLocally()
-    {
-        throw new PendingException();
-    }
-
-    /**
-     * @Given /^the user fails to pair with a semantically invalid code "([^"]*)"$/
-     */
-    public function theUserFailsToPairWithASemanticallyInvalidCode($arg1)
+    public function theyShouldRecieveAnInvoiceInResponseFor($arg1, $arg2)
     {
         throw new PendingException();
     }
@@ -107,6 +94,75 @@ class FeatureContext extends MinkContext
      * @Then /^they will receive a BitPay::ArgumentError matching "([^"]*)"$/
      */
     public function theyWillReceiveABitpayArgumenterrorMatching($arg1)
+    {
+        throw new PendingException();
+    }
+
+    /**
+     * @Given /^the user pairs with BitPay with a valid pairing code$/
+     */
+    public function theUserPairsWithBitpayWithAValidPairingCode()
+    {
+        // Login
+        $this->mink->getSession()->visit('https://alex.bp:8088/merchant-login');
+        var_dump($this->mink->getSession()->getPage()->getHtml());
+        $this->mink->getSession()->wait(1500);
+        $this->mink->getSession()->getPage()->fillField('email', $this->params['user']);
+        $this->mink->getSession()->getPage()->fillField('password', $this->params['password']);
+        $this->mink->getSession()->getPage()->findById('loginButton')->click();
+        $this->mink->getSession()->wait(1500);
+
+        // Navigate to tokens
+        $this->mink->getSession()->getPage()->clickLink('My Account');
+        $this->mink->getSession()->wait(1500);
+        $this->mink->getSession()->getPage()->clickLink('API Tokens');
+        $this->mink->getSession()->wait(1500);
+
+        // Create and set pairing code
+        $cssSelector = ".icon-plus";
+        $element = $this->mink->getSession()->getPage()->find(
+            'xpath',
+            $this->mink->getSession()->getSelectorsHandler()->selectorToXpath('css', $cssSelector) // just changed xpath to css
+        );
+        if (null === $element) {
+            throw new \InvalidArgumentException(sprintf('Could not evaluate CSS Selector: "%s"', $cssSelector));
+        }
+        $element->press();
+        $this->mink->getSession()->wait(1500);
+        $this->mink->getSession()->getPage()->pressButton("Add Token");
+        $this->mink->getSession()->wait(5000);
+        $this->pairingCode = $this->mink->getSession()->getPage()->find('xpath', '//*[@id="my-token-access-wrapper"]/div[1]/div[2]/div/div')->getText();
+        $this->tearDown();
+    }
+
+    /**
+     * @Then /^the user is paired with BitPay$/
+     */
+    public function theUserIsPairedWithBitpay()
+    {
+        throw new PendingException();
+    }
+
+    /**
+     * @Given /^the user fails to pair with a semantically valid code "([^"]*)"$/
+     */
+    public function theUserFailsToPairWithASemanticallyValidCode($arg1)
+    {
+        throw new PendingException();
+    }
+
+    /**
+     * @Then /^they will receive a BitPay::BitPayError matching "([^"]*)"$/
+     */
+    public function theyWillReceiveABitpayBitpayerrorMatching($arg1)
+    {
+        throw new PendingException();
+    }
+
+    /**
+     * @Given /^the user fails to pair with a semantically invalid code "([^"]*)"$/
+     */
+    public function theUserFailsToPairWithASemanticallyInvalidCode($arg1)
     {
         throw new PendingException();
     }
@@ -128,20 +184,19 @@ class FeatureContext extends MinkContext
     }
 
     /**
-     * @Given /^the user fails to pair with a semantically valid code "([^"]*)"$/
+     * @Given /^that a user knows an invoice id$/
      */
-    public function theUserFailsToPairWithASemanticallyValidCode($arg1)
+    public function thatAUserKnowsAnInvoiceId()
     {
         throw new PendingException();
     }
 
     /**
-     * @Then /^they will receive a BitPay::BitPayError matching "([^"]*)"$/
+     * @Then /^they can retrieve that invoice$/
      */
-    public function theyWillReceiveABitpayBitpayerrorMatching($arg1)
+    public function theyCanRetrieveThatInvoice()
     {
         throw new PendingException();
     }
-
 
 }
