@@ -74,7 +74,7 @@ class CurlAdapter implements AdapterInterface
         if (false === $raw) {
             $errorMessage = curl_error($curl);
             curl_close($curl);
-            throw new \Exception($errorMessage);
+            throw new \Bitpay\Client\ConnectionException($errorMessage);
         }
 
         /** @var ResponseInterface */

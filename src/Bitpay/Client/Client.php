@@ -15,6 +15,10 @@ use Bitpay\Util\Util;
 use Bitpay\PublicKey;
 use Bitpay\PrivateKey;
 
+class BitPayException extends \Exception {}
+class ArgumentException extends \Exception {}
+class ConnectionException extends \Exception {}
+
 /**
  * Client used to send requests and receive responses for BitPay's Web API
  *
@@ -469,6 +473,9 @@ class Client implements ClientInterface
      */
     public function createToken(array $payload = array())
     {
+        if(1 !== preg_match('/^[a-zA-Z0-9]{7}$/', $payload['pairingCode'])){
+            throw new ArgumentException("pairing code is not legal");
+        }
         $this->request = $this->createNewRequest();
         $this->request->setMethod(Request::METHOD_POST);
         $this->request->setPath('tokens');
@@ -478,7 +485,7 @@ class Client implements ClientInterface
         $body           = json_decode($this->response->getBody(), true);
 
         if (isset($body['error'])) {
-            throw new \Exception($body['error']);
+            throw new BitPayException($this->response->getStatusCode().": ".$body['error']);
         }
 
         $tkn = $body['data'][0];

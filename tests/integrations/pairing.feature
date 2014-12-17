@@ -12,10 +12,10 @@ Feature: pairing with bitpay
     Given the user fails to pair with a semantically <valid> code <code>
     Then they will receive a <error> matching <message>
   Examples:
-      | valid   | code       | error                 | message                       |
-      | valid   | "a1b2c3d"  | BitPay::BitPayError   | "500: Unable to create token" |
-      | invalid | "a1b2c3d4" | BitPay::ArgumentError | "pairing code is not legal"   |
+      | valid   | code       | error                               | message                       |
+      | valid   | "a1b2c3d"  | "Bitpay\Client\BitPayException"     | "500: Unable to create token" |
+      | invalid | "a1b2c3d4" | "Bitpay\Client\ArgumentException"   | "pairing code is not legal"   |
 
   Scenario: the client has a bad port configuration to a closed port
     When the fails to pair with BitPay because of an incorrect port
-    Then they will receive a BitPay::ConnectionError matching "Connection refused"
+    Then they will receive a "Bitpay\Client\ConnectionException" matching "connect() timed out!"

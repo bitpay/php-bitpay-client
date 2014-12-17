@@ -21,13 +21,15 @@ require_once __DIR__ . '/StepHelper.php';
 /**
  * Features context.
  */
-class FeatureContext extends MinkContext
+class FeatureContext extends BehatContext
 {
     private $params = array();
 
     protected $mink;
 
-    public $pairingCode;
+    public $validPairingCode;
+
+    protected $error;
 
     /**
      * Initializes context.
@@ -48,22 +50,27 @@ class FeatureContext extends MinkContext
         }
 
         $phantomjsDriver = new \Behat\Mink\Driver\Selenium2Driver('phantomJS', null, 'http://127.0.0.1:8643');
-        $selenium2driver = new \Behat\Mink\Driver\Selenium2Driver('firefox');
+        $selenium2Driver = new \Behat\Mink\Driver\Selenium2Driver('firefox');
+        $zombiejsDriver = new \Behat\Mink\Driver\ZombieDriver(
+            new \Behat\Mink\Driver\NodeJS\Server\ZombieServer()
+        );
+
         $this->mink      = new \Behat\Mink\Mink(
             array(
                 'phantomjs' => new \Behat\Mink\Session($phantomjsDriver),
-                'selenium2' => new \Behat\Mink\Session($selenium2driver),
+                'selenium2' => new \Behat\Mink\Session($selenium2Driver),
+                'zombiejs'  => new \Behat\Mink\Session($zombiejsDriver),
             )
         );
 
         $this->mink->setDefaultSessionName($this->params['driver']);
-
-        //$this->mink->setDefaultSessionName('phantomjs');
     }
 
     protected function tearDown()
     {
-        $this->mink->getSession()->restart();
+        $this->mink->getSession()->reset();
+        unload('/tmp/bitpay.pri');
+        unload('/tmp/bitpay.pub');
     }
 
     /**
@@ -91,28 +98,20 @@ class FeatureContext extends MinkContext
     }
 
     /**
-     * @Then /^they will receive a BitPay::ArgumentError matching "([^"]*)"$/
-     */
-    public function theyWillReceiveABitpayArgumenterrorMatching($arg1)
-    {
-        throw new PendingException();
-    }
-
-    /**
      * @Given /^the user pairs with BitPay with a valid pairing code$/
      */
     public function theUserPairsWithBitpayWithAValidPairingCode()
     {
         // Login
         $this->mink->getSession()->visit('https://alex.bp:8088/merchant-login');
-        var_dump($this->mink->getSession()->getPage()->getHtml());
+
         $this->mink->getSession()->wait(1500);
         $this->mink->getSession()->getPage()->fillField('email', $this->params['user']);
         $this->mink->getSession()->getPage()->fillField('password', $this->params['password']);
         $this->mink->getSession()->getPage()->findById('loginButton')->click();
-        $this->mink->getSession()->wait(1500);
 
         // Navigate to tokens
+        $this->mink->getSession()->wait(1500);
         $this->mink->getSession()->getPage()->clickLink('My Account');
         $this->mink->getSession()->wait(1500);
         $this->mink->getSession()->getPage()->clickLink('API Tokens');
@@ -131,8 +130,7 @@ class FeatureContext extends MinkContext
         $this->mink->getSession()->wait(1500);
         $this->mink->getSession()->getPage()->pressButton("Add Token");
         $this->mink->getSession()->wait(5000);
-        $this->pairingCode = $this->mink->getSession()->getPage()->find('xpath', '//*[@id="my-token-access-wrapper"]/div[1]/div[2]/div/div')->getText();
-        $this->tearDown();
+        $this->validPairingCode = $this->mink->getSession()->getPage()->find('xpath', '//*[@id="my-token-access-wrapper"]/div[1]/div[2]/div/div')->getText();
     }
 
     /**
@@ -140,31 +138,119 @@ class FeatureContext extends MinkContext
      */
     public function theUserIsPairedWithBitpay()
     {
-        throw new PendingException();
+        // Create Keys
+        $privateKey = new \Bitpay\PrivateKey('/tmp/bitpay.pri');
+        $privateKey->generate();
+        $publicKey = new \Bitpay\PublicKey('/tmp/bitpay.pub');
+        $publicKey->setPrivateKey($privateKey);
+        $publicKey->generate();
+        $sinKey = new \Bitpay\SinKey('/tmp/sin.key');
+        $sinKey->setPublicKey($publicKey);
+        $sinKey->generate();
+
+        //Persist Keys
+        $storageEngine = new \Bitpay\Storage\EncryptedFilesystemStorage('YourTopSecretPassword');
+        $storageEngine->persist($privateKey);
+        $storageEngine->persist($publicKey);
+
+        //Set Client
+        $client = new \Bitpay\Client\Client();
+        $network = new \Bitpay\Network\Customnet("alex.bp", 8088, true);
+        $curl_options = array(
+                    CURLOPT_SSL_VERIFYPEER => false,
+                    CURLOPT_SSL_VERIFYHOST => false,
+                    );
+        $adapter = new \Bitpay\Client\Adapter\CurlAdapter($curl_options);
+        $client->setPrivateKey($privateKey);
+        $client->setPublicKey($publicKey);
+        $client->setNetwork($network);
+        $client->setAdapter($adapter);
+        $pairingCode = $this->validPairingCode;
+
+        // Pair
+        try {
+            $token = $client->createToken(
+                array(
+                    'pairingCode' => $pairingCode,
+                    'label'       => 'Integrations Testing',
+                    'id'          => (string) $sinKey,
+                )
+            );
+        } catch (\Exception $e) {
+            $request  = $client->getRequest();
+            $response = $client->getResponse();
+            echo (string) $request.PHP_EOL.PHP_EOL.PHP_EOL;
+            echo (string) $response.PHP_EOL.PHP_EOL;
+            exit(1);
+        }
+
     }
 
     /**
-     * @Given /^the user fails to pair with a semantically valid code "([^"]*)"$/
+     * @Given /^the user fails to pair with a semantically (?:in|)valid code "([^"]*)"$/
      */
-    public function theUserFailsToPairWithASemanticallyValidCode($arg1)
+    public function theUserFailsToPairWithASemanticallyValidCode($pairingCode)
     {
-        throw new PendingException();
-    }
+        try {
+            // Stupid rate limiters
+            $this->mink->getSession()->wait(1500);
 
-    /**
-     * @Then /^they will receive a BitPay::BitPayError matching "([^"]*)"$/
-     */
-    public function theyWillReceiveABitpayBitpayerrorMatching($arg1)
-    {
-        throw new PendingException();
-    }
+            // Create Keys
+            $privateKey = new \Bitpay\PrivateKey('/tmp/bitpay.pri');
+            $privateKey->generate();
+            $publicKey = new \Bitpay\PublicKey('/tmp/bitpay.pub');
+            $publicKey->setPrivateKey($privateKey);
+            $publicKey->generate();
+            $sinKey = new \Bitpay\SinKey('/tmp/sin.key');
+            $sinKey->setPublicKey($publicKey);
+            $sinKey->generate();
 
+            //Persist Keys
+            $storageEngine = new \Bitpay\Storage\EncryptedFilesystemStorage('YourTopSecretPassword');
+            $storageEngine->persist($privateKey);
+            $storageEngine->persist($publicKey);
+
+            //Set Client
+            $client = new \Bitpay\Client\Client();
+            $network = new \Bitpay\Network\Customnet("alex.bp", 8088, true);
+            $curl_options = array(
+                        CURLOPT_SSL_VERIFYPEER => false,
+                        CURLOPT_SSL_VERIFYHOST => false,
+                        );
+            $adapter = new \Bitpay\Client\Adapter\CurlAdapter($curl_options);
+            $client->setPrivateKey($privateKey);
+            $client->setPublicKey($publicKey);
+            $client->setNetwork($network);
+            $client->setAdapter($adapter);
+
+            // Pair
+            $token = $client->createToken(
+                array(
+                    'pairingCode' => $pairingCode,
+                    'label'       => 'Integrations Testing',
+                    'id'          => (string) $sinKey,
+                )
+            );
+        } catch (\Exception $e) {
+            $this->error = $e;
+        } finally {
+            return true;
+        }
+
+    }
     /**
-     * @Given /^the user fails to pair with a semantically invalid code "([^"]*)"$/
+     * @Then /^they will receive a "([^"]*)" matching "([^"]*)"$/
      */
-    public function theUserFailsToPairWithASemanticallyInvalidCode($arg1)
-    {
-        throw new PendingException();
+    public function theyWillReceiveAnErrorMatching($errorName, $errorMessage)
+    {   
+        var_dump(get_class($this->error));
+        if ($this->error->getMessage() !== $errorMessage){
+            throw new Exception("Error message incorrect", 1);
+        }
+        if (get_class($this->error) !== $errorName){
+            throw new Exception("Error name incorrect", 1);
+        }
+        
     }
 
     /**
@@ -172,15 +258,53 @@ class FeatureContext extends MinkContext
      */
     public function theFailsToPairWithBitpayBecauseOfAnIncorrectPort()
     {
-        throw new PendingException();
-    }
+        try {
+            // Stupid rate limiters
+            $this->mink->getSession()->wait(1500);
 
-    /**
-     * @Then /^they will receive a BitPay::ConnectionError matching "([^"]*)"$/
-     */
-    public function theyWillReceiveABitpayConnectionerrorMatching($arg1)
-    {
-        throw new PendingException();
+            // Create Keys
+            $privateKey = new \Bitpay\PrivateKey('/tmp/bitpay.pri');
+            $privateKey->generate();
+            $publicKey = new \Bitpay\PublicKey('/tmp/bitpay.pub');
+            $publicKey->setPrivateKey($privateKey);
+            $publicKey->generate();
+            $sinKey = new \Bitpay\SinKey('/tmp/sin.key');
+            $sinKey->setPublicKey($publicKey);
+            $sinKey->generate();
+
+            //Persist Keys
+            $storageEngine = new \Bitpay\Storage\EncryptedFilesystemStorage('YourTopSecretPassword');
+            $storageEngine->persist($privateKey);
+            $storageEngine->persist($publicKey);
+
+            //Set Client
+            $client = new \Bitpay\Client\Client();
+            $network = new \Bitpay\Network\Customnet("alex.bp", 8974, true);
+            $curl_options = array(
+                        CURLOPT_SSL_VERIFYPEER => false,
+                        CURLOPT_SSL_VERIFYHOST => false,
+                        );
+            $adapter = new \Bitpay\Client\Adapter\CurlAdapter($curl_options);
+            $client->setPrivateKey($privateKey);
+            $client->setPublicKey($publicKey);
+            $client->setNetwork($network);
+            $client->setAdapter($adapter);
+            $pairingCode = $this->validPairingCode;
+
+            // Pair
+            $token = $client->createToken(
+                array(
+                    'pairingCode' => 'aaaaaaa',
+                    'label'       => 'Integrations Testing',
+                    'id'          => (string) $sinKey,
+                )
+            );
+
+        } catch (\Exception $e) {
+            $this->error = $e;
+        } finally {
+            return true;
+        }
     }
 
     /**
