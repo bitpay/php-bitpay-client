@@ -65,11 +65,11 @@ class Application implements ApplicationInterface
     /**
      * Add org to stack
      *
-     * @param OrgInterface $org
+     * @param OrganizationInterface $org
      *
      * @return ApplicationInterface
      */
-    public function addOrg(OrgInterface $org)
+    public function addOrg(OrganizationInterface $org)
     {
         if (!empty($org)) {
             $this->orgs[] = $org;

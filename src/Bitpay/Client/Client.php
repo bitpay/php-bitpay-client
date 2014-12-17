@@ -61,7 +61,7 @@ class Client implements ClientInterface
      * The network is either livenet or testnet and tells the client where to
      * send the requests.
      *
-     * @param NetworkInterface
+     * @param NetworkInterface $network
      */
     public function setNetwork(NetworkInterface $network)
     {
@@ -99,6 +99,7 @@ class Client implements ClientInterface
 
     /**
      * @param TokenInterface $token
+     *
      * @return ClientInterface
      */
     public function setToken(TokenInterface $token)
@@ -199,13 +200,94 @@ class Client implements ClientInterface
                 'token'          => $invoice->getToken()->getToken()
             ];
             $request->setBody(json_encode($body));
-            
+
             $this->addIdentityHeader($request);
             $this->addSignatureHeader($request);
-            
-            $this->request       = $request;
-            $this->response      = $this->sendRequest($request);
-            $body                = json_decode($this->response->getBody(), true);
+
+            $this->request  = $request;
+            $this->response = $this->sendRequest($request);
+            $body           = json_decode($this->response->getBody(), true);
+
+            if (isset($body['error'])) {
+                throw new \Exception($body['error']);
+            }
+
+            return $body['data'];
+        } catch (\Exception $ex) {
+            throw $ex;
+        }
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getRefund($invoiceId, $refundRequestId)
+    {
+        $request = $this->createNewRequest();
+        $request->setMethod(Request::METHOD_GET);
+        $request->setPath(sprintf('invoices/%s/refunds/%s', $invoiceId, $refundRequestId));
+
+        try {
+            $this->addIdentityHeader($request);
+            $this->addSignatureHeader($request);
+
+            $this->request  = $request;
+            $this->response = $this->sendRequest($request);
+            $body           = json_decode($this->response->getBody(), true);
+
+            if (isset($body['error'])) {
+                throw new \Exception($body['error']);
+            }
+
+            return $body['data'];
+        } catch (\Exception $ex) {
+            throw $ex;
+        }
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function cancelRefund($invoiceId, $refundRequestId)
+    {
+        $request = $this->createNewRequest();
+        $request->setMethod(Request::METHOD_DELETE);
+        $request->setPath(sprintf('invoices/%s/refunds/%s', $invoiceId, $refundRequestId));
+
+        try {
+            $this->addIdentityHeader($request);
+            $this->addSignatureHeader($request);
+
+            $this->request  = $request;
+            $this->response = $this->sendRequest($request);
+            $body           = json_decode($this->response->getBody(), true);
+
+            if (isset($body['error'])) {
+                throw new \Exception($body['error']);
+            }
+
+            return $body['data'];
+        } catch (\Exception $ex) {
+            throw $ex;
+        }
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getRefunds($invoiceId)
+    {
+        $request = $this->createNewRequest();
+        $request->setMethod(Request::METHOD_GET);
+        $request->setPath(sprintf('invoices/%s/refunds', $invoiceId));
+
+        try {
+            $this->addIdentityHeader($request);
+            $this->addSignatureHeader($request);
+
+            $this->request  = $request;
+            $this->response = $this->sendRequest($request);
+            $body           = json_decode($this->response->getBody(), true);
 
             if (isset($body['error'])) {
                 throw new \Exception($body['error']);
@@ -258,10 +340,10 @@ class Client implements ClientInterface
         $request->setMethod($request::METHOD_POST);
         $request->setPath('payouts');
 
-        $amount         = $payout->getAmount();
-        $currency       = $payout->getCurrency();
-        $effectiveDate  = $payout->getEffectiveDate();
-        $token          = $payout->getToken();
+        $amount        = $payout->getAmount();
+        $currency      = $payout->getCurrency();
+        $effectiveDate = $payout->getEffectiveDate();
+        $token         = $payout->getToken();
 
         $body = array(
             'token'         => $token->getToken(),
@@ -275,7 +357,7 @@ class Client implements ClientInterface
         );
 
         // Optional
-        foreach (array('reference','notificationURL','notificationEmail') as $value) {
+        foreach (array('reference', 'notificationURL', 'notificationEmail') as $value) {
             $function = 'get' . ucfirst($value);
             if ($payout->$function() != null) {
                 $body[$value] = $payout->$function();
@@ -297,7 +379,7 @@ class Client implements ClientInterface
 
         $this->request  = $request;
         $this->response = $this->sendRequest($request);
-        $body = json_decode($this->response->getBody(), true);
+        $body           = json_decode($this->response->getBody(), true);
         if (isset($body['error']) || isset($body['errors'])) {
             throw new \Exception('Error with request');
         }
@@ -324,8 +406,8 @@ class Client implements ClientInterface
         $request = $this->createNewRequest();
         $request->setMethod(Request::METHOD_GET);
         $path = 'payouts?token='
-                    . $this->token->getToken()
-                    . (($status == null) ? '' : '&status=' . $status);
+            . $this->token->getToken()
+            . (($status == null) ? '' : '&status=' . $status);
         $request->setPath($path);
 
         $this->addIdentityHeader($request);
@@ -399,12 +481,12 @@ class Client implements ClientInterface
         $this->request  = $request;
         $this->response = $this->sendRequest($this->request);
 
-        $body           = json_decode($this->response->getBody(), true);
+        $body = json_decode($this->response->getBody(), true);
         if (empty($body['data'])) {
             throw new \Exception('Error with request');
         }
 
-        $data   = $body['data'];
+        $data = $body['data'];
 
         $payout->setStatus($data['status']);
 
@@ -425,11 +507,11 @@ class Client implements ClientInterface
         $this->request  = $request;
         $this->response = $this->sendRequest($this->request);
 
-        $body           = json_decode($this->response->getBody(), true);
+        $body = json_decode($this->response->getBody(), true);
         if (empty($body['data'])) {
             throw new \Exception('Error with request');
         }
-        $data   = $body['data'];
+        $data = $body['data'];
 
         $payout = new \Bitpay\Payout();
         $payout
@@ -534,11 +616,11 @@ class Client implements ClientInterface
         if (isset($tkn['resource'])) {
             $token->setResource($tkn['resource']);
         }
-        
+
         if (isset($tkn['pairingCode'])) {
             $token->setPairingCode($tkn['pairingCode']);
         }
-        
+
         return $token;
     }
 
@@ -574,7 +656,7 @@ class Client implements ClientInterface
         $this->addIdentityHeader($this->request);
         $this->addSignatureHeader($this->request);
         $this->response = $this->sendRequest($this->request);
-        $body = json_decode($this->response->getBody(), true);
+        $body           = json_decode($this->response->getBody(), true);
 
         if (isset($body['error'])) {
             throw new \Exception($body['error']);
@@ -582,7 +664,7 @@ class Client implements ClientInterface
 
         $data = $body['data'];
 
-        $invoice = new \Bitpay\Invoice();
+        $invoice      = new \Bitpay\Invoice();
         $invoiceToken = new \Bitpay\Token();
         $invoice
             ->setToken($invoiceToken->setToken($data['token']))
@@ -608,6 +690,7 @@ class Client implements ClientInterface
 
     /**
      * @param RequestInterface $request
+     *
      * @return ResponseInterface
      */
     public function sendRequest(RequestInterface $request)
@@ -622,6 +705,8 @@ class Client implements ClientInterface
 
     /**
      * @param RequestInterface $request
+     *
+     * @throws \Exception
      */
     protected function addIdentityHeader(RequestInterface $request)
     {
@@ -629,7 +714,7 @@ class Client implements ClientInterface
             throw new \Exception('Please set your Public Key.');
         }
 
-        $request->setHeader('x-identity', (string) $this->publicKey);
+        $request->setHeader('x-identity', (string)$this->publicKey);
     }
 
     /**
