@@ -65,6 +65,6 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
 
     private function getMockOrg()
     {
-        return $this->getMock('Bitpay\OrgInterface');
+        return $this->getMock('Bitpay\OrganizationInterface');
     }
 }
