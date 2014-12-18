@@ -78,7 +78,7 @@ interface ClientInterface
      * @param $invoiceId
      * @param $refundRequestId
      *
-     * @return mixed
+     * @return SupportRequestInterface
      * @throws \Exception
      */
     public function getRefund($invoiceId, $refundRequestId);
@@ -101,7 +101,7 @@ interface ClientInterface
      *
      * @param $invoiceId
      *
-     * @return mixed
+     * @return SupportRequestInterface[]
      * @throws \Exception
      */
     public function getRefunds($invoiceId);

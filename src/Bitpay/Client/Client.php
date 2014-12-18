@@ -253,7 +253,14 @@ class Client implements ClientInterface
                 throw new \Exception($body['error']);
             }
 
-            return $body['data'];
+            $data           = $body['data'];
+            $supportRequest = new SupportRequest();
+            $supportRequest->setId($data['id'])
+                ->setRequestDate($data['requestDate'])
+                ->setStatus($data['status'])
+                ->setToken($data['token']);
+
+            return $supportRequest;
         } catch (\Exception $ex) {
             throw $ex;
         }
@@ -325,7 +332,20 @@ class Client implements ClientInterface
                 throw new \Exception($body['error']);
             }
 
-            return $body['data'];
+            $refunds         = $body['data'];
+            $supportRequests = array();
+            foreach ($refunds as $refund) {
+                $supportRequest = new SupportRequest();
+                $supportRequest->setId($refund['id'])
+                    ->setRequestDate($refund['requestDate'])
+                    ->setStatus($refund['status'])
+                    ->setToken($refund['token']);
+
+                $supportRequests[] = $supportRequest;
+            }
+
+            return $supportRequests;
+
         } catch (\Exception $ex) {
             throw $ex;
         }
