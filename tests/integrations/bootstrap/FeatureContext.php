@@ -27,6 +27,8 @@ class FeatureContext extends BehatContext
 
     protected $reponse;
 
+    protected $posData;
+
     /**
      * Initializes context.
      * Every scenario gets it's own context object.
@@ -112,7 +114,9 @@ class FeatureContext extends BehatContext
             $client->setToken($token);
 
             $invoice = new \Bitpay\Invoice();
-
+            $posData = '123456789';
+            $invoice->setPosData($posData);
+            $this->posData = $posData;
             $item = new \Bitpay\Item();
             $item
                 ->setCode('skuNumber')
@@ -345,7 +349,11 @@ class FeatureContext extends BehatContext
      */
     public function thatAUserKnowsAnInvoiceId()
     {
-        throw new PendingException();
+        if(true == !file_exists('/tmp/token.json') || true == !file_exists('/tmp/bitpay.pri') || true == !file_exists('/tmp/bitpay.pub')){
+            $this->theUserPairsWithBitpayWithAValidPairingCode();
+            $this->theUserIsPairedWithBitpay();
+        }
+        $this->theUserCreatesAnInvoiceFor(1.99, 'USD');
     }
 
     /**
@@ -353,7 +361,25 @@ class FeatureContext extends BehatContext
      */
     public function theyCanRetrieveThatInvoice()
     {
-        throw new PendingException();
+        try
+        {
+            $client = new \Bitpay\Client\Client();
+            $network = new \Bitpay\Network\Customnet("alex.bp", 8088, true);
+            $curl_options = array(
+                        CURLOPT_SSL_VERIFYPEER => false,
+                        CURLOPT_SSL_VERIFYHOST => false,
+                        );
+            $adapter = new \Bitpay\Client\Adapter\CurlAdapter($curl_options);
+            $client->setNetwork($network);
+            $client->setAdapter($adapter);
+            $response  = $client->getInvoice($this->posData);
+        } catch (Exception $e){
+            var_dump($e->getMessage());
+        }
+        $responsePosData = $response->getPosData();
+        if($responsePosData !== $this->posData){
+            throw new Exception("Invoice ids don't match");
+        } 
     }
 
 }
