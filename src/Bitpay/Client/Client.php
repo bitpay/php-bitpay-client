@@ -7,7 +7,9 @@
 namespace Bitpay\Client;
 
 use Bitpay\Client\Adapter\AdapterInterface;
+use Bitpay\CurrencyInterface;
 use Bitpay\Network\NetworkInterface;
+use Bitpay\Rate;
 use Bitpay\SupportRequest;
 use Bitpay\TokenInterface;
 use Bitpay\InvoiceInterface;
@@ -272,7 +274,7 @@ class Client implements ClientInterface
     public function cancelRefund($invoiceId, $refundRequestId)
     {
         try {
-            $invoice = $this->getInvoice($invoiceId);
+            $refund = $this->getRefund($invoiceId, $refundRequestId);
         } catch (\Exception $ex) {
             throw $ex;
         }
@@ -283,7 +285,7 @@ class Client implements ClientInterface
 
         try {
             $body = [
-                'token' => $invoice->getToken()->getToken()
+                'token' => $refund->getToken()
             ];
 
             $request->setBody(json_encode($body));
@@ -603,6 +605,58 @@ class Client implements ClientInterface
         });
 
         return $payout;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getRates()
+    {
+        $this->request = $this->createNewRequest();
+        $this->request->setMethod(Request::METHOD_GET);
+        $this->request->setPath('rates');
+        $this->response = $this->sendRequest($this->request);
+        $body           = json_decode($this->response->getBody(), true);
+        if (empty($body['data'])) {
+            throw new \Exception('Error with request');
+        }
+
+        $data  = $body['data'];
+        $rates = array();
+        foreach ($data as $rate) {
+            $rateObj = new Rate();
+            $rateObj->setCode($rate['code'])
+                ->setName($rate['name'])
+                ->setRate($rate['rate']);
+
+            $rates[] = $rateObj;
+        }
+
+        return $rates;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getRate(CurrencyInterface $currency)
+    {
+        $this->request = $this->createNewRequest();
+        $this->request->setMethod(Request::METHOD_GET);
+        $this->request->setPath(sprintf('rates/%s', $currency->getCode()));
+        $this->response = $this->sendRequest($this->request);
+        $body           = json_decode($this->response->getBody(), true);
+        if (empty($body['data'])) {
+            throw new \Exception('Error with request');
+        }
+
+        $data = $body['data'];
+
+        $rate = new Rate();
+        $rate->setCode($data['code'])
+            ->setName($data['name'])
+            ->setRate($data['rate']);
+
+        return $rate;
     }
 
     /**

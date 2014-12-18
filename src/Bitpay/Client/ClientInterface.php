@@ -6,8 +6,10 @@
 
 namespace Bitpay\Client;
 
+use Bitpay\CurrencyInterface;
 use Bitpay\InvoiceInterface;
 use Bitpay\PayoutInterface;
+use Bitpay\RateInterface;
 use Bitpay\SupportRequestInterface;
 
 /**
@@ -149,8 +151,22 @@ interface ClientInterface
 
     //public function updatePayout(PayoutInterface $payout);
 
-    //public function getRates();
-    //public function getRate(CurrencyInterface $currency);
+
+    /**
+     * Retrieves the list of exchange rates.
+     * @return RateInterface[]
+     */
+    public function getRates();
+
+
+    /**
+     * Retrieves the exchange rate for the given currency.
+     *
+     * @param CurrencyInterface $currency
+     *
+     * @return RateInterface
+     */
+    public function getRate(CurrencyInterface $currency);
 
     /**
      * Get an array of tokens indexed by facade
