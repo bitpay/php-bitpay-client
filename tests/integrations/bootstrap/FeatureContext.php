@@ -25,9 +25,9 @@ class FeatureContext extends BehatContext
 
     protected $error;
 
-    protected $reponse;
+    public $reponse;
 
-    protected $posData;
+    protected $InvoiceId;
 
     /**
      * Initializes context.
@@ -62,14 +62,14 @@ class FeatureContext extends BehatContext
         );
 
         $this->mink->setDefaultSessionName($this->params['driver']);
+
     }
 
     /**
      * @Then /^clean up$/
      */
-    protected function deconstruct()
+    public function deconstruct()
     {
-        $this->mink->getSession()->reset();
         unlink('/tmp/token.json');
         unlink('/tmp/bitpay.pri');
         unlink('/tmp/bitpay.pub');
@@ -114,9 +114,7 @@ class FeatureContext extends BehatContext
             $client->setToken($token);
 
             $invoice = new \Bitpay\Invoice();
-            $posData = '123456789';
-            $invoice->setPosData($posData);
-            $this->posData = $posData;
+
             $item = new \Bitpay\Item();
             $item
                 ->setCode('skuNumber')
@@ -126,8 +124,11 @@ class FeatureContext extends BehatContext
 
             $invoice->setCurrency(new \Bitpay\Currency($currency));
 
-                $client->createInvoice($invoice);
-                $this->response = $client->getResponse();
+            $client->createInvoice($invoice);
+            $this->response = $client->getResponse();
+            $body = $this->response->getBody();
+            $json = json_decode($body, true);
+            $this->InvoiceId = $json['data']['id'];
         } catch (\Exception $e) {
             $this->error = $e;
         } finally {
@@ -372,12 +373,12 @@ class FeatureContext extends BehatContext
             $adapter = new \Bitpay\Client\Adapter\CurlAdapter($curl_options);
             $client->setNetwork($network);
             $client->setAdapter($adapter);
-            $response  = $client->getInvoice($this->posData);
+            $response  = $client->getInvoice($this->InvoiceId);
         } catch (Exception $e){
             var_dump($e->getMessage());
         }
-        $responsePosData = $response->getPosData();
-        if($responsePosData !== $this->posData){
+        $responseInvoiceId = $response->getId();
+        if($responseInvoiceId !== $this->InvoiceId){
             throw new Exception("Invoice ids don't match");
         } 
     }
