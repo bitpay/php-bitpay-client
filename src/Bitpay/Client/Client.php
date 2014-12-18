@@ -231,9 +231,15 @@ class Client implements ClientInterface
      */
     public function getRefund($invoiceId, $refundRequestId)
     {
+        try {
+            $invoice = $this->getInvoice($invoiceId);
+        } catch (\Exception $ex) {
+            throw $ex;
+        }
+
         $request = $this->createNewRequest();
         $request->setMethod(Request::METHOD_GET);
-        $request->setPath(sprintf('invoices/%s/refunds/%s?token=%s', $invoiceId, $refundRequestId, $this->token->getToken()));
+        $request->setPath(sprintf('invoices/%s/refunds/%s?token=%s', $invoiceId, $refundRequestId, $invoice->getToken()->getToken()));
 
         try {
             $this->addIdentityHeader($request);
@@ -305,15 +311,9 @@ class Client implements ClientInterface
 
         $request = $this->createNewRequest();
         $request->setMethod(Request::METHOD_GET);
-        $request->setPath(sprintf('invoices/%s/refunds', $invoiceId));
+        $request->setPath(sprintf('invoices/%s/refunds?token=%s', $invoiceId, $invoice->getToken()->getToken()));
 
         try {
-            $body = [
-                'token' => $invoice->getToken()->getToken()
-            ];
-
-            $request->setBody(json_encode($body));
-
             $this->addIdentityHeader($request);
             $this->addSignatureHeader($request);
 
