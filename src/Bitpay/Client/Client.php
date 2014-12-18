@@ -8,6 +8,7 @@ namespace Bitpay\Client;
 
 use Bitpay\Client\Adapter\AdapterInterface;
 use Bitpay\Network\NetworkInterface;
+use Bitpay\SupportRequest;
 use Bitpay\TokenInterface;
 use Bitpay\InvoiceInterface;
 use Bitpay\PayoutInterface;
@@ -212,7 +213,14 @@ class Client implements ClientInterface
                 throw new \Exception($body['error']);
             }
 
-            return $body['data'];
+            $data           = $body['data'];
+            $supportRequest = new SupportRequest();
+            $supportRequest->setId($data['id'])
+                ->setRequestDate($data['requestDate'])
+                ->setStatus($data['status'])
+                ->setToken($data['token']);
+
+            return $supportRequest;
         } catch (\Exception $ex) {
             throw $ex;
         }
@@ -278,7 +286,7 @@ class Client implements ClientInterface
             ];
 
             $request->setBody(json_encode($body));
-            
+
             $this->addIdentityHeader($request);
             $this->addSignatureHeader($request);
 

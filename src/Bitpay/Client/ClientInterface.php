@@ -8,6 +8,7 @@ namespace Bitpay\Client;
 
 use Bitpay\InvoiceInterface;
 use Bitpay\PayoutInterface;
+use Bitpay\SupportRequestInterface;
 
 /**
  * Sends request(s) to bitpay server
@@ -65,7 +66,7 @@ interface ClientInterface
      * @param $amount
      * @param $currency
      *
-     * @return string
+     * @return SupportRequestInterface
      * @throws \Exception
      */
     public function createRefund($invoiceId, $bitcoinAddress, $amount, $currency);
