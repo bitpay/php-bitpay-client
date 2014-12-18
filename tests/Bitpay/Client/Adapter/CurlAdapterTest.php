@@ -6,7 +6,6 @@
 
 namespace Bitpay\Client\Adapter;
 
-use Bitpay\Client;
 use Bitpay\Client\Request;
 
 class CurlAdapterTest extends \PHPUnit_Framework_TestCase

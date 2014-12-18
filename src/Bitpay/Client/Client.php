@@ -15,10 +15,6 @@ use Bitpay\Util\Util;
 use Bitpay\PublicKey;
 use Bitpay\PrivateKey;
 
-class BitPayException extends \Exception {}
-class ArgumentException extends \Exception {}
-class ConnectionException extends \Exception {}
-
 /**
  * Client used to send requests and receive responses for BitPay's Web API
  *
@@ -488,7 +484,7 @@ class Client implements ClientInterface
         $body           = json_decode($this->response->getBody(), true);
 
         if (isset($body['error'])) {
-            throw new BitPayException($this->response->getStatusCode().": ".$body['error']);
+            throw new \Bitpay\Client\BitpayException($this->response->getStatusCode().": ".$body['error']);
         }
 
         $tkn = $body['data'][0];
