@@ -6,6 +6,7 @@
 
 namespace Bitpay\Client\Adapter;
 
+use Bitpay\Client;
 use Bitpay\Client\Request;
 
 class CurlAdapterTest extends \PHPUnit_Framework_TestCase
@@ -31,8 +32,7 @@ class CurlAdapterTest extends \PHPUnit_Framework_TestCase
 
     public function testSendRequestWithException()
     {
-        $http = $this->getMock('HttpRequest');
-        $this->setExpectedException('Exception');
+        $this->setExpectedException('Bitpay\Client\ConnectionException');
         
         $curl_options = array(
             CURLOPT_URL            => "www.example.com",
@@ -41,13 +41,11 @@ class CurlAdapterTest extends \PHPUnit_Framework_TestCase
         );
 
         $adapter = new CurlAdapter($curl_options);
-        $response = $adapter->sendRequest($this->request);
+        $response = $adapter->sendRequest($this->request);;
     }
 
     public function testSendRequestWithoutException()
     {
-        $http = $this->getMock('HttpRequest');
-        
         $curl_options = array(
             CURLOPT_URL            => "www.bitpay.com",
             CURLOPT_SSL_VERIFYPEER => 1,

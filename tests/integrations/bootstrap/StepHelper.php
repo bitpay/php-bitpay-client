@@ -1,19 +1,20 @@
 <?php
 
-
-function newSession()
+function generateAndPersistKeys()
 {
-	$phantomjsDriver = new \Behat\Mink\Driver\Selenium2Driver('phantomJS');
+    $privateKey = new \Bitpay\PrivateKey('/tmp/bitpay.pri');
+    $privateKey->generate();
+    $publicKey = new \Bitpay\PublicKey('/tmp/bitpay.pub');
+    $publicKey->setPrivateKey($privateKey);
+    $publicKey->generate();
+    $sinKey = new \Bitpay\SinKey('/tmp/sin.key');
+    $sinKey->setPublicKey($publicKey);
+    $sinKey->generate();
 
-    // Setup mink sessions.
-    $phantomjsSession = new \Behat\Mink\Session($phantomjsDriver);
+    //Persist Keys
+    $storageEngine = new \Bitpay\Storage\EncryptedFilesystemStorage('YourTopSecretPassword');
+    $storageEngine->persist($privateKey);
+    $storageEngine->persist($publicKey);
 
-    // Setup mink session manager.
-    $mink = new \Behat\Mink\Mink();
-
-    $mink->registerSession('phantomjs', $phantomjsSession);
-
-    $mink->setDefaultSessionName('phantomjs');
-
-    return $mink->getSession();
+    return array($privateKey, $publicKey, $sinKey);
 }

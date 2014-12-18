@@ -11,12 +11,6 @@ use Behat\MinkExtension\Context\MinkContext;
 
 require_once __DIR__ . '/../../../vendor/autoload.php';
 require_once __DIR__ . '/StepHelper.php';
-//
-// Require 3rd-party libraries here:
-//
-//   require_once 'PHPUnit/Autoload.php';
-//   require_once 'PHPUnit/Framework/Assert/Functions.php';
-//
 
 /**
  * Features context.
@@ -30,6 +24,8 @@ class FeatureContext extends BehatContext
     public $validPairingCode;
 
     protected $error;
+
+    protected $reponse;
 
     /**
      * Initializes context.
@@ -66,11 +62,15 @@ class FeatureContext extends BehatContext
         $this->mink->setDefaultSessionName($this->params['driver']);
     }
 
-    protected function tearDown()
+    /**
+     * @Then /^clean up$/
+     */
+    protected function deconstruct()
     {
         $this->mink->getSession()->reset();
-        unload('/tmp/bitpay.pri');
-        unload('/tmp/bitpay.pub');
+        unlink('/tmp/token.json');
+        unlink('/tmp/bitpay.pri');
+        unlink('/tmp/bitpay.pub');
     }
 
     /**
@@ -78,23 +78,74 @@ class FeatureContext extends BehatContext
      */
     public function theUserIsAuthenticatedWithBitpay()
     {
-        throw new PendingException();
+        if(true == !file_exists('/tmp/token.json') || true == !file_exists('/tmp/bitpay.pri') || true == !file_exists('/tmp/bitpay.pub')){
+            $this->theUserPairsWithBitpayWithAValidPairingCode();
+            $this->theUserIsPairedWithBitpay();
+        }
     }
 
     /**
      * @When /^the user creates an invoice for "([^"]*)" "([^"]*)"$/
      */
-    public function theUserCreatesAnInvoiceFor($arg1, $arg2)
+    public function theUserCreatesAnInvoiceFor($price, $currency)
     {
-        throw new PendingException();
+        try {
+            $storageEngine = new \Bitpay\Storage\EncryptedFilesystemStorage('YourTopSecretPassword'); // Password may need to be updated if you changed it
+            $privateKey    = $storageEngine->load('/tmp/bitpay.pri');
+            $publicKey     = $storageEngine->load('/tmp/bitpay.pub');
+            $token_id      = file_get_contents('/tmp/token.json');
+
+            $client = new \Bitpay\Client\Client();
+            $network = new \Bitpay\Network\Customnet("alex.bp", 8088, true);
+            $curl_options = array(
+                        CURLOPT_SSL_VERIFYPEER => false,
+                        CURLOPT_SSL_VERIFYHOST => false,
+                        );
+            $adapter = new \Bitpay\Client\Adapter\CurlAdapter($curl_options);
+            $client->setPrivateKey($privateKey);
+            $client->setPublicKey($publicKey);
+            $client->setNetwork($network);
+            $client->setAdapter($adapter);
+
+            $token = new \Bitpay\Token();
+            $token->setToken($token_id);
+            $client->setToken($token);
+
+            $invoice = new \Bitpay\Invoice();
+
+            $item = new \Bitpay\Item();
+            $item
+                ->setCode('skuNumber')
+                ->setDescription('General Description of Item')
+                ->setPrice($price);
+            $invoice->setItem($item);
+
+            $invoice->setCurrency(new \Bitpay\Currency($currency));
+
+                $client->createInvoice($invoice);
+                $this->response = $client->getResponse();
+        } catch (\Exception $e) {
+            $this->error = $e;
+        } finally {
+            return true;
+        }
     }
 
     /**
      * @Then /^they should recieve an invoice in response for "([^"]*)" "([^"]*)"$/
      */
-    public function theyShouldRecieveAnInvoiceInResponseFor($arg1, $arg2)
+    public function theyShouldRecieveAnInvoiceInResponseFor($price, $currency)
     {
-        throw new PendingException();
+        $body = $this->response->getBody();
+        $json = json_decode($body, true);
+        $responsePrice = (string) $json['data']['price'];
+        $responseCurrency = $json['data']['currency'];
+        if ($responsePrice !== $price){
+            throw new Exception("Error: Price is different", 1);
+        }
+        if ($responseCurrency !== $currency){
+            throw new Exception("Error: Currency is different", 1);
+        }    
     }
 
     /**
@@ -127,9 +178,11 @@ class FeatureContext extends BehatContext
             throw new \InvalidArgumentException(sprintf('Could not evaluate CSS Selector: "%s"', $cssSelector));
         }
         $element->press();
+
         $this->mink->getSession()->wait(1500);
         $this->mink->getSession()->getPage()->pressButton("Add Token");
         $this->mink->getSession()->wait(5000);
+
         $this->validPairingCode = $this->mink->getSession()->getPage()->find('xpath', '//*[@id="my-token-access-wrapper"]/div[1]/div[2]/div/div')->getText();
     }
 
@@ -139,19 +192,7 @@ class FeatureContext extends BehatContext
     public function theUserIsPairedWithBitpay()
     {
         // Create Keys
-        $privateKey = new \Bitpay\PrivateKey('/tmp/bitpay.pri');
-        $privateKey->generate();
-        $publicKey = new \Bitpay\PublicKey('/tmp/bitpay.pub');
-        $publicKey->setPrivateKey($privateKey);
-        $publicKey->generate();
-        $sinKey = new \Bitpay\SinKey('/tmp/sin.key');
-        $sinKey->setPublicKey($publicKey);
-        $sinKey->generate();
-
-        //Persist Keys
-        $storageEngine = new \Bitpay\Storage\EncryptedFilesystemStorage('YourTopSecretPassword');
-        $storageEngine->persist($privateKey);
-        $storageEngine->persist($publicKey);
+        list($privateKey, $publicKey, $sinKey) = generateAndPersistKeys();
 
         //Set Client
         $client = new \Bitpay\Client\Client();
@@ -176,6 +217,9 @@ class FeatureContext extends BehatContext
                     'id'          => (string) $sinKey,
                 )
             );
+            $token_file = fopen('/tmp/token.json', 'w');
+            fwrite($token_file, $token);
+            fclose($token_file);
         } catch (\Exception $e) {
             $request  = $client->getRequest();
             $response = $client->getResponse();
@@ -196,19 +240,7 @@ class FeatureContext extends BehatContext
             $this->mink->getSession()->wait(1500);
 
             // Create Keys
-            $privateKey = new \Bitpay\PrivateKey('/tmp/bitpay.pri');
-            $privateKey->generate();
-            $publicKey = new \Bitpay\PublicKey('/tmp/bitpay.pub');
-            $publicKey->setPrivateKey($privateKey);
-            $publicKey->generate();
-            $sinKey = new \Bitpay\SinKey('/tmp/sin.key');
-            $sinKey->setPublicKey($publicKey);
-            $sinKey->generate();
-
-            //Persist Keys
-            $storageEngine = new \Bitpay\Storage\EncryptedFilesystemStorage('YourTopSecretPassword');
-            $storageEngine->persist($privateKey);
-            $storageEngine->persist($publicKey);
+            list($privateKey, $publicKey, $sinKey) = generateAndPersistKeys();
 
             //Set Client
             $client = new \Bitpay\Client\Client();
@@ -238,19 +270,31 @@ class FeatureContext extends BehatContext
         }
 
     }
+
     /**
      * @Then /^they will receive a "([^"]*)" matching "([^"]*)"$/
      */
     public function theyWillReceiveAnErrorMatching($errorName, $errorMessage)
-    {   
-        var_dump(get_class($this->error));
+    {
         if ($this->error->getMessage() !== $errorMessage){
             throw new Exception("Error message incorrect", 1);
         }
         if (get_class($this->error) !== $errorName){
             throw new Exception("Error name incorrect", 1);
         }
-        
+    }
+
+    /**
+     * @Then /^they will receive a "([^"]*)" matching \'([^\']*)\'$/
+     */
+    public function theyWillReceiveAnErrorMatching2($errorName, $errorMessage)
+    {
+        if ($this->error->getMessage() !== $errorMessage){
+            throw new Exception("Error message incorrect", 1);
+        }
+        if (get_class($this->error) !== $errorName){
+            throw new Exception("Error name incorrect", 1);
+        }
     }
 
     /**
@@ -263,19 +307,7 @@ class FeatureContext extends BehatContext
             $this->mink->getSession()->wait(1500);
 
             // Create Keys
-            $privateKey = new \Bitpay\PrivateKey('/tmp/bitpay.pri');
-            $privateKey->generate();
-            $publicKey = new \Bitpay\PublicKey('/tmp/bitpay.pub');
-            $publicKey->setPrivateKey($privateKey);
-            $publicKey->generate();
-            $sinKey = new \Bitpay\SinKey('/tmp/sin.key');
-            $sinKey->setPublicKey($publicKey);
-            $sinKey->generate();
-
-            //Persist Keys
-            $storageEngine = new \Bitpay\Storage\EncryptedFilesystemStorage('YourTopSecretPassword');
-            $storageEngine->persist($privateKey);
-            $storageEngine->persist($publicKey);
+            list($privateKey, $publicKey, $sinKey) = generateAndPersistKeys();
 
             //Set Client
             $client = new \Bitpay\Client\Client();
@@ -283,6 +315,7 @@ class FeatureContext extends BehatContext
             $curl_options = array(
                         CURLOPT_SSL_VERIFYPEER => false,
                         CURLOPT_SSL_VERIFYHOST => false,
+                        CURLOPT_TIMEOUT        => 1,
                         );
             $adapter = new \Bitpay\Client\Adapter\CurlAdapter($curl_options);
             $client->setPrivateKey($privateKey);

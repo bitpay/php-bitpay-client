@@ -6,6 +6,8 @@
 
 namespace Bitpay;
 
+use Bitpay\Client;
+
 /**
  * For the most part this should conform to ISO 4217
  *
@@ -114,7 +116,7 @@ class Currency implements CurrencyInterface
     public function setCode($code)
     {
         if (null !== $code && !in_array(strtoupper($code), self::$availableCurrencies)) {
-            throw new \Exception(
+            throw new \Bitpay\Client\ArgumentException(
                 sprintf('The currency code "%s" is not supported.', $code)
             );
         }

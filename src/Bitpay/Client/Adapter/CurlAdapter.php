@@ -6,9 +6,12 @@
 
 namespace Bitpay\Client\Adapter;
 
+use Bitpay\Client;
 use Bitpay\Client\RequestInterface;
 use Bitpay\Client\ResponseInterface;
 use Bitpay\Client\Response;
+
+require_once __DIR__ . '/../../../../vendor/autoload.php';
 
 /**
  * Adapter that sends Request objects using CURL
@@ -74,7 +77,11 @@ class CurlAdapter implements AdapterInterface
         if (false === $raw) {
             $errorMessage = curl_error($curl);
             curl_close($curl);
-            throw new \Bitpay\Client\ConnectionException($errorMessage);
+            if(class_exists('\Bitpay\Client\ConnectionException'))
+            {
+                throw new \Bitpay\Client\ConnectionException($errorMessage);                
+            }
+
         }
 
         /** @var ResponseInterface */
