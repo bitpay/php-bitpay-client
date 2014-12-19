@@ -2,7 +2,7 @@
 
 namespace Bitpay\Client;
 
-class ArgumentException extends \Exception 
+class ArgumentException extends \Exception
 {
 
 }
