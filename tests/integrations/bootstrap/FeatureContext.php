@@ -6,8 +6,10 @@ use Behat\Behat\Context\ClosuredContextInterface,
     Behat\Behat\Exception\PendingException;
 use Behat\Gherkin\Node\PyStringNode,
     Behat\Gherkin\Node\TableNode;
+use Behat\Mink\Mink;
+use Behat\Mink\Session;
+use Behat\Mink\Driver\Selenium2Driver;
 
-use Behat\MinkExtension\Context\MinkContext;
 
 require_once __DIR__ . '/../../../vendor/autoload.php';
 require_once __DIR__ . '/StepHelper.php';
@@ -49,20 +51,15 @@ class FeatureContext extends BehatContext
 
         $phantomjsDriver = new \Behat\Mink\Driver\Selenium2Driver('phantomJS', null, 'http://127.0.0.1:8643');
         $selenium2Driver = new \Behat\Mink\Driver\Selenium2Driver('firefox');
-        $zombiejsDriver = new \Behat\Mink\Driver\ZombieDriver(
-            new \Behat\Mink\Driver\NodeJS\Server\ZombieServer()
-        );
 
         $this->mink      = new \Behat\Mink\Mink(
             array(
                 'phantomjs' => new \Behat\Mink\Session($phantomjsDriver),
                 'selenium2' => new \Behat\Mink\Session($selenium2Driver),
-                'zombiejs'  => new \Behat\Mink\Session($zombiejsDriver),
             )
         );
 
         $this->mink->setDefaultSessionName($this->params['driver']);
-
     }
 
     /**
@@ -92,22 +89,10 @@ class FeatureContext extends BehatContext
     public function theUserCreatesAnInvoiceFor($price, $currency)
     {
         try {
-            $storageEngine = new \Bitpay\Storage\EncryptedFilesystemStorage('YourTopSecretPassword'); // Password may need to be updated if you changed it
-            $privateKey    = $storageEngine->load('/tmp/bitpay.pri');
-            $publicKey     = $storageEngine->load('/tmp/bitpay.pub');
-            $token_id      = file_get_contents('/tmp/token.json');
+            // Load keys
+            list($privateKey, $publicKey, $token_id) = loadKeys();
 
-            $client = new \Bitpay\Client\Client();
-            $network = new \Bitpay\Network\Customnet("alex.bp", 8088, true);
-            $curl_options = array(
-                        CURLOPT_SSL_VERIFYPEER => false,
-                        CURLOPT_SSL_VERIFYHOST => false,
-                        );
-            $adapter = new \Bitpay\Client\Adapter\CurlAdapter($curl_options);
-            $client->setPrivateKey($privateKey);
-            $client->setPublicKey($publicKey);
-            $client->setNetwork($network);
-            $client->setAdapter($adapter);
+            $client = createClient($privateKey, $publicKey);
 
             $token = new \Bitpay\Token();
             $token->setToken($token_id);
@@ -164,7 +149,13 @@ class FeatureContext extends BehatContext
         $this->mink->getSession()->wait(1500);
         $this->mink->getSession()->getPage()->fillField('email', $this->params['user']);
         $this->mink->getSession()->getPage()->fillField('password', $this->params['password']);
-        $this->mink->getSession()->getPage()->findById('loginButton')->click();
+
+        $value = $this->mink->getSession()->getPage()->pressButton('loginButton');
+
+        $this->mink->getSession()->wait(2500);
+
+        $assert = $this->mink->assertSession();
+        $assert->pageTextContains('Dashboard');
 
         // Navigate to tokens
         $this->mink->getSession()->wait(1500);
@@ -200,17 +191,8 @@ class FeatureContext extends BehatContext
         list($privateKey, $publicKey, $sinKey) = generateAndPersistKeys();
 
         //Set Client
-        $client = new \Bitpay\Client\Client();
-        $network = new \Bitpay\Network\Customnet("alex.bp", 8088, true);
-        $curl_options = array(
-                    CURLOPT_SSL_VERIFYPEER => false,
-                    CURLOPT_SSL_VERIFYHOST => false,
-                    );
-        $adapter = new \Bitpay\Client\Adapter\CurlAdapter($curl_options);
-        $client->setPrivateKey($privateKey);
-        $client->setPublicKey($publicKey);
-        $client->setNetwork($network);
-        $client->setAdapter($adapter);
+        $client = createClient($privateKey, $publicKey);
+
         $pairingCode = $this->validPairingCode;
 
         // Pair
@@ -248,17 +230,7 @@ class FeatureContext extends BehatContext
             list($privateKey, $publicKey, $sinKey) = generateAndPersistKeys();
 
             //Set Client
-            $client = new \Bitpay\Client\Client();
-            $network = new \Bitpay\Network\Customnet("alex.bp", 8088, true);
-            $curl_options = array(
-                        CURLOPT_SSL_VERIFYPEER => false,
-                        CURLOPT_SSL_VERIFYHOST => false,
-                        );
-            $adapter = new \Bitpay\Client\Adapter\CurlAdapter($curl_options);
-            $client->setPrivateKey($privateKey);
-            $client->setPublicKey($publicKey);
-            $client->setNetwork($network);
-            $client->setAdapter($adapter);
+            $client = createClient($privateKey, $publicKey);
 
             // Pair
             $token = $client->createToken(
@@ -277,22 +249,9 @@ class FeatureContext extends BehatContext
     }
 
     /**
-     * @Then /^they will receive a "([^"]*)" matching "([^"]*)"$/
-     */
-    public function theyWillReceiveAnErrorMatching($errorName, $errorMessage)
-    {
-        if ($this->error->getMessage() !== $errorMessage){
-            throw new Exception("Error message incorrect", 1);
-        }
-        if (get_class($this->error) !== $errorName){
-            throw new Exception("Error name incorrect", 1);
-        }
-    }
-
-    /**
      * @Then /^they will receive a "([^"]*)" matching \'([^\']*)\'$/
      */
-    public function theyWillReceiveAnErrorMatching2($errorName, $errorMessage)
+    public function theyWillReceiveAnErrorMatching($errorName, $errorMessage)
     {
         if ($this->error->getMessage() !== $errorMessage){
             throw new Exception("Error message incorrect", 1);
@@ -315,19 +274,13 @@ class FeatureContext extends BehatContext
             list($privateKey, $publicKey, $sinKey) = generateAndPersistKeys();
 
             //Set Client
-            $client = new \Bitpay\Client\Client();
             $network = new \Bitpay\Network\Customnet("alex.bp", 8974, true);
             $curl_options = array(
                         CURLOPT_SSL_VERIFYPEER => false,
                         CURLOPT_SSL_VERIFYHOST => false,
                         CURLOPT_TIMEOUT        => 1,
                         );
-            $adapter = new \Bitpay\Client\Adapter\CurlAdapter($curl_options);
-            $client->setPrivateKey($privateKey);
-            $client->setPublicKey($publicKey);
-            $client->setNetwork($network);
-            $client->setAdapter($adapter);
-            $pairingCode = $this->validPairingCode;
+            $client = createClient($privateKey, $publicKey, $network, $curl_options);
 
             // Pair
             $token = $client->createToken(
@@ -337,7 +290,7 @@ class FeatureContext extends BehatContext
                     'id'          => (string) $sinKey,
                 )
             );
-
+            $this->deconstruct();
         } catch (\Exception $e) {
             $this->error = $e;
         } finally {
@@ -364,15 +317,7 @@ class FeatureContext extends BehatContext
     {
         try
         {
-            $client = new \Bitpay\Client\Client();
-            $network = new \Bitpay\Network\Customnet("alex.bp", 8088, true);
-            $curl_options = array(
-                        CURLOPT_SSL_VERIFYPEER => false,
-                        CURLOPT_SSL_VERIFYHOST => false,
-                        );
-            $adapter = new \Bitpay\Client\Adapter\CurlAdapter($curl_options);
-            $client->setNetwork($network);
-            $client->setAdapter($adapter);
+            $client = createClient();
             $response  = $client->getInvoice($this->InvoiceId);
         } catch (Exception $e){
             var_dump($e->getMessage());
@@ -382,5 +327,4 @@ class FeatureContext extends BehatContext
             throw new Exception("Invoice ids don't match");
         } 
     }
-
 }

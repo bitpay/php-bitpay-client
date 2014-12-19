@@ -17,23 +17,6 @@ default:
       goutte: ~
       selenium2: ~
 
-zombie:
-  context:
-    parameters:
-      user: 'alex@bitpay.com'
-      password: 'abc123ABC!@#'
-      features_path: %behat.paths.features%
-      base_url: 'https://alex.bp:8088'
-      driver: 'zombiejs'
-  paths:
-    features: tests/integrations
-    bootstrap: %behat.paths.features%/bootstrap
-  extensions:
-    Behat\MinkExtension\Extension:
-      base_url: 'alex.bp:8088'
-      goutte: ~
-      zombie: ~
-
 phantomjs:
   context:
     parameters:
