@@ -40,7 +40,7 @@ class CurlAdapterTest extends \PHPUnit_Framework_TestCase
         );
 
         $adapter = new CurlAdapter($curl_options);
-        $response = $adapter->sendRequest($this->request);;
+        $response = $adapter->sendRequest($this->request);
     }
 
     public function testSendRequestWithoutException()
