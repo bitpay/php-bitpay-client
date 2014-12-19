@@ -11,13 +11,10 @@ install:
 
 before_script:
     - make phantomjs
-    - curl -O http://selenium-release.storage.googleapis.com/2.44/selenium-server-standalone-2.44.0.jar
 
 script:
     - php bin/phpunit -c build/
     - php bin/phpcs -n --standard=PSR1,PSR2 --report=full src/
-    - java -jar selenium-server-standalone-2.44.0.jar
-    - php bin/behat test/integrations
 
 after_script:
     - ls -alh build/logs
