@@ -2,4 +2,7 @@
 
 namespace Bitpay\Client;
 
-class BitpayException extends \Exception {}
+class BitpayException extends \Exception
+{
+
+}
