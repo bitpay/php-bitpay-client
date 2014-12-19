@@ -471,7 +471,7 @@ class Client implements ClientInterface
     {
         if ($payload !== array()) {
             if (1 !== preg_match('/^[a-zA-Z0-9]{7}$/', $payload['pairingCode'])) {
-            throw new ArgumentException("pairing code is not legal");
+                throw new ArgumentException("pairing code is not legal");
             }
         }
 
