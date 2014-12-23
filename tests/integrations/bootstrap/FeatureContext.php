@@ -31,6 +31,10 @@ class FeatureContext extends BehatContext
 
     protected $InvoiceId;
 
+    protected $user;
+
+    protected $password;
+
     /**
      * Initializes context.
      * Every scenario gets it's own context object.
@@ -41,10 +45,18 @@ class FeatureContext extends BehatContext
     {
         $this->params = $parameters;
 
-        $isEmailConfigured    = $this->params['user'];
-        $isPasswordConfigured = $this->params['password'];
+        if (null == getenv('BITPAY_EMAIL')){
+            $this->email = $this->params['user'];
+        } else {
+            $this->email = getenv('BITPAY_EMAIL');
+        }
+        if (null == getenv('BITPAY_PASSWORD')){
+            $this->password = $this->params['password'];
+        } else {
+            $this->password = getenv('BITPAY_PASSWORD');
+        }
 
-        if (!$isEmailConfigured || !$isPasswordConfigured) {
+        if ((null == $this->email) || (null == $this->password)) {
             throw new Exception("Your email or password are not configured.");
             return;
         }
@@ -144,11 +156,11 @@ class FeatureContext extends BehatContext
     public function theUserPairsWithBitpayWithAValidPairingCode()
     {
         // Login
-        $this->mink->getSession()->visit('https://alex.bp:8088/merchant-login');
+        $this->mink->getSession()->visit($this->params['base_url'].'/merchant-login');
 
         $this->mink->getSession()->wait(1500);
-        $this->mink->getSession()->getPage()->fillField('email', $this->params['user']);
-        $this->mink->getSession()->getPage()->fillField('password', $this->params['password']);
+        $this->mink->getSession()->getPage()->fillField('email', $this->email);
+        $this->mink->getSession()->getPage()->fillField('password', $this->password);
 
         $value = $this->mink->getSession()->getPage()->pressButton('loginButton');
 

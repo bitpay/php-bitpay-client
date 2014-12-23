@@ -91,3 +91,35 @@ please try to use phpmd. You can see the rules in ``build/rulesets/phpmd.xml``.
 .. code-block:: bash
 
     php bin/phpmd src/ text build/rulesets/phpmd.xml
+
+Mink/Behat
+=================
+
+This will run tests verifying that the client is able to perform it's core functionality.
+
+To run mink/behat integration tests, use the command:
+.. code-block:: bash
+
+    sh ./integration_tests user_name 'password'
+
+You can configure which instance of bitpay.com this will test with to by changing the url
+in the behat.yml file. Make sure you replace username and password with the credentials
+used to log into the bitpay site you are testing with.
+
+You can also run specific tests from a command like so:
+.. code-block:: bash
+
+    php bin/behat tests/integrations/invoice_create.feature
+
+And you can run specific lines from these tests by:
+.. code-block:: bash
+
+    php bin/behat tests/integrations/invoice_create.feature:20
+
+.. note::
+
+    Tests run individually require you to set environment variables for your bitpay 
+    credentials or they must be set in the behat.yml file.
+
+    Also keep in mind that rate limiters may hinder some tests and they need to be 
+    reset every so often.

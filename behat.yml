@@ -3,34 +3,30 @@
 default:
   context:
     parameters:
-      user: ''
-      password: ''
-      features_path: %behat.paths.features%
-      base_url: ''
+      user:
+      password:
+      base_url: 'https://test.bitpay.com'
       driver: 'selenium2'
   paths:
     features: tests/integrations
     bootstrap: %behat.paths.features%/bootstrap
   extensions:
     Behat\MinkExtension\Extension:
-      base_url: ''
       goutte: ~
       selenium2: ~
 
 phantomjs:
   context:
     parameters:
-      user: ''
-      password: ''
-      features_path: %behat.paths.features%
-      base_url: ''
+      user:
+      password:
+      base_url: 'https://test.bitpay.com'
       driver: 'phantomjs'
   paths:
     features: tests/integrations
     bootstrap: %behat.paths.features%/bootstrap
   extensions:
     Behat\MinkExtension\Extension:
-      base_url: ''
       goutte: ~
       selenium2:
         wd_host: "http://localhost:8643/wd/hub"
