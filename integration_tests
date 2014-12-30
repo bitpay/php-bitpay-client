@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+if [ -z "$1" ]
+then
+	echo "No parameters passed so using Environment Variables"
+    if [ -z "$BITPAY_EMAIL" ] || [ -z "$BITPAY_PASSWORD"]
+	then
+		echo "ERROR: No Email or password are set."
+		echo "set BITPAY_EMAIL and BITPAY_PASSWORD as environment variables"
+		echo "or pass them as arguments when running this script"
+		exit 1
+	else
+		EMAIL=$BITPAY_EMAIL
+    	PASSWORD=$BITPAY_PASSWORD
+	fi
+else
+	echo "Username $1 and Password $2 passed from command line"
+    EMAIL=$1
+    PASSWORD=$2
+    echo "Setting user and Password to new environment variables..."
+	export BITPAY_EMAIL=$EMAIL
+	export BITPAY_PASSWORD=$PASSWORD
+fi
+
+echo "Removing old keys..."
+if [ -e /tmp/bitpay.pub ]
+then
+    rm -rf /tmp/bitpay.pub
+    rm -rf /tmp/bitpay.pri
+    rm -rf /tmp/token.json
+fi
+
+echo "Checking if Selenium exists..."
+if [ ! -f selenium-server-standalone-2.44.0.jar ]
+then
+	echo "Downloading Selenium"
+    curl -O http://selenium-release.storage.googleapis.com/2.44/selenium-server-standalone-2.44.0.jar
+fi
+
+echo "Running Selenium and the tests"
+java -jar selenium-server-standalone-2.44.0.jar & php bin/behat tests/integrations
