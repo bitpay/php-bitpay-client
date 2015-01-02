@@ -29,11 +29,19 @@ class FeatureContext extends BehatContext
 
     public $reponse;
 
-    protected $InvoiceId;
+    protected $invoiceId;
 
     protected $user;
 
     protected $password;
+
+    protected $base_url;
+
+    protected $port;
+
+    protected $port_required_in_url;
+
+    protected $network;
 
     /**
      * Initializes context.
@@ -45,19 +53,46 @@ class FeatureContext extends BehatContext
     {
         $this->params = $parameters;
 
-        if (null == getenv('BITPAY_EMAIL')){
+        if (null == getenv('BITPAY_EMAIL')) {
             $this->email = $this->params['user'];
         } else {
             $this->email = getenv('BITPAY_EMAIL');
         }
-        if (null == getenv('BITPAY_PASSWORD')){
+        if (null == getenv('BITPAY_PASSWORD')) {
             $this->password = $this->params['password'];
         } else {
             $this->password = getenv('BITPAY_PASSWORD');
         }
 
+        if (null == getenv('BITPAY_URL')) {
+            $this->base_url = $this->params['base_url'];
+        } else {
+            $this->base_url = getenv('BITPAY_URL');
+        }
+
+        $port = parse_url($this->base_url, PHP_URL_PORT);
+        if (true == is_null(parse_url($this->base_url, PHP_URL_PORT))) {
+            $this->port = 443;
+            $this->port_required_in_url = false;
+        } else {
+            $this->port = parse_url($this->base_url, PHP_URL_PORT);
+            $this->port_required_in_url = true;
+        }
+
+        if (parse_url($this->base_url, PHP_URL_HOST) == 'test.bitpay.com') {
+            $this->network = new \Bitpay\Network\Testnet();
+        } else {
+            $url = parse_url($this->base_url, PHP_URL_HOST);
+            $this->network = new \Bitpay\Network\Customnet($url, $this->port, $this->port_required_in_url);
+        }
+
         if ((null == $this->email) || (null == $this->password)) {
             throw new Exception("Your email or password are not configured.");
+            return;
+        }
+
+        if (null == $this->base_url) {
+            throw new Exception("Your url is not configured.");
             return;
         }
 
@@ -104,7 +139,8 @@ class FeatureContext extends BehatContext
             // Load keys
             list($privateKey, $publicKey, $token_id) = loadKeys();
 
-            $client = createClient($privateKey, $publicKey);
+            $network = $this->network;
+            $client = createClient($network, $privateKey, $publicKey);
 
             $token = new \Bitpay\Token();
             $token->setToken($token_id);
@@ -120,12 +156,11 @@ class FeatureContext extends BehatContext
             $invoice->setItem($item);
 
             $invoice->setCurrency(new \Bitpay\Currency($currency));
-
             $client->createInvoice($invoice);
             $this->response = $client->getResponse();
             $body = $this->response->getBody();
             $json = json_decode($body, true);
-            $this->InvoiceId = $json['data']['id'];
+            $this->invoiceId = $json['data']['id'];
         } catch (\Exception $e) {
             $this->error = $e;
         } finally {
@@ -156,7 +191,8 @@ class FeatureContext extends BehatContext
     public function theUserPairsWithBitpayWithAValidPairingCode()
     {
         // Login
-        $this->mink->getSession()->visit($this->params['base_url'].'/merchant-login');
+
+        $this->mink->getSession()->visit($this->base_url.'/merchant-login');
 
         $this->mink->getSession()->wait(1500);
         $this->mink->getSession()->getPage()->fillField('email', $this->email);
@@ -203,7 +239,8 @@ class FeatureContext extends BehatContext
         list($privateKey, $publicKey, $sinKey) = generateAndPersistKeys();
 
         //Set Client
-        $client = createClient($privateKey, $publicKey);
+        $network = $this->network;
+        $client = createClient($network, $privateKey, $publicKey);
 
         $pairingCode = $this->validPairingCode;
 
@@ -242,7 +279,8 @@ class FeatureContext extends BehatContext
             list($privateKey, $publicKey, $sinKey) = generateAndPersistKeys();
 
             //Set Client
-            $client = createClient($privateKey, $publicKey);
+            $network = $this->network;
+            $client = createClient($network, $privateKey, $publicKey);
 
             // Pair
             $token = $client->createToken(
@@ -286,13 +324,14 @@ class FeatureContext extends BehatContext
             list($privateKey, $publicKey, $sinKey) = generateAndPersistKeys();
 
             //Set Client
-            $network = new \Bitpay\Network\Customnet("alex.bp", 8974, true);
+            $url = parse_url($this->base_url, PHP_URL_HOST);
+            $network = new \Bitpay\Network\Customnet($url, 8974234, true);
             $curl_options = array(
                         CURLOPT_SSL_VERIFYPEER => false,
                         CURLOPT_SSL_VERIFYHOST => false,
                         CURLOPT_TIMEOUT        => 1,
                         );
-            $client = createClient($privateKey, $publicKey, $network, $curl_options);
+            $client = createClient($network, $privateKey, $publicKey, $curl_options);
 
             // Pair
             $token = $client->createToken(
@@ -329,13 +368,14 @@ class FeatureContext extends BehatContext
     {
         try
         {
-            $client = createClient();
-            $response  = $client->getInvoice($this->InvoiceId);
+            $network = $this->network;
+            $client = createClient($network);
+            $response  = $client->getInvoice($this->invoiceId);
         } catch (Exception $e){
             var_dump($e->getMessage());
         }
         $responseInvoiceId = $response->getId();
-        if($responseInvoiceId !== $this->InvoiceId){
+        if($responseInvoiceId !== $this->invoiceId){
             throw new Exception("Invoice ids don't match");
         } 
     }

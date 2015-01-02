@@ -5,7 +5,7 @@ default:
     parameters:
       user:
       password:
-      base_url: 'https://test.bitpay.com'
+      base_url:
       driver: 'selenium2'
   paths:
     features: tests/integrations
@@ -20,7 +20,7 @@ phantomjs:
     parameters:
       user:
       password:
-      base_url: 'https://test.bitpay.com'
+      base_url:
       driver: 'phantomjs'
   paths:
     features: tests/integrations

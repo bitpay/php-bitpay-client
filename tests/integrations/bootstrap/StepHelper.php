@@ -29,11 +29,8 @@ function loadKeys()
     return array($privateKey, $publicKey, $token_id);
 }
 
-function createClient($privateKey = null, $publicKey = null, $network = null, $curl_options = null)
+function createClient($network, $privateKey = null, $publicKey = null, $curl_options = null)
 {
-    if(true === is_null($network)) {
-        $network = new \Bitpay\Network\Customnet("alex.bp", 8088, true);
-    }
     if(true === is_null($curl_options)) {
         $curl_options = array(
             CURLOPT_SSL_VERIFYPEER => false,

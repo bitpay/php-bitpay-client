@@ -100,7 +100,12 @@ This will run tests verifying that the client is able to perform it's core funct
 To run mink/behat integration tests, use the command:
 .. code-block:: bash
 
-    sh ./integration_tests user_name 'password'
+    source ./integration_tests.sh
+
+URL, email, and password can be passed in as arguments to integration_tests.sh like so:
+.. code-block::
+
+    source ./integration_tests.sh 'https://bobert.bp:8090' bobert@gmail.com 'abc123%^&@ac'
 
 You can configure which instance of bitpay.com this will test with to by changing the url
 in the behat.yml file. Make sure you replace username and password with the credentials

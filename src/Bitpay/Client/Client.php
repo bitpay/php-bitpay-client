@@ -596,7 +596,7 @@ class Client implements ClientInterface
             throw new \Exception('Please set your Private Key');
         }
 
-        if (isset($this->network->isPortRequiredInUrl)) {
+        if (true == property_exists($this->network, 'isPortRequiredInUrl')){
             if ($this->network->isPortRequiredInUrl === true) {
                 $url = $request->getUriWithPort();
             }
