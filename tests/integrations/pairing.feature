@@ -19,6 +19,10 @@ Feature: pairing with bitpay
       | invalid | "a1b2c3d4" | "Bitpay\Client\ArgumentException"   | 'pairing code is not legal'   |
 
   @javascript
-  Scenario: the client has a bad port configuration to a closed port
-    When the fails to pair with BitPay because of an incorrect port
-    Then they will receive a "Bitpay\Client\ConnectionException" matching 'connect() timed out!'
+  Scenario Outline: the client has a bad port configuration to an incorrect port
+    When the client fails to pair with BitPay because <status> port <port> is an incorrect port
+    Then they will receive a <error> matching <message>
+  Examples:
+      | status  | port | error                               | message                |
+      | open    | 444  | "Bitpay\Client\ConnectionException" | 'connect() timed out!' |
+      | closed  | 8444 | "Bitpay\Client\ConnectionException" | 'Connection refused'   |

@@ -110,16 +110,6 @@ class FeatureContext extends BehatContext
     }
 
     /**
-     * @Then /^clean up$/
-     */
-    public function deconstruct()
-    {
-        unlink('/tmp/token.json');
-        unlink('/tmp/bitpay.pri');
-        unlink('/tmp/bitpay.pub');
-    }
-
-    /**
      * @Given /^the user is authenticated with BitPay$/
      */
     public function theUserIsAuthenticatedWithBitpay()
@@ -301,20 +291,22 @@ class FeatureContext extends BehatContext
     /**
      * @Then /^they will receive a "([^"]*)" matching \'([^\']*)\'$/
      */
-    public function theyWillReceiveAnErrorMatching($errorName, $errorMessage)
+    public function theyWillReceiveAnErrorMatching($expectedErrorName, $expectedErrorMessage)
     {
-        if ($this->error->getMessage() !== $errorMessage){
-            throw new Exception("Error message incorrect", 1);
+        $curlError = $this->error;
+        $curlErrorMessage = $this->error->getMessage();
+        if ($curlErrorMessage !== $expectedErrorMessage){
+            throw new Exception("Error message incorrect: ".$curlErrorMessage, 1);
         }
-        if (get_class($this->error) !== $errorName){
-            throw new Exception("Error name incorrect", 1);
+        if (get_class($curlError) !== $expectedErrorName){
+            throw new Exception("Error name incorrect: ".get_class($curlError), 1);
         }
     }
 
     /**
-     * @When /^the fails to pair with BitPay because of an incorrect port$/
+     * @When /^the client fails to pair with BitPay because (open|closed) port ([0-9]+) is an incorrect port$/
      */
-    public function theFailsToPairWithBitpayBecauseOfAnIncorrectPort()
+    public function theClientFailsToPairWithBitpayBecauseOfAnIncorrectPort($status, $port)
     {
         try {
             // Stupid rate limiters
@@ -325,11 +317,11 @@ class FeatureContext extends BehatContext
 
             //Set Client
             $url = parse_url($this->base_url, PHP_URL_HOST);
-            $network = new \Bitpay\Network\Customnet($url, 8974234, true);
+            $network = new \Bitpay\Network\Customnet($url, $port, true);
             $curl_options = array(
                         CURLOPT_SSL_VERIFYPEER => false,
                         CURLOPT_SSL_VERIFYHOST => false,
-                        CURLOPT_TIMEOUT        => 1,
+                        CURLOPT_TIMEOUT        => 5,
                         );
             $client = createClient($network, $privateKey, $publicKey, $curl_options);
 
@@ -341,7 +333,6 @@ class FeatureContext extends BehatContext
                     'id'          => (string) $sinKey,
                 )
             );
-            $this->deconstruct();
         } catch (\Exception $e) {
             $this->error = $e;
         } finally {
