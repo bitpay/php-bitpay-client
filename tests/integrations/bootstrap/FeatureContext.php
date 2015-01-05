@@ -295,10 +295,10 @@ class FeatureContext extends BehatContext
     {
         $curlError = $this->error;
         $curlErrorMessage = $this->error->getMessage();
-        if ($curlErrorMessage !== $expectedErrorMessage){
+        if (strpos($curlErrorMessage, $expectedErrorMessage) === false) {
             throw new Exception("Error message incorrect: ".$curlErrorMessage, 1);
         }
-        if (get_class($curlError) !== $expectedErrorName){
+        if (strpos(get_class($curlError), $expectedErrorName) === false) {
             throw new Exception("Error name incorrect: ".get_class($curlError), 1);
         }
     }

@@ -23,6 +23,6 @@ Feature: pairing with bitpay
     When the client fails to pair with BitPay because <status> port <port> is an incorrect port
     Then they will receive a <error> matching <message>
   Examples:
-      | status  | port | error                               | message                |
-      | open    | 444  | "Bitpay\Client\ConnectionException" | 'connect() timed out!' |
-      | closed  | 8444 | "Bitpay\Client\ConnectionException" | 'Connection refused'   |
+      | status  | port | error                               | message     |
+      | open    | 444  | "Bitpay\Client\ConnectionException" | 'timed out' |
+      | closed  | 8444 | "Bitpay\Client\ConnectionException" | 'timed out' |
