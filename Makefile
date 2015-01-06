@@ -6,4 +6,4 @@ test:
 	php ./bin/phpunit -c build/
 
 phantomjs:
-	./node_modules/.bin/phantomjs --webdriver=4444 --ssl-protocol=TLSv1 --ignore-ssl-errors=yes &
+	phantomjs --webdriver=8643 --ignore-ssl-errors=yes &

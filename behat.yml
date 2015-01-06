@@ -1,0 +1,32 @@
+# behat.yml
+
+default:
+  context:
+    parameters:
+      user:
+      password:
+      base_url:
+      driver: 'selenium2'
+  paths:
+    features: tests/integrations
+    bootstrap: %behat.paths.features%/bootstrap
+  extensions:
+    Behat\MinkExtension\Extension:
+      goutte: ~
+      selenium2: ~
+
+phantomjs:
+  context:
+    parameters:
+      user:
+      password:
+      base_url:
+      driver: 'phantomjs'
+  paths:
+    features: tests/integrations
+    bootstrap: %behat.paths.features%/bootstrap
+  extensions:
+    Behat\MinkExtension\Extension:
+      goutte: ~
+      selenium2:
+        wd_host: "http://localhost:8643/wd/hub"

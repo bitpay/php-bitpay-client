@@ -6,6 +6,8 @@
 
 namespace Bitpay;
 
+use Bitpay\Client;
+
 /**
  *
  * @package Bitpay
@@ -99,6 +101,9 @@ class Item implements ItemInterface
      */
     public function setPrice($price)
     {
+        if (1 !== preg_match('/^[0-9]+(?:\.[0-9]{1,2})?$/', $price)) {
+            throw new \Bitpay\Client\ArgumentException("Price must be formatted as a float");
+        }
         $this->price = $price;
 
         return $this;

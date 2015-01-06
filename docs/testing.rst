@@ -91,3 +91,57 @@ please try to use phpmd. You can see the rules in ``build/rulesets/phpmd.xml``.
 .. code-block:: bash
 
     php bin/phpmd src/ text build/rulesets/phpmd.xml
+
+Mink/Behat
+=================
+
+This will run tests verifying that the client is able to perform it's core functionality.
+
+To run mink/behat integration tests, use the command:
+
+.. code-block:: bash
+
+    source ./integration_tests.sh
+
+URL, email, and password can be passed in as arguments to integration_tests.sh like so:
+
+.. code-block::
+
+    source ./integration_tests.sh 'https://bobert.bp:8090' bobert@gmail.com 'abc123%^&@ac'
+
+You can configure which instance of bitpay.com this will test with to by changing the url
+in the behat.yml file. Make sure you replace username and password with the credentials
+used to log into the bitpay site you are testing with.
+
+You can also run specific tests from a command like so:
+
+.. code-block:: bash
+
+    php bin/behat tests/integrations/invoice_create.feature
+
+And you can run specific lines from these tests by:
+
+.. code-block:: bash
+
+    php bin/behat tests/integrations/invoice_create.feature:20
+
+.. note::
+
+    Tests run individually require you to set environment variables for your bitpay 
+    credentials or they must be set in the behat.yml file.
+
+    Also keep in mind that rate limiters may hinder some tests and they need to be 
+    reset every so often.
+
+.. note::
+
+    pairing.feature's test "the client has a bad port configuration to an incorrect port"
+    requires ports that vary from computer to computer so you may need to manually change 
+    these in order to avoid error.
+
+    A timing issue will occasionally occur saying:
+    "Notice: Undefined variable: response in 
+    tests/integrations/bootstrap/FeatureContext.php line 368"
+    and there will be a message from BitPay saying:
+    "This endpoint does not support the `public` facade"
+    This is likely a timing issue and the tests will likely pass when run again.
