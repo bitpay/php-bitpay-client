@@ -36,7 +36,7 @@ You will next need to create a SIN based on your Public Key.
 
     // @var \Bitpay\KeyManager
     $manager   = $bitpay->get('key_manager');
-    $publicKey = $manager->load($bitpay->getContainer->getParameter('bitpay.public_key'));
+    $publicKey = $manager->load($bitpay->getContainer()->getParameter('bitpay.public_key'));
     $sin = new \Bitpay\SinKey();
     $sin->setPublicKey($publicKey);
     $sin->generate();
