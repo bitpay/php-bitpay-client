@@ -599,6 +599,8 @@ class Client implements ClientInterface
         if (true == property_exists($this->network, 'isPortRequiredInUrl')) {
             if ($this->network->isPortRequiredInUrl === true) {
                 $url = $request->getUriWithPort();
+            } else {
+                $url = $request->getUri();
             }
         } else {
             $url = $request->getUri();
