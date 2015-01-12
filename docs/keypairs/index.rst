@@ -52,7 +52,7 @@ already been generated.
     $privateKey->generate();
 
     $keyManager = new \Bitpay\KeyManager(new \Bitpay\Storage\FilesystemStorage());
-    $manager->persist($privateKey);
+    $keyManager->persist($privateKey);
 
 The key can now be found at `/path/to/private.key`. Loading the key is just as
 easy.
