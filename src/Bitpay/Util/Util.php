@@ -145,7 +145,7 @@ class Util
             throw new \Exception(sprintf('Argument is expected to be a string of decimal numbers. You passed in "%s"', gettype($dec)));
         }
 
-        if(substr($dec, 0, 1) === '-') {
+        if (substr($dec, 0, 1) === '-') {
             $dec = substr($dec, 1);
         }
 
