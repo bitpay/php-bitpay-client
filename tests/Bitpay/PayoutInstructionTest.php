@@ -21,7 +21,7 @@ class PayoutInstructionTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($this->instruction->getId());
     }
 
-    public function testBtc()
+    public function testGetBtc()
     {
         $this->assertNotNull($this->instruction);
         $this->assertNull($this->instruction->getBtc());
