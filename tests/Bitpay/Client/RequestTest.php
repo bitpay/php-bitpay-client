@@ -77,9 +77,6 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->request->isMethod('unknown method'));
     }
 
-    /**
-     * @depends testGetPort
-     */
     public function testGetPort()
     {
         $this->assertSame(443, $this->request->getPort());

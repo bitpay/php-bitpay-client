@@ -145,6 +145,10 @@ class Util
             throw new \Exception(sprintf('Argument is expected to be a string of decimal numbers. You passed in "%s"', gettype($dec)));
         }
 
+        if (substr($dec, 0, 1) === '-') {
+            $dec = substr($dec, 1);
+        }
+
         $hex = '';
 
         while (Math::cmp($dec, 0) > 0) {
@@ -190,16 +194,15 @@ class Util
         if (null === $parameters) {
             $parameters = new Secp256k1();
         }
-
         $tmp = self::decToBin($hex);
 
         $n   = strlen($tmp) - 1;
-        $old = 11;
         $S   = new Point(PointInterface::INFINITY, PointInterface::INFINITY);
-        $gmpS = new Point(PointInterface::INFINITY, PointInterface::INFINITY);
+
 
         while ($n >= 0) {
             $S = self::pointDouble($S);
+
             if ($tmp[$n] == 1) {
                 $S = self::pointAdd($S, $point);
             }
