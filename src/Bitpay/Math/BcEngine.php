@@ -100,6 +100,10 @@ class BcEngine implements EngineInterface
         $a = $this->input($a);
         $b = $this->input($b);
 
+        if (substr($a, 0, 1) === '-') {
+            return bcadd(bcmod($a, $b), $b);
+        }
+
         return bcmod($a, $b);
     }
 
@@ -159,7 +163,7 @@ class BcEngine implements EngineInterface
         } elseif (preg_match('/^-?[0-9]+$/', $x)) {
             return $x;
         } else {
-            throw new \Exception("The input must be a numeric string in decimal or hexadecimal (with leading 0x) format.\n".var_export($x, false));
+            throw new \Exception("The input must be a numeric string in decimal or hexadecimal (with leading 0x) format.\n".var_export($x, true));
         }
 
     }
