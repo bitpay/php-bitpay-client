@@ -1,0 +1,15 @@
+TXTDIR=.
+HTMLS=$(wildcard *.rst)
+MDS=$(patsubst %.rst,$(TXTDIR)/%.md, $(HTMLS))
+
+.PHONY : all
+
+all : $(MDS)
+
+$(TXTDIR) :
+		mkdir $(TXTDIR)
+
+$(TXTDIR)/%.md : %.rst $(TXTDIR)
+		git mv $< $@ && cp $@ $<
+		pandoc -f rst -t markdown -s $< -o $@
+		perl -0777 -i$@ -pe 's/\-\-\-\ntitle:(.*)\n\.\.\.\n/## $$1/g' $@
