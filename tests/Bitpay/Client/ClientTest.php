@@ -22,6 +22,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $this->client->setAdapter($adapter);
     }
 
+
     /**
      * @expectedException \Exception
      */
@@ -61,6 +62,11 @@ class ClientTest extends \PHPUnit_Framework_TestCase
             ->setCurrency($currency)
             ->setEffectiveDate("1415853007000")
             ->setPricingMethod('bitcoinbestbuy')
+            ->setNotificationUrl('https://bitpay.com')
+            ->setNotificationEmail('support@bitpay.com')
+            ->setPricingMethod('bitcoinbestbuy')
+            ->setReference('your reference, can be json')
+            ->setAmount(5625)
             ->setToken($token);
 
         $btc_amounts = array(
@@ -111,8 +117,14 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('7m7hSF3ws1LhnWUf17CXsJ', $payout->getId());
         $this->assertEquals('Lwbnf9XAPCxDmy8wsRH3ct', $payout->getAccountId());
         $this->assertEquals(\Bitpay\Payout::STATUS_NEW, $payout->getStatus());
+        $this->assertEquals(5625, $payout->getAmount());
+        $this->assertEquals(null, $payout->getRate());
+        $this->assertEquals(null, $payout->getBtcAmount());
         $this->assertEquals('bitcoinbestbuy', $payout->getPricingMethod());
+        $this->assertEquals('your reference, can be json', $payout->getReference());
         $this->assertEquals('1415853007000', $payout->getEffectiveDate());
+        $this->assertEquals('https://bitpay.com', $payout->getNotificationUrl());
+        $this->assertEquals('support@bitpay.com', $payout->getNotificationEmail());
         $this->assertEquals('8mZ37Gt91Wr7GXGPnB9zj1zwTcLGweRDka4axVBPi9Uxiiv7zZWvEKSgmFddQZA1Jy', $payout->getResponseToken());
         $instructions = $payout->getInstructions();
         $this->assertSame($instruction0, $instructions[0]);
@@ -398,8 +410,15 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $adapter = $this->getMockAdapter();
         $adapter->method('sendRequest')->willReturn($response);
         $this->client->setAdapter($adapter);
-        $invoice = $this->client->getPayout('7m7hSF3ws1LhnWUf17CXsJ');
-        $this->assertInstanceOf('Bitpay\PayoutInterface', $invoice);
+        $payout = $this->client->getPayout('7m7hSF3ws1LhnWUf17CXsJ');
+        $this->assertInstanceOf('Bitpay\PayoutInterface', $payout);
+        $this->assertSame($payout->getId(), '7AboMecD4jSMXbH7DaJJvm');
+        $this->assertSame($payout->getAccountId(), 'Lwbnf9XAPCxDmy8wsRH3ct');
+        $this->assertSame($payout->getStatus(), 'complete');
+        $this->assertSame($payout->getRate(), 352.23);
+        $this->assertSame($payout->getAmount(), 5625);
+        $this->assertSame($payout->getBtcAmount(), 15.9696);
+        $this->assertSame($payout->getCurrency()->getCode(), 'USD');
     }
 
     /**

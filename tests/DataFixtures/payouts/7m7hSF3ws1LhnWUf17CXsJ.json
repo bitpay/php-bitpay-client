@@ -8,9 +8,12 @@
     "amount":5625,
     "btc":null,
     "currency":"USD",
+    "reference": "your reference, can be json",
     "requestDate":"2014-11-13T04:30:07.905Z",
     "effectiveDate":"2014-11-15T05:00:00.000Z",
     "pricingMethod":"bitcoinbestbuy",
+    "notificationURL": "https://bitpay.com",
+    "notificationEmail": "support@bitpay.com",
     "instructions":[
       {
         "id":"Sra19AFU57Rx53rKQbbRKZ",

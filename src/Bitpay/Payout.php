@@ -33,6 +33,10 @@ class Payout implements PayoutInterface
     protected $amount;
 
     /**
+     * @var float
+     */
+    protected $btc;
+    /**
      * @var CurrencyInterface
      */
     protected $currency;
@@ -146,7 +150,7 @@ class Payout implements PayoutInterface
      * @param $amount
      * @return $this
      */
-    private function setAmount($amount)
+    public function setAmount($amount)
     {
         if (!empty($amount)) {
             $this->amount = $amount;
@@ -224,6 +228,28 @@ class Payout implements PayoutInterface
     /**
      * @inheritdoc
      */
+    public function getBtcAmount()
+    {
+        return $this->btc;
+    }
+
+    /**
+     * Set the Bitcoin amount for this payout, once set by Bitpay.
+     * @param $amount
+     * @return $this
+     */
+    public function setBtcAmount($amount)
+    {
+        if (!empty($amount)) {
+            $this->btc = $amount;
+        }
+
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function getRequestDate()
     {
         return $this->requestDate;
@@ -259,8 +285,6 @@ class Payout implements PayoutInterface
     {
         if (!empty($instruction)) {
             $this->instructions[] = $instruction;
-            $new_total = $this->getAmount() + $instruction->getAmount();
-            $this->setAmount($new_total);
         }
 
         return $this;

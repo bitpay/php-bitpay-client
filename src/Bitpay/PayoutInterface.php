@@ -66,6 +66,14 @@ interface PayoutInterface
     public function getAmount();
 
     /**
+     * This will return the Bitcoin amount for this transaction. This
+     * should only be called once the payout is funded
+     *
+     * @return float
+     */
+    public function getBtcAmount();
+
+    /**
      * This is the currency code set for the batch amount.  The pricing currencies
      * currently supported are USD and EUR.
      *
