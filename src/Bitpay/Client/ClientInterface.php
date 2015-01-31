@@ -1,13 +1,16 @@
 <?php
 /**
- * @license Copyright 2011-2014 BitPay Inc., MIT License 
+ * @license Copyright 2011-2014 BitPay Inc., MIT License
  * see https://github.com/bitpay/php-bitpay-client/blob/master/LICENSE
  */
 
 namespace Bitpay\Client;
 
+use Bitpay\CurrencyInterface;
 use Bitpay\InvoiceInterface;
 use Bitpay\PayoutInterface;
+use Bitpay\RateInterface;
+use Bitpay\SupportRequestInterface;
 
 /**
  * Sends request(s) to bitpay server
@@ -25,8 +28,9 @@ interface ClientInterface
      *
      * @see RFC2616 section 14.43 for User-Agent Format
      */
-    const NAME    = 'BitPay PHP-Client';
+    const NAME = 'BitPay PHP-Client';
     const VERSION = '0.0.0';
+
 
     //public function createApplication(ApplicationInterface $application);
 
@@ -42,7 +46,8 @@ interface ClientInterface
     public function getCurrencies();
 
     /**
-     * @param InvoiceInterface $invoiceId
+     * @param InvoiceInterface $invoice
+     *
      * @return \Bitpay\Invoice
      * @throws \Exception
      */
@@ -51,10 +56,57 @@ interface ClientInterface
 
     /**
      * @param $invoiceId
+     *
      * @return InvoiceInterface
      * @throws \Exception
      */
     public function getInvoice($invoiceId);
+
+    /**
+     * @param $invoiceId
+     * @param $bitcoinAddress
+     * @param $amount
+     * @param $currency
+     *
+     * @return SupportRequestInterface
+     * @throws \Exception
+     */
+    public function createRefund($invoiceId, $bitcoinAddress, $amount, $currency);
+
+
+    /**
+     * Returns the status of a refund.
+     *
+     * @param $invoiceId
+     * @param $refundRequestId
+     *
+     * @return SupportRequestInterface
+     * @throws \Exception
+     */
+    public function getRefund($invoiceId, $refundRequestId);
+
+
+    /**
+     * Cancels a pending refund request
+     *
+     * @param $invoiceId
+     * @param $refundRequestId
+     *
+     * @return mixed
+     * @throws \Exception
+     */
+    public function cancelRefund($invoiceId, $refundRequestId);
+
+
+    /**
+     * Returns the status of all refunds on an invoice.
+     *
+     * @param $invoiceId
+     *
+     * @return SupportRequestInterface[]
+     * @throws \Exception
+     */
+    public function getRefunds($invoiceId);
 
     //public function getLedgers();
     //public function getLedger(CurrencyInterface $currency);
@@ -65,7 +117,9 @@ interface ClientInterface
 
     /**
      * Create a Payout Request on Bitpay
+     *
      * @param PayoutInterface $payout
+     *
      * @return PayoutInterface|mixed
      * @throws \Exception
      */
@@ -73,6 +127,7 @@ interface ClientInterface
 
     /**
      * @param null $status
+     *
      * @return array
      * @throws \Exception
      */
@@ -80,13 +135,15 @@ interface ClientInterface
 
     /**
      * @param $payoutId
+     *
      * @return \Bitpay\Payout
      * @throws \Exception
      */
     public function getPayout($payoutId);
 
     /**
-     * @param PayoutInterface
+     * @param PayoutInterface $payout
+     *
      * @return PayoutInterface|mixed
      * @throws \Exception
      */
@@ -94,8 +151,22 @@ interface ClientInterface
 
     //public function updatePayout(PayoutInterface $payout);
 
-    //public function getRates();
-    //public function getRate(CurrencyInterface $currency);
+
+    /**
+     * Retrieves the list of exchange rates.
+     * @return RateInterface[]
+     */
+    public function getRates();
+
+
+    /**
+     * Retrieves the exchange rate for the given currency.
+     *
+     * @param CurrencyInterface $currency
+     *
+     * @return RateInterface
+     */
+    public function getRate(CurrencyInterface $currency);
 
     /**
      * Get an array of tokens indexed by facade

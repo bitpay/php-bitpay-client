@@ -37,6 +37,11 @@ class Token implements TokenInterface
     protected $policies;
 
     /**
+     * @var string
+     */
+    protected $pairingCode;
+    
+    /**
      */
     public function __construct()
     {
@@ -59,6 +64,11 @@ class Token implements TokenInterface
         return $this->token;
     }
 
+    /**
+     * @param $token
+     *
+     * @return $this
+     */
     public function setToken($token)
     {
         $this->token = $token;
@@ -74,6 +84,11 @@ class Token implements TokenInterface
         return $this->resource;
     }
 
+    /**
+     * @param $resource
+     *
+     * @return $this
+     */
     public function setResource($resource)
     {
         $this->resource = $resource;
@@ -89,6 +104,11 @@ class Token implements TokenInterface
         return $this->facade;
     }
 
+    /**
+     * @param $facade
+     *
+     * @return $this
+     */
     public function setFacade($facade)
     {
         $this->facade = $facade;
@@ -104,6 +124,11 @@ class Token implements TokenInterface
         return $this->createdAt;
     }
 
+    /**
+     * @param $createdAt
+     *
+     * @return $this
+     */
     public function setCreatedAt($createdAt)
     {
         $this->createdAt = $createdAt;
@@ -119,10 +144,36 @@ class Token implements TokenInterface
         return $this->policies;
     }
 
+    /**
+     * @param $policies
+     *
+     * @return $this
+     */
     public function setPolicies($policies)
     {
         $this->policies = $policies;
 
+        return $this;
+    }
+    
+    /**
+     * @return string
+     */
+    public function getPairingCode()
+    {
+        return $this->pairingCode;
+    }
+
+
+    /**
+     * @param $pairingCode
+     *
+     * @return $this
+     */
+    public function setPairingCode($pairingCode)
+    {
+        $this->pairingCode = $pairingCode;
+        
         return $this;
     }
 }

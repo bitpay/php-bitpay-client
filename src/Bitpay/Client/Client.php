@@ -7,7 +7,10 @@
 namespace Bitpay\Client;
 
 use Bitpay\Client\Adapter\AdapterInterface;
+use Bitpay\CurrencyInterface;
 use Bitpay\Network\NetworkInterface;
+use Bitpay\Rate;
+use Bitpay\SupportRequest;
 use Bitpay\TokenInterface;
 use Bitpay\InvoiceInterface;
 use Bitpay\PayoutInterface;
@@ -61,7 +64,7 @@ class Client implements ClientInterface
      * The network is either livenet or testnet and tells the client where to
      * send the requests.
      *
-     * @param NetworkInterface
+     * @param NetworkInterface $network
      */
     public function setNetwork(NetworkInterface $network)
     {
@@ -99,6 +102,7 @@ class Client implements ClientInterface
 
     /**
      * @param TokenInterface $token
+     *
      * @return ClientInterface
      */
     public function setToken(TokenInterface $token)
@@ -179,6 +183,179 @@ class Client implements ClientInterface
     /**
      * @inheritdoc
      */
+    public function createRefund($invoiceId, $bitcoinAddress, $amount, $currency)
+    {
+        try {
+            $invoice = $this->getInvoice($invoiceId);
+        } catch (\Exception $ex) {
+            throw $ex;
+        }
+
+        $request = $this->createNewRequest();
+        $request->setMethod(Request::METHOD_POST);
+        $request->setPath(sprintf('invoices/%s/refunds', $invoiceId));
+
+        try {
+            $body = [
+                'bitcoinAddress' => $bitcoinAddress,
+                'amount'         => $amount,
+                'currency'       => $currency,
+                'token'          => $invoice->getToken()->getToken()
+            ];
+            $request->setBody(json_encode($body));
+
+            $this->addIdentityHeader($request);
+            $this->addSignatureHeader($request);
+
+            $this->request  = $request;
+            $this->response = $this->sendRequest($request);
+            $body           = json_decode($this->response->getBody(), true);
+
+            if (isset($body['error'])) {
+                throw new \Exception($body['error']);
+            }
+
+            $data           = $body['data'];
+            $supportRequest = new SupportRequest();
+            $supportRequest->setId($data['id'])
+                ->setRequestDate($data['requestDate'])
+                ->setStatus($data['status'])
+                ->setToken($data['token']);
+
+            return $supportRequest;
+        } catch (\Exception $ex) {
+            throw $ex;
+        }
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getRefund($invoiceId, $refundRequestId)
+    {
+        try {
+            $invoice = $this->getInvoice($invoiceId);
+        } catch (\Exception $ex) {
+            throw $ex;
+        }
+
+        $request = $this->createNewRequest();
+        $request->setMethod(Request::METHOD_GET);
+        $request->setPath(sprintf('invoices/%s/refunds/%s?token=%s', $invoiceId, $refundRequestId, $invoice->getToken()->getToken()));
+
+        try {
+            $this->addIdentityHeader($request);
+            $this->addSignatureHeader($request);
+
+            $this->request  = $request;
+            $this->response = $this->sendRequest($request);
+            $body           = json_decode($this->response->getBody(), true);
+
+            if (isset($body['error'])) {
+                throw new \Exception($body['error']);
+            }
+
+            $data           = $body['data'];
+            $supportRequest = new SupportRequest();
+            $supportRequest->setId($data['id'])
+                ->setRequestDate($data['requestDate'])
+                ->setStatus($data['status'])
+                ->setToken($data['token']);
+
+            return $supportRequest;
+        } catch (\Exception $ex) {
+            throw $ex;
+        }
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function cancelRefund($invoiceId, $refundRequestId)
+    {
+        try {
+            $refund = $this->getRefund($invoiceId, $refundRequestId);
+        } catch (\Exception $ex) {
+            throw $ex;
+        }
+
+        $request = $this->createNewRequest();
+        $request->setMethod(Request::METHOD_DELETE);
+        $request->setPath(sprintf('invoices/%s/refunds/%s', $invoiceId, $refundRequestId));
+
+        try {
+            $body = [
+                'token' => $refund->getToken()
+            ];
+
+            $request->setBody(json_encode($body));
+
+            $this->addIdentityHeader($request);
+            $this->addSignatureHeader($request);
+
+            $this->request  = $request;
+            $this->response = $this->sendRequest($request);
+            $body           = json_decode($this->response->getBody(), true);
+
+            if (isset($body['error'])) {
+                throw new \Exception($body['error']);
+            }
+
+            return $body['data'];
+        } catch (\Exception $ex) {
+            throw $ex;
+        }
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getRefunds($invoiceId)
+    {
+        try {
+            $invoice = $this->getInvoice($invoiceId);
+        } catch (\Exception $ex) {
+            throw $ex;
+        }
+
+        $request = $this->createNewRequest();
+        $request->setMethod(Request::METHOD_GET);
+        $request->setPath(sprintf('invoices/%s/refunds?token=%s', $invoiceId, $invoice->getToken()->getToken()));
+
+        try {
+            $this->addIdentityHeader($request);
+            $this->addSignatureHeader($request);
+
+            $this->request  = $request;
+            $this->response = $this->sendRequest($request);
+            $body           = json_decode($this->response->getBody(), true);
+
+            if (isset($body['error'])) {
+                throw new \Exception($body['error']);
+            }
+
+            $refunds         = $body['data'];
+            $supportRequests = array();
+            foreach ($refunds as $refund) {
+                $supportRequest = new SupportRequest();
+                $supportRequest->setId($refund['id'])
+                    ->setRequestDate($refund['requestDate'])
+                    ->setStatus($refund['status'])
+                    ->setToken($refund['token']);
+
+                $supportRequests[] = $supportRequest;
+            }
+
+            return $supportRequests;
+
+        } catch (\Exception $ex) {
+            throw $ex;
+        }
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function getCurrencies()
     {
         $this->request = $this->createNewRequest();
@@ -217,10 +394,10 @@ class Client implements ClientInterface
         $request->setMethod($request::METHOD_POST);
         $request->setPath('payouts');
 
-        $amount         = $payout->getAmount();
-        $currency       = $payout->getCurrency();
-        $effectiveDate  = $payout->getEffectiveDate();
-        $token          = $payout->getToken();
+        $amount        = $payout->getAmount();
+        $currency      = $payout->getCurrency();
+        $effectiveDate = $payout->getEffectiveDate();
+        $token         = $payout->getToken();
 
         $body = array(
             'token'         => $token->getToken(),
@@ -234,7 +411,7 @@ class Client implements ClientInterface
         );
 
         // Optional
-        foreach (array('reference','notificationURL','notificationEmail') as $value) {
+        foreach (array('reference', 'notificationURL', 'notificationEmail') as $value) {
             $function = 'get' . ucfirst($value);
             if ($payout->$function() != null) {
                 $body[$value] = $payout->$function();
@@ -256,7 +433,7 @@ class Client implements ClientInterface
 
         $this->request  = $request;
         $this->response = $this->sendRequest($request);
-        $body = json_decode($this->response->getBody(), true);
+        $body           = json_decode($this->response->getBody(), true);
         if (isset($body['error']) || isset($body['errors'])) {
             throw new \Exception('Error with request');
         }
@@ -283,8 +460,8 @@ class Client implements ClientInterface
         $request = $this->createNewRequest();
         $request->setMethod(Request::METHOD_GET);
         $path = 'payouts?token='
-                    . $this->token->getToken()
-                    . (($status == null) ? '' : '&status=' . $status);
+            . $this->token->getToken()
+            . (($status == null) ? '' : '&status=' . $status);
         $request->setPath($path);
 
         $this->addIdentityHeader($request);
@@ -360,12 +537,12 @@ class Client implements ClientInterface
         $this->request  = $request;
         $this->response = $this->sendRequest($this->request);
 
-        $body           = json_decode($this->response->getBody(), true);
+        $body = json_decode($this->response->getBody(), true);
         if (empty($body['data'])) {
             throw new \Exception('Error with request');
         }
 
-        $data   = $body['data'];
+        $data = $body['data'];
 
         $payout->setStatus($data['status']);
 
@@ -386,11 +563,11 @@ class Client implements ClientInterface
         $this->request  = $request;
         $this->response = $this->sendRequest($this->request);
 
-        $body           = json_decode($this->response->getBody(), true);
+        $body = json_decode($this->response->getBody(), true);
         if (empty($body['data'])) {
             throw new \Exception('Error with request');
         }
-        $data   = $body['data'];
+        $data = $body['data'];
 
         $payout = new \Bitpay\Payout();
         $payout
@@ -433,6 +610,58 @@ class Client implements ClientInterface
         });
 
         return $payout;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getRates()
+    {
+        $this->request = $this->createNewRequest();
+        $this->request->setMethod(Request::METHOD_GET);
+        $this->request->setPath('rates');
+        $this->response = $this->sendRequest($this->request);
+        $body           = json_decode($this->response->getBody(), true);
+        if (empty($body['data'])) {
+            throw new \Exception('Error with request');
+        }
+
+        $data  = $body['data'];
+        $rates = array();
+        foreach ($data as $rate) {
+            $rateObj = new Rate();
+            $rateObj->setCode($rate['code'])
+                ->setName($rate['name'])
+                ->setRate($rate['rate']);
+
+            $rates[] = $rateObj;
+        }
+
+        return $rates;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getRate(CurrencyInterface $currency)
+    {
+        $this->request = $this->createNewRequest();
+        $this->request->setMethod(Request::METHOD_GET);
+        $this->request->setPath(sprintf('rates/%s', $currency->getCode()));
+        $this->response = $this->sendRequest($this->request);
+        $body           = json_decode($this->response->getBody(), true);
+        if (empty($body['data'])) {
+            throw new \Exception('Error with request');
+        }
+
+        $data = $body['data'];
+
+        $rate = new Rate();
+        $rate->setCode($data['code'])
+            ->setName($data['name'])
+            ->setRate($data['rate']);
+
+        return $rate;
     }
 
     /**
@@ -497,10 +726,17 @@ class Client implements ClientInterface
         $token = new \Bitpay\Token();
         $token
             ->setPolicies($tkn['policies'])
-            ->setResource($tkn['resource'])
             ->setToken($tkn['token'])
             ->setFacade($tkn['facade'])
             ->setCreatedAt($tkn['dateCreated']);
+
+        if (isset($tkn['resource'])) {
+            $token->setResource($tkn['resource']);
+        }
+
+        if (isset($tkn['pairingCode'])) {
+            $token->setPairingCode($tkn['pairingCode']);
+        }
 
         return $token;
     }
@@ -533,9 +769,11 @@ class Client implements ClientInterface
     {
         $this->request = $this->createNewRequest();
         $this->request->setMethod(Request::METHOD_GET);
-        $this->request->setPath(sprintf('invoices/%s', $invoiceId));
+        $this->request->setPath(sprintf('invoices/%s?token=%s', $invoiceId, $this->token->getToken()));
+        $this->addIdentityHeader($this->request);
+        $this->addSignatureHeader($this->request);
         $this->response = $this->sendRequest($this->request);
-        $body = json_decode($this->response->getBody(), true);
+        $body           = json_decode($this->response->getBody(), true);
 
         if (isset($body['error'])) {
             throw new \Exception($body['error']);
@@ -543,9 +781,10 @@ class Client implements ClientInterface
 
         $data = $body['data'];
 
-        $invoice = new \Bitpay\Invoice();
+        $invoice      = new \Bitpay\Invoice();
+        $invoiceToken = new \Bitpay\Token();
         $invoice
-            //->setToken($data['token'])
+            ->setToken($invoiceToken->setToken($data['token']))
             //->setBtcDue($data['btcDue'])
             //->setExRates($data['exRates'])
             ->setUrl($data['url'])
@@ -568,6 +807,7 @@ class Client implements ClientInterface
 
     /**
      * @param RequestInterface $request
+     *
      * @return ResponseInterface
      */
     public function sendRequest(RequestInterface $request)
@@ -582,6 +822,8 @@ class Client implements ClientInterface
 
     /**
      * @param RequestInterface $request
+     *
+     * @throws \Exception
      */
     protected function addIdentityHeader(RequestInterface $request)
     {
@@ -589,7 +831,7 @@ class Client implements ClientInterface
             throw new \Exception('Please set your Public Key.');
         }
 
-        $request->setHeader('x-identity', (string) $this->publicKey);
+        $request->setHeader('x-identity', (string)$this->publicKey);
     }
 
     /**
