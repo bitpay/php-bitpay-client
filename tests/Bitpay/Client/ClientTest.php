@@ -361,6 +361,12 @@ class ClientTest extends \PHPUnit_Framework_TestCase
 
         $token = $this->client->createToken();
         $this->assertInstanceOf('Bitpay\TokenInterface', $token);
+
+        $response = $this->getMockResponse();
+        $response->method('getBody')->willReturn(file_get_contents(__DIR__ . '/../../DataFixtures/tokens_pairing.json'));
+
+        $token = $this->client->createToken();
+        $this->assertInstanceOf('Bitpay\TokenInterface', $token);
     }
 
     /**

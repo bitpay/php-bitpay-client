@@ -80,8 +80,9 @@ class TokenTest extends \PHPUnit_Framework_TestCase
     public function testSetCreatedAt()
     {
         $token = new Token();
-        $token->setCreatedAt('createdAt');
-        $this->assertSame('createdAt', $token->getCreatedAt());
+        $now = new \DateTime();
+        $token->setCreatedAt($now);
+        $this->assertSame($now, $token->getCreatedAt());
     }
 
     public function testGetPolicies()
@@ -98,5 +99,38 @@ class TokenTest extends \PHPUnit_Framework_TestCase
         $token = new Token();
         $token->setPolicies('policy');
         $this->assertSame('policy', $token->getPolicies());
+    }
+
+    public function testGetPairingCode()
+    {
+        $token = new Token();
+        $this->assertNull($token->getPairingCode());
+    }
+
+    /**
+     * @depends testGetPairingCode
+     */
+    public function testSetPairingCode()
+    {
+        $token = new Token();
+        $token->setPairingCode('abcd456');
+        $this->assertSame('abcd456', $token->getPairingCode());
+    }
+
+    public function testGetPairingExpiration()
+    {
+        $token = new Token();
+        $this->assertNull($token->getPairingExpiration());
+    }
+
+    /**
+     * @depends testGetPairingExpiration
+     */
+    public function testSetPairingExpiration()
+    {
+        $token = new Token();
+        $now = new \DateTime();
+        $token->setPairingExpiration($now);
+        $this->assertSame($now, $token->getPairingExpiration());
     }
 }
