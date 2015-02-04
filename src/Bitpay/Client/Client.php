@@ -474,10 +474,8 @@ class Client implements ClientInterface
      */
     public function createToken(array $payload = array())
     {
-        if ($payload !== array()) {
-            if (1 !== preg_match('/^[a-zA-Z0-9]{7}$/', $payload['pairingCode'])) {
-                throw new ArgumentException("pairing code is not legal");
-            }
+        if (isset($payload['pairingCode']) && 1 !== preg_match('/^[a-zA-Z0-9]{7}$/', $payload['pairingCode'])) {
+            throw new ArgumentException("pairing code is not legal");
         }
 
         $this->request = $this->createNewRequest();
@@ -493,14 +491,24 @@ class Client implements ClientInterface
         }
 
         $tkn = $body['data'][0];
+        $createdAt = new \DateTime();
+        $pairingExpiration = new \DateTime();
 
         $token = new \Bitpay\Token();
         $token
             ->setPolicies($tkn['policies'])
-            ->setResource($tkn['resource'])
             ->setToken($tkn['token'])
             ->setFacade($tkn['facade'])
-            ->setCreatedAt($tkn['dateCreated']);
+            ->setCreatedAt($createdAt->setTimestamp(floor($tkn['dateCreated']/1000)));
+
+        if (isset($tkn['resource'])) {
+            $token->setResource($tkn['resource']);
+        }
+        
+        if (isset($tkn['pairingCode'])) {
+            $token->setPairingCode($tkn['pairingCode']);
+            $token->setPairingExpiration($pairingExpiration->setTimestamp(floor($tkn['pairingExpiration']/1000)));
+        }
 
         return $token;
     }

@@ -1,0 +1,12 @@
+{
+    "data": [
+        {
+            "policies": [],
+            "token": "testToken",
+            "facade": "pos",
+            "dateCreated": "123456789",
+            "pairingExpiration": "133456789",
+            "pairingCode": "abcd456"
+        }
+    ]
+}
