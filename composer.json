@@ -1,6 +1,6 @@
 {
     "name": "bitpay/php-client",
-    "description": "PHP Library to work with the new Bitpay API",
+    "description": "PHP Library to work with the new cryptographically secure BitPay API",
     "license": "MIT",
     "minimum-stability": "stable",
     "keywords": ["bitpay", "bitcoin"],
@@ -8,18 +8,13 @@
     "support": {
         "email": "support+php@bitpay.com",
         "issues": "https://github.com/bitpay/php-bitpay-client/issues",
-        "wiki": "http://php-bitpay-client.readthedocs.org/",
-        "source": "https://github.com/bitpay/php-bitpay-client/"
+        "source": "https://github.com/bitpay/php-bitpay-client"
     },
     "authors": [
         {
-            "name": "BitPay Inc Ecommerce Development Team",
-            "homepage": "https://bitpay.com",
-            "role": "Software Engineer"
-        },
-        {
-            "name": "Community Contributors",
-            "homepage": "https://github.com/bitpay/php-bitpay-client/graphs/contributors"
+            "name": "BitPay Integrations Development Team",
+            "email": "integrations@bitpay.com",
+            "homepage": "https://bitpay.com/integrations"
         }
     ],
     "autoload": {
@@ -34,8 +29,8 @@
         "ext-json": "*",
         "ext-openssl": "*",
         "ext-mcrypt": "*",
-        "symfony/config": "~2.3",
-        "symfony/dependency-injection": "~2.3"
+        "symfony/config": "2.3.*",
+        "symfony/dependency-injection": "2.3.*"
     },
     "require-dev": {
         "behat/behat": "2.5.*@stable",
@@ -52,7 +47,7 @@
         "satooshi/php-coveralls": "~0.6.1"
     },
     "suggest": {
-        "ext-gmp": "Quickest PHP math library for doing Elliptic Curve calculations."
+        "ext-gmp": "Quickest PHP math extension for doing computationally-expensive work."
     },
     "config": {
         "bin-dir": "bin"
