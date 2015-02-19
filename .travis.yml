@@ -21,7 +21,7 @@ after_script:
     - php bin/coveralls -v
 
 notifications:
-    email: true
+    email: false
 
 matrix:
     fast_finish: true
