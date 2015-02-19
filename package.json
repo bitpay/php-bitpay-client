@@ -1,6 +1,6 @@
 {
   "name": "php-bitpay-client",
-  "description": "PHP Client Library",
+  "description": "PHP Client Library for the BitPay Bitcoin Payment Gateway",
   "directories": {
     "lib": "src",
     "doc": "docs",
@@ -17,9 +17,15 @@
   "keywords": [
     "bitpay",
     "bitcoin",
-    "php"
+    "php",
+    "library",
+    "payment",
+    "gateway",
+    "ecommerce",
+    "merchant",
+    "money"
   ],
-  "author": "BitPay Inc Ecommerce Development Team",
+  "author": "BitPay Integrations Development Team",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/bitpay/php-bitpay-client/issues"
