@@ -23,6 +23,14 @@ class BcEngineTest extends \PHPUnit_Framework_TestCase
       }
 
     }
+
+    public function testConstruct()
+    {
+        bcscale(15);
+        $math = new BcEngine();
+        $this->assertEquals('16', bcdiv('105', '6.55957'));
+    }
+
     public function testAdd()
     {
         $a = 1234;
