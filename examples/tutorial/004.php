@@ -1,6 +1,7 @@
 <?php
-
 /**
+ * Copyright (c) 2014-2015 BitPay
+ *
  * 004 - Advanced Functionality
  *
  * Requirements:
