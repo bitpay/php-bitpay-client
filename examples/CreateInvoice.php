@@ -1,5 +1,7 @@
 <?php
 /**
+ * Copyright (c) 2014-2015 BitPay
+ *
  * WARNING - This example will NOT work until you have generated your public
  * and private keys. Please see the example documentation on generating your
  * keys and also see the documentation on how to save those keys.
@@ -24,10 +26,10 @@ $item
  */
 $buyer = new \Bitpay\Buyer();
 $buyer
-    ->setFirstName('Joshua')
-    ->setLastName('Estes')
+    ->setFirstName('Some')
+    ->setLastName('Customer')
     ->setPhone('555-5555-5555')
-    ->setEmail('josh@bitpay.com')
+    ->setEmail('integrations@bitpay.com')
     ->setAddress(
         array(
             '123 Main St',
@@ -50,14 +52,16 @@ $invoice->setBuyer($buyer);
 // Configure the rest of the invoice
 $invoice
     ->setOrderId('OrderIdFromYourSystem')
-    // You will receive IPN's at this URL, Must be HTTPS
+    // You will receive IPN's at this URL, should be HTTPS for security purposes!
     ->setNotificationUrl('https://store.example.com/bitpay/callback');
+
 /**
  * BitPay offers services for many different currencies. You will need to
  * configure the currency in which you are selling products with.
  */
 $currency = new \Bitpay\Currency();
 $currency->setCode('USD');
+
 // Set the invoice currency
 $invoice->setCurrency($currency);
 
@@ -88,10 +92,12 @@ $client = $bitpay->get('client');
  */
 $token = new \Bitpay\Token();
 $token->setToken('Put your token here');
+
 $client->setToken($token);
 
 // Send invoice
 $client->createInvoice($invoice);
+
 var_dump(
     (string) $client->getRequest(),
     (string) $client->getResponse(),
