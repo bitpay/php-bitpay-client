@@ -1,6 +1,7 @@
 <?php
-
 /**
+ * Copyright (c) 2014-2015 BitPay
+ *
  * 002 - Pairing
  *
  * Requirements:
@@ -102,6 +103,7 @@ try {
  */
 $persistThisValue = $token->getToken();
 echo 'Token obtained: '.$persistThisValue.PHP_EOL;
+
 /**
  * Make sure you persist the token, you will need it for the next tutorial
  */
