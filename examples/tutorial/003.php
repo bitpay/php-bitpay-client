@@ -1,6 +1,7 @@
 <?php
-
 /**
+ * Copyright (c) 2014-2015 BitPay
+ *
  * 003 - Creating Invoices
  *
  * Requirements:
