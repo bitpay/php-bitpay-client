@@ -1,6 +1,7 @@
 <?php
-
 /**
+ * Copyright (c) 2014-2015 BitPay
+ *
  * 001 - Generate and Persist Keys
  *
  * Requirements:
@@ -20,6 +21,7 @@ $privateKey->generate();
 
 // You can generate a private key with only one line of code like so
 $privateKey = \Bitpay\PrivateKey::create('/tmp/bitpay.pri')->generate();
+
 // NOTE: This has overridden the previous $privateKey variable, although its
 //       not an issue in this case since we have not used this key for
 //       anything yet.
