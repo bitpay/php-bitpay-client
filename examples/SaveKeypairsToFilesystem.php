@@ -1,4 +1,7 @@
 <?php
+/**
+ * Copyright (c) 2014-2015 BitPay
+ */
 
 /**
  * This example show how to persist and load keys from the filesystem. Any key
