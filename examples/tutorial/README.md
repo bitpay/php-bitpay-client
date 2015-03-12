@@ -17,3 +17,6 @@ Options, you are given to option to make the wallet a testnet wallet.
 Once you have an account and a testnet wallet, you should begin to go through
 this tutorial starting from file `001.php` and continuing on to the next
 files in order.
+
+
+Examples (c) 2014-2015 BitPay
