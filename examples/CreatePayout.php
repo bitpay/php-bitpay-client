@@ -1,5 +1,9 @@
 <?php
 /**
+ * Copyright (c) 2014-2015 BitPay
+ */
+
+/**
  * WARNING - This example will NOT work until you have generated your public
  * and private keys. Please see the example documentation on generating your
  * keys and also see the documentation on how to save those keys.
