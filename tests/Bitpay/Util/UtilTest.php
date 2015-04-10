@@ -258,4 +258,63 @@ class UtilTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+    public function testCheckRequirements()
+    {
+        $requirements = Util::checkRequirements();
+
+        // PHP Version
+        if (!defined('PHP_VERSION_ID')) {
+            $version = explode('.', PHP_VERSION);
+            define('PHP_VERSION_ID', ($version[0] * 10000 + $version[1] * 100 + $version[2]));
+        }
+        if (PHP_VERSION_ID >= 50400) {
+            $this->assertTrue($requirements['PHP']);
+        } else {
+            $this->assertTrue(is_string($requirements['PHP']));
+        }
+
+        // Mcrypt Extension
+        if (extension_loaded('mcrypt')) {
+            $this->assertTrue($requirements['Mcrypt']);
+        } else {
+            $this->assertTrue(is_string($requirements['Mcrypt']));
+        }
+
+        // OpenSSL Extension
+        if (extension_loaded('openssl')) {
+            $this->assertTrue($requirements['OpenSSL']);
+        } else {
+            $this->assertTrue(is_string($requirements['OpenSSL']));
+        }
+
+        // JSON Extension
+        if (extension_loaded('json')) {
+            $this->assertTrue($requirements['JSON']);
+        } else {
+            $this->assertTrue(is_string($requirements['JSON']));
+        }
+
+        // cURL Extension
+        if (extension_loaded('curl')) {
+            $this->assertTrue($requirements['cURL']);
+            $curl_version = curl_version();
+            $ssl_supported = ($curl_version['features'] & CURL_VERSION_SSL);
+            if ($ssl_supported) {
+                $this->assertTrue($requirements['cURL.SSL']);
+            } else {
+                $this->assertTrue(is_string($requirements['cURL.SSL']));
+            }
+        } else {
+            $this->assertTrue(is_string($requirements['cURL']));
+            $this->assertTrue(is_string($requirements['cURL']));
+        }
+
+        // Math
+        if (extension_loaded('bcmath') || extension_loaded('gmp')) {
+            $this->assertTrue($requirements['Math']);
+        } else {
+            $this->assertTrue(is_string($requirements['Math']));
+        }
+    }
+
 }

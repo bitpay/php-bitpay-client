@@ -6,6 +6,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - Token functionality for client-sided pairing
 - Set payout bitcoin amount, as returned by BitPay
+- Utility method for checking requirements
 
 ### Changed
 - Documentation from RST to Markdown

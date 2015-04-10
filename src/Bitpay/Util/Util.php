@@ -406,4 +406,69 @@ class Util
 
         return strrev($byte);
     }
+
+    /**
+     * Checks dependencies for the library
+     *
+     * @return array list of each requirement, boolean true if met, string error message if not as value
+     */
+    public static function checkRequirements()
+    {
+        $requirements = array();
+
+        // PHP Version
+        if (!defined('PHP_VERSION_ID')) {
+            $version = explode('.', PHP_VERSION);
+            define('PHP_VERSION_ID', ($version[0] * 10000 + $version[1] * 100 + $version[2]));
+        }
+        if (PHP_VERSION_ID < 50400) {
+            $requirements['PHP'] = 'Your PHP version, ' . PHP_VERSION . ', is too low. PHP version >= 5.4 is required.';
+        } else {
+            $requirements['PHP'] = true;
+        }
+
+        // Mcrypt Extension
+        if (!extension_loaded('mcrypt')) {
+            $requirements['Mcrypt'] = 'The Mcrypt PHP extension could not be found.';
+        } else {
+            $requirements['Mcrypt'] = true;
+        }
+
+        // OpenSSL Extension
+        if (!extension_loaded('openssl')) {
+            $requirements['OpenSSL'] = 'The OpenSSL PHP extension could not be found.';
+        } else {
+            $requirements['OpenSSL'] = true;
+        }
+
+        // JSON Extension
+        if (!extension_loaded('json')) {
+            $requirements['JSON'] = 'The JSON PHP extension could not be found.';
+        } else {
+            $requirements['JSON'] = true;
+        }
+
+        // cURL Extension
+        if (!extension_loaded('curl')) {
+            $requirements['cURL'] = 'The cURL PHP extension could not be found.';
+        } else {
+            $requirements['cURL'] = true;
+            $curl_version = curl_version();
+            $ssl_supported = ($curl_version['features'] & CURL_VERSION_SSL);
+            if (!$ssl_supported) {
+                $requirements['cURL.SSL'] = 'The cURL PHP extension does not have SSL support.';
+            } else {
+                $requirements['cURL.SSL'] = true;
+            }
+        }
+
+        // Math
+        if (!extension_loaded('bcmath') && !extension_loaded('gmp')) {
+            $requirements['Math'] = 'Either the BC Math or GMP PHP extension is required.  Neither could be found.';
+        } else {
+            $requirements['Math'] = true;
+        }
+
+        return $requirements;
+    }
 }
