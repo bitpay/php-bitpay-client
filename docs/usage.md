@@ -3,6 +3,28 @@ Please make sure that you have Installed this library and have
 Configured it correctly. This section will help guide you on how to use
 this library.
 
+Autoloader
+==========
+
+To use the library's autoloader (which doesn't include composer dependencies)
+instead of composer's autoloader, use the following code:
+
+``` {.sourceCode .php}
+<?php
+$autoloader = __DIR__ . '/relative/path/to/Bitpay/Autoloader.php';
+if (true === file_exists($autoloader) &&
+    true === is_readable($autoloader))
+{
+    require_once $autoloader;
+    \Bitpay\Autoloader::register();
+} else {
+    throw new Exception('BitPay Library could not be loaded');
+}
+```
+
+Dependency Injection
+====================
+
 This library relies heavily on what is known as [Dependency
 Injection](http://en.wikipedia.org/wiki/Dependency_injection) and this
 is helped using the `Bitpay\Bitpay` class and the [Dependency Injection

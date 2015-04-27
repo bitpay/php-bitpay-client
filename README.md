@@ -48,6 +48,26 @@ See http://php-bitpay-client.readthedocs.org/en/latest/configuration.html
 
 # Usage
 
+## Autoloader
+
+To use the library's autoloader (which doesn't include composer dependencies)
+instead of composer's autoloader, use the following code:
+
+```php
+<?php
+$autoloader = __DIR__ . '/relative/path/to/Bitpay/Autoloader.php';
+if (true === file_exists($autoloader) &&
+    true === is_readable($autoloader))
+{
+    require_once $autoloader;
+    \Bitpay\Autoloader::register();
+} else {
+    throw new Exception('BitPay Library could not be loaded');
+}
+```
+
+## Documentation
+
 Please see the ``docs`` directory for information on how to use this library
 and the ``examples`` directory for examples on using this library. You should
 be able to run all the examples by running ``php examples/File.php``.

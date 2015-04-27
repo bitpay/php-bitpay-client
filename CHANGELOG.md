@@ -7,9 +7,11 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Token functionality for client-sided pairing
 - Set payout bitcoin amount, as returned by BitPay
 - Utility method for checking requirements
+- Autoloader documentation
 
 ### Changed
 - Documentation from RST to Markdown
+- Autoloader now loads relative to library root directory
 
 ## [2.2.2] - 2015-01-13
 ### Added

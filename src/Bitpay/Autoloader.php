@@ -41,24 +41,17 @@ class Autoloader
      */
     public static function autoload($class)
     {
-        $isBitpay = false;
-
         if (0 === strpos($class, 'Bitpay\\')) {
-            $isBitpay = true;
-        }
+            $classname = substr($class, 7);
 
-        $file = __DIR__.'/../'.str_replace(array('\\'), array('/'), $class).'.php';
+            $file = __DIR__.DIRECTORY_SEPARATOR.str_replace('\\', DIRECTORY_SEPARATOR, $classname).'.php';
 
-        if (is_file($file) && is_readable($file)) {
-            require_once $file;
+            if (is_file($file) && is_readable($file)) {
+                require_once $file;
 
-            return true;
-        }
+                return true;
+            }
 
-        /**
-         * Only want to throw exceptions if class is under bitpay namespace
-         */
-        if ($isBitpay) {
             throw new \Exception(sprintf('Class "%s" Not Found', $class));
         }
     }
