@@ -156,8 +156,12 @@ class Client implements ClientInterface
         $this->response = $this->sendRequest($request);
 
         $body = json_decode($this->response->getBody(), true);
-        if (isset($body['error']) || isset($body['errors'])) {
-            throw new \Exception('Error with request');
+        $error_message = false;
+        $error_message = (!empty($body['error'])) ? $body['error'] : $error_message;
+        $error_message = (!empty($body['errors'])) ? $body['errors'] : $error_message;
+        $error_message = (is_array($error_message)) ? implode("\n", $error_message) : $error_message;
+        if (false !== $error_message) {
+            throw new \Exception($error_message);
         }
         $data = $body['data'];
         $invoice
@@ -187,7 +191,7 @@ class Client implements ClientInterface
         $this->response = $this->sendRequest($this->request);
         $body           = json_decode($this->response->getBody(), true);
         if (empty($body['data'])) {
-            throw new \Exception('Error with request');
+            throw new \Exception('Error with request: no data returned');
         }
         $currencies = $body['data'];
         array_walk($currencies, function (&$value, $key) {
@@ -257,8 +261,12 @@ class Client implements ClientInterface
         $this->request  = $request;
         $this->response = $this->sendRequest($request);
         $body = json_decode($this->response->getBody(), true);
-        if (isset($body['error']) || isset($body['errors'])) {
-            throw new \Exception('Error with request');
+        $error_message = false;
+        $error_message = (!empty($body['error'])) ? $body['error'] : $error_message;
+        $error_message = (!empty($body['errors'])) ? $body['errors'] : $error_message;
+        $error_message = (is_array($error_message)) ? implode("\n", $error_message) : $error_message;
+        if (false !== $error_message) {
+            throw new \Exception($error_message);
         }
 
         $data = $body['data'];
@@ -293,8 +301,12 @@ class Client implements ClientInterface
         $this->request  = $request;
         $this->response = $this->sendRequest($this->request);
         $body           = json_decode($this->response->getBody(), true);
-        if (isset($body['error']) || isset($body['errors'])) {
-            throw new \Exception('Error with request');
+        $error_message = false;
+        $error_message = (!empty($body['error'])) ? $body['error'] : $error_message;
+        $error_message = (!empty($body['errors'])) ? $body['errors'] : $error_message;
+        $error_message = (is_array($error_message)) ? implode("\n", $error_message) : $error_message;
+        if (false !== $error_message) {
+            throw new \Exception($error_message);
         }
 
         $payouts = array();
@@ -362,7 +374,7 @@ class Client implements ClientInterface
 
         $body           = json_decode($this->response->getBody(), true);
         if (empty($body['data'])) {
-            throw new \Exception('Error with request');
+            throw new \Exception('Error with request: no data returned');
         }
 
         $data   = $body['data'];
@@ -388,7 +400,7 @@ class Client implements ClientInterface
 
         $body           = json_decode($this->response->getBody(), true);
         if (empty($body['data'])) {
-            throw new \Exception('Error with request');
+            throw new \Exception('Error with request: no data returned');
         }
         $data   = $body['data'];
 
@@ -450,7 +462,7 @@ class Client implements ClientInterface
         $this->response = $this->sendRequest($this->request);
         $body           = json_decode($this->response->getBody(), true);
         if (empty($body['data'])) {
-            throw new \Exception('Error with request');
+            throw new \Exception('Error with request: no data returned');
         }
 
         $tokens = array();
@@ -504,7 +516,7 @@ class Client implements ClientInterface
         if (isset($tkn['resource'])) {
             $token->setResource($tkn['resource']);
         }
-        
+
         if (isset($tkn['pairingCode'])) {
             $token->setPairingCode($tkn['pairingCode']);
             $token->setPairingExpiration($pairingExpiration->setTimestamp(floor($tkn['pairingExpiration']/1000)));
