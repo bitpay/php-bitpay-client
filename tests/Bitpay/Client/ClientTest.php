@@ -189,7 +189,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $invoice->method('getCurrency')->willReturn($this->getMockCurrency());
 
         $response = $this->getMockResponse();
-        $response->method('getBody')->will($this->returnValue('{"error":""}'));
+        $response->method('getBody')->will($this->returnValue('{"error":"Some error message"}'));
 
         $adapter = $this->getMockAdapter();
         $adapter->method('sendRequest')->willReturn($response);
@@ -242,7 +242,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
 
         $adapter = $this->getMockAdapter();
         $response = $this->getMockResponse();
-        $response->method('getBody')->will($this->returnValue('{"error":""}'));
+        $response->method('getBody')->will($this->returnValue('{"error":"Some error message"}'));
         $adapter->method('sendRequest')->willReturn($response);
         $this->client->setAdapter($adapter);
 

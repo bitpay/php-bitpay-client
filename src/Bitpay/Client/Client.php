@@ -156,8 +156,12 @@ class Client implements ClientInterface
         $this->response = $this->sendRequest($request);
 
         $body = json_decode($this->response->getBody(), true);
-        if (isset($body['error']) || isset($body['errors'])) {
-            throw new \Exception('Error with request');
+        $error_message = false;
+        $error_message = (!empty($body['error'])) ? $body['error'] : $error_message;
+        $error_message = (!empty($body['errors'])) ? $body['errors'] : $error_message;
+        $error_message = (is_array($error_message)) ? implode("\n", $error_message) : $error_message;
+        if (false !== $error_message) {
+          throw new \Exception($error_message);
         }
         $data = $body['data'];
         $invoice
