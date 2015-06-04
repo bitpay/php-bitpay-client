@@ -3,6 +3,8 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased][unreleased]
+
+## [2.2.4] - 2015-06-04
 ### Added
 - Token functionality for client-sided pairing
 - Set payout bitcoin amount, as returned by BitPay
@@ -70,7 +72,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 - Client library now uses BitPay's new API
 
-[unreleased]: https://github.com/bitpay/php-bitpay-client/compare/v2.2.3...HEAD
+[unreleased]: https://github.com/bitpay/php-bitpay-client/compare/v2.2.4...HEAD
+[2.2.4]: https://github.com/bitpay/php-bitpay-client/compare/v2.2.3...v2.2.4
 [2.2.3]: https://github.com/bitpay/php-bitpay-client/compare/v2.2.2...v2.2.3
 [2.2.2]: https://github.com/bitpay/php-bitpay-client/compare/v2.2.1...v2.2.2
 [2.2.1]: https://github.com/bitpay/php-bitpay-client/compare/v2.2.0...v2.2.1

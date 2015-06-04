@@ -8,9 +8,9 @@ bitpay/php-bitpay-client
 [![Scrutinizer](https://img.shields.io/scrutinizer/g/bitpay/php-bitpay-client.svg?style=flat-square)](https://scrutinizer-ci.com/g/bitpay/php-bitpay-client/)
 [![Coveralls](https://img.shields.io/coveralls/bitpay/php-bitpay-client.svg?style=flat-square)](https://coveralls.io/r/bitpay/php-bitpay-client)
 
-[![Documentation Status](https://readthedocs.org/projects/php-bitpay-client/badge/?version=latest)](https://readthedocs.org/projects/php-bitpay-client/?badge=latest) 
-[![Total Downloads](https://poser.pugx.org/bitpay/php-client/downloads.svg)](https://packagist.org/packages/bitpay/php-client) 
-[![Latest Unstable Version](https://poser.pugx.org/bitpay/php-client/v/unstable.svg)](https://packagist.org/packages/bitpay/php-client) 
+[![Documentation Status](https://readthedocs.org/projects/php-bitpay-client/badge/?version=latest)](https://readthedocs.org/projects/php-bitpay-client/?badge=latest)
+[![Total Downloads](https://poser.pugx.org/bitpay/php-client/downloads.svg)](https://packagist.org/packages/bitpay/php-client)
+[![Latest Unstable Version](https://poser.pugx.org/bitpay/php-client/v/unstable.svg)](https://packagist.org/packages/bitpay/php-client)
 
 This is a self-contained PHP implementation of BitPay's new cryptographically secure API: https://bitpay.com/api
 
@@ -33,7 +33,7 @@ Add to your composer.json file by hand.
     ...
     "require": {
         ...
-        "bitpay/php-client": "~2.0"
+        "bitpay/php-client": "^2.2"
     }
     ...
 }
@@ -48,7 +48,7 @@ php composer.phar update bitpay/php-client
 ### Install using composer
 
 ```bash
-php composer.phar require bitpay/php-client:~2.0
+php composer.phar require bitpay/php-client:^2.2
 ```
 
 # Configuration
