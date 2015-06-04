@@ -12,6 +12,11 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 - Documentation from RST to Markdown
 - Autoloader now loads relative to library root directory
+- Client now sets invoice tokens upon creation and retrieval
+
+## [2.2.3] - 2015-05-29
+### Fixed
+- BitPay API errors are now passthrough
 
 ## [2.2.2] - 2015-01-13
 ### Added
@@ -65,7 +70,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 - Client library now uses BitPay's new API
 
-[unreleased]: https://github.com/bitpay/php-bitpay-client/compare/v2.2.2...HEAD
+[unreleased]: https://github.com/bitpay/php-bitpay-client/compare/v2.2.3...HEAD
+[2.2.3]: https://github.com/bitpay/php-bitpay-client/compare/v2.2.2...v2.2.3
 [2.2.2]: https://github.com/bitpay/php-bitpay-client/compare/v2.2.1...v2.2.2
 [2.2.1]: https://github.com/bitpay/php-bitpay-client/compare/v2.2.0...v2.2.1
 [2.2.0]: https://github.com/bitpay/php-bitpay-client/compare/v2.1.1...v2.2.0

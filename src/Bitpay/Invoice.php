@@ -1,6 +1,6 @@
 <?php
 /**
- * @license Copyright 2011-2014 BitPay Inc., MIT License 
+ * @license Copyright 2011-2014 BitPay Inc., MIT License
  * see https://github.com/bitpay/php-bitpay-client/blob/master/LICENSE
  */
 
@@ -111,6 +111,11 @@ class Invoice implements InvoiceInterface
      * @var
      */
     protected $rate;
+
+    /**
+     * @var
+     */
+    protected $token;
 
     /**
      */
@@ -687,6 +692,23 @@ class Invoice implements InvoiceInterface
             $this->rate = $rate;
         }
 
+        return $this;
+    }
+
+    /**
+     * @return TokenInterface
+     */
+    public function getToken()
+    {
+        return $this->token;
+    }
+    /**
+     * @param TokenInterface $token
+     * @return InvoiceInterface
+     */
+    public function setToken(TokenInterface $token)
+    {
+        $this->token = $token;
         return $this;
     }
 }

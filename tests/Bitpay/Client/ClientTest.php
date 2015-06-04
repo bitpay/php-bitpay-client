@@ -171,6 +171,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('0.0000', $invoice->getBtcPaid());
         $this->assertEquals(315.7, $invoice->getRate());
         $this->assertEquals(false, $invoice->getExceptionStatus());
+        $this->assertEquals('abcdefghijklmno', $invoice->getToken()->getToken());
     }
 
     /**
@@ -507,9 +508,9 @@ class ClientTest extends \PHPUnit_Framework_TestCase
                     'getExpirationTime', 'getCurrentTime', 'getOrderId', 'getItemDesc', 'getItemCode',
                     'isPhysical', 'getBuyerName', 'getBuyerAddress1', 'getBuyerAddress2', 'getBuyerCity',
                     'getBuyerState', 'getBuyerZip', 'getBuyerCountry', 'getBuyerEmail', 'getBuyerPhone',
-                    'getExceptionStatus', 'getBtcPaid', 'getRate', 'setId', 'setUrl',
+                    'getExceptionStatus', 'getBtcPaid', 'getRate', 'getToken', 'setId', 'setUrl',
                     'setStatus', 'setBtcPrice', 'setPrice', 'setInvoiceTime', 'setExpirationTime',
-                    'setCurrentTime', 'setBtcPaid', 'setRate', 'setExceptionStatus',
+                    'setCurrentTime', 'setBtcPaid', 'setRate', 'setToken', 'setExceptionStatus',
                 )
             )
             ->getMock();
