@@ -101,6 +101,11 @@ class Item implements ItemInterface
      */
     public function setPrice($price)
     {
+        // If we get float, then convert it to correct string
+        if(!is_string($price) AND is_float($price)) {
+            $price = number_format($price, 2, '.', '');
+        }
+        // Check a format
         if (1 !== preg_match('/^[0-9]+(?:\.[0-9]{1,2})?$/', $price)) {
             throw new \Bitpay\Client\ArgumentException("Price must be formatted as a float");
         }
