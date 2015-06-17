@@ -101,9 +101,10 @@ class Item implements ItemInterface
      */
     public function setPrice($price)
     {
-        if (1 !== preg_match('/^[0-9]+(?:\.[0-9]{1,2})?$/', $price)) {
-            throw new \Bitpay\Client\ArgumentException("Price must be formatted as a float");
+        if(is_string($price)){
+            $this->checkPriceFormat($price);
         }
+        $price = (float)$price;
         $this->price = $price;
 
         return $this;
@@ -147,5 +148,12 @@ class Item implements ItemInterface
         $this->physical = (boolean) $physical;
 
         return $this;
+    }
+
+    protected function checkPriceFormat($price)
+    {
+        if (1 !== preg_match('/^[0-9]+?[\.,][0-9]{1,6}?$/', $price)) {
+            throw new \Bitpay\Client\ArgumentException("Price must be formatted as a float");
+        }
     }
 }

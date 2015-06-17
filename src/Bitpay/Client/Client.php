@@ -122,6 +122,8 @@ class Client implements ClientInterface
         $buyer        = $invoice->getBuyer();
         $buyerAddress = $buyer->getAddress();
 
+        $this->checkPriceAndCurrency($item->getPrice(), $currency->getCode());
+
         $body = array(
             'price'             => $item->getPrice(),
             'currency'          => $currency->getCode(),
@@ -671,4 +673,14 @@ class Client implements ClientInterface
         $request->setHeader('Content-Type', 'application/json');
         $request->setHeader('X-Accept-Version', '2.0.0');
     }
+
+    protected function checkPriceAndCurrency($price, $currency)
+    {
+        //get the decimal precision of the price
+        $decimalPrecision = strlen(substr($price, strpos($price, '.')+1));
+        if (($decimalPrecision > 2 && $currency != "BTC") || $decimalPrecision > 6) {
+            throw new ArgumentException("Incorrect price format");
+        }
+    }
 }
+
