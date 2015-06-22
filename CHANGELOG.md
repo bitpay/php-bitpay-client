@@ -3,6 +3,8 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased][unreleased]
+### Fixed
+- Item::setPrice accepts en_US formatted numeric strings
 
 ## [2.2.4] - 2015-06-04
 ### Added

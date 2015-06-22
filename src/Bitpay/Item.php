@@ -88,6 +88,8 @@ class Item implements ItemInterface
 
     /**
      * @inheritdoc
+     *
+     * @return float
      */
     public function getPrice()
     {
@@ -95,16 +97,20 @@ class Item implements ItemInterface
     }
 
     /**
-     * @param float $price
+     * @param mixed $price A float, integer, or en_US formatted numeric string
      *
      * @return ItemInterface
      */
     public function setPrice($price)
     {
-        if (1 !== preg_match('/^[0-9]+(?:\.[0-9]{1,2})?$/', $price)) {
-            throw new \Bitpay\Client\ArgumentException("Price must be formatted as a float");
+        if (is_string($price) &&
+        (1 !== preg_match('/^[0-9]*\.[0-9]+$/', $price) &&
+         1 !== preg_match('/^[0-9]+(\.[0-9]*)?$/', $price))) {
+            throw new \Bitpay\Client\ArgumentException("Price must be formatted as an en_US numeric. Received $price");
+        }else if(!is_string($price) && !is_integer($price) && !is_float($price)) {
+            throw new \Bitpay\Client\ArgumentException("Price must be a float, integer, or en_US formatted numeric string. Received ".gettype($price));
         }
-        $this->price = $price;
+        $this->price = (float)$price;
 
         return $this;
     }
