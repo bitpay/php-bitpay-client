@@ -5,6 +5,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased][unreleased]
 ### Fixed
 - Item::setPrice accepts en_US formatted numeric strings
+- getInvoice now works with merchant and public facades
 
 ## [2.2.4] - 2015-06-04
 ### Added

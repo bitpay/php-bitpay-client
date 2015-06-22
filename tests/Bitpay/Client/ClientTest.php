@@ -392,7 +392,24 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $adapter = $this->getMockAdapter();
         $adapter->method('sendRequest')->willReturn($response);
         $this->client->setAdapter($adapter);
+        $token = new \Bitpay\Token();
+        $token->setToken('asdfsds');
+
+        // No token/public facade
         $invoice = $this->client->getInvoice('5NxFkXcJbCSivtQRJa4kHP');
+        $this->assertSame('invoices/5NxFkXcJbCSivtQRJa4kHP', $this->client->getRequest()->getPath());
+        $this->assertInstanceOf('Bitpay\InvoiceInterface', $invoice);
+
+        // pos token/public facade
+        $this->client->setToken($token->setFacade('pos'));
+        $invoice = $this->client->getInvoice('5NxFkXcJbCSivtQRJa4kHP');
+        $this->assertSame('invoices/5NxFkXcJbCSivtQRJa4kHP', $this->client->getRequest()->getPath());
+        $this->assertInstanceOf('Bitpay\InvoiceInterface', $invoice);
+
+        // merchant token/merchant facade
+        $this->client->setToken($token->setFacade('merchant'));
+        $invoice = $this->client->getInvoice('5NxFkXcJbCSivtQRJa4kHP');
+        $this->assertSame('invoices/5NxFkXcJbCSivtQRJa4kHP?token=asdfsds', $this->client->getRequest()->getPath());
         $this->assertInstanceOf('Bitpay\InvoiceInterface', $invoice);
     }
 
