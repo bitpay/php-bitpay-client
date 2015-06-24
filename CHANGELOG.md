@@ -3,6 +3,8 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased][unreleased]
+### Changed
+- Refactored function calls out of loops
 
 ## [2.2.5] - 2015-06-23
 ### Fixed
