@@ -644,10 +644,7 @@ class Invoice implements InvoiceInterface
      */
     public function setExceptionStatus($exceptionStatus)
     {
-        if (!empty($exceptionStatus)) {
-            $this->exceptionStatus = $exceptionStatus;
-        }
-
+        $this->exceptionStatus = $exceptionStatus;
         return $this;
     }
 
