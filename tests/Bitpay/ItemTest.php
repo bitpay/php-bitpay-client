@@ -69,8 +69,25 @@ class ItemTest extends \PHPUnit_Framework_TestCase
 
         // Accepts standard float string
         $this->item->setPrice("9.99");
+        $this->assertNotNull($this->item->getPrice());
         $this->assertSame(9.99, $this->item->getPrice());
+        $this->assertInternalType('float', $this->item->getPrice());
 
+        $this->item->setPrice("0.999999");
+        $this->assertNotNull($this->item->getPrice());
+        $this->assertSame(.999999, $this->item->getPrice());
+        $this->assertInternalType('float', $this->item->getPrice());
+
+        // if the argument is a string
+        // and the string is not "floatlike"
+        // throw an error
+    }
+
+    /**
+     *  @expectedException \Bitpay\Client\ArgumentException
+     */
+    public function testBadStringPrice()
+    {
         // Accepts standard integer string
         $this->item->setPrice("456");
         $this->assertSame(456.0, $this->item->getPrice());

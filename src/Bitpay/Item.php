@@ -103,13 +103,10 @@ class Item implements ItemInterface
      */
     public function setPrice($price)
     {
-        if (is_string($price) &&
-        (1 !== preg_match('/^[0-9]*\.[0-9]+$/', $price) &&
-         1 !== preg_match('/^[0-9]+(\.[0-9]*)?$/', $price))) {
-            throw new \Bitpay\Client\ArgumentException("Price must be formatted as an en_US numeric. Received $price");
-        }else if(!is_string($price) && !is_integer($price) && !is_float($price)) {
-            throw new \Bitpay\Client\ArgumentException("Price must be a float, integer, or en_US formatted numeric string. Received ".gettype($price));
+        if (is_string($price)) {
+            $this->checkPriceFormat($price);
         }
+
         $this->price = (float)$price;
 
         return $this;
@@ -150,8 +147,22 @@ class Item implements ItemInterface
      */
     public function setPhysical($physical)
     {
-        $this->physical = (boolean) $physical;
+        $this->physical = (boolean)$physical;
 
         return $this;
+    }
+
+    /**
+     * Checks the new price to include BTC
+     * values with more than 6 decimals.
+     *
+     * @param string $price The price value to check
+     * @throws \Exception
+     */
+    protected function checkPriceFormat($price)
+    {
+        if (preg_match('/^[0-9]+?[\.,][0-9]{1,6}?$/', $price) !== 1) {
+            throw new \Bitpay\Client\ArgumentException("Price must be formatted as a float");
+        }
     }
 }
