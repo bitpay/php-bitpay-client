@@ -561,7 +561,7 @@ class Client implements ClientInterface
             $this->request->setPath(sprintf('invoices/%s?token=%s', $invoiceId, $this->token->getToken()));
             $this->addIdentityHeader($this->request);
             $this->addSignatureHeader($this->request);
-        } else {   
+        } else {
             $this->request->setPath(sprintf('invoices/%s', $invoiceId));
         }
         $this->response = $this->sendRequest($this->request);
