@@ -1,6 +1,6 @@
 <?php
 /**
- * @license Copyright 2011-2014 BitPay Inc., MIT License 
+ * @license Copyright 2011-2014 BitPay Inc., MIT License
  * see https://github.com/bitpay/php-bitpay-client/blob/master/LICENSE
  */
 
@@ -502,6 +502,23 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
         $this->assertNotNull($this->invoice);
         $this->invoice->setRate(600.00);
         $this->assertSame(600.00, $this->invoice->getRate());
+    }
+
+    public function testGetToken()
+    {
+        $this->assertNotNull($this->invoice);
+        $this->assertNull($this->invoice->getToken());
+    }
+
+    /**
+     * @depends testGetToken
+     */
+    public function testSetToken()
+    {
+        $invoiceToken = new \Bitpay\Token();
+        $this->assertNotNull($this->invoice);
+        $this->invoice->setToken($invoiceToken);
+        $this->assertSame($invoiceToken, $this->invoice->getToken());
     }
 
     public function testSetFullNotifications()

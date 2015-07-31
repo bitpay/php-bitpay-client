@@ -1,7 +1,16 @@
 bitpay/php-bitpay-client
 =================
 
-[![Coverage Status](https://coveralls.io/repos/bitpay/php-bitpay-client/badge.png)](https://coveralls.io/r/bitpay/php-bitpay-client) [![Build Status](https://travis-ci.org/bitpay/php-bitpay-client.svg?branch=master)](https://travis-ci.org/bitpay/php-bitpay-client) [![Documentation Status](https://readthedocs.org/projects/php-bitpay-client/badge/?version=latest)](https://readthedocs.org/projects/php-bitpay-client/?badge=latest) [![Latest Stable Version](https://poser.pugx.org/bitpay/php-client/v/stable.svg)](https://packagist.org/packages/bitpay/php-client) [![Total Downloads](https://poser.pugx.org/bitpay/php-client/downloads.svg)](https://packagist.org/packages/bitpay/php-client) [![Latest Unstable Version](https://poser.pugx.org/bitpay/php-client/v/unstable.svg)](https://packagist.org/packages/bitpay/php-client) [![License](https://poser.pugx.org/bitpay/php-client/license.svg)](https://packagist.org/packages/bitpay/php-client)
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://raw.githubusercontent.com/bitpay/php-bitpay-client/master/LICENSE.md)
+[![Travis](https://img.shields.io/travis/bitpay/php-bitpay-client.svg?style=flat-square)](https://travis-ci.org/bitpay/php-bitpay-client)
+[![Packagist](https://img.shields.io/packagist/v/bitpay/php-client.svg?style=flat-square)](https://packagist.org/packages/bitpay/php-client)
+[![Code Climate](https://img.shields.io/codeclimate/github/bitpay/php-bitpay-client.svg?style=flat-square)](https://codeclimate.com/github/bitpay/php-bitpay-client)
+[![Scrutinizer](https://img.shields.io/scrutinizer/g/bitpay/php-bitpay-client.svg?style=flat-square)](https://scrutinizer-ci.com/g/bitpay/php-bitpay-client/)
+[![Coveralls](https://img.shields.io/coveralls/bitpay/php-bitpay-client.svg?style=flat-square)](https://coveralls.io/r/bitpay/php-bitpay-client)
+
+[![Documentation Status](https://readthedocs.org/projects/php-bitpay-client/badge/?version=latest)](https://readthedocs.org/projects/php-bitpay-client/?badge=latest)
+[![Total Downloads](https://poser.pugx.org/bitpay/php-client/downloads.svg)](https://packagist.org/packages/bitpay/php-client)
+[![Latest Unstable Version](https://poser.pugx.org/bitpay/php-client/v/unstable.svg)](https://packagist.org/packages/bitpay/php-client)
 
 This is a self-contained PHP implementation of BitPay's new cryptographically secure API: https://bitpay.com/api
 
@@ -24,7 +33,7 @@ Add to your composer.json file by hand.
     ...
     "require": {
         ...
-        "bitpay/php-client": "~2.0"
+        "bitpay/php-client": "^2.2"
     }
     ...
 }
@@ -39,12 +48,12 @@ php composer.phar update bitpay/php-client
 ### Install using composer
 
 ```bash
-php composer.phar require bitpay/php-client:~2.0
+php composer.phar require bitpay/php-client:^2.2
 ```
 
 # Configuration
 
-See http://php-bitpay-client.readthedocs.org/en/latest/configuration.html
+See https://labs.bitpay.com/t/php-bitpay-client-library-configuration/555
 
 # Usage
 
@@ -72,13 +81,12 @@ Please see the ``docs`` directory for information on how to use this library
 and the ``examples`` directory for examples on using this library. You should
 be able to run all the examples by running ``php examples/File.php``.
 
-Reading the latest documentation at http://php-bitpay-client.readthedocs.org/
-can also help.
+Reading the latest documentation at https://labs.bitpay.com/c/libraries/php might also help.
 
 # Support
 
 * https://github.com/bitpay/php-bitpay-client/issues
-* http://php-bitpay-client.readthedocs.org/en/latest/index.html
+* https://labs.bitpay.com/c/libraries/php
 * https://support.bitpay.com/
 
 # License

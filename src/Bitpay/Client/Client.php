@@ -166,7 +166,9 @@ class Client implements ClientInterface
             throw new \Exception($error_message);
         }
         $data = $body['data'];
+        $invoiceToken = new \Bitpay\Token();
         $invoice
+            ->setToken($invoiceToken->setToken($data['token']))
             ->setId($data['id'])
             ->setUrl($data['url'])
             ->setStatus($data['status'])
@@ -555,7 +557,13 @@ class Client implements ClientInterface
     {
         $this->request = $this->createNewRequest();
         $this->request->setMethod(Request::METHOD_GET);
-        $this->request->setPath(sprintf('invoices/%s', $invoiceId));
+        if ($this->token->getFacade() === 'merchant') {
+            $this->request->setPath(sprintf('invoices/%s?token=%s', $invoiceId, $this->token->getToken()));
+            $this->addIdentityHeader($this->request);
+            $this->addSignatureHeader($this->request);
+        } else {   
+            $this->request->setPath(sprintf('invoices/%s', $invoiceId));
+        }
         $this->response = $this->sendRequest($this->request);
         $body = json_decode($this->response->getBody(), true);
 
@@ -566,10 +574,9 @@ class Client implements ClientInterface
         $data = $body['data'];
 
         $invoice = new \Bitpay\Invoice();
+        $invoiceToken = new \Bitpay\Token();
         $invoice
-            //->setToken($data['token'])
-            //->setBtcDue($data['btcDue'])
-            //->setExRates($data['exRates'])
+            ->setToken($invoiceToken->setToken($data['token']))
             ->setUrl($data['url'])
             ->setPosData($data['posData'])
             ->setStatus($data['status'])

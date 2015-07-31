@@ -181,7 +181,8 @@ class Util
             $hex = substr($hex, 2);
         }
 
-        for ($dec = '0', $i = 0; $i < strlen($hex); $i++) {
+        $hexLen = strlen($hex);
+        for ($dec = '0', $i = 0; $i < $hexLen; $i++) {
             $current = strpos(self::HEX_CHARS, $hex[$i]);
             $dec     = Math::add(Math::mul($dec, 16), $current);
         }
