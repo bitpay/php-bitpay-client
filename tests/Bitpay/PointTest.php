@@ -1,6 +1,6 @@
 <?php
 /**
- * @license Copyright 2011-2014 BitPay Inc., MIT License 
+ * @license Copyright 2011-2015 BitPay Inc., MIT License
  * see https://github.com/bitpay/php-bitpay-client/blob/master/LICENSE
  */
 
@@ -8,8 +8,6 @@ namespace Bitpay;
 
 class PointTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     */
     public function testConstruct()
     {
         $point = new Point(1, 2);
@@ -66,6 +64,7 @@ class PointTest extends \PHPUnit_Framework_TestCase
         );
 
         $pointA = unserialize($data);
+
         $this->assertInstanceOf('Bitpay\PointInterface', $pointA);
         $this->assertSame('1', $pointA->getX());
         $this->assertSame('2', $pointA->getY());
