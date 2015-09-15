@@ -1,34 +1,30 @@
 <?php
 /**
- * @license Copyright 2011-2014 BitPay Inc., MIT License 
+ * @license Copyright 2011-2015 BitPay Inc., MIT License
  * see https://github.com/bitpay/php-bitpay-client/blob/master/LICENSE
  */
 
 namespace Bitpay;
 
 /**
- * @package Bitcore
+ * @package Bitpay
  */
 class SinKeyTest extends \PHPUnit_Framework_TestCase
 {
     public function testToString()
     {
         $pubKey = PublicKey::create();
+        
         $this->assertNotNull($pubKey);
-
         $pubKey->setPrivateKey(PrivateKey::create()->generate());
-
         $pubKey->generate();
 
         $sinKey = new SinKey();
+        
         $this->assertNotNull($sinKey);
-
         $sinKey->setPublicKey($pubKey);
-
         $this->assertSame('', (string) $sinKey);
-
         $sinKey->generate();
-
         $this->assertEquals(35, strlen((string) $sinKey));
     }
 
@@ -38,6 +34,7 @@ class SinKeyTest extends \PHPUnit_Framework_TestCase
     public function testGenerateWithException()
     {
         $sinKey = new SinKey();
+        
         $this->assertNotNull($sinKey);
         $sinKey->generate();
     }
@@ -48,27 +45,24 @@ class SinKeyTest extends \PHPUnit_Framework_TestCase
     public function testGenerateWithoutPublicKey()
     {
         $sinKey = new SinKey();
+        
         $this->assertNotNull($sinKey);
-
         $sinKey->generate();
     }
 
     public function testGenerateWithoutException()
     {
         $pubKey = PublicKey::create();
+        
         $this->assertNotNull($pubKey);
-
         $pubKey->setPrivateKey(PrivateKey::create()->generate());
-
         $pubKey->generate();
 
         $sinKey = new SinKey();
+        
         $this->assertNotNull($sinKey);
-
         $sinKey->setPublicKey($pubKey);
-
         $sinKey->generate();
-
         $this->assertEquals(35, strlen((string) $sinKey));
     }
 
@@ -78,21 +72,17 @@ class SinKeyTest extends \PHPUnit_Framework_TestCase
     public function testIsValid()
     {
         $sinKey = new SinKey();
+        
         $this->assertNotNull($sinKey);
-
         $this->assertFalse($sinKey->isValid());
 
         $pubKey = PublicKey::create();
+        
         $this->assertNotNull($pubKey);
-
         $pubKey->setPrivateKey(PrivateKey::create()->generate());
-
         $pubKey->generate();
-
         $sinKey->setPublicKey($pubKey);
-
         $sinKey->generate();
-
         $this->assertTrue($sinKey->isValid());
     }
 }
