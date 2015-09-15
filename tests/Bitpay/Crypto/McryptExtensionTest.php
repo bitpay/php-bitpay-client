@@ -1,6 +1,6 @@
 <?php
 /**
- * @license Copyright 2011-2014 BitPay Inc., MIT License
+ * @license Copyright 2011-2015 BitPay Inc., MIT License
  * see https://github.com/bitpay/php-bitpay-client/blob/master/LICENSE
  */
 
@@ -11,7 +11,6 @@ namespace Bitpay\Crypto;
  */
 class McryptExtensionTest extends \PHPUnit_Framework_TestCase
 {
-
     public function testHasSupport()
     {
         $mcrypt = new McryptExtension();
@@ -20,7 +19,6 @@ class McryptExtensionTest extends \PHPUnit_Framework_TestCase
 
     public function testEncrypt()
     {
-
         $mcrypt = new McryptExtension();
         $key = 'testEncrypt';
         $data = array(
@@ -30,8 +28,7 @@ class McryptExtensionTest extends \PHPUnit_Framework_TestCase
             '___asdfa234($*(#__' => 'I8OFg5parn9b0Qk8mJnQH0+SgQWwYER5'
         );
 
-        foreach($data as $unencrypted => $encrypted )
-        {
+        foreach ($data as $unencrypted => $encrypted) {
             $encryptedtext = $mcrypt->encrypt($unencrypted, $key, '00000000');
             $this->assertEquals($encrypted, $encryptedtext);
         }
@@ -39,7 +36,6 @@ class McryptExtensionTest extends \PHPUnit_Framework_TestCase
 
     public function testDecrypt()
     {
-
         $mcrypt = new McryptExtension();
         $key = 'testEncrypt';
         $data = array(
@@ -49,8 +45,7 @@ class McryptExtensionTest extends \PHPUnit_Framework_TestCase
             '___asdfa234($*(#__' => 'I8OFg5parn9b0Qk8mJnQH0+SgQWwYER5'
         );
 
-        foreach($data as $unencrypted => $encrypted )
-        {
+        foreach ($data as $unencrypted => $encrypted) {
             $plaintext = $mcrypt->decrypt($encrypted, $key, '00000000');
             $this->assertEquals($unencrypted, $plaintext);
         }
@@ -60,11 +55,11 @@ class McryptExtensionTest extends \PHPUnit_Framework_TestCase
     {
         $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $randomString = '';
+
         for ($i = 0; $i < $length; $i++) {
             $randomString .= $characters[rand(0, strlen($characters) - 1)];
         }
 
         return $randomString;
     }
-
 }
