@@ -7,7 +7,7 @@
 namespace Bitpay;
 
 /**
- * Creates an access token for the given client
+ * Interface for an access token for the given client
  *
  * @package Bitpay
  */
@@ -27,9 +27,4 @@ interface AccessTokenInterface
      * @return string
      */
     public function getLabel();
-
-    /**
-     * @return boolean
-     */
-    public function isNonceDisabled();
 }
