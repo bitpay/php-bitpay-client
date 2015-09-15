@@ -1,6 +1,6 @@
 <?php
 /**
- * @license Copyright 2011-2014 BitPay Inc., MIT License
+ * @license Copyright 2011-2015 BitPay Inc., MIT License
  * see https://github.com/bitpay/php-bitpay-client/blob/master/LICENSE
  */
 
@@ -10,13 +10,25 @@ use org\bovigo\vfs\vfsStream;
 
 class BitpayTest extends \PHPUnit_Framework_TestCase
 {
+    private $temp_path_pri;
+    private $temp_path_pub;
+    private $temp_path_root;
+    private $network_type;
+
+    public function setUp()
+    {
+        $this->temp_path_root = 'tmp';
+        $this->temp_path_pri  = $this->temp_path_root . '/key.pri';
+        $this->temp_path_pub  = $this->temp_path_root . '/key.pub';
+        $this->network_type   = 'testnet';
+    }
 
     public function testConstruct()
     {
         $bitpay = new \Bitpay\Bitpay(
             array(
                 'bitpay' => array(
-                    'network' => 'testnet',
+                    'network' => $this->network_type,
                 )
             )
         );
@@ -45,20 +57,21 @@ class BitpayTest extends \PHPUnit_Framework_TestCase
 
     public function testConfigAbleToPersistAndLoadKeys()
     {
-        $root   = vfsStream::setup('tmp');
+        $root   = vfsStream::setup($this->temp_path_root);
         $bitpay = new \Bitpay\Bitpay(
             array(
                 'bitpay' => array(
                     'network'     => 'testnet',
-                    'private_key' => vfsStream::url('tmp/key.pri'),
-                    'public_key'  => vfsStream::url('tmp/key.pub'),
+                    'private_key' => vfsStream::url($this->temp_path_pri),
+                    'public_key'  => vfsStream::url($this->temp_path_pub),
                 )
             )
         );
 
-        $pri = new \Bitpay\PrivateKey(vfsStream::url('tmp/key.pri'));
+        $pri = new \Bitpay\PrivateKey(vfsStream::url($this->temp_path_pri));
         $pri->generate();
-        $pub = new \Bitpay\PublicKey(vfsStream::url('tmp/key.pub'));
+
+        $pub = new \Bitpay\PublicKey(vfsStream::url($this->temp_path_pub));
         $pub->setPrivateKey($pri)->generate();
 
         /**
