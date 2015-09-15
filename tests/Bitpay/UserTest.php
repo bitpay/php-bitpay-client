@@ -1,6 +1,6 @@
 <?php
 /**
- * @license Copyright 2011-2014 BitPay Inc., MIT License 
+ * @license Copyright 2011-2015 BitPay Inc., MIT License
  * see https://github.com/bitpay/php-bitpay-client/blob/master/LICENSE
  */
 
@@ -27,7 +27,6 @@ class UserTest extends \PHPUnit_Framework_TestCase
     public function testSetPhone()
     {
         $this->assertNotNull($this->user);
-
         $this->user->setPhone('555-555-5555');
         $this->assertNotNull($this->user->getPhone());
         $this->assertSame('555-555-5555', $this->user->getPhone());
@@ -45,7 +44,6 @@ class UserTest extends \PHPUnit_Framework_TestCase
     public function testSetEmail()
     {
         $this->assertNotNull($this->user);
-
         $this->user->setEmail('support@bitpay.com');
         $this->assertNotNull($this->user->getEmail());
         $this->assertSame('support@bitpay.com', $this->user->getEmail());
@@ -63,7 +61,6 @@ class UserTest extends \PHPUnit_Framework_TestCase
     public function testSetFirstName()
     {
         $this->assertNotNull($this->user);
-
         $this->user->setFirstName('BitPay');
         $this->assertNotNull($this->user->getFirstName());
         $this->assertSame('BitPay', $this->user->getFirstName());
@@ -81,7 +78,6 @@ class UserTest extends \PHPUnit_Framework_TestCase
     public function testSetLastName()
     {
         $this->assertNotNull($this->user);
-
         $this->user->setLastName('Inc');
         $this->assertNotNull($this->user->getLastName());
         $this->assertSame('Inc', $this->user->getLastName());
@@ -122,7 +118,6 @@ class UserTest extends \PHPUnit_Framework_TestCase
     public function testSetCity()
     {
         $this->assertNotNull($this->user);
-
         $this->user->setCity('Atlanta');
         $this->assertNotNull($this->user->getCity());
         $this->assertSame('Atlanta', $this->user->getCity());
@@ -140,7 +135,6 @@ class UserTest extends \PHPUnit_Framework_TestCase
     public function testSetState()
     {
         $this->assertNotNull($this->user);
-
         $this->user->setState('GA');
         $this->assertNotNull($this->user->getState());
         $this->assertSame('GA', $this->user->getState());
@@ -158,7 +152,6 @@ class UserTest extends \PHPUnit_Framework_TestCase
     public function testSetZip()
     {
         $this->assertNotNull($this->user);
-
         $this->user->setZip('37379');
         $this->assertNotNull($this->user->getZip());
         $this->assertSame('37379', $this->user->getZip());
@@ -176,7 +169,6 @@ class UserTest extends \PHPUnit_Framework_TestCase
     public function testSetCountry()
     {
         $this->assertNotNull($this->user);
-
         $this->user->setCountry('US');
         $this->assertNotNull($this->user->getCountry());
         $this->assertSame('US', $this->user->getCountry());
