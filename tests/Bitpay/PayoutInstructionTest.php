@@ -1,6 +1,6 @@
 <?php
 /**
- * @license Copyright 2011-2014 BitPay Inc., MIT License
+ * @license Copyright 2011-2015 BitPay Inc., MIT License
  * see https://github.com/bitpay/php-bitpay-client/blob/master/LICENSE
  */
 
@@ -125,6 +125,7 @@ class PayoutInstructionTest extends \PHPUnit_Framework_TestCase
         $this->assertNotNull($this->instruction->getBtc());
         $this->assertSame($btc, $this->instruction->getBtc());
     }
+
     /**
      * @depends testGetAmount
      */
@@ -140,6 +141,7 @@ class PayoutInstructionTest extends \PHPUnit_Framework_TestCase
         $this->assertInternalType('float', $this->instruction->getAmount());
         $this->assertSame(10.99, $this->instruction->getAmount());
     }
+
     /**
      * @depends testGetStatus
      */
