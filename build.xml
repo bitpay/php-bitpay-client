@@ -3,12 +3,11 @@
 <project name="bitpay/package" default="build">
     <target name="build" depends="lint,phpunit,phpcs" />
 
-    <target name="lint"
-        description="Check the syntax of PHP files">
+    <target name="lint" description="Check the syntax of PHP files">
         <mkdir dir="${project.basedir}/build/cache" />
         <phplint cachefile="${project.basedir}/build/cache/phplint.cache">
             <fileset dir="${project.basedir}/src">
-                <include name="**/*.php"/>
+                <include name="**/*.php" />
             </fileset>
         </phplint>
     </target>
