@@ -1,6 +1,6 @@
 <?php
 /**
- * @license Copyright 2011-2014 BitPay Inc., MIT License
+ * @license Copyright 2011-2015 BitPay Inc., MIT License
  * see https://github.com/bitpay/php-bitpay-client/blob/master/LICENSE
  */
 
@@ -23,6 +23,7 @@ class Base58Test extends \PHPUnit_Framework_TestCase
         $data = array(
             array('', '', '3QJmnh'),
         );
+
         foreach ($data as $datum) {
             $this->assertSame($datum[1], Base58::encode($datum[0]));
         }
@@ -44,6 +45,7 @@ class Base58Test extends \PHPUnit_Framework_TestCase
             array('3e', '25', ''),
             array('39', 'z', ''),
         );
+
         foreach ($data as $datum) {
             $decoded = Base58::decode($datum[1]);
             $this->assertSame($datum[0], $decoded, sprintf('%s != %s', $datum[0], $decoded));
