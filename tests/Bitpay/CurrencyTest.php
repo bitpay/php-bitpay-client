@@ -1,6 +1,6 @@
 <?php
 /**
- * @license Copyright 2011-2014 BitPay Inc., MIT License
+ * @license Copyright 2011-2015 BitPay Inc., MIT License
  * see https://github.com/bitpay/php-bitpay-client/blob/master/LICENSE
  */
 
@@ -36,7 +36,7 @@ class CurrencyTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetCodeWithExceptionThrown()
     {
-        new Currency('Dodge Coin');
+        new Currency('Foo Coin');
     }
 
     /**
@@ -157,8 +157,8 @@ class CurrencyTest extends \PHPUnit_Framework_TestCase
     public function testSetAlts()
     {
         $this->assertNotNull($this->currency);
-        $this->currency->setAlts('usd bucks');
-        $this->assertSame('usd bucks', $this->currency->getAlts());
+        $this->currency->setAlts('USD Bucks');
+        $this->assertSame('USD Bucks', $this->currency->getAlts());
     }
 
     public function testGetPayoutFields()
