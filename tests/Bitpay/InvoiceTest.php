@@ -1,6 +1,6 @@
 <?php
 /**
- * @license Copyright 2011-2014 BitPay Inc., MIT License
+ * @license Copyright 2011-2015 BitPay Inc., MIT License
  * see https://github.com/bitpay/php-bitpay-client/blob/master/LICENSE
  */
 
@@ -110,8 +110,8 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
     public function testSetNotificationEmail()
     {
         $this->assertNotNull($this->invoice);
-        $this->invoice->setNotificationEmail('support@bitpay.com');
-        $this->assertSame('support@bitpay.com', $this->invoice->getNotificationEmail());
+        $this->invoice->setNotificationEmail('integrations@bitpay.com');
+        $this->assertSame('integrations@bitpay.com', $this->invoice->getNotificationEmail());
     }
 
     public function testGetNotificationUrl()
@@ -313,24 +313,10 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($this->invoice->getItemDesc());
     }
 
-    public function testSetItemDesc()
-    {
-        $this->assertNotNull($this->invoice);
-
-        // TODO: add a test for setting the item description...
-    }
-
     public function testGetItemCode()
     {
         $this->assertNotNull($this->invoice);
         $this->assertNull($this->invoice->getItemCode());
-    }
-
-    public function testSetItemCode()
-    {
-        $this->assertNotNull($this->invoice);
-
-        // TODO: add a test for setting the item code...
     }
 
     public function testIsPhysical()
@@ -345,24 +331,10 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
         $this->assertEmpty($this->invoice->getBuyerName());
     }
 
-    public function testSetBuyerName()
-    {
-        $this->assertNotNull($this->invoice);
-
-        // TODO: add a test for setting the buyer name...
-    }
-
     public function testGetBuyerAddress1()
     {
         $this->assertNotNull($this->invoice);
         $this->assertNull($this->invoice->getBuyerAddress1());
-    }
-
-    public function testSetBuyerAddress1()
-    {
-        $this->assertNotNull($this->invoice);
-
-        // TODO: add a test for setting the buyer address1...
     }
 
     public function testGetBuyerAddress2()
@@ -371,24 +343,10 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($this->invoice->getBuyerAddress2());
     }
 
-    public function testSetBuyerAddress2()
-    {
-        $this->assertNotNull($this->invoice);
-
-        // TODO: add a test for setting the buyer address2...
-    }
-
     public function testGetBuyerCity()
     {
         $this->assertNotNull($this->invoice);
         $this->assertNull($this->invoice->getBuyerCity());
-    }
-
-    public function testSetBuyerCity()
-    {
-        $this->assertNotNull($this->invoice);
-
-        // TODO: add a test for setting the buyer city...
     }
 
     public function testGetBuyerState()
@@ -397,24 +355,10 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($this->invoice->getBuyerState());
     }
 
-    public function testSetBuyerState()
-    {
-        $this->assertNotNull($this->invoice);
-
-        // TODO: add a test for setting the buyer state...
-    }
-
     public function testGetBuyerZip()
     {
         $this->assertNotNull($this->invoice);
         $this->assertNull($this->invoice->getBuyerZip());
-    }
-
-    public function testSetBuyerZip()
-    {
-        $this->assertNotNull($this->invoice);
-
-        // TODO: add a test for setting the buyer zip...
     }
 
     public function testGetBuyerCountry()
@@ -423,37 +367,16 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($this->invoice->getBuyerCountry());
     }
 
-    public function testSetBuyerCountry()
-    {
-        $this->assertNotNull($this->invoice);
-
-        // TODO: add a test for setting the buyer country...
-    }
-
     public function testGetBuyerEmail()
     {
         $this->assertNotNull($this->invoice);
         $this->assertNull($this->invoice->getBuyerEmail());
     }
 
-    public function testSetBuyerEmail()
-    {
-        $this->assertNotNull($this->invoice);
-
-        // TODO: add a test for setting the buyer email...
-    }
-
     public function testGetBuyerPhone()
     {
         $this->assertNotNull($this->invoice);
         $this->assertNull($this->invoice->getBuyerPhone());
-    }
-
-    public function testSetBuyerPhone()
-    {
-        $this->assertNotNull($this->invoice);
-
-        // TODO: add a test for setting the buyer phone...
     }
 
     public function testGetExceptionStatus()
