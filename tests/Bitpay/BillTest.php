@@ -1,6 +1,6 @@
 <?php
 /**
- * @license Copyright 2011-2014 BitPay Inc., MIT License
+ * @license Copyright 2011-2015 BitPay Inc., MIT License
  * see https://github.com/bitpay/php-bitpay-client/blob/master/LICENSE
  */
 
@@ -162,8 +162,8 @@ class BillTest extends \PHPUnit_Framework_TestCase
     public function testSetEmail()
     {
         $this->assertNotNull($this->bill);
-        $this->bill->setEmail('support@bitpay.com');
-        $this->assertSame('support@bitpay.com', $this->bill->getEmail());
+        $this->bill->setEmail('integrations@bitpay.com');
+        $this->assertSame('integrations@bitpay.com', $this->bill->getEmail());
     }
 
     public function testGetPhone()
