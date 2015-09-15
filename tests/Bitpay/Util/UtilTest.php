@@ -1,6 +1,6 @@
 <?php
 /**
- * @license Copyright 2011-2014 BitPay Inc., MIT License
+ * @license Copyright 2011-2015 BitPay Inc., MIT License
  * see https://github.com/bitpay/php-bitpay-client/blob/master/LICENSE
  */
 
@@ -9,11 +9,10 @@ namespace Bitpay\Util;
 use Bitpay\Point;
 
 /**
- * @package Bitcore
+ * @package Bitpay
  */
 class UtilTest extends \PHPUnit_Framework_TestCase
 {
-
     public function testSha256()
     {
         $data = array(
@@ -94,16 +93,6 @@ class UtilTest extends \PHPUnit_Framework_TestCase
         }
     }
 
-    public function testNonce()
-    {
-        $a = Util::nonce();
-        usleep(1);
-        $b = Util::nonce();
-
-        // ensure a < b
-        $this->assertGreaterThan($a, $b);
-    }
-
     public function testGuid()
     {
         $guid = Util::guid();
@@ -173,6 +162,7 @@ class UtilTest extends \PHPUnit_Framework_TestCase
         $point = Util::doubleAndAdd('1', new Point(1, 1));
         $this->assertEquals('1', $point->getX());
         $this->assertEquals('1', $point->getY());
+
         $point = new Point(
             '0x'.substr(Secp256k1::G, 2, 64),
             '0x'.substr(Secp256k1::G, 66, 64)
@@ -182,6 +172,7 @@ class UtilTest extends \PHPUnit_Framework_TestCase
             '0xb7dafe35d7d1aab78b53982c8ba554584518f86d50af565c98e053613c8f15e0',
             $point
         );
+
         $this->assertEquals('14976827122927988984909748681266837395089399768482149532452617485742004777865', $R->getX());
         $this->assertEquals('5009713401941157350243425146365130573323232660945282226881202857781593637456', $R->getY());
 
@@ -189,6 +180,7 @@ class UtilTest extends \PHPUnit_Framework_TestCase
             '0xfd7c6914790d3bbf3184d9830e3f1a327e951e3478dd0b28f0fd3b0e774bbd68',
             $point
         );
+
         $this->assertEquals('65041784833307054098962518952641430476519680065454324565175938819000678523383', $R->getX());
         $this->assertEquals('53140314933116045874248958072587249546886301333167874306830834776596206062743', $R->getY());
     }
@@ -199,6 +191,7 @@ class UtilTest extends \PHPUnit_Framework_TestCase
             array('123456789', '101010001011001111011010111'),
             array('0x123456789', '100100011110011010100010110001001'),
         );
+
         foreach ($data as $datum) {
             $this->assertSame($datum[1], Util::decToBin($datum[0]));
         }
@@ -229,6 +222,7 @@ class UtilTest extends \PHPUnit_Framework_TestCase
            new Point(1, 1),
            new Point(1, 1)
         );
+
         $expectedpoint = new Point("28948022309329048855892746252171976963317496166410141009864396001977208667916", "14474011154664524427946373126085988481658748083205070504932198000988604333958");
         $this->assertEquals($expectedpoint, $point);
 
@@ -236,6 +230,7 @@ class UtilTest extends \PHPUnit_Framework_TestCase
            new Point(0, 0),
            new Point(1, 1)
         );
+
         $expectedpoint = new Point("0", "0");
         $this->assertEquals($expectedpoint, $point);
 
@@ -243,6 +238,7 @@ class UtilTest extends \PHPUnit_Framework_TestCase
            new Point(1, 0),
            new Point(0, 1)
         );
+
         $expectedpoint = new Point("0", "115792089237316195423570985008687907853269984665640564039457584007908834671662");
         $this->assertEquals($expectedpoint, $point);
     }
@@ -253,6 +249,7 @@ class UtilTest extends \PHPUnit_Framework_TestCase
             array('7361746f736869', 'satoshi'),
             array('0x7361746f736869', 'satoshi'),
         );
+
         foreach ($data as $datum) {
             $this->assertSame($datum[1], Util::binConv($datum[0]));
         }
@@ -267,6 +264,7 @@ class UtilTest extends \PHPUnit_Framework_TestCase
             $version = explode('.', PHP_VERSION);
             define('PHP_VERSION_ID', ($version[0] * 10000 + $version[1] * 100 + $version[2]));
         }
+
         if (PHP_VERSION_ID >= 50400) {
             $this->assertTrue($requirements['PHP']);
         } else {
@@ -299,6 +297,7 @@ class UtilTest extends \PHPUnit_Framework_TestCase
             $this->assertTrue($requirements['cURL']);
             $curl_version = curl_version();
             $ssl_supported = ($curl_version['features'] & CURL_VERSION_SSL);
+
             if ($ssl_supported) {
                 $this->assertTrue($requirements['cURL.SSL']);
             } else {
@@ -316,5 +315,4 @@ class UtilTest extends \PHPUnit_Framework_TestCase
             $this->assertTrue(is_string($requirements['Math']));
         }
     }
-
 }
