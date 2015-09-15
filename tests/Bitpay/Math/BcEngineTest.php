@@ -1,6 +1,6 @@
 <?php
 /**
- * @license Copyright 2011-2014 BitPay Inc., MIT License
+ * @license Copyright 2011-2015 BitPay Inc., MIT License
  * see https://github.com/bitpay/php-bitpay-client/blob/master/LICENSE
  */
 
@@ -14,14 +14,11 @@ class BcEngineTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-      if (!extension_loaded('bcmath'))
-      {
-        $this->markTestSkipped('The Bcmath extension is NOT loaded! You must enable it to run this test');
-      } elseif (!extension_loaded('gmp'))
-      {
-        $this->markTestSkipped('The GMPmath extension is NOT loaded! You must enable it to run this test');
-      }
-
+        if (!extension_loaded('bcmath')) {
+            $this->markTestSkipped('The Bcmath extension is NOT loaded! You must enable it to run this test');
+        } else if (!extension_loaded('gmp')) {
+            $this->markTestSkipped('The GMPmath extension is NOT loaded! You must enable it to run this test');
+        }
     }
 
     public function testConstruct()
@@ -81,7 +78,7 @@ class BcEngineTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(gmp_strval(gmp_invert($c, $c)), $math->invertm($c, $c));
 
         $this->assertEquals(gmp_strval(gmp_invert(15, 14)), $math->invertm(15, 14));
-    	$this->assertEquals(gmp_strval(gmp_invert(-1, 1)), $math->invertm(-1, 1));
+        $this->assertEquals(gmp_strval(gmp_invert(-1, 1)), $math->invertm(-1, 1));
         $this->assertEquals(0, $math->invertm(1, 1));
 
         $o = '2';
@@ -171,7 +168,8 @@ class BcEngineTest extends \PHPUnit_Framework_TestCase
         );
 
         $math = new BcEngine();
-        for($i = 0, $size = count($inputs); $i < $size; $i++) {
+
+        for ($i = 0, $size = count($inputs); $i < $size; $i++) {
             $this->assertEquals($outputs[$i], $math->input($inputs[$i]));
         }
     }
@@ -211,5 +209,4 @@ class BcEngineTest extends \PHPUnit_Framework_TestCase
         $math = new BcEngine();
         $this->assertTrue($math->coprime($a, $b));
     }
-
 }
