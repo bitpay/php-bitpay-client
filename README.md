@@ -8,11 +8,10 @@ bitpay/php-bitpay-client
 [![Scrutinizer](https://img.shields.io/scrutinizer/g/bitpay/php-bitpay-client.svg?style=flat-square)](https://scrutinizer-ci.com/g/bitpay/php-bitpay-client/)
 [![Coveralls](https://img.shields.io/coveralls/bitpay/php-bitpay-client.svg?style=flat-square)](https://coveralls.io/r/bitpay/php-bitpay-client)
 
-[![Documentation Status](https://readthedocs.org/projects/php-bitpay-client/badge/?version=latest)](https://readthedocs.org/projects/php-bitpay-client/?badge=latest)
 [![Total Downloads](https://poser.pugx.org/bitpay/php-client/downloads.svg)](https://packagist.org/packages/bitpay/php-client)
 [![Latest Unstable Version](https://poser.pugx.org/bitpay/php-client/v/unstable.svg)](https://packagist.org/packages/bitpay/php-client)
 
-This is a self-contained PHP implementation of BitPay's new cryptographically secure API: https://bitpay.com/api
+This is a self-contained PHP implementation of BitPay's cryptographically secure API: https://bitpay.com/api
 
 # Installation
 
@@ -65,9 +64,8 @@ instead of composer's autoloader, use the following code:
 ```php
 <?php
 $autoloader = __DIR__ . '/relative/path/to/Bitpay/Autoloader.php';
-if (true === file_exists($autoloader) &&
-    true === is_readable($autoloader))
-{
+
+if (file_exists($autoloader) && is_readable($autoloader)) {
     require_once $autoloader;
     \Bitpay\Autoloader::register();
 } else {
@@ -93,7 +91,7 @@ Reading the latest documentation at https://labs.bitpay.com/c/libraries/php migh
 
 The MIT License (MIT)
 
-Copyright (c) 2015 BitPay, Inc.
+Copyright (c) 2011-2015 BitPay, Inc.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
