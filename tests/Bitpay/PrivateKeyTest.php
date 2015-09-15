@@ -1,6 +1,6 @@
 <?php
 /**
- * @license Copyright 2011-2014 BitPay Inc., MIT License
+ * @license Copyright 2011-2015 BitPay Inc., MIT License
  * see https://github.com/bitpay/php-bitpay-client/blob/master/LICENSE
  */
 
@@ -28,10 +28,10 @@ class PrivateKeyTest extends \PHPUnit_Framework_TestCase
         } else {
             \Bitpay\Math\Math::setEngine(new \Bitpay\Math\RpEngine());
         }
-        
-        $priKey = new PrivateKey();
-        $this->assertNotNull($priKey);
 
+        $priKey = new PrivateKey();
+
+        $this->assertNotNull($priKey);
         $this->assertNull($priKey->getHex());
         $this->assertNull($priKey->getDec());
 
@@ -44,8 +44,11 @@ class PrivateKeyTest extends \PHPUnit_Framework_TestCase
     public function testGenerateCannotHappenTwice()
     {
         $privateKey = new PrivateKey();
+
         $privateKey->generate();
+
         $hex = $privateKey->getHex();
+
         $privateKey->generate();
         $this->assertSame($hex, $privateKey->getHex());
     }
@@ -53,10 +56,9 @@ class PrivateKeyTest extends \PHPUnit_Framework_TestCase
     public function testGetHex()
     {
         $priKey = new PrivateKey();
+
         $this->assertNotNull($priKey);
-
         $this->assertNull($priKey->getHex());
-
         $this->assertEquals(0, strlen($priKey->getHex()));
 
         $priKey->generate();
@@ -71,6 +73,7 @@ class PrivateKeyTest extends \PHPUnit_Framework_TestCase
     public function testToString()
     {
         $priKey = new PrivateKey();
+
         $this->assertNotNull($priKey);
 
         // Make sure this is a string
@@ -87,10 +90,9 @@ class PrivateKeyTest extends \PHPUnit_Framework_TestCase
     public function testGetDec()
     {
         $priKey = new PrivateKey();
+
         $this->assertNotNull($priKey);
-
         $this->assertNull($priKey->getDec());
-
         $this->assertEquals(0, strlen($priKey->getDec()));
 
         $priKey->generate();
@@ -101,8 +103,8 @@ class PrivateKeyTest extends \PHPUnit_Framework_TestCase
     public function testIsValid()
     {
         $priKey = new PrivateKey();
-        $this->assertNotNull($priKey);
 
+        $this->assertNotNull($priKey);
         $this->assertFalse($priKey->isValid());
 
         $priKey->generate();
@@ -113,6 +115,7 @@ class PrivateKeyTest extends \PHPUnit_Framework_TestCase
     public function testSign()
     {
         $priKey = new PrivateKey();
+
         $priKey->generate();
 
         // Make sure not exceptions are thrown
@@ -122,8 +125,8 @@ class PrivateKeyTest extends \PHPUnit_Framework_TestCase
     public function testHasValidHex()
     {
         $priKey = new PrivateKey();
-        $this->assertNotNull($priKey);
 
+        $this->assertNotNull($priKey);
         $this->assertFalse($priKey->hasValidHex());
 
         $priKey->generate();
@@ -134,8 +137,8 @@ class PrivateKeyTest extends \PHPUnit_Framework_TestCase
     public function testHasValidDec()
     {
         $priKey = new PrivateKey();
-        $this->assertNotNull($priKey);
 
+        $this->assertNotNull($priKey);
         $this->assertFalse($priKey->hasValidDec());
 
         $priKey->generate();
@@ -163,9 +166,11 @@ class PrivateKeyTest extends \PHPUnit_Framework_TestCase
         $public_key  = '048d970d6ba29dcfa190c177140fd889fadd6d2590b1ee1a6a06e255dbf22b4017ee7bc8e1f07ed0ff8bd77c002b98d31a1a8b53a63767ca65a531fb33cd726197';
 
         $pkey = new PrivateKey();
+
         $this->assertNotNull($pkey);
 
         $keys = $pkey->pemDecode($data);
+
         $this->assertNotNull($pkey);
 
         // Ensure it's an array
@@ -190,11 +195,12 @@ class PrivateKeyTest extends \PHPUnit_Framework_TestCase
         $public_key  = '048d970d6ba29dcfa190c177140fd889fadd6d2590b1ee1a6a06e255dbf22b4017ee7bc8e1f07ed0ff8bd77c002b98d31a1a8b53a63767ca65a531fb33cd726197';
 
         $keypair = array($private_key, $public_key);
+        $pkey    = new PrivateKey();
 
-        $pkey = new PrivateKey();
         $this->assertNotNull($pkey);
 
         $pemdata = $pkey->pemEncode($keypair);
+
         $this->assertNotNull($pemdata);
 
         // Ensure it's a string
