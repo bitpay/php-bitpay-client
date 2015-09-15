@@ -1,6 +1,6 @@
 <?php
 /**
- * @license Copyright 2011-2014 BitPay Inc., MIT License
+ * @license Copyright 2011-2015 BitPay Inc., MIT License
  * see https://github.com/bitpay/php-bitpay-client/blob/master/LICENSE
  */
 
@@ -21,7 +21,6 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $adapter->method('sendRequest')->willReturn($this->getMock('Bitpay\Client\ResponseInterface'));
         $this->client->setAdapter($adapter);
     }
-
 
     /**
      * @expectedException \Exception
@@ -63,7 +62,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
             ->setEffectiveDate("1415853007000")
             ->setPricingMethod('bitcoinbestbuy')
             ->setNotificationUrl('https://bitpay.com')
-            ->setNotificationEmail('support@bitpay.com')
+            ->setNotificationEmail('integrations@bitpay.com')
             ->setPricingMethod('bitcoinbestbuy')
             ->setReference('your reference, can be json')
             ->setAmount(5625)
@@ -73,6 +72,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
             \Bitpay\PayoutInstruction::STATUS_UNPAID => null,
             \Bitpay\PayoutInstruction::STATUS_PAID => '0'
         );
+
         $instruction0 = new \Bitpay\PayoutInstruction();
         $instruction0
             ->setId('Sra19AFU57Rx53rKQbbRKZ')
@@ -124,7 +124,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('your reference, can be json', $payout->getReference());
         $this->assertEquals('1415853007000', $payout->getEffectiveDate());
         $this->assertEquals('https://bitpay.com', $payout->getNotificationUrl());
-        $this->assertEquals('support@bitpay.com', $payout->getNotificationEmail());
+        $this->assertEquals('integrations@bitpay.com', $payout->getNotificationEmail());
         $this->assertEquals('8mZ37Gt91Wr7GXGPnB9zj1zwTcLGweRDka4axVBPi9Uxiiv7zZWvEKSgmFddQZA1Jy', $payout->getResponseToken());
         $instructions = $payout->getInstructions();
         $this->assertSame($instruction0, $instructions[0]);
@@ -134,7 +134,6 @@ class ClientTest extends \PHPUnit_Framework_TestCase
 
     public function testCreateInvoice()
     {
-
         $buyer = $this->getMockBuyer();
         $buyer->method('getAddress')->will($this->returnValue(array()));
 
@@ -149,7 +148,6 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $item = new \Bitpay\Item();
         $item->setPrice('19.95');
         $invoice->setItem($item);
-
 
         $response = $this->getMockResponse();
         $response->method('getBody')->willReturn(file_get_contents(__DIR__ . '/../../DataFixtures/invoice.json'));
@@ -242,7 +240,6 @@ class ClientTest extends \PHPUnit_Framework_TestCase
 
         $this->client->createInvoice($invoice);
     }
-
 
     /**
      *  @expectedException Exception
@@ -364,7 +361,6 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $payouts = $this->client->getPayouts();
         $this->assertInternalType('array', $payouts);
         $this->assertInstanceOf('Bitpay\PayoutInterface', $payouts[0]);
-
     }
 
     /**
@@ -380,7 +376,6 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $this->client->setAdapter($adapter);
 
         $payouts = $this->client->getPayouts();
-
     }
 
     public function testGetTokens()
@@ -536,7 +531,6 @@ class ClientTest extends \PHPUnit_Framework_TestCase
 
         $payout = $this->client->getPayout('7m7hSF3ws1LhnWUf17CXsJ');
 
-
         // Test deletePayout
         $response = $this->getMockResponse();
         $response->method('getBody')->willReturn(file_get_contents(__DIR__ . '/../../DataFixtures/payouts/cancelled.json'));
@@ -546,7 +540,6 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $this->client->setAdapter($adapter);
 
         $payout = $this->client->deletePayout($payout);
-
         $this->assertSame($payout->getStatus(), \Bitpay\Payout::STATUS_CANCELLED);
     }
 
@@ -566,7 +559,6 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $payout = $this->client->getPayout('7m7hSF3ws1LhnWUf17CXsJ');
 
         // Test with exception
-
         $response = $this->getMockResponse();
         $response->method('getBody')->willReturn('{"error":"Object not found"}');
 
@@ -577,7 +569,6 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $payout = $this->client->deletePayout($payout);
         $this->assertSame($payout->getStatus(), \Bitpay\Payout::STATUS_CANCELLED);
     }
-
 
     private function getMockInvoice()
     {
