@@ -10,7 +10,6 @@ use Behat\Mink\Mink;
 use Behat\Mink\Session;
 use Behat\Mink\Driver\Selenium2Driver;
 
-
 require_once __DIR__ . '/../../../vendor/autoload.php';
 require_once __DIR__ . '/StepHelper.php';
 
@@ -58,6 +57,7 @@ class FeatureContext extends BehatContext
         } else {
             $this->email = getenv('BITPAY_EMAIL');
         }
+
         if (null == getenv('BITPAY_PASSWORD')) {
             $this->password = $this->params['password'];
         } else {
@@ -71,7 +71,8 @@ class FeatureContext extends BehatContext
         }
 
         $port = parse_url($this->base_url, PHP_URL_PORT);
-        if (true == is_null(parse_url($this->base_url, PHP_URL_PORT))) {
+
+        if (true === is_null(parse_url($this->base_url, PHP_URL_PORT))) {
             $this->port = 443;
             $this->port_required_in_url = false;
         } else {
@@ -114,7 +115,7 @@ class FeatureContext extends BehatContext
      */
     public function theUserIsAuthenticatedWithBitpay()
     {
-        if(true == !file_exists('/tmp/token.json') || true == !file_exists('/tmp/bitpay.pri') || true == !file_exists('/tmp/bitpay.pub')){
+        if (false === file_exists('/tmp/token.json') || false === file_exists('/tmp/bitpay.pri') || false === file_exists('/tmp/bitpay.pub')) {
             $this->theUserPairsWithBitpayWithAValidPairingCode();
             $this->theUserIsPairedWithBitpay();
         }
@@ -143,13 +144,16 @@ class FeatureContext extends BehatContext
                 ->setCode('skuNumber')
                 ->setDescription('General Description of Item')
                 ->setPrice($price);
-            $invoice->setItem($item);
 
+            $invoice->setItem($item);
             $invoice->setCurrency(new \Bitpay\Currency($currency));
             $client->createInvoice($invoice);
+
             $this->response = $client->getResponse();
+
             $body = $this->response->getBody();
             $json = json_decode($body, true);
+
             $this->invoiceId = $json['data']['id'];
         } catch (\Exception $e) {
             $this->error = $e;
@@ -167,11 +171,13 @@ class FeatureContext extends BehatContext
         $json = json_decode($body, true);
         $responsePrice = (string) $json['data']['price'];
         $responseCurrency = $json['data']['currency'];
-        if ($responsePrice !== $price){
-            throw new Exception("Error: Price is different", 1);
+
+        if ($responsePrice !== $price) {
+            throw new \Exception("Error: Price is different", 1);
         }
-        if ($responseCurrency !== $currency){
-            throw new Exception("Error: Currency is different", 1);
+
+        if ($responseCurrency !== $currency) {
+            throw new \Exception("Error: Currency is different", 1);
         }    
     }
 
@@ -181,9 +187,7 @@ class FeatureContext extends BehatContext
     public function theUserPairsWithBitpayWithAValidPairingCode()
     {
         // Login
-
-        $this->mink->getSession()->visit($this->base_url.'/merchant-login');
-
+        $this->mink->getSession()->visit($this->base_url . '/merchant-login');
         $this->mink->getSession()->wait(1500);
         $this->mink->getSession()->getPage()->fillField('email', $this->email);
         $this->mink->getSession()->getPage()->fillField('password', $this->password);
@@ -204,13 +208,16 @@ class FeatureContext extends BehatContext
 
         // Create and set pairing code
         $cssSelector = ".icon-plus";
+
         $element = $this->mink->getSession()->getPage()->find(
             'xpath',
             $this->mink->getSession()->getSelectorsHandler()->selectorToXpath('css', $cssSelector) // just changed xpath to css
         );
+
         if (null === $element) {
             throw new \InvalidArgumentException(sprintf('Could not evaluate CSS Selector: "%s"', $cssSelector));
         }
+
         $element->press();
 
         $this->mink->getSession()->wait(1500);
@@ -231,7 +238,6 @@ class FeatureContext extends BehatContext
         //Set Client
         $network = $this->network;
         $client = createClient($network, $privateKey, $publicKey);
-
         $pairingCode = $this->validPairingCode;
 
         // Pair
@@ -243,17 +249,20 @@ class FeatureContext extends BehatContext
                     'id'          => (string) $sinKey,
                 )
             );
+
             $token_file = fopen('/tmp/token.json', 'w');
+
             fwrite($token_file, $token);
             fclose($token_file);
         } catch (\Exception $e) {
             $request  = $client->getRequest();
             $response = $client->getResponse();
+
             echo (string) $request.PHP_EOL.PHP_EOL.PHP_EOL;
             echo (string) $response.PHP_EOL.PHP_EOL;
+
             exit(1);
         }
-
     }
 
     /**
@@ -285,7 +294,6 @@ class FeatureContext extends BehatContext
         } finally {
             return true;
         }
-
     }
 
     /**
@@ -295,9 +303,11 @@ class FeatureContext extends BehatContext
     {
         $curlError = $this->error;
         $curlErrorMessage = $this->error->getMessage();
+
         if (strpos($curlErrorMessage, $expectedErrorMessage) === false) {
             throw new Exception("Error message incorrect: ".$curlErrorMessage, 1);
         }
+
         if (strpos(get_class($curlError), $expectedErrorName) === false) {
             throw new Exception("Error name incorrect: ".get_class($curlError), 1);
         }
@@ -318,11 +328,13 @@ class FeatureContext extends BehatContext
             //Set Client
             $url = parse_url($this->base_url, PHP_URL_HOST);
             $network = new \Bitpay\Network\Customnet($url, $port, true);
+
             $curl_options = array(
                         CURLOPT_SSL_VERIFYPEER => false,
                         CURLOPT_SSL_VERIFYHOST => false,
                         CURLOPT_TIMEOUT        => 5,
                         );
+
             $client = createClient($network, $privateKey, $publicKey, $curl_options);
 
             // Pair
@@ -330,7 +342,7 @@ class FeatureContext extends BehatContext
                 array(
                     'pairingCode' => 'aaaaaaa',
                     'label'       => 'Integrations Testing',
-                    'id'          => (string) $sinKey,
+                    'id'          => (string)$sinKey,
                 )
             );
         } catch (\Exception $e) {
@@ -345,10 +357,11 @@ class FeatureContext extends BehatContext
      */
     public function thatAUserKnowsAnInvoiceId()
     {
-        if(true == !file_exists('/tmp/token.json') || true == !file_exists('/tmp/bitpay.pri') || true == !file_exists('/tmp/bitpay.pub')){
+        if (false === file_exists('/tmp/token.json') || false === file_exists('/tmp/bitpay.pri') || false === file_exists('/tmp/bitpay.pub')) {
             $this->theUserPairsWithBitpayWithAValidPairingCode();
             $this->theUserIsPairedWithBitpay();
         }
+
         $this->theUserCreatesAnInvoiceFor(1.99, 'USD');
     }
 
@@ -357,17 +370,18 @@ class FeatureContext extends BehatContext
      */
     public function theyCanRetrieveThatInvoice()
     {
-        try
-        {
-            $network = $this->network;
-            $client = createClient($network);
-            $response  = $client->getInvoice($this->invoiceId);
-        } catch (Exception $e){
+        try {
+            $network  = $this->network;
+            $client   = createClient($network);
+            $response = $client->getInvoice($this->invoiceId);
+        } catch (\Exception $e) {
             var_dump($e->getMessage());
         }
+
         $responseInvoiceId = $response->getId();
-        if($responseInvoiceId !== $this->invoiceId){
-            throw new Exception("Invoice ids don't match");
+
+        if ($responseInvoiceId !== $this->invoiceId) {
+            throw new \Exception("Invoice ids don't match");
         } 
     }
 }
