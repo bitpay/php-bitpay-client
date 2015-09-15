@@ -31,19 +31,21 @@ function loadKeys()
 
 function createClient($network, $privateKey = null, $publicKey = null, $curl_options = null)
 {
-    if(true === is_null($curl_options)) {
+    if (true === is_null($curl_options)) {
         $curl_options = array(
             CURLOPT_SSL_VERIFYPEER => false,
             CURLOPT_SSL_VERIFYHOST => false,
         );
     }
-    $adapter = new \Bitpay\Client\Adapter\CurlAdapter($curl_options);
-    $client = new \Bitpay\Client\Client();
 
-    if(true === !is_null($privateKey)) {
+    $adapter = new \Bitpay\Client\Adapter\CurlAdapter($curl_options);
+    $client  = new \Bitpay\Client\Client();
+
+    if (false === is_null($privateKey)) {
         $client->setPrivateKey($privateKey);
     }
-    if(true === !is_null($publicKey)) {
+
+    if (false === is_null($publicKey)) {
         $client->setPublicKey($publicKey);
     }
 
