@@ -1,6 +1,6 @@
 <?php
 /**
- * @license Copyright 2011-2014 BitPay Inc., MIT License
+ * @license Copyright 2011-2015 BitPay Inc., MIT License
  * see https://github.com/bitpay/php-bitpay-client/blob/master/LICENSE
  */
 
@@ -13,7 +13,6 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         $application = new Application();
 
         $this->assertNotNull($application);
-
         $this->assertInternalType('array', $application->getUsers());
         $this->assertEmpty($application->getUsers());
     }
@@ -26,7 +25,6 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         $application = new Application();
 
         $this->assertNotNull($application);
-
         $application->addUser($this->getMockUser());
 
         $this->assertInternalType('array', $application->getUsers());
@@ -38,7 +36,6 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         $application = new Application();
 
         $this->assertNotNull($application);
-
         $this->assertInternalType('array', $application->getOrgs());
         $this->assertEmpty($application->getOrgs());
     }
@@ -51,7 +48,6 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         $application = new Application();
 
         $this->assertNotNull($application);
-
         $application->addOrg($this->getMockOrg());
 
         $this->assertInternalType('array', $application->getOrgs());
