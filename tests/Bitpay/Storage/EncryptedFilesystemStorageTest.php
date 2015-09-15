@@ -1,6 +1,6 @@
 <?php
 /**
- * @license Copyright 2011-2014 BitPay Inc., MIT License
+ * @license Copyright 2011-2015 BitPay Inc., MIT License
  * see https://github.com/bitpay/php-bitpay-client/blob/master/LICENSE
  */
 
@@ -10,6 +10,8 @@ use org\bovigo\vfs\vfsStream;
 
 class EncryptedFilesystemStorageTest extends \PHPUnit_Framework_TestCase
 {
+    private $root;
+
     public function setUp()
     {
         $this->root = vfsStream::setup('tmp');
