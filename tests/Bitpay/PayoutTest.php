@@ -1,6 +1,6 @@
 <?php
 /**
- * @license Copyright 2011-2014 BitPay Inc., MIT License
+ * @license Copyright 2011-2015 BitPay Inc., MIT License
  * see https://github.com/bitpay/php-bitpay-client/blob/master/LICENSE
  */
 
@@ -77,7 +77,6 @@ class PayoutTest extends \PHPUnit_Framework_TestCase
             ->setLabel($label);
 
         $this->payout->addInstruction($instruction);
-
         $this->assertInternalType('array', $this->payout->getInstructions());
         $this->assertTrue(count($this->payout->getInstructions()) == 1);
 
