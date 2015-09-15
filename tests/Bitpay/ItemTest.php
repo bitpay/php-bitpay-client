@@ -1,6 +1,6 @@
 <?php
 /**
- * @license Copyright 2011-2014 BitPay Inc., MIT License
+ * @license Copyright 2011-2015 BitPay Inc., MIT License
  * see https://github.com/bitpay/php-bitpay-client/blob/master/LICENSE
  */
 
@@ -59,6 +59,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     public function testSetPrice()
     {
         setlocale(LC_NUMERIC, 'en_US');
+
         // Accepts floats
         $this->item->setPrice(9.99);
         $this->assertSame(9.99, $this->item->getPrice());
@@ -142,7 +143,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException        \Bitpay\Client\ArgumentException
+     * @expectedException \Bitpay\Client\ArgumentException
      */
     public function testSetPriceExceptionNoNumber()
     {
@@ -150,7 +151,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException        \Bitpay\Client\ArgumentException
+     * @expectedException \Bitpay\Client\ArgumentException
      */
     public function testSetPriceExceptionDoubleDecimal()
     {
