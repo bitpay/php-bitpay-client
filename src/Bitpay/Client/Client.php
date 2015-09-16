@@ -523,7 +523,7 @@ class Client implements ClientInterface
     public function createToken(array $payload = array())
     {
         if (isset($payload['pairingCode']) && 1 !== preg_match('/^[a-zA-Z0-9]{7}$/', $payload['pairingCode'])) {
-            throw new ArgumentException("pairing code is not legal");
+            throw new \ArgumentException('[ERROR] In Client::createToken(): The pairing code provided is not legal.');
         }
 
         $this->request = $this->createNewRequest();
@@ -538,7 +538,7 @@ class Client implements ClientInterface
         $body = json_decode($this->response->getBody(), true);
 
         if (isset($body['error'])) {
-            throw new \Bitpay\Client\BitpayException($this->response->getStatusCode() . ": " . $body['error']);
+            throw new \Bitpay\Client\BitpayException($this->response->getStatusCode() . ': ' . $body['error']);
         }
 
         $tkn = $body['data'][0];
