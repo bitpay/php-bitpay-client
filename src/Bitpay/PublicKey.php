@@ -1,6 +1,6 @@
 <?php
 /**
- * @license Copyright 2011-2014 BitPay Inc., MIT License 
+ * @license Copyright 2011-2015 BitPay Inc., MIT License
  * see https://github.com/bitpay/php-bitpay-client/blob/master/LICENSE
  */
 
@@ -11,7 +11,7 @@ use Bitpay\Util\Secp256k1;
 use Bitpay\Util\Util;
 
 /**
- * @package Bitcore
+ * @package Bitpay
  */
 class PublicKey extends Key
 {
@@ -45,6 +45,7 @@ class PublicKey extends Key
 
     /**
      * @param PrivateKey
+     * @return PublicKey
      */
     public static function createFromPrivateKey(PrivateKey $private)
     {
@@ -55,7 +56,8 @@ class PublicKey extends Key
     }
 
     /**
-     * @return KeyInterface
+     * @param PrivateKey
+     * @return PublicKey
      */
     public function setPrivateKey(PrivateKey $privateKey)
     {
@@ -68,8 +70,8 @@ class PublicKey extends Key
      * Generates an uncompressed and compressed EC public key.
      *
      * @param \Bitpay\PrivateKey $privateKey
-     *
-     * @return Bitpay\PublicKey
+     * @return \Bitpay\PublicKey
+     * @throws \Exception
      */
     public function generate(PrivateKey $privateKey = null)
     {
@@ -111,6 +113,7 @@ class PublicKey extends Key
 
         $this->x   = $RxHex;
         $this->y   = $RyHex;
+
         $this->hex = sprintf('%s%s', $RxHex, $RyHex);
         $this->dec = Util::decodeHex($this->hex);
 
@@ -139,6 +142,7 @@ class PublicKey extends Key
 
         if (null === $this->sin) {
             $this->sin = new SinKey();
+
             $this->sin->setPublicKey($this);
             $this->sin->generate();
         }
