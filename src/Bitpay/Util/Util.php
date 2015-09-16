@@ -1,6 +1,6 @@
 <?php
 /**
- * @license Copyright 2011-2014 BitPay Inc., MIT License
+ * @license Copyright 2011-2015 BitPay Inc., MIT License
  * see https://github.com/bitpay/php-bitpay-client/blob/master/LICENSE
  */
 
@@ -13,7 +13,7 @@ use Bitpay\Math\Math;
 /**
  * Utility class used by string and arbitrary integer methods.
  *
- * @package Bitcore
+ * @package Bitpay
  */
 class Util
 {
@@ -25,11 +25,11 @@ class Util
     /**
      * Computes a digest hash value for the given data using
      * the given method, and returns a raw or binhex encoded
-     * string, see:
-     * http://us1.php.net/manual/en/function.openssl-digest.php
+     * string. Uses the OpenSSL extension.
      *
+     * @see http://us1.php.net/manual/en/function.openssl-digest.php
      * @param string $data
-     *
+     * @param boolean $binary
      * @return string
      */
     public static function sha256($data, $binary = false)
@@ -40,11 +40,10 @@ class Util
     /**
      * Computes a digest hash value for the given data using
      * the given method, and returns a raw or binhex encoded
-     * string, see:
-     * http://us1.php.net/manual/en/function.openssl-digest.php
+     * string. Uses the OpenSSL extension.
      *
+     * @see http://us1.php.net/manual/en/function.openssl-digest.php
      * @param string $data
-     *
      * @return string
      */
     public static function sha512($data)
@@ -54,11 +53,10 @@ class Util
 
     /**
      * Generate a keyed hash value using the HMAC method.
-     * http://us1.php.net/manual/en/function.hash-hmac.php
      *
+     * @see http://us1.php.net/manual/en/function.hash-hmac.php
      * @param string $data
      * @param string $key
-     *
      * @return string
      */
     public static function sha512hmac($data, $key)
@@ -67,10 +65,12 @@ class Util
     }
 
     /**
-     * Returns a RIPDEMD160 hash of a value.
+     * Uses the OpenSSL extention to calculate the RIPDEMD160
+     * hash of a value.
      *
+     * @see http://php.net/manual/en/function.openssl-digest.php
      * @param string $data
-     *
+     * @param boolean $binary
      * @return string
      */
     public static function ripe160($data, $binary = false)
@@ -82,7 +82,6 @@ class Util
      * Returns a SHA256 hash of a RIPEMD160 hash of a value.
      *
      * @param string $data
-     *
      * @return string
      */
     public static function sha256ripe160($data)
@@ -94,7 +93,7 @@ class Util
      * Returns a double SHA256 hash of a value.
      *
      * @param string $data
-     *
+     * @param boolean $binary
      * @return string
      */
     public static function twoSha256($data, $binary = false)
@@ -103,22 +102,9 @@ class Util
     }
 
     /**
-     * Returns a nonce for use in REST calls.
-     *
-     * @see http://en.wikipedia.org/wiki/Cryptographic_nonce
-     *
-     * @return string
-     */
-    public static function nonce()
-    {
-        return microtime(true);
-    }
-
-    /**
      * Returns a GUID for use in REST calls.
      *
      * @see http://en.wikipedia.org/wiki/Globally_unique_identifier
-     *
      * @return string
      */
     public static function guid()
@@ -138,6 +124,7 @@ class Util
      *
      * @param  string $dec
      * @return string
+     * @throws \Exception
      */
     public static function encodeHex($dec)
     {
@@ -151,12 +138,12 @@ class Util
 
         $hex = '';
 
-        while (Math::cmp($dec, 0) > 0) {
-            $q = Math::div($dec, 16);
-            $rem = Math::mod($dec, 16);
+        while (Math::cmp($dec, '0') > 0) {
+            $q   = Math::div($dec, '16');
+            $rem = Math::mod($dec, '16');
             $dec = $q;
 
-            $hex = substr(self::HEX_CHARS, intval($rem), 1).$hex;
+            $hex = substr(self::HEX_CHARS, intval($rem), 1) . $hex;
         }
 
         return $hex;
@@ -167,6 +154,7 @@ class Util
      *
      * @param  string $hex
      * @return string
+     * @throws \Exception
      */
     public static function decodeHex($hex)
     {
@@ -174,7 +162,7 @@ class Util
             throw new \Exception('Argument must be a string of hex digits.');
         }
 
-        $hex = strtolower($hex);
+        $hex = strtolower(trim($hex));
 
         // if it has a prefix of 0x this needs to be trimed
         if (substr($hex, 0, 2) == '0x') {
@@ -182,24 +170,32 @@ class Util
         }
 
         $hexLen = strlen($hex);
+
         for ($dec = '0', $i = 0; $i < $hexLen; $i++) {
             $current = strpos(self::HEX_CHARS, $hex[$i]);
-            $dec     = Math::add(Math::mul($dec, 16), $current);
+            $dec     = Math::add(Math::mul($dec, '16'), $current);
         }
 
         return $dec;
     }
 
+   /**
+     * Calculates a new EC curve point.
+     *
+     * @param  string $hex
+     * @param  PointInterface $point
+     * @param  CurveParameterInterface $parameters
+     * @return Point
+     */
     public static function doubleAndAdd($hex, PointInterface $point, CurveParameterInterface $parameters = null)
     {
         if (null === $parameters) {
             $parameters = new Secp256k1();
         }
-        $tmp = self::decToBin($hex);
 
+        $tmp = self::decToBin($hex);
         $n   = strlen($tmp) - 1;
         $S   = new Point(PointInterface::INFINITY, PointInterface::INFINITY);
-
 
         while ($n >= 0) {
             $S = self::pointDouble($S);
@@ -207,6 +203,7 @@ class Util
             if ($tmp[$n] == 1) {
                 $S = self::pointAdd($S, $point);
             }
+
             $n--;
         }
 
@@ -217,10 +214,9 @@ class Util
      * This method returns a binary string representation of
      * the decimal number. Used for the doubleAndAdd() method.
      *
-     * @see http://php.net/manual/en/function.decbin.php but for large numbers
-     *
-     * @param string
-     * @return string
+     * @see http://php.net/manual/en/function.decbin.php (but for large numbers)
+     * @param string $dec
+     * @return string $bin
      */
     public static function decToBin($dec)
     {
@@ -229,13 +225,15 @@ class Util
         }
 
         $bin  = '';
+
         while (Math::cmp($dec, '0') > 0) {
-            if (Math::mod($dec, 2) == '1') {
+            if (Math::mod($dec, '2') == '1') {
                 $bin .= '1';
             } else {
                 $bin .= '0';
             }
-            $dec = Math::div($dec, 2);
+
+            $dec = Math::div($dec, '2');
         }
 
         return $bin;
@@ -247,9 +245,10 @@ class Util
      *   xR = s2 - 2xP mod p
      *   yR = -yP + s(xP - xR) mod p
      *
-     * @param  PointInterface $point
-     * @param CurveParameterInterface
+     * @param PointInterface $point
+     * @param CurveParameterInterface $parameters
      * @return PointInterface
+     * @throws \Exception
      */
     public static function pointDouble(PointInterface $point, CurveParameterInterface $parameters = null)
     {
@@ -273,41 +272,38 @@ class Util
         // Critical math section
         try {
             $m      = Math::add(Math::mul(3, Math::mul($point->getX(), $point->getX())), $a);
-            $o      = Math::mul(2, $point->getY());
+            $o      = Math::mul('2', $point->getY());
             $n      = Math::invertm($o, $p);
             $n2     = Math::mod($o, $p);
             $st     = Math::mul($m, $n);
             $st2    = Math::mul($m, $n2);
             $s      = Math::mod($st, $p);
             $s2     = Math::mod($st2, $p);
-            $xmul   = Math::mul(2, $point->getX());
+            $xmul   = Math::mul('2', $point->getX());
             $smul   = Math::mul($s, $s);
             $xsub   = Math::sub($smul, $xmul);
             $xmod   = Math::mod($xsub, $p);
             $R['x'] = $xmod;
             $ysub   = Math::sub($point->getX(), $R['x']);
             $ymul   = Math::mul($s, $ysub);
-            $ysub2  = Math::sub(0, $point->getY());
+            $ysub2  = Math::sub('0', $point->getY());
             $yadd   = Math::add($ysub2, $ymul);
-
             $R['y'] = Math::mod($yadd, $p);
-
         } catch (\Exception $e) {
-            throw new \Exception('Error in Util::pointDouble(): '.$e->getMessage());
+            throw new \Exception('Error in Util::pointDouble(): ' . $e->getMessage());
         }
 
         return new Point($R['x'], $R['y']);
     }
 
-        /**
+    /**
      * Point addition method P + Q = R where:
      *   s = (yP - yQ)/(xP - xQ) mod p
      *   xR = s2 - xP - xQ mod p
      *   yR = -yP + s(xP - xR) mod p
      *
-     * @param PointInterface
-     * @param PointInterface
-     *
+     * @param PointInterface $P
+     * @param PointInterface $Q
      * @return PointInterface
      */
     public static function pointAdd(PointInterface $P, PointInterface $Q)
@@ -324,8 +320,9 @@ class Util
             return self::pointDouble(new Point($P->getX(), $P->getY()));
         }
 
-        $p = '0x'.Secp256k1::P;
-        $a = '0x'.Secp256k1::A;
+        $p = '0x' . Secp256k1::P;
+        $a = '0x' . Secp256k1::A;
+
         $s = 0;
         $R = array(
             'x' => 0,
@@ -351,10 +348,11 @@ class Util
                 ),
                 $p
             );
+
             $R['y'] = Math::mod(
                 Math::add(
                     Math::sub(
-                        0,
+                        '0',
                         $P->getY()
                     ),
                     Math::mul(
@@ -370,18 +368,17 @@ class Util
 
             $R['s'] = $s;
         } catch (Exception $e) {
-            throw new \Exception('Error in Util::pointAdd(): '.$e->getMessage());
+            throw new \Exception('Error in Util::pointAdd(): ' . $e->getMessage());
         }
 
         return new Point($R['x'], $R['y']);
     }
 
     /**
-     * Converts hex value into octet (byte) string
+     * Converts hex value into octet (byte) string.
      *
-     * @param string
-     *
-     * @return string
+     * @param string $hex
+     * @return string $byte
      */
     public static function binConv($hex)
     {
@@ -395,21 +392,21 @@ class Util
         }
 
         if (substr(strtolower($hex), 0, 2) != '0x') {
-            $hex = '0x'.strtolower($hex);
+            $hex = '0x' . strtolower(trim($hex));
         }
 
-        while (Math::cmp($hex, 0) > 0) {
-            $dv   = Math::div($hex, 256);
-            $rem  = Math::mod($hex, 256);
+        while (Math::cmp($hex, '0') > 0) {
+            $dv   = Math::div($hex, '256');
+            $rem  = Math::mod($hex, '256');
             $hex  = $dv;
-            $byte = $byte.$digits[$rem];
+            $byte = $byte . $digits[$rem];
         }
 
         return strrev($byte);
     }
 
     /**
-     * Checks dependencies for the library
+     * Checks dependencies for the library.
      *
      * @return array list of each requirement, boolean true if met, string error message if not as value
      */
@@ -422,6 +419,7 @@ class Util
             $version = explode('.', PHP_VERSION);
             define('PHP_VERSION_ID', ($version[0] * 10000 + $version[1] * 100 + $version[2]));
         }
+
         if (PHP_VERSION_ID < 50400) {
             $requirements['PHP'] = 'Your PHP version, ' . PHP_VERSION . ', is too low. PHP version >= 5.4 is required.';
         } else {
@@ -454,8 +452,9 @@ class Util
             $requirements['cURL'] = 'The cURL PHP extension could not be found.';
         } else {
             $requirements['cURL'] = true;
-            $curl_version = curl_version();
+            $curl_version  = curl_version();
             $ssl_supported = ($curl_version['features'] & CURL_VERSION_SSL);
+
             if (!$ssl_supported) {
                 $requirements['cURL.SSL'] = 'The cURL PHP extension does not have SSL support.';
             } else {
