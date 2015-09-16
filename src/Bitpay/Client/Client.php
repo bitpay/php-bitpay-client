@@ -1,6 +1,6 @@
 <?php
 /**
- * @license Copyright 2011-2014 BitPay Inc., MIT License
+ * @license Copyright 2011-2015 BitPay Inc., MIT License
  * see https://github.com/bitpay/php-bitpay-client/blob/master/LICENSE
  */
 
@@ -16,7 +16,7 @@ use Bitpay\PublicKey;
 use Bitpay\PrivateKey;
 
 /**
- * Client used to send requests and receive responses for BitPay's Web API
+ * Client used to send requests and receive responses for BitPay's Web API.
  *
  * @package Bitpay
  */
@@ -61,7 +61,7 @@ class Client implements ClientInterface
      * The network is either livenet or testnet and tells the client where to
      * send the requests.
      *
-     * @param NetworkInterface
+     * @param NetworkInterface $network
      */
     public function setNetwork(NetworkInterface $network)
     {
@@ -90,6 +90,8 @@ class Client implements ClientInterface
     }
 
     /**
+     * Set the network adapter object to use.
+     *
      * @param AdapterInterface $adapter
      */
     public function setAdapter(AdapterInterface $adapter)
@@ -98,6 +100,8 @@ class Client implements ClientInterface
     }
 
     /**
+     * Assigns the token to use for a request.
+     *
      * @param TokenInterface $token
      * @return ClientInterface
      */
@@ -147,26 +151,31 @@ class Client implements ClientInterface
             'buyerEmail'        => $buyer->getEmail(),
             'buyerPhone'        => $buyer->getPhone(),
             'guid'              => Util::guid(),
-            'nonce'             => Util::nonce(),
             'token'             => $this->token->getToken(),
         );
 
         $request->setBody(json_encode($body));
+
         $this->addIdentityHeader($request);
         $this->addSignatureHeader($request);
+
         $this->request  = $request;
         $this->response = $this->sendRequest($request);
 
         $body = json_decode($this->response->getBody(), true);
+
         $error_message = false;
         $error_message = (!empty($body['error'])) ? $body['error'] : $error_message;
         $error_message = (!empty($body['errors'])) ? $body['errors'] : $error_message;
         $error_message = (is_array($error_message)) ? implode("\n", $error_message) : $error_message;
+
         if (false !== $error_message) {
             throw new \Exception($error_message);
         }
+
         $data = $body['data'];
         $invoiceToken = new \Bitpay\Token();
+
         $invoice
             ->setToken($invoiceToken->setToken($data['token']))
             ->setId($data['id'])
@@ -192,12 +201,17 @@ class Client implements ClientInterface
         $this->request = $this->createNewRequest();
         $this->request->setMethod(Request::METHOD_GET);
         $this->request->setPath('currencies');
+
         $this->response = $this->sendRequest($this->request);
-        $body           = json_decode($this->response->getBody(), true);
+
+        $body = json_decode($this->response->getBody(), true);
+
         if (empty($body['data'])) {
             throw new \Exception('Error with request: no data returned');
         }
+
         $currencies = $body['data'];
+
         array_walk($currencies, function (&$value, $key) {
             $currency = new \Bitpay\Currency();
             $currency
@@ -210,6 +224,7 @@ class Client implements ClientInterface
                 ->setPluralName($value['plural'])
                 ->setAlts($value['alts'])
                 ->setPayoutFields($value['payoutFields']);
+
             $value = $currency;
         });
 
@@ -238,12 +253,12 @@ class Client implements ClientInterface
             'effectiveDate' => $effectiveDate,
             'pricingMethod' => $payout->getPricingMethod(),
             'guid'          => Util::guid(),
-            'nonce'         => Util::nonce()
         );
 
         // Optional
         foreach (array('reference','notificationURL','notificationEmail') as $value) {
             $function = 'get' . ucfirst($value);
+
             if ($payout->$function() != null) {
                 $body[$value] = $payout->$function();
             }
@@ -259,21 +274,26 @@ class Client implements ClientInterface
         }
 
         $request->setBody(json_encode($body));
+
         $this->addIdentityHeader($request);
         $this->addSignatureHeader($request);
 
         $this->request  = $request;
         $this->response = $this->sendRequest($request);
+
         $body = json_decode($this->response->getBody(), true);
+
         $error_message = false;
         $error_message = (!empty($body['error'])) ? $body['error'] : $error_message;
         $error_message = (!empty($body['errors'])) ? $body['errors'] : $error_message;
         $error_message = (is_array($error_message)) ? implode("\n", $error_message) : $error_message;
+
         if (false !== $error_message) {
             throw new \Exception($error_message);
         }
 
         $data = $body['data'];
+
         $payout
             ->setId($data['id'])
             ->setAccountId($data['account'])
@@ -294,9 +314,11 @@ class Client implements ClientInterface
     {
         $request = $this->createNewRequest();
         $request->setMethod(Request::METHOD_GET);
+
         $path = 'payouts?token='
                     . $this->token->getToken()
                     . (($status == null) ? '' : '&status=' . $status);
+
         $request->setPath($path);
 
         $this->addIdentityHeader($request);
@@ -304,11 +326,14 @@ class Client implements ClientInterface
 
         $this->request  = $request;
         $this->response = $this->sendRequest($this->request);
-        $body           = json_decode($this->response->getBody(), true);
+
+        $body = json_decode($this->response->getBody(), true);
+
         $error_message = false;
         $error_message = (!empty($body['error'])) ? $body['error'] : $error_message;
         $error_message = (!empty($body['errors'])) ? $body['errors'] : $error_message;
         $error_message = (is_array($error_message)) ? implode("\n", $error_message) : $error_message;
+
         if (false !== $error_message) {
             throw new \Exception($error_message);
         }
@@ -376,12 +401,13 @@ class Client implements ClientInterface
         $this->request  = $request;
         $this->response = $this->sendRequest($this->request);
 
-        $body           = json_decode($this->response->getBody(), true);
+        $body = json_decode($this->response->getBody(), true);
+
         if (empty($body['data'])) {
             throw new \Exception('Error with request: no data returned');
         }
 
-        $data   = $body['data'];
+        $data = $body['data'];
 
         $payout->setStatus($data['status']);
 
@@ -396,19 +422,22 @@ class Client implements ClientInterface
         $request = $this->createNewRequest();
         $request->setMethod(Request::METHOD_GET);
         $request->setPath(sprintf('payouts/%s?token=%s', $payoutId, $this->token->getToken()));
+
         $this->addIdentityHeader($request);
         $this->addSignatureHeader($request);
 
         $this->request  = $request;
         $this->response = $this->sendRequest($this->request);
 
-        $body           = json_decode($this->response->getBody(), true);
+        $body = json_decode($this->response->getBody(), true);
+
         if (empty($body['data'])) {
             throw new \Exception('Error with request: no data returned');
         }
-        $data   = $body['data'];
 
+        $data   = $body['data'];
         $payout = new \Bitpay\Payout();
+
         $payout
             ->setId($data['id'])
             ->setAccountId($data['account'])
@@ -459,12 +488,15 @@ class Client implements ClientInterface
         $request = $this->createNewRequest();
         $request->setMethod(Request::METHOD_GET);
         $request->setPath('tokens');
+
         $this->addIdentityHeader($request);
         $this->addSignatureHeader($request);
 
         $this->request  = $request;
         $this->response = $this->sendRequest($this->request);
-        $body           = json_decode($this->response->getBody(), true);
+
+        $body = json_decode($this->response->getBody(), true);
+
         if (empty($body['data'])) {
             throw new \Exception('Error with request: no data returned');
         }
@@ -497,25 +529,28 @@ class Client implements ClientInterface
         $this->request = $this->createNewRequest();
         $this->request->setMethod(Request::METHOD_POST);
         $this->request->setPath('tokens');
+
         $payload['guid'] = Util::guid();
+
         $this->request->setBody(json_encode($payload));
         $this->response = $this->sendRequest($this->request);
-        $body           = json_decode($this->response->getBody(), true);
+
+        $body = json_decode($this->response->getBody(), true);
 
         if (isset($body['error'])) {
-            throw new \Bitpay\Client\BitpayException($this->response->getStatusCode().": ".$body['error']);
+            throw new \Bitpay\Client\BitpayException($this->response->getStatusCode() . ": " . $body['error']);
         }
 
         $tkn = $body['data'][0];
         $createdAt = new \DateTime();
         $pairingExpiration = new \DateTime();
-
         $token = new \Bitpay\Token();
+
         $token
             ->setPolicies($tkn['policies'])
             ->setToken($tkn['token'])
             ->setFacade($tkn['facade'])
-            ->setCreatedAt($createdAt->setTimestamp(floor($tkn['dateCreated']/1000)));
+            ->setCreatedAt($createdAt->setTimestamp(floor($tkn['dateCreated'] / 1000)));
 
         if (isset($tkn['resource'])) {
             $token->setResource($tkn['resource']);
@@ -523,15 +558,15 @@ class Client implements ClientInterface
 
         if (isset($tkn['pairingCode'])) {
             $token->setPairingCode($tkn['pairingCode']);
-            $token->setPairingExpiration($pairingExpiration->setTimestamp(floor($tkn['pairingExpiration']/1000)));
+            $token->setPairingExpiration($pairingExpiration->setTimestamp(floor($tkn['pairingExpiration'] / 1000)));
         }
 
         return $token;
     }
 
     /**
-     * Returns the Response object that BitPay returned from the request that
-     * was sent
+     * Returns the Response object that BitPay returned from
+     * the request that was sent.
      *
      * @return ResponseInterface
      */
@@ -541,7 +576,7 @@ class Client implements ClientInterface
     }
 
     /**
-     * Returns the request object that was sent to BitPay
+     * Returns the request object that was sent to BitPay.
      *
      * @return RequestInterface
      */
@@ -557,6 +592,7 @@ class Client implements ClientInterface
     {
         $this->request = $this->createNewRequest();
         $this->request->setMethod(Request::METHOD_GET);
+
         if ($this->token->getFacade() === 'merchant') {
             $this->request->setPath(sprintf('invoices/%s?token=%s', $invoiceId, $this->token->getToken()));
             $this->addIdentityHeader($this->request);
@@ -564,7 +600,9 @@ class Client implements ClientInterface
         } else {
             $this->request->setPath(sprintf('invoices/%s', $invoiceId));
         }
+
         $this->response = $this->sendRequest($this->request);
+
         $body = json_decode($this->response->getBody(), true);
 
         if (isset($body['error'])) {
@@ -572,9 +610,9 @@ class Client implements ClientInterface
         }
 
         $data = $body['data'];
-
         $invoice = new \Bitpay\Invoice();
         $invoiceToken = new \Bitpay\Token();
+
         $invoice
             ->setToken($invoiceToken->setToken($data['token']))
             ->setUrl($data['url'])
@@ -611,6 +649,7 @@ class Client implements ClientInterface
 
     /**
      * @param RequestInterface $request
+     * @throws \Exception
      */
     protected function addIdentityHeader(RequestInterface $request)
     {
@@ -623,6 +662,7 @@ class Client implements ClientInterface
 
     /**
      * @param RequestInterface $request
+     * @throws \Exception
      */
     protected function addSignatureHeader(RequestInterface $request)
     {
@@ -667,26 +707,33 @@ class Client implements ClientInterface
     /**
      * Prepares the request object by adding additional headers
      *
+     * @see http://en.wikipedia.org/wiki/User_agent
      * @param RequestInterface $request
      */
     protected function prepareRequestHeaders(RequestInterface $request)
     {
-        // @see http://en.wikipedia.org/wiki/User_agent
         $request->setHeader(
             'User-Agent',
             sprintf('%s/%s (PHP %s)', self::NAME, self::VERSION, phpversion())
         );
+
         $request->setHeader('X-BitPay-Plugin-Info', sprintf('%s/%s', self::NAME, self::VERSION));
         $request->setHeader('Content-Type', 'application/json');
-        $request->setHeader('X-Accept-Version', '2.0.0');
+        $request->setHeader('X-Accept-Version', '2.2.6');
     }
 
+    /**
+     * @param string $price
+     * @param string $currency
+     * @throws \Exception
+     */
     protected function checkPriceAndCurrency($price, $currency)
     {
-        //get the decimal precision of the price
-        $decimalPrecision = strlen(substr($price, strpos($price, '.')+1));
-        if (($decimalPrecision > 2 && $currency != "BTC") || $decimalPrecision > 6) {
-            throw new ArgumentException("Incorrect price format");
+        // Get the decimal precision of the price
+        $decimalPrecision = strlen(substr($price, strpos($price, '.') + 1));
+
+        if (($decimalPrecision > 2 && $currency != 'BTC') || $decimalPrecision > 6) {
+            throw new \Exception('Incorrect price format or currency type.');
         }
     }
 }
