@@ -97,7 +97,7 @@ class Bill implements BillInterface
      * @param Item $item
      * @return Bill
      */
-    public function addItem(ItemInterface $item)
+    public function addItem(Item $item)
     {
         if (!empty($item)) {
             $this->items[] = $item;
@@ -118,7 +118,7 @@ class Bill implements BillInterface
      * @param Currency $currency
      * @return Bill
      */
-    public function setCurrency(CurrencyInterface $currency)
+    public function setCurrency(Currency $currency)
     {
         if (!empty($currency)) {
             $this->currency = $currency;
