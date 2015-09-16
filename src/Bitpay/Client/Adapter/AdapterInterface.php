@@ -1,6 +1,6 @@
 <?php
 /**
- * @license Copyright 2011-2014 BitPay Inc., MIT License 
+ * @license Copyright 2011-2015 BitPay Inc., MIT License
  * see https://github.com/bitpay/php-bitpay-client/blob/master/LICENSE
  */
 
@@ -21,7 +21,6 @@ interface AdapterInterface
      * Send request to BitPay
      *
      * @param RequestInterface $request
-     *
      * @return ResponseInterface
      */
     public function sendRequest(RequestInterface $request);
