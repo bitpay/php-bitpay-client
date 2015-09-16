@@ -47,15 +47,19 @@ class EncryptedFilesystemStorage implements StorageInterface
         $path    = $key->getId();
         $data    = serialize($key);
 
-        $encoded = base64_encode(openssl_encrypt(
+        $encoded = openssl_encrypt(
             $data,
             self::METHOD,
             $this->password,
             1,
             self::IV
-        ));
+        );
 
-        if (file_put_contents($path, $encoded) === false) {
+        if ($encoded === false) {
+            throw new \Exception('[ERROR] In EncryptedFilesystemStorage::persist(): Could not encode key file "' . $id . '" with the data "' . $data . '".');
+        }
+
+        if (file_put_contents($path, base64_encode($encoded)) === false) {
             throw new \Exception('[ERROR] In EncryptedFilesystemStorage::persist(): Could not write to the file "' . $path . '".');
         }
     }
