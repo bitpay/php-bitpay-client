@@ -31,12 +31,15 @@ class Autoloader
     /**
      * Unregister this autoloader.
      *
+     * @param boolean $ignoreFailures
      * @throws \Exception
      */
-    public static function unregister()
+    public static function unregister($ignoreFailures = true)
     {
         if (false === spl_autoload_unregister(array(__CLASS__, 'autoload'))) {
-            throw new \Exception('[ERROR] In Autoloader::unregister(): Call to spl_autoload_unregister() failed.');
+            if ($ignoreFailures === false) {
+                throw new \Exception('[ERROR] In Autoloader::unregister(): Call to spl_autoload_unregister() failed.');
+            }
         }
     }
 
