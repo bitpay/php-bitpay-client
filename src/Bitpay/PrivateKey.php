@@ -1,6 +1,6 @@
 <?php
 /**
- * @license Copyright 2011-2014 BitPay Inc., MIT License
+ * @license Copyright 2011-2015 BitPay Inc., MIT License
  * see https://github.com/bitpay/php-bitpay-client/blob/master/LICENSE
  */
 
@@ -12,7 +12,7 @@ use Bitpay\Util\SecureRandom;
 use Bitpay\Math\Math;
 
 /**
- * @package Bitcore
+ * @package Bitpay
  * @see https://en.bitcoin.it/wiki/List_of_address_prefixes
  */
 class PrivateKey extends Key
@@ -68,7 +68,7 @@ class PrivateKey extends Key
         do {
             $privateKey = \Bitpay\Util\SecureRandom::generateRandom(32);
             $this->hex  = strtolower(bin2hex($privateKey));
-        } while (Math::cmp('0x'.$this->hex, '1') <= 0 || Math::cmp('0x'.$this->hex, '0x'.Secp256k1::N) >= 0);
+        } while (Math::cmp('0x'.$this->hex, '1') <= 0 || Math::cmp('0x' . $this->hex, '0x' . Secp256k1::N) >= 0);
 
         $this->dec = Util::decodeHex($this->hex);
 
@@ -104,9 +104,11 @@ class PrivateKey extends Key
     }
 
     /**
-     * Creates an ECDSA signature of $message
+     * Creates an ECDSA signature of $data.
      *
+     * @param string
      * @return string
+     * @throws \Exception
      */
     public function sign($data)
     {
@@ -122,19 +124,19 @@ class PrivateKey extends Key
 
         do {
             if (substr(strtolower($this->hex), 0, 2) != '0x') {
-                $d = '0x'.$this->hex;
+                $d = '0x' . $this->hex;
             } else {
                 $d = $this->hex;
             }
 
             $k = SecureRandom::generateRandom(32);
 
-            $k_hex = '0x'.strtolower(bin2hex($k));
-            $n_hex = '0x'.Secp256k1::N;
+            $k_hex = '0x' . strtolower(bin2hex($k));
+            $n_hex = '0x' . Secp256k1::N;
 
 
-            $Gx = '0x'.substr(Secp256k1::G, 2, 64);
-            $Gy = '0x'.substr(Secp256k1::G, 66, 64);
+            $Gx = '0x' . substr(Secp256k1::G, 2, 64);
+            $Gy = '0x' . substr(Secp256k1::G, 66, 64);
 
             $P = new Point($Gx, $Gy);
 
@@ -142,11 +144,10 @@ class PrivateKey extends Key
             $R = Util::doubleAndAdd($k_hex, $P);
 
             $Rx_hex = Util::encodeHex($R->getX());
-
             $Rx_hex = str_pad($Rx_hex, 64, '0', STR_PAD_LEFT);
 
             // r = x1 mod n
-            $r = Math::mod('0x'.$Rx_hex, $n_hex);
+            $r = Math::mod('0x' . $Rx_hex, $n_hex);
 
             // s = k^-1 * (e+d*r) mod n
             $edr  = Math::add($e, Math::mul($d, $r));
@@ -198,42 +199,44 @@ class PrivateKey extends Key
         $dec = Util::decodeHex($r);
 
         while (Math::cmp($dec, '0') > 0) {
-            $dv = Math::div($dec, '256');
-            $rem = Math::mod($dec, '256');
-            $dec = $dv;
-            $byte = $byte.$digits[$rem];
+            $dv   = Math::div($dec, '256');
+            $rem  = Math::mod($dec, '256');
+            $dec  = $dv;
+            $byte = $byte . $digits[$rem];
         }
 
         $byte = strrev($byte);
 
         // msb check
-        if (Math::cmp('0x'.bin2hex($byte[0]), '0x80') >= 0) {
-            $byte = chr(0x00).$byte;
+        if (Math::cmp('0x' . bin2hex($byte[0]), '0x80') >= 0) {
+            $byte = chr(0x00) . $byte;
         }
 
         $retval['bin_r'] = bin2hex($byte);
-        $seq = chr(0x02).chr(strlen($byte)).$byte;
+        $seq = chr(0x02) . chr(strlen($byte)) . $byte;
         $dec = Util::decodeHex($s);
 
         $byte = '';
 
         while (Math::cmp($dec, '0') > 0) {
-            $dv = Math::div($dec, '256');
-            $rem = Math::mod($dec, '256');
-            $dec = $dv;
-            $byte = $byte.$digits[$rem];
+            $dv   = Math::div($dec, '256');
+            $rem  = Math::mod($dec, '256');
+            $dec  = $dv;
+            $byte = $byte . $digits[$rem];
         }
 
         $byte = strrev($byte);
 
         // msb check
-        if (Math::cmp('0x'.bin2hex($byte[0]), '0x80') >= 0) {
-            $byte = chr(0x00).$byte;
+        if (Math::cmp('0x' . bin2hex($byte[0]), '0x80') >= 0) {
+            $byte = chr(0x00) . $byte;
         }
 
         $retval['bin_s'] = bin2hex($byte);
-        $seq = $seq.chr(0x02).chr(strlen($byte)).$byte;
-        $seq = chr(0x30).chr(strlen($seq)).$seq;
+
+        $seq = $seq . chr(0x02) . chr(strlen($byte)) . $byte;
+        $seq = chr(0x30) . chr(strlen($seq)) . $seq;
+
         $retval['seq'] = bin2hex($seq);
 
         return $retval;
@@ -244,6 +247,7 @@ class PrivateKey extends Key
      *
      * @param  string $pem_data The data to decode.
      * @return array            The keypair info.
+     * @throws \Exception
      */
     public function pemDecode($pem_data)
     {
@@ -293,6 +297,7 @@ class PrivateKey extends Key
      *
      * @param  array  $keypair The keypair info.
      * @return string          The data to decode.
+     * @throws \Exception
      */
     public function pemEncode($keypair)
     {
@@ -329,7 +334,7 @@ class PrivateKey extends Key
                 'a1_ele_len'   => '44',
                 'bit_str_beg'  => '03',
                 'bit_str_len'  => '42',
-                'bit_str_val'  => '00'.$keypair[1],
+                'bit_str_val'  => '00' . $keypair[1],
         );
 
         $beg_ec_text = '-----BEGIN EC PRIVATE KEY-----';
@@ -341,16 +346,16 @@ class PrivateKey extends Key
             throw new \Exception('Invalid or corrupt secp256k1 keypair provided. Cannot encode the supplied data.');
         }
 
-        $dec = Util::decodeHex('0x'.$dec);
+        $dec = Util::decodeHex('0x' . $dec);
 
         while (Math::cmp($dec, '0') > 0) {
-            $dv = Math::div($dec, '256');
-            $rem = Math::mod($dec, '256');
-            $dec = $dv;
-            $byte = $byte.$digits[$rem];
+            $dv   = Math::div($dec, '256');
+            $rem  = Math::mod($dec, '256');
+            $dec  = $dv;
+            $byte = $byte . $digits[$rem];
         }
 
-        $byte = $beg_ec_text."\r\n".chunk_split(base64_encode(strrev($byte)), 64).$end_ec_text;
+        $byte = $beg_ec_text . "\r\n" . chunk_split(base64_encode(strrev($byte)), 64) . $end_ec_text;
 
         $this->pemEncoded = $byte;
 
