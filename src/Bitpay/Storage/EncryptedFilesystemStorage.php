@@ -1,12 +1,13 @@
 <?php
 /**
- * @license Copyright 2011-2014 BitPay Inc., MIT License 
+ * @license Copyright 2011-2015 BitPay Inc., MIT License
  * see https://github.com/bitpay/php-bitpay-client/blob/master/LICENSE
  */
 
 namespace Bitpay\Storage;
 
 /**
+ * @package Bitpay
  */
 class EncryptedFilesystemStorage implements StorageInterface
 {
@@ -45,7 +46,8 @@ class EncryptedFilesystemStorage implements StorageInterface
     {
         $path    = $key->getId();
         $data    = serialize($key);
-        $encoded = bin2hex(openssl_encrypt(
+
+        $encoded = base64_encode(openssl_encrypt(
             $data,
             self::METHOD,
             $this->password,
@@ -53,7 +55,9 @@ class EncryptedFilesystemStorage implements StorageInterface
             self::IV
         ));
 
-        file_put_contents($path, $encoded);
+        if (file_put_contents($path, $encoded) === false) {
+            throw new \Exception('[ERROR] In EncryptedFilesystemStorage::persist(): Could not write to the file "' . $path . '".');
+        }
     }
 
     /**
@@ -61,19 +65,24 @@ class EncryptedFilesystemStorage implements StorageInterface
      */
     public function load($id)
     {
-        if (!is_file($id)) {
-            throw new \Exception(sprintf('Could not find "%s"', $id));
+        if (is_file($id) === false) {
+            throw new \Exception('[ERROR] In EncryptedFilesystemStorage::load(): Could not find the file "' . $id . '".');
         }
 
-        if (!is_readable($id)) {
-            throw new \Exception(sprintf('"%s" cannot be read, check permissions', $id));
+        if (is_readable($id) === false) {
+            throw new \Exception('[ERROR] In EncryptedFilesystemStorage::load(): The file "' . $id . '" cannot be read, check permissions.');
         }
 
         $encoded = file_get_contents($id);
-        $decoded = openssl_decrypt(\Bitpay\Util\Util::binConv($encoded), self::METHOD, $this->password, 1, self::IV);
 
-        if (false === $decoded) {
-            throw new \Exception('Could not decode key');
+        if ($encoded === false) {
+            throw new \Exception('[ERROR] In EncryptedFilesystemStorage::load(): The file "' . $id . '" cannot be read, check permissions.');
+        }
+
+        $decoded = openssl_decrypt(base64_decode($encoded), self::METHOD, $this->password, 1, self::IV);
+
+        if ($decoded === false) {
+            throw new \Exception('[ERROR] In EncryptedFilesystemStorage::load(): Could not decode key "' . $id . '".');
         }
 
         return unserialize($decoded);
