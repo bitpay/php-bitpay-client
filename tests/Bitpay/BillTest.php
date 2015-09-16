@@ -35,7 +35,7 @@ class BillTest extends \PHPUnit_Framework_TestCase
     public function testGetCurrency()
     {
         $this->assertNotNull($this->bill);
-        $this->assertInstanceOf('Bitpay\CurrencyInterface', $this->bill->getCurrency());
+        $this->assertInstanceOf('Bitpay\Currency', $this->bill->getCurrency());
     }
 
     /**
@@ -45,7 +45,7 @@ class BillTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertNotNull($this->bill);
         $this->bill->setCurrency($this->getMockCurrency());
-        $this->assertInstanceOf('Bitpay\CurrencyInterface', $this->bill->getCurrency());
+        $this->assertInstanceOf('Bitpay\Currency', $this->bill->getCurrency());
     }
 
     public function testGetName()
