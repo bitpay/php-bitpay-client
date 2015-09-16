@@ -92,7 +92,7 @@ class EncryptedFilesystemStorage implements StorageInterface
         $decrypted = openssl_decrypt($decoded, self::METHOD, $this->password, 1, self::IV);
 
         if ($decrypted === false) {
-            throw new \Exception('[ERROR] In EncryptedFilesystemStorage::load(): Could not decode key "' . $id . '".');
+            throw new \Exception('[ERROR] In EncryptedFilesystemStorage::load(): Could not decrypt key "' . $id . '" with data "' . $decoded . '".');
         }
 
         return unserialize($decrypted);
