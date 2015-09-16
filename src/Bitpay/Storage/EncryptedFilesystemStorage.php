@@ -158,7 +158,7 @@ class EncryptedFilesystemStorage implements StorageInterface
             throw new \Exception('[ERROR] In EncryptedFilesystemStorage::readFromFile(): The file "' . $path . '" cannot be read, check permissions.');
         }
 
-        return $data;   
+        return $data;
     }
 
     /**
