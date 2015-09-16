@@ -37,7 +37,7 @@ class BitpayTest extends \PHPUnit_Framework_TestCase
     public function testGetContainer()
     {
         $bitpay = new \Bitpay\Bitpay();
-        $this->assertInstanceOf('Symfony\Component\DependencyInjection\ContainerInterface', $bitpay->getContainer());
+        $this->assertInstanceOf('Symfony\Component\DependencyInjection\Container', $bitpay->getContainer());
     }
 
     public function testGet()
