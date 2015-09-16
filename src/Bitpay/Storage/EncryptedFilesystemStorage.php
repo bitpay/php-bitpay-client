@@ -75,7 +75,7 @@ class EncryptedFilesystemStorage implements StorageInterface
         $encrypted = openssl_encrypt($data, self::METHOD, $this->password, self::OPENSSL_RAW_DATA, self::IV);
 
         if ($encrypted === false) {
-            throw new \Exception('[ERROR] In EncryptedFilesystemStorage::dataEncrypt(): Could not encrypt data for key file "' . $id . '" with the data "' . $data . '". OpenSSL error(s) are: "' . $this->getOpenSSLErrors() . '".');
+            throw new \Exception('[ERROR] In EncryptedFilesystemStorage::dataEncrypt(): Could not encrypt data for key file "' . $id . '" with the data "' . $data . '". OpenSSL error(s) are: "' . $this->getOpenSslErrors() . '".');
         }
 
         return $encrypted;
@@ -91,7 +91,7 @@ class EncryptedFilesystemStorage implements StorageInterface
         $decrypted = openssl_decrypt($data, self::METHOD, $this->password, self::OPENSSL_RAW_DATA, self::IV);
 
         if ($decrypted === false) {
-            throw new \Exception('[ERROR] In EncryptedFilesystemStorage::dataDecrypt(): Could not decrypt key "' . $id . '" with data "' . $data . '". OpenSSL error(s) are: "' . $this->getOpenSSLErrors() . '".');
+            throw new \Exception('[ERROR] In EncryptedFilesystemStorage::dataDecrypt(): Could not decrypt key "' . $id . '" with data "' . $data . '". OpenSSL error(s) are: "' . $this->getOpenSslErrors() . '".');
         }
 
         return $decrypted;
@@ -164,7 +164,7 @@ class EncryptedFilesystemStorage implements StorageInterface
     /**
      * @return string
      */
-    private function getOpenSSLErrors()
+    private function getOpenSslErrors()
     {
         $msg = '';
         $openssl_error_msg = '';
