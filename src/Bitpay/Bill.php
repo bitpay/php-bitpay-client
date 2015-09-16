@@ -1,6 +1,6 @@
 <?php
 /**
- * @license Copyright 2011-2014 BitPay Inc., MIT License 
+ * @license Copyright 2011-2015 BitPay Inc., MIT License 
  * see https://github.com/bitpay/php-bitpay-client/blob/master/LICENSE
  */
 
@@ -18,7 +18,7 @@ class Bill implements BillInterface
     protected $items;
 
     /**
-     * @var CurrencyInterface
+     * @var Currency
      */
     protected $currency;
 
@@ -77,8 +77,6 @@ class Bill implements BillInterface
      */
     protected $archived;
 
-    /**
-     */
     public function __construct()
     {
         $this->address  = array();
@@ -96,9 +94,8 @@ class Bill implements BillInterface
     }
 
     /**
-     * @param ItemInterface $item
-     *
-     * @return BillInterface
+     * @param Item $item
+     * @return Bill
      */
     public function addItem(ItemInterface $item)
     {
@@ -118,9 +115,8 @@ class Bill implements BillInterface
     }
 
     /**
-     * @param CurrencyInterface $currency
-     *
-     * @return BillInterface
+     * @param Currency $currency
+     * @return Bill
      */
     public function setCurrency(CurrencyInterface $currency)
     {
@@ -141,8 +137,7 @@ class Bill implements BillInterface
 
     /**
      * @param string $name
-     *
-     * @return BillInterface
+     * @return Bill
      */
     public function setName($name)
     {
@@ -163,8 +158,7 @@ class Bill implements BillInterface
 
     /**
      * @param array $address
-     *
-     * @return BillInterface
+     * @return Bill
      */
     public function setAddress($address)
     {
@@ -185,8 +179,7 @@ class Bill implements BillInterface
 
     /**
      * @param string $city
-     *
-     * @return BillInterface
+     * @return Bill
      */
     public function setCity($city)
     {
@@ -207,8 +200,7 @@ class Bill implements BillInterface
 
     /**
      * @param string $state
-     *
-     * @return BillInterface
+     * @return Bill
      */
     public function setState($state)
     {
@@ -229,8 +221,7 @@ class Bill implements BillInterface
 
     /**
      * @param string $zip
-     *
-     * @return BillInterface
+     * @return Bill
      */
     public function setZip($zip)
     {
@@ -251,8 +242,7 @@ class Bill implements BillInterface
 
     /**
      * @param string $country
-     *
-     * @return BillInterface
+     * @return Bill
      */
     public function setCountry($country)
     {
@@ -273,8 +263,7 @@ class Bill implements BillInterface
 
     /**
      * @param string $email
-     *
-     * @return BillInterface
+     * @return Bill
      */
     public function setEmail($email)
     {
@@ -295,8 +284,7 @@ class Bill implements BillInterface
 
     /**
      * @param string $phone
-     *
-     * @return BillInterface
+     * @return Bill
      */
     public function setPhone($phone)
     {
@@ -317,8 +305,7 @@ class Bill implements BillInterface
 
     /**
      * @param string $status
-     *
-     * @return BillInterface
+     * @return Bill
      */
     public function setStatus($status)
     {
@@ -339,8 +326,7 @@ class Bill implements BillInterface
 
     /**
      * @param string $showRate
-     *
-     * @return BillInterface
+     * @return Bill
      */
     public function setShowRate($showRate)
     {
@@ -361,8 +347,7 @@ class Bill implements BillInterface
 
     /**
      * @param boolean $archived
-     *
-     * @return BillInterface
+     * @return Bill
      */
     public function setArchived($archived)
     {
