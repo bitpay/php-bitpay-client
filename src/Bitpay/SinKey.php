@@ -1,6 +1,6 @@
 <?php
 /**
- * @license Copyright 2011-2014 BitPay Inc., MIT License 
+ * @license Copyright 2011-2015 BitPay Inc., MIT License
  * see https://github.com/bitpay/php-bitpay-client/blob/master/LICENSE
  */
 
@@ -11,15 +11,19 @@ use Bitpay\Util\Gmp;
 use Bitpay\Util\Util;
 
 /**
- * @package Bitcore
+ * @package BitPay
  */
 class SinKey extends Key
 {
-    // Type 2 (ephemeral)
-    const SIN_TYPE    = '02';
+    /**
+     * Type 2 (ephemeral)
+     */
+    const SIN_TYPE = '02';
 
-    // Always the prefix!
-    // (well, right now)
+    /**
+     * Always the prefix!
+     * (well, right now)
+     */
     const SIN_VERSION = '0F';
 
     /**
@@ -56,6 +60,7 @@ class SinKey extends Key
      * https://en.bitcoin.it/wiki/Identity_protocol_v1
      *
      * @return SinKey
+     * @throws \Exception
      */
     public function generate()
     {
@@ -70,7 +75,6 @@ class SinKey extends Key
         }
 
         $step1 = Util::sha256(Util::binConv($compressedValue), true);
-
         $step2 = Util::ripe160($step1);
 
         $step3 = sprintf(
@@ -81,10 +85,8 @@ class SinKey extends Key
         );
 
         $step4 = Util::twoSha256(Util::binConv($step3), true);
-
         $step5 = substr(bin2hex($step4), 0, 8);
-
-        $step6 = $step3.$step5;
+        $step6 = $step3 . $step5;
 
         $this->value = Base58::encode($step6);
 
