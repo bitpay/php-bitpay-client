@@ -18,8 +18,8 @@ class EncryptedFilesystemStorageTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->pubkeyName = 'tmp/public.key';
-        $this->pubkeyStream = vfsStream::url($this->pubkeyName);
         $this->root = vfsStream::setup('tmp');
+        $this->pubkeyStream = vfsStream::url($this->pubkeyName);
         $this->storage = new EncryptedFilesystemStorage('satoshi');
     }
 
