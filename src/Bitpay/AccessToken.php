@@ -40,7 +40,7 @@ class AccessToken implements AccessTokenInterface
      * Setter for the id.
      *
      * @param string $id
-     * @return AccessTokenInterface
+     * @return AccessToken
      */
     public function setId($id)
     {
@@ -63,7 +63,7 @@ class AccessToken implements AccessTokenInterface
      * Setter for the email address.
      *
      * @param string $email
-     * @return AccessTokenInterface
+     * @return AccessToken
      */
     public function setEmail($email)
     {
@@ -86,7 +86,7 @@ class AccessToken implements AccessTokenInterface
      * Setter for the label.
      *
      * @param string $label
-     * @return AccessTokenInterface
+     * @return AccessToken
      */
     public function setLabel($label)
     {
