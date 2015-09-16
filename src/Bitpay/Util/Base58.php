@@ -1,6 +1,6 @@
 <?php
 /**
- * @license Copyright 2011-2014 BitPay Inc., MIT License
+ * @license Copyright 2011-2015 BitPay Inc., MIT License
  * see https://github.com/bitpay/php-bitpay-client/blob/master/LICENSE
  */
 
@@ -11,7 +11,7 @@ use Bitpay\Math\Math;
 /**
  * Utility class for encoding/decoding BASE-58 data
  *
- * @package Bitcore
+ * @package Bitpay
  */
 final class Base58
 {
@@ -21,17 +21,18 @@ final class Base58
     const BASE58_CHARS = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
 
     /**
-     * Encodes $data into BASE-58 format
+     * Encodes a numeric string into BASE-58 format.
      *
      * @param string $data
-     *
-     * @return string
+     * @return string $output_string
+     * @throws \Exception
      */
     public static function encode($data)
     {
         $dataLen = strlen($data);
+
         if ($dataLen % 2 != 0 || $dataLen == 0) {
-            throw new \Exception('Invalid Length');
+            throw new \Exception('Invalid length data string provided to Base58::encode() method.');
         }
 
         $code_string = self::BASE58_CHARS;
@@ -39,8 +40,8 @@ final class Base58
         $output_string = '';
 
         while (Math::cmp($x, '0') > 0) {
-            $q = Math::div($x, 58);
-            $r = Math::mod($x, 58);
+            $q = Math::div($x, '58');
+            $r = Math::mod($x, '58');
             $output_string .= substr($code_string, intval($r), 1);
             $x = $q;
         }
@@ -55,11 +56,10 @@ final class Base58
     }
 
     /**
-     * Decodes $data from BASE-58 format
+     * Decodes a numeric string from BASE-58 format.
      *
      * @param string $data
-     *
-     * @return string
+     * @return string $return
      */
     public static function decode($data)
     {
@@ -74,11 +74,11 @@ final class Base58
         $return = Util::encodeHex($return);
 
         for ($i = 0; $i < $dataLen && substr($data, $i, 1) == '1'; $i++) {
-            $return = '00'.$return;
+            $return = '00' . $return;
         }
 
         if (strlen($return) % 2 != 0) {
-            $return = '0'.$return;
+            $return = '0' . $return;
         }
 
         return $return;
