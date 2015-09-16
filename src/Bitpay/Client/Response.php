@@ -1,13 +1,13 @@
 <?php
 /**
- * @license Copyright 2011-2014 BitPay Inc., MIT License
+ * @license Copyright 2011-2015 BitPay Inc., MIT License
  * see https://github.com/bitpay/php-bitpay-client/blob/master/LICENSE
  */
 
 namespace Bitpay\Client;
 
 /**
- * Generic Response object used to parse a response from a server
+ * Generic Response class used to parse a response from a server.
  *
  * @package Bitpay
  */
@@ -33,8 +33,6 @@ class Response implements ResponseInterface
      */
     protected $statusCode;
 
-    /**
-     */
     public function __construct($raw = null)
     {
         $this->headers = array();
@@ -48,26 +46,31 @@ class Response implements ResponseInterface
      */
     public function __toString()
     {
-        return (string) $this->raw;
+        return (string)$this->raw;
     }
 
     /**
+     * @param Response
      */
     public static function createFromRawResponse($rawResponse)
     {
         $response = new self($rawResponse);
         $lines    = preg_split('/(\\r?\\n)/', $rawResponse);
         $linesLen = count($lines);
+
         for ($i = 0; $i < $linesLen; $i++) {
             if (0 == $i) {
                 preg_match('/^HTTP\/(\d\.\d)\s(\d+)\s(.+)/', $lines[$i], $statusLine);
+    
                 $response->setStatusCode($statusCode = $statusLine[2]);
+
                 continue;
             }
 
             if (empty($lines[$i])) {
                 $body = array_slice($lines, $i + 1);
                 $response->setBody(implode("\n", $body));
+
                 break;
             }
 
@@ -90,12 +93,11 @@ class Response implements ResponseInterface
 
     /**
      * @param integer
-     *
-     * @return ResponseInterface
+     * @return Response
      */
     public function setStatusCode($statusCode)
     {
-        $this->statusCode = (integer) $statusCode;
+        $this->statusCode = (integer)$statusCode;
 
         return $this;
     }
@@ -112,6 +114,7 @@ class Response implements ResponseInterface
      * Set the body of the response
      *
      * @param string $body
+     * @return Response
      */
     public function setBody($body)
     {
@@ -131,6 +134,7 @@ class Response implements ResponseInterface
     /**
      * @param string $header
      * @param string $value
+     * @return Response
      */
     public function setHeader($header, $value)
     {
