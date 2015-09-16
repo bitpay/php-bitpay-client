@@ -1,11 +1,16 @@
 <?php
 /**
- * @license Copyright 2011-2014 BitPay Inc., MIT License 
+ * @license Copyright 2011-2015 BitPay Inc., MIT License
  * see https://github.com/bitpay/php-bitpay-client/blob/master/LICENSE
  */
 
 namespace Bitpay\Util;
 
+/**
+ * General error class.
+ *
+ * @package Bitpay
+ */
 class Error
 {
     /**
@@ -97,6 +102,7 @@ class Error
         if (empty($error_types)) {
             $error_types = E_ALL | E_STRICT;
         }
+
         switch (strtolower($type)) {
             case 'error':
                 switch (strtolower($action)) {
