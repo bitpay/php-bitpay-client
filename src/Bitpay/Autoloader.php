@@ -1,6 +1,6 @@
 <?php
 /**
- * @license Copyright 2011-2014 BitPay Inc., MIT License
+ * @license Copyright 2011-2015 BitPay Inc., MIT License 
  * see https://github.com/bitpay/php-bitpay-client/blob/master/LICENSE
  */
 
@@ -19,32 +19,40 @@ class Autoloader
      * some are not compatible with PSR standards.
      *
      * @param boolean $prepend
+     * @throws \Exception
      */
     public static function register($prepend = true)
     {
-        spl_autoload_register(array(__CLASS__, 'autoload'), true, (bool) $prepend);
+        if (false === spl_autoload_register(array(__CLASS__, 'autoload'), true, (bool)$prepend)) {
+            throw new \Exception('[ERROR] In Autoloader::register(): Call to spl_autoload_register() failed.');
+        }
     }
 
     /**
-     * Unregister this autoloader
+     * Unregister this autoloader.
+     *
+     * @throws \Exception
      */
     public static function unregister()
     {
-        spl_autoload_unregister(array(__CLASS__, 'autoload'));
+        if (false === spl_autoload_unregister(array(__CLASS__, 'autoload'))) {
+            throw new \Exception('[ERROR] In Autoloader::unregister(): Call to spl_autoload_unregister() failed.');
+        }
     }
 
     /**
      * Give a class name and it will require the file.
      *
      * @param  string $class
-     * @return bool
+     * @return bool|null
+     * @throws \Exception
      */
     public static function autoload($class)
     {
         if (0 === strpos($class, 'Bitpay\\')) {
             $classname = substr($class, 7);
 
-            $file = __DIR__.DIRECTORY_SEPARATOR.str_replace('\\', DIRECTORY_SEPARATOR, $classname).'.php';
+            $file = __DIR__ . DIRECTORY_SEPARATOR . str_replace('\\', DIRECTORY_SEPARATOR, $classname) . '.php';
 
             if (is_file($file) && is_readable($file)) {
                 require_once $file;
@@ -52,7 +60,7 @@ class Autoloader
                 return true;
             }
 
-            throw new \Exception(sprintf('Class "%s" Not Found', $class));
+            throw new \Exception('[ERROR] In Autoloader::autoload(): Class "' . $class . '" Not Found');
         }
     }
 }
