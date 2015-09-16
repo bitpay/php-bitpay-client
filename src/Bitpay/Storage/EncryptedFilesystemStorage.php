@@ -47,19 +47,19 @@ class EncryptedFilesystemStorage implements StorageInterface
         $path    = $key->getId();
         $data    = serialize($key);
 
-        $encoded = openssl_encrypt(
-            $data,
-            self::METHOD,
-            $this->password,
-            1,
-            self::IV
-        );
+        $encrypted = openssl_encrypt($data, self::METHOD, $this->password, 1, self::IV);
 
-        if ($encoded === false) {
-            throw new \Exception('[ERROR] In EncryptedFilesystemStorage::persist(): Could not encode key file "' . $id . '" with the data "' . $data . '".');
+        if ($encrypted === false) {
+            throw new \Exception('[ERROR] In EncryptedFilesystemStorage::persist(): Could not encrypt data for key file "' . $id . '" with the data "' . $data . '".');
         }
 
-        if (file_put_contents($path, base64_encode($encoded)) === false) {
+        $encoded = base64_encode($encrypted);
+
+        if ($encoded === false) {
+            throw new \Exception('[ERROR] In EncryptedFilesystemStorage::persist(): Could not encode encrypted data for key file "' . $id . '" with the data "' . $data . '".');
+        }
+
+        if (file_put_contents($path, $encoded) === false) {
             throw new \Exception('[ERROR] In EncryptedFilesystemStorage::persist(): Could not write to the file "' . $path . '".');
         }
     }
@@ -83,12 +83,18 @@ class EncryptedFilesystemStorage implements StorageInterface
             throw new \Exception('[ERROR] In EncryptedFilesystemStorage::load(): The file "' . $id . '" cannot be read, check permissions.');
         }
 
-        $decoded = openssl_decrypt(base64_decode($encoded), self::METHOD, $this->password, 1, self::IV);
+        $decoded = base64_decode($encoded);
 
         if ($decoded === false) {
+            throw new \Exception('[ERROR] In EncryptedFilesystemStorage::load(): Could not decode encrypted data for key file "' . $id . '" with the data "' . $encoded . '".');
+        }
+
+        $decrypted = openssl_decrypt($decoded, self::METHOD, $this->password, 1, self::IV);
+
+        if ($decrypted === false) {
             throw new \Exception('[ERROR] In EncryptedFilesystemStorage::load(): Could not decode key "' . $id . '".');
         }
 
-        return unserialize($decoded);
+        return unserialize($decrypted);
     }
 }
