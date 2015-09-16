@@ -1,6 +1,6 @@
 <?php
 /**
- * @license Copyright 2011-2014 BitPay Inc., MIT License
+ * @license Copyright 2011-2015 BitPay Inc., MIT License
  * see https://github.com/bitpay/php-bitpay-client/blob/master/LICENSE
  */
 
@@ -11,9 +11,7 @@ use Bitpay\Client\ResponseInterface;
 use Bitpay\Client\Response;
 
 /**
- * Adapter that sends Request objects using CURL
- *
- * @TODO add way to configure curl with options
+ * Adapter class that sends Request objects using cURL.
  *
  * @package Bitpay
  */
@@ -33,7 +31,7 @@ class CurlAdapter implements AdapterInterface
     }
 
     /**
-     * Returns an array of curl settings to use
+     * Returns an array of cURL settings to use
      *
      * @return array
      */
@@ -74,6 +72,7 @@ class CurlAdapter implements AdapterInterface
         if (false === $raw) {
             $errorMessage = curl_error($curl);
             curl_close($curl);
+
             throw new \Bitpay\Client\ConnectionException($errorMessage);
         }
 
@@ -86,9 +85,9 @@ class CurlAdapter implements AdapterInterface
     }
 
     /**
-     * Returns an array of default curl settings to use
+     * Returns an array of default cURL settings to use.
      *
-     * @param RequestInterface $request
+     * @param Request $request
      * @return array
      */
     private function getCurlDefaultOptions(RequestInterface $request)
