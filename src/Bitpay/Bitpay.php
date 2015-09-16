@@ -37,9 +37,9 @@ class Bitpay
      * The second argument is the container if you want to build one by hand.
      *
      * @param array|string       $config
-     * @param Container $container
+     * @param ContainerBuilder $container
      */
-    public function __construct($config = array(), Container $container = null)
+    public function __construct($config = array(), ContainerBuilder $container = null)
     {
         $this->container = $container;
 
@@ -63,7 +63,7 @@ class Bitpay
      * Build the container of services and parameters.
      * 
      * @param array|string $config
-     * @return Container
+     * @return ContainerBuilder
      */
     protected function buildContainer($config)
     {
@@ -86,9 +86,9 @@ class Bitpay
     }
 
     /**
-     * @param Container $container
+     * @param ContainerBuilder $container
      */
-    private function prepareContainer(Container $container)
+    private function prepareContainer(ContainerBuilder $container)
     {
         foreach ($this->getDefaultExtensions() as $ext) {
             $container->registerExtension($ext);
