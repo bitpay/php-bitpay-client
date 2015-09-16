@@ -1,13 +1,13 @@
 <?php
 /**
- * @license Copyright 2011-2014 BitPay Inc., MIT License 
+ * @license Copyright 2011-2015 BitPay Inc., MIT License
  * see https://github.com/bitpay/php-bitpay-client/blob/master/LICENSE
  */
 
 namespace Bitpay\Storage;
 
 /**
- * @package Bitcore
+ * @package Bitpay
  */
 interface StorageInterface
 {
@@ -18,7 +18,6 @@ interface StorageInterface
 
     /**
      * @param string $id
-     *
      * @return KeyInterface
      */
     public function load($id);
