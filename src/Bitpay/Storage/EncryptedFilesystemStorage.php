@@ -75,7 +75,7 @@ class EncryptedFilesystemStorage implements StorageInterface
         $encrypted = openssl_encrypt($data, self::METHOD, $this->password, self::OPENSSL_RAW_DATA, self::IV);
 
         if ($encrypted === false) {
-            throw new \Exception('[ERROR] In EncryptedFilesystemStorage::dataEncrypt(): Could not encrypt data for key file "' . $id . '" with the data "' . $data . '". OpenSSL error(s) are: "' . $this->getOpenSslErrors() . '".');
+            throw new \Exception('[ERROR] In EncryptedFilesystemStorage::dataEncrypt(): Could not encrypt data "' . $data . '". OpenSSL error(s) are: "' . $this->getOpenSslErrors() . '".');
         }
 
         return $encrypted;
@@ -91,7 +91,7 @@ class EncryptedFilesystemStorage implements StorageInterface
         $decrypted = openssl_decrypt($data, self::METHOD, $this->password, self::OPENSSL_RAW_DATA, self::IV);
 
         if ($decrypted === false) {
-            throw new \Exception('[ERROR] In EncryptedFilesystemStorage::dataDecrypt(): Could not decrypt key "' . $id . '" with data "' . $data . '". OpenSSL error(s) are: "' . $this->getOpenSslErrors() . '".');
+            throw new \Exception('[ERROR] In EncryptedFilesystemStorage::dataDecrypt(): Could not decrypt data "' . $data . '". OpenSSL error(s) are: "' . $this->getOpenSslErrors() . '".');
         }
 
         return $decrypted;
@@ -107,7 +107,7 @@ class EncryptedFilesystemStorage implements StorageInterface
         $encoded = base64_encode($data);
 
         if ($encoded === false) {
-            throw new \Exception('[ERROR] In EncryptedFilesystemStorage::dataEncode(): Could not encode encrypted data for key file "' . $id . '" with the data "' . $data . '".');
+            throw new \Exception('[ERROR] In EncryptedFilesystemStorage::dataEncode(): Could not encode data "' . $data . '".');
         }
 
         return $encoded;
@@ -123,7 +123,7 @@ class EncryptedFilesystemStorage implements StorageInterface
         $decoded = base64_decode($data);
 
         if ($decoded === false) {
-            throw new \Exception('[ERROR] In EncryptedFilesystemStorage::dataDecode(): Could not decode encrypted data for key file "' . $id . '" with the data "' . $data . '".');
+            throw new \Exception('[ERROR] In EncryptedFilesystemStorage::dataDecode(): Could not decode data "' . $data . '".');
         }
 
         return $decoded;
@@ -155,7 +155,7 @@ class EncryptedFilesystemStorage implements StorageInterface
         $data = file_get_contents($path);
 
         if ($data === false) {
-            throw new \Exception('[ERROR] In EncryptedFilesystemStorage::readFromFile(): The file "' . $id . '" cannot be read, check permissions.');
+            throw new \Exception('[ERROR] In EncryptedFilesystemStorage::readFromFile(): The file "' . $path . '" cannot be read, check permissions.');
         }
 
         return $data;   
