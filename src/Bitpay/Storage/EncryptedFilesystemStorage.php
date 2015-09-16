@@ -154,7 +154,7 @@ class EncryptedFilesystemStorage implements StorageInterface
 
         $data = file_get_contents($path);
 
-        if ($encoded === false) {
+        if ($data === false) {
             throw new \Exception('[ERROR] In EncryptedFilesystemStorage::readFromFile(): The file "' . $id . '" cannot be read, check permissions.');
         }
 
