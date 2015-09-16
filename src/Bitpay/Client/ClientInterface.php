@@ -1,6 +1,6 @@
 <?php
 /**
- * @license Copyright 2011-2014 BitPay Inc., MIT License 
+ * @license Copyright 2011-2015 BitPay Inc., MIT License
  * see https://github.com/bitpay/php-bitpay-client/blob/master/LICENSE
  */
 
@@ -10,7 +10,7 @@ use Bitpay\InvoiceInterface;
 use Bitpay\PayoutInterface;
 
 /**
- * Sends request(s) to bitpay server
+ * Interface for class that sends request(s) to BitPay.
  *
  * @package Bitpay
  */
@@ -25,19 +25,8 @@ interface ClientInterface
      *
      * @see RFC2616 section 14.43 for User-Agent Format
      */
-    const NAME    = 'BitPay PHP-Client';
-    const VERSION = '0.0.0';
-
-    //public function createApplication(ApplicationInterface $application);
-
-    //public function createBill(BillInterface $bill);
-    //public function getBills($status = null);
-    //public function getBill($billId);
-    //public function updateBill(BillInterface $bill);
-
-    //public function createAccessToken(AccessTokenInterface $accessToken);
-    //public function getAccessTokens();
-    //public function getAccessToken($keyId);
+    const NAME    = 'BitPay PHP Client';
+    const VERSION = '2.2.6';
 
     public function getCurrencies();
 
@@ -47,7 +36,6 @@ interface ClientInterface
      * @throws \Exception
      */
     public function createInvoice(InvoiceInterface $invoice);
-    //public function getInvoices();
 
     /**
      * @param $invoiceId
@@ -56,15 +44,9 @@ interface ClientInterface
      */
     public function getInvoice($invoiceId);
 
-    //public function getLedgers();
-    //public function getLedger(CurrencyInterface $currency);
-
-    //public function getOrgs();
-    //public function getOrg($orgId);
-    //public function updateOrg(OrgInterface $org);
-
     /**
-     * Create a Payout Request on Bitpay
+     * Create a Payout Request on Bitpay.
+     *
      * @param PayoutInterface $payout
      * @return PayoutInterface|mixed
      * @throws \Exception
@@ -92,18 +74,11 @@ interface ClientInterface
      */
     public function deletePayout(PayoutInterface $payout);
 
-    //public function updatePayout(PayoutInterface $payout);
-
-    //public function getRates();
-    //public function getRate(CurrencyInterface $currency);
-
     /**
-     * Get an array of tokens indexed by facade
+     * Get an array of tokens indexed by facade.
+     *
      * @return array
      * @throws \Exception
      */
     public function getTokens();
-
-    //public function getUser();
-    //public function updateUser(UserInterface $user);
 }
