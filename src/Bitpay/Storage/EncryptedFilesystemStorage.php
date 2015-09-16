@@ -44,13 +44,20 @@ class EncryptedFilesystemStorage implements StorageInterface
      */
     public function persist(\Bitpay\KeyInterface $key)
     {
-        $path    = $key->getId();
-        $data    = serialize($key);
+        $msg  = '';
+        $openssl_error_msg = '';
+        $path = $key->getId();
+        $data = serialize($key);
 
-        $encrypted = openssl_encrypt($data, self::METHOD, $this->password, 1, self::IV);
+        $encrypted = openssl_encrypt($data, self::METHOD, $this->password, self::OPENSSL_RAW_DATA, self::IV);
 
         if ($encrypted === false) {
-            throw new \Exception('[ERROR] In EncryptedFilesystemStorage::persist(): Could not encrypt data for key file "' . $id . '" with the data "' . $data . '".');
+            while ($msg = openssl_error_string()) {
+                $openssl_error_msg .= $msg . "\r\n";
+                $msg = '';
+            }
+            
+            throw new \Exception('[ERROR] In EncryptedFilesystemStorage::persist(): Could not encrypt data for key file "' . $id . '" with the data "' . $data . '". OpenSSL error(s) are: "' . $openssl_error_msg . '".');
         }
 
         $encoded = base64_encode($encrypted);
@@ -69,6 +76,9 @@ class EncryptedFilesystemStorage implements StorageInterface
      */
     public function load($id)
     {
+        $msg = '';
+        $openssl_error_msg = '';
+
         if (is_file($id) === false) {
             throw new \Exception('[ERROR] In EncryptedFilesystemStorage::load(): Could not find the file "' . $id . '".');
         }
@@ -89,10 +99,15 @@ class EncryptedFilesystemStorage implements StorageInterface
             throw new \Exception('[ERROR] In EncryptedFilesystemStorage::load(): Could not decode encrypted data for key file "' . $id . '" with the data "' . $encoded . '".');
         }
 
-        $decrypted = openssl_decrypt($decoded, self::METHOD, $this->password, 1, self::IV);
+        $decrypted = openssl_decrypt($decoded, self::METHOD, $this->password, self::OPENSSL_RAW_DATA, self::IV);
 
         if ($decrypted === false) {
-            throw new \Exception('[ERROR] In EncryptedFilesystemStorage::load(): Could not decrypt key "' . $id . '" with data "' . $decoded . '".');
+            while ($msg = openssl_error_string()) {
+                $openssl_error_msg .= $msg . "\r\n";
+                $msg = '';
+            }
+
+            throw new \Exception('[ERROR] In EncryptedFilesystemStorage::load(): Could not decrypt key "' . $id . '" with data "' . $decoded . '". OpenSSL error(s) are: "' . $openssl_error_msg . '".');
         }
 
         return unserialize($decrypted);
