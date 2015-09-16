@@ -31,9 +31,11 @@ class EncryptedFilesystemStorageTest extends \PHPUnit_Framework_TestCase
 
     public function testLoad()
     {
-        vfsStream::newFile('public.key')
-            ->at($this->root)
-            ->setContent('8bc03b8e4272d47ea81d63c6571b8172072ed03203ff7cd3fd434c03f7994b5721363d0dda3cec833f6f263bde0ececa06b79f68d5616be18b8e9311c486223e18c7424daaa59991f4b10db9f2fb8b4c42896c50d216010b403d562738ef5a96');
+        //vfsStream::newFile('public.key')
+        //    ->at($this->root)
+        //    ->setContent('8bc03b8e4272d47ea81d63c6571b8172072ed03203ff7cd3fd434c03f7994b5721363d0dda3cec833f6f263bde0ececa06b79f68d5616be18b8e9311c486223e18c7424daaa59991f4b10db9f2fb8b4c42896c50d216010b403d562738ef5a96');
+
+        $this->storage->persist(new \Bitpay\PublicKey($this->pubkeyStream));
 
         $key = $this->storage->load($this->pubkeyStream);
         $this->assertInstanceOf('Bitpay\PublicKey', $key);
