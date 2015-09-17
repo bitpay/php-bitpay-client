@@ -90,7 +90,7 @@ class CurlAdapter implements AdapterInterface
      * @param Request $request
      * @return array
      */
-    private function getCurlDefaultOptions(RequestInterface $request)
+    private function getCurlDefaultOptions(Request $request)
     {
         return array(
             CURLOPT_URL            => $request->getUri(),
