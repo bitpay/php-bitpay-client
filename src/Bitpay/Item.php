@@ -9,7 +9,6 @@ namespace Bitpay;
 use Bitpay\Client;
 
 /**
- *
  * @package Bitpay
  */
 class Item implements ItemInterface
@@ -39,8 +38,6 @@ class Item implements ItemInterface
      */
     protected $physical;
 
-    /**
-     */
     public function __construct()
     {
         $this->physical = false;
@@ -56,7 +53,6 @@ class Item implements ItemInterface
 
     /**
      * @param string $code
-     *
      * @return ItemInterface
      */
     public function setCode($code)
@@ -76,7 +72,6 @@ class Item implements ItemInterface
 
     /**
      * @param string $description
-     *
      * @return ItemInterface
      */
     public function setDescription($description)
@@ -88,8 +83,6 @@ class Item implements ItemInterface
 
     /**
      * @inheritdoc
-     *
-     * @return float
      */
     public function getPrice()
     {
@@ -98,8 +91,7 @@ class Item implements ItemInterface
 
     /**
      * @param mixed $price A float, integer, or en_US formatted numeric string
-     *
-     * @return ItemInterface
+     * @return Item
      */
     public function setPrice($price)
     {
@@ -122,8 +114,7 @@ class Item implements ItemInterface
 
     /**
      * @param integer $quantity
-     *
-     * @return ItemInterface
+     * @return Item
      */
     public function setQuantity($quantity)
     {
@@ -142,8 +133,7 @@ class Item implements ItemInterface
 
     /**
      * @param boolean $physical
-     *
-     * @return ItemInterface
+     * @return Item
      */
     public function setPhysical($physical)
     {
@@ -162,7 +152,7 @@ class Item implements ItemInterface
     protected function checkPriceFormat($price)
     {
         if (preg_match('/^[0-9]+?[\.,][0-9]{1,6}?$/', $price) !== 1) {
-            throw new \Bitpay\Client\ArgumentException("Price must be formatted as a float");
+            throw new \Bitpay\Client\ArgumentException('[ERROR] In Item::checkPriceFormat(): Price value must be formatted as a float.');
         }
     }
 }
