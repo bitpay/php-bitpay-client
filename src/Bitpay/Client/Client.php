@@ -523,7 +523,7 @@ class Client implements ClientInterface
     public function createToken(array $payload = array())
     {
         if (isset($payload['pairingCode']) && 1 !== preg_match('/^[a-zA-Z0-9]{7}$/', $payload['pairingCode'])) {
-            throw new \ArgumentException('[ERROR] In Client::createToken(): The pairing code provided is not legal.');
+            throw new \Exception('[ERROR] In Client::createToken(): The pairing code provided is not legal.');
         }
 
         $this->request = $this->createNewRequest();
@@ -654,7 +654,7 @@ class Client implements ClientInterface
     protected function addIdentityHeader(RequestInterface $request)
     {
         if (null === $this->publicKey) {
-            throw new \Exception('Please set your Public Key.');
+            throw new \Exception('[ERROR] In Client::addIdentityHeader(): No public key value found. Please set your kublic key first before you can add the x-identity header.');
         }
 
         $request->setHeader('x-identity', (string) $this->publicKey);
