@@ -25,7 +25,7 @@ use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 class Bitpay
 {
     /**
-     * @var Container
+     * @var ContainerBuilder
      */
     protected $container;
 
@@ -37,7 +37,7 @@ class Bitpay
      * The second argument is the container if you want to build one by hand.
      *
      * @param array|string       $config
-     * @param ContainerBuilder $container
+     * @param null|ContainerBuilder $container
      */
     public function __construct($config = array(), ContainerBuilder $container = null)
     {
