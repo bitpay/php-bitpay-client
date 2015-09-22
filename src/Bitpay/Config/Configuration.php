@@ -74,7 +74,7 @@ class Configuration implements ConfigurationInterface
      *     * implement Bitpay\Storage\StorageInterface
      *     * be a class that can be loaded
      *
-     * @return TreeBuilder
+     * @return \Symfony\Component\Config\Definition\Builder\NodeDefinition
      * @throws \Exception
      */
     protected function addKeyStorageNode()
