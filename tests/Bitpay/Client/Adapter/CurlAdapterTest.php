@@ -31,7 +31,7 @@ class CurlAdapterTest extends \PHPUnit_Framework_TestCase
 
     public function testSendRequestWithException()
     {
-        $this->setExpectedException('Bitpay\Client\ConnectionException');
+        $this->setExpectedException('\Exception');
         
         $curl_options = array(
             CURLOPT_URL            => "www.example.com",
