@@ -14,112 +14,116 @@ class Invoice implements InvoiceInterface
     /**
      * @var CurrencyInterface
      */
-    protected $currency;
+    protected $currency = null;
 
     /**
      * @var string
      */
-    protected $orderId;
+    protected $orderId = '';
 
     /**
      * @var ItemInterface
      */
-    protected $item;
+    protected $item = null;
 
     /**
      * @var string
      */
-    protected $transactionSpeed;
+    protected $transactionSpeed = '';
 
     /**
      * @var string
      */
-    protected $notificationEmail;
+    protected $notificationEmail = '';
 
     /**
      * @var string
      */
-    protected $notificationUrl;
+    protected $notificationUrl = '';
 
     /**
      * @var string
      */
-    protected $redirectUrl;
+    protected $redirectUrl = '';
 
     /**
      * @var string
      */
-    protected $posData;
+    protected $posData = '';
 
     /**
      * @var string
      */
-    protected $status;
+    protected $status = '';
 
     /**
      * @var boolean
      */
-    protected $fullNotifications;
+    protected $fullNotifications = false;
 
     /**
      * @var string
      */
-    protected $id;
+    protected $id = '';
 
     /**
      * @var string
      */
-    protected $url;
+    protected $url = '';
 
     /**
      * @var float
      */
-    protected $btcPrice;
+    protected $btcPrice = 0.000000;
 
     /**
      * @var \DateTime
      */
-    protected $invoiceTime;
+    protected $invoiceTime = null;
 
     /**
      * @var \DateTime
      */
-    protected $expirationTime;
+    protected $expirationTime = null;
 
     /**
      * @var \DateTime
      */
-    protected $currentTime;
+    protected $currentTime = null;
 
     /**
      * @var BuyerInterface
      */
-    protected $buyer;
+    protected $buyer = null;
 
     /**
-     * @var
+     * @var string
      */
-    protected $exceptionStatus;
+    protected $exceptionStatus = '';
 
     /**
-     * @var
+     * @var float
      */
-    protected $btcPaid;
+    protected $btcPaid = 0.000000;
 
     /**
-     * @var
+     * @var float
      */
-    protected $rate;
+    protected $rate = 0.000000;
 
     /**
-     * @var
+     * @var Token
      */
-    protected $token;
+    protected $token = null;
 
-    public function __construct()
+    public function __construct($transactionSpeed = self::TRANSACTION_SPEED_LOW, $fullNotifications = false, $item = null, $currency = null, $orderId = '', $posData = '')
     {
-        $this->transactionSpeed  = self::TRANSACTION_SPEED_MEDIUM;
-        $this->fullNotifications = false;
+        $this->currency = $currency;
+        $this->transactionSpeed  = $transactionSpeed;
+        $this->fullNotifications = $fullNotifications;
+        $this->item = $item;
+        $this->orderId = $orderId;
+        $this->posData = $posData;
     }
 
     /**
@@ -127,7 +131,11 @@ class Invoice implements InvoiceInterface
      */
     public function getPrice()
     {
-        return $this->getItem()->getPrice();
+        if (is_a($this->item, 'Item')) {
+            return $this->getItem()->getPrice();
+        } else {
+            return 0.000000;
+        }
     }
 
     /**
@@ -136,7 +144,7 @@ class Invoice implements InvoiceInterface
      */
     public function setPrice($price)
     {
-        if (!empty($price)) {
+        if (is_float($price)) {
             $this->getItem()->setPrice($price);
         }
 
@@ -148,6 +156,10 @@ class Invoice implements InvoiceInterface
      */
     public function getCurrency()
     {
+        if ($this->currency === null) {
+            $this->currency = new Currency('BTC');
+        }
+
         return $this->currency;
     }
 
@@ -157,7 +169,7 @@ class Invoice implements InvoiceInterface
      */
     public function setCurrency(CurrencyInterface $currency)
     {
-        if (!empty($currency)) {
+        if (is_a($currency, 'Currency')) {
             $this->currency = $currency;
         }
 
@@ -169,10 +181,7 @@ class Invoice implements InvoiceInterface
      */
     public function getItem()
     {
-        // If there is not an item already set, we need to use a default item
-        // so that some methods do not throw errors about methods and
-        // non-objects.
-        if (null == $this->item) {
+        if (null === $this->item) {
             $this->item = new Item();
         }
 
@@ -185,7 +194,7 @@ class Invoice implements InvoiceInterface
      */
     public function setItem(ItemInterface $item)
     {
-        if (!empty($item)) {
+        if (is_a($item, 'Item')) {
             $this->item = $item;
         }
 
@@ -197,8 +206,7 @@ class Invoice implements InvoiceInterface
      */
     public function getBuyer()
     {
-        // Same logic as getItem method
-        if (null == $this->buyer) {
+        if ($this->buyer === null) {
             $this->buyer = new Buyer();
         }
 
@@ -211,7 +219,7 @@ class Invoice implements InvoiceInterface
      */
     public function setBuyer(BuyerInterface $buyer)
     {
-        if (!empty($buyer)) {
+        if (is_a($buyer, 'Buyer')) {
             $this->buyer = $buyer;
         }
 
@@ -232,8 +240,16 @@ class Invoice implements InvoiceInterface
      */
     public function setTransactionSpeed($transactionSpeed)
     {
-        if (!empty($transactionSpeed) && ctype_print($transactionSpeed)) {
-            $this->transactionSpeed = trim($transactionSpeed);
+        switch (strtolower(trim($transactionSpeed))) {
+            case 'high':
+                $this->transactionSpeed = self::TRANSACTION_SPEED_HIGH;
+                break;
+            case 'medium':
+                $this->transactionSpeed = self::TRANSACTION_SPEED_MEDIUM;
+                break;
+            case 'low':
+            default:
+                $this->transactionSpeed = self::TRANSACTION_SPEED_LOW;
         }
 
         return $this;
@@ -253,7 +269,7 @@ class Invoice implements InvoiceInterface
      */
     public function setNotificationEmail($notificationEmail)
     {
-        if (!empty($notificationEmail) && ctype_print($notificationEmail)) {
+        if (filter_var($notificationEmail, FILTER_VALIDATE_EMAIL)) {
             $this->notificationEmail = trim($notificationEmail);
         }
 
@@ -274,7 +290,7 @@ class Invoice implements InvoiceInterface
      */
     public function setNotificationUrl($notificationUrl)
     {
-        if (!empty($notificationUrl) && ctype_print($notificationUrl)) {
+        if (preg_match("/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i", $notificationUrl)) {
             $this->notificationUrl = trim($notificationUrl);
         }
 
@@ -295,7 +311,7 @@ class Invoice implements InvoiceInterface
      */
     public function setRedirectUrl($redirectUrl)
     {
-        if (!empty($redirectUrl) && ctype_print($redirectUrl)) {
+        if (preg_match("/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i", $redirectUrl)) {
             $this->redirectUrl = trim($redirectUrl);
         }
 
@@ -316,7 +332,7 @@ class Invoice implements InvoiceInterface
      */
     public function setPosData($posData)
     {
-        if (!empty($posData)) {
+        if (is_string($posData)) {
             $this->posData = $posData;
         }
 
@@ -337,7 +353,7 @@ class Invoice implements InvoiceInterface
      */
     public function setStatus($status)
     {
-        if (!empty($status) && ctype_print($status)) {
+        if (is_string($status)) {
             $this->status = trim($status);
         }
 
@@ -373,7 +389,7 @@ class Invoice implements InvoiceInterface
      */
     public function setId($id)
     {
-        if (!empty($id) && ctype_print($id)) {
+        if (is_string($id)) {
             $this->id = trim($id);
         }
 
@@ -394,7 +410,7 @@ class Invoice implements InvoiceInterface
      */
     public function setUrl($url)
     {
-        if (!empty($url) && ctype_print($url)) {
+        if (is_string($url)) {
             $this->url = trim($url);
         }
 
@@ -415,7 +431,7 @@ class Invoice implements InvoiceInterface
      */
     public function setBtcPrice($btcPrice)
     {
-        if (!empty($btcPrice)) {
+        if (is_float($btcPrice)) {
             $this->btcPrice = $btcPrice;
         }
 
@@ -436,7 +452,7 @@ class Invoice implements InvoiceInterface
      */
     public function setInvoiceTime($invoiceTime)
     {
-        if (!empty($invoiceTime)) {
+        if (is_a($invoiceTime, 'DateTime')) {
             $this->invoiceTime = $invoiceTime;
         }
 
@@ -457,7 +473,7 @@ class Invoice implements InvoiceInterface
      */
     public function setExpirationTime($expirationTime)
     {
-        if (!empty($expirationTime)) {
+        if (is_a($expirationTime, 'DateTime')) {
             $this->expirationTime = $expirationTime;
         }
 
@@ -478,7 +494,7 @@ class Invoice implements InvoiceInterface
      */
     public function setCurrentTime($currentTime)
     {
-        if (!empty($currentTime)) {
+        if (is_a($currentTime, 'DateTime')) {
             $this->currentTime = $currentTime;
         }
 
@@ -499,7 +515,7 @@ class Invoice implements InvoiceInterface
      */
     public function setOrderId($orderId)
     {
-        if (!empty($orderId) && ctype_print($orderId)) {
+        if (is_string($orderId)) {
             $this->orderId = trim($orderId);
         }
 
@@ -538,7 +554,7 @@ class Invoice implements InvoiceInterface
         $firstName = $this->getBuyer()->getFirstName();
         $lastName  = $this->getBuyer()->getLastName();
 
-        return trim($firstName.' '.$lastName);
+        return trim($firstName . ' ' . $lastName);
     }
 
     /**
@@ -642,7 +658,7 @@ class Invoice implements InvoiceInterface
      */
     public function setBtcPaid($btcPaid)
     {
-        if (isset($btcPaid)) {
+        if (is_float($btcPaid)) {
             $this->btcPaid = $btcPaid;
         }
 
@@ -664,7 +680,7 @@ class Invoice implements InvoiceInterface
      */
     public function setRate($rate)
     {
-        if (!empty($rate)) {
+        if (is_float($rate)) {
             $this->rate = $rate;
         }
 
@@ -684,7 +700,10 @@ class Invoice implements InvoiceInterface
      */
     public function setToken(TokenInterface $token)
     {
-        $this->token = $token;
+        if (is_a($token, 'Token')) {
+            $this->token = $token;
+        }
+
         return $this;
     }
 }
