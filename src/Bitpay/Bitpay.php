@@ -97,10 +97,10 @@ class Bitpay
     }
 
     /**
-     * @param  Container $container
+     * @param  ContainerBuilder $container
      * @return DelegatingLoader
      */
-    private function getContainerLoader(Container $container)
+    private function getContainerLoader(ContainerBuilder $container)
     {
         $locator  = new FileLocator();
         $resolver = new LoaderResolver(
