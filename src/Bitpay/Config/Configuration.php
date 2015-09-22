@@ -1,6 +1,6 @@
 <?php
 /**
- * @license Copyright 2011-2014 BitPay Inc., MIT License
+ * @license Copyright 2011-2015 BitPay Inc., MIT License
  * see https://github.com/bitpay/php-bitpay-client/blob/master/LICENSE
  */
 
@@ -15,40 +15,48 @@ use Symfony\Component\Config\Definition\Builder\TreeBuilder;
  * documentation as well.
  *
  * @see http://symfony.com/doc/current/components/config/definition.html
- *
  * @package Bitpay
  */
 class Configuration implements ConfigurationInterface
 {
+    private $pubfilename = '/.bitpay/api.pub';
+    private $prifilename = '/.bitpay/api.key';
+    private $sinfilename = '/.bitpay/api.sin';
+    private $defstorage  = 'Bitpay\Storage\EncryptedFilesystemStorage';
+    private $networks    = array('livenet', 'testnet');
+    private $adapters    = array('curl', 'mock');
+
     /**
+     * @return TreeBuilder
      */
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
         $rootNode    = $treeBuilder->root('bitpay');
+
         $rootNode
             ->children()
                 ->scalarNode('public_key')
                     ->info('Public Key Filename')
-                    ->defaultValue(getenv('HOME').'/.bitpay/api.pub')
+                    ->defaultValue($this->getPubKeyFilename())
                 ->end()
                 ->scalarNode('private_key')
                     ->info('Private Key Filename')
-                    ->defaultValue(getenv('HOME').'/.bitpay/api.key')
+                    ->defaultValue($this->getPriKeyFilename())
                 ->end()
                 ->scalarNode('sin_key')
-                    ->info('Private Key Filename')
-                    ->defaultValue(getenv('HOME').'/.bitpay/api.sin')
+                    ->info('SIN Filename')
+                    ->defaultValue($this->getSinKeyFilename())
                 ->end()
                 ->enumNode('network')
-                    ->values(array('livenet', 'testnet'))
+                    ->values($this->networks)
                     ->info('Network')
-                    ->defaultValue('livenet')
+                    ->defaultValue($this->networks[0])
                 ->end()
                 ->enumNode('adapter')
-                    ->values(array('curl', 'mock'))
+                    ->values($this->adapters)
                     ->info('Client Adapter')
-                    ->defaultValue('curl')
+                    ->defaultValue($this->adapters[0])
                 ->end()
                 ->append($this->addKeyStorageNode())
                 ->scalarNode('key_storage_password')
@@ -61,11 +69,13 @@ class Configuration implements ConfigurationInterface
     }
 
     /**
-     * Adds the key_storage node with validation rules
-     *
+     * Adds the key_storage node with validation rules.
      * key_storage MUST:
      *     * implement Bitpay\Storage\StorageInterface
      *     * be a class that can be loaded
+     *
+     * @return TreeBuilder
+     * @throws \Exception
      */
     protected function addKeyStorageNode()
     {
@@ -74,7 +84,7 @@ class Configuration implements ConfigurationInterface
 
         $node
             ->info('Class that is used to store your keys')
-            ->defaultValue('Bitpay\Storage\EncryptedFilesystemStorage')
+            ->defaultValue($this->defstorage)
             ->validate()
                 ->always()
                 ->then(function ($value) {
@@ -88,13 +98,8 @@ class Configuration implements ConfigurationInterface
                     }
 
                     // requires PHP >= 5.3.7
-                    if (!is_subclass_of($value, 'Bitpay\Storage\StorageInterface')) {
-                        throw new \Exception(
-                            sprintf(
-                                '"%s" does not implement "Bitpay\Storage\StorageInterface"',
-                                $value
-                            )
-                        );
+                    if (is_subclass_of($value, 'Bitpay\Storage\StorageInterface') === false) {
+                        throw new \Exception('[ERROR] In Configuration::addKeyStorageNode(): "' . $value . '" does not implement "Bitpay\Storage\StorageInterface".');
                     }
 
                     return $value;
@@ -102,5 +107,29 @@ class Configuration implements ConfigurationInterface
             ->end();
 
         return $node;
+    }
+
+    /**
+     * @return string
+     */
+    private function getPubKeyFilename()
+    {
+        return getenv('HOME') . $this->pubfilename;
+    }
+
+    /**
+     * @return string
+     */
+    private function getPriKeyFilename()
+    {
+        return getenv('HOME') . $this->prifilename;
+    }
+
+    /**
+     * @return string
+     */
+    private function getSinFilename()
+    {
+        return getenv('HOME') . $this->sinfilename;
     }
 }
