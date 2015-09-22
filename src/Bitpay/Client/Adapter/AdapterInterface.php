@@ -18,10 +18,10 @@ use Bitpay\Client\ResponseInterface;
 interface AdapterInterface
 {
     /**
-     * Send request to BitPay
+     * Send a request to BitPay.
      *
-     * @param RequestInterface $request
-     * @return ResponseInterface
+     * @param \Bitpay\Client\Adapter\Request $request
+     * @return Response
      */
-    public function sendRequest(RequestInterface $request);
+    public function sendRequest(\Bitpay\Client\Adapter\Request $request);
 }
