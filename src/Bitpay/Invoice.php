@@ -431,7 +431,7 @@ class Invoice implements InvoiceInterface
     }
 
     /**
-     * @param DateTime $invoiceTime
+     * @param \DateTime $invoiceTime
      * @return Invoice
      */
     public function setInvoiceTime($invoiceTime)
@@ -452,7 +452,7 @@ class Invoice implements InvoiceInterface
     }
 
     /**
-     * @param DateTime $expirationTime
+     * @param \DateTime $expirationTime
      * return Invoice
      */
     public function setExpirationTime($expirationTime)
@@ -473,7 +473,7 @@ class Invoice implements InvoiceInterface
     }
 
     /**
-     * @param DateTime $currentTime
+     * @param \DateTime $currentTime
      * @return Invoice
      */
     public function setCurrentTime($currentTime)
