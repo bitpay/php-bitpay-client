@@ -85,7 +85,7 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
     public function testGetTransactionSpeed()
     {
         $this->assertNotNull($this->invoice);
-        $this->assertSame(Invoice::TRANSACTION_SPEED_MEDIUM, $this->invoice->getTransactionSpeed());
+        $this->assertSame(Invoice::TRANSACTION_SPEED_LOW, $this->invoice->getTransactionSpeed());
     }
 
     /**
