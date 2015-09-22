@@ -43,7 +43,7 @@ class CurlAdapter implements AdapterInterface
     /**
      * @inheritdoc
      */
-    public function sendRequest(Request $request)
+    public function sendRequest(\Bitpay\Client\Request $request)
     {
         $curl = curl_init();
 
