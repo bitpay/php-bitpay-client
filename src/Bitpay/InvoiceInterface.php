@@ -1,14 +1,12 @@
 <?php
 /**
- * @license Copyright 2011-2014 BitPay Inc., MIT License
+ * @license Copyright 2011-2015 BitPay Inc., MIT License
  * see https://github.com/bitpay/php-bitpay-client/blob/master/LICENSE
  */
 
 namespace Bitpay;
 
 /**
- * Invoice
- *
  * @package Bitpay
  */
 interface InvoiceInterface
@@ -94,6 +92,10 @@ interface InvoiceInterface
     public function getCurrency();
 
     /**
+     * If there is not an item already set, we need to use a default item
+     * so that some methods do not throw errors about methods and
+     * non-objects.
+     *
      * @return ItemInterface
      */
     public function getItem();
@@ -342,18 +344,22 @@ interface InvoiceInterface
     public function getBuyerPhone();
 
     /**
+     * Returns exception status.
      */
     public function getExceptionStatus();
 
     /**
+     * Returns the amount of BTC paid.
      */
     public function getBtcPaid();
 
     /**
+     * Returns the exchange rate.
      */
     public function getRate();
 
     /**
+     * Returns the token for this resource.
      */
     public function getToken();
 }
