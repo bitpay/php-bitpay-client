@@ -410,7 +410,7 @@ class Invoice implements InvoiceInterface
      */
     public function setUrl($url)
     {
-        if (is_string($url)) {
+        if (preg_match("/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i", $url)) {
             $this->url = trim($url);
         }
 
