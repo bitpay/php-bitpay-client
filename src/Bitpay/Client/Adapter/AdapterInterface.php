@@ -20,8 +20,8 @@ interface AdapterInterface
     /**
      * Send a request to BitPay.
      *
-     * @param \Bitpay\Client\Adapter\Request $request
+     * @param Request $request
      * @return Response
      */
-    public function sendRequest(\Bitpay\Client\Adapter\Request $request);
+    public function sendRequest(Request $request);
 }
