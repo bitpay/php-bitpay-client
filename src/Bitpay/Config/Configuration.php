@@ -46,7 +46,7 @@ class Configuration implements ConfigurationInterface
                 ->end()
                 ->scalarNode('sin_key')
                     ->info('SIN Filename')
-                    ->defaultValue($this->getSinKeyFilename())
+                    ->defaultValue($this->getSinFilename())
                 ->end()
                 ->enumNode('network')
                     ->values($this->networks)
