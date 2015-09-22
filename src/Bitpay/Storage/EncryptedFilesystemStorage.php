@@ -166,12 +166,10 @@ class EncryptedFilesystemStorage implements StorageInterface
      */
     private function getOpenSslErrors()
     {
-        $msg = '';
         $openssl_error_msg = '';
 
         while ($msg = openssl_error_string()) {
             $openssl_error_msg .= $msg . "\r\n";
-            $msg = '';
         }
 
         return $openssl_error_msg;
