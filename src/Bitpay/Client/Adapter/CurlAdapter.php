@@ -91,10 +91,10 @@ class CurlAdapter implements AdapterInterface
     /**
      * Returns an array of default cURL settings to use.
      *
-     * @param \Bitpay\Client\Adapter\Request $request
+     * @param \Bitpay\Client\Request $request
      * @return array
      */
-    private function getCurlDefaultOptions(\Bitpay\Client\Adapter\Request $request)
+    private function getCurlDefaultOptions(\Bitpay\Client\Request $request)
     {
         return array(
             CURLOPT_URL            => $request->getUri(),
