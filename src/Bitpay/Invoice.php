@@ -1,13 +1,12 @@
 <?php
 /**
- * @license Copyright 2011-2014 BitPay Inc., MIT License
+ * @license Copyright 2011-2015 BitPay Inc., MIT License
  * see https://github.com/bitpay/php-bitpay-client/blob/master/LICENSE
  */
 
 namespace Bitpay;
 
 /**
- *
  * @package Bitpay
  */
 class Invoice implements InvoiceInterface
@@ -88,7 +87,7 @@ class Invoice implements InvoiceInterface
     protected $expirationTime;
 
     /**
-     * @var DateTime
+     * @var \DateTime
      */
     protected $currentTime;
 
@@ -117,8 +116,6 @@ class Invoice implements InvoiceInterface
      */
     protected $token;
 
-    /**
-     */
     public function __construct()
     {
         $this->transactionSpeed  = self::TRANSACTION_SPEED_MEDIUM;
@@ -135,8 +132,7 @@ class Invoice implements InvoiceInterface
 
     /**
      * @param float $price
-     *
-     * @return InvoiceInterface
+     * @return Invoice
      */
     public function setPrice($price)
     {
@@ -157,8 +153,7 @@ class Invoice implements InvoiceInterface
 
     /**
      * @param CurrencyInterface $currency
-     *
-     * @return InvoiceInterface
+     * @return Invoice
      */
     public function setCurrency(CurrencyInterface $currency)
     {
@@ -186,8 +181,7 @@ class Invoice implements InvoiceInterface
 
     /**
      * @param ItemInterface $item
-     *
-     * @return InvoiceInterface
+     * @return Invoice
      */
     public function setItem(ItemInterface $item)
     {
@@ -213,8 +207,7 @@ class Invoice implements InvoiceInterface
 
     /**
      * @param BuyerInterface $buyer
-     *
-     * @return InvoiceInterface
+     * @return Invoice
      */
     public function setBuyer(BuyerInterface $buyer)
     {
@@ -235,8 +228,7 @@ class Invoice implements InvoiceInterface
 
     /**
      * @param string $transactionSpeed
-     *
-     * @return InvoiceInterface
+     * @return Invoice
      */
     public function setTransactionSpeed($transactionSpeed)
     {
@@ -257,8 +249,7 @@ class Invoice implements InvoiceInterface
 
     /**
      * @param string $notificationEmail
-     *
-     * @return InvoiceInterface
+     * @return Invoice
      */
     public function setNotificationEmail($notificationEmail)
     {
@@ -279,8 +270,7 @@ class Invoice implements InvoiceInterface
 
     /**
      * @param string $notificationUrl
-     *
-     * @return InvoiceInterface
+     * @return Invoice
      */
     public function setNotificationUrl($notificationUrl)
     {
@@ -301,8 +291,7 @@ class Invoice implements InvoiceInterface
 
     /**
      * @param string $redirectUrl
-     *
-     * @return InvoiceInterface
+     * @return Invoice
      */
     public function setRedirectUrl($redirectUrl)
     {
@@ -323,8 +312,7 @@ class Invoice implements InvoiceInterface
 
     /**
      * @param string $posData
-     *
-     * @return InvoiceInterface
+     * @return Invoice
      */
     public function setPosData($posData)
     {
@@ -345,8 +333,7 @@ class Invoice implements InvoiceInterface
 
     /**
      * @param string $status
-     *
-     * @return InvoiceInterface
+     * @return Invoice
      */
     public function setStatus($status)
     {
@@ -382,8 +369,7 @@ class Invoice implements InvoiceInterface
 
     /**
      * @param string $id
-     *
-     * @return InvoiceInterface
+     * @return Invoice
      */
     public function setId($id)
     {
@@ -404,8 +390,7 @@ class Invoice implements InvoiceInterface
 
     /**
      * @param string $url
-     *
-     * @return InvoiceInterface
+     * @return Invoice
      */
     public function setUrl($url)
     {
@@ -426,8 +411,7 @@ class Invoice implements InvoiceInterface
 
     /**
      * @param float $btcPrice
-     *
-     * @return InvoiceInterface
+     * @return Invoice
      */
     public function setBtcPrice($btcPrice)
     {
@@ -448,8 +432,7 @@ class Invoice implements InvoiceInterface
 
     /**
      * @param DateTime $invoiceTime
-     *
-     * @return InvoiceInterface
+     * @return Invoice
      */
     public function setInvoiceTime($invoiceTime)
     {
@@ -470,8 +453,7 @@ class Invoice implements InvoiceInterface
 
     /**
      * @param DateTime $expirationTime
-     *
-     * return InvoiceInterface
+     * return Invoice
      */
     public function setExpirationTime($expirationTime)
     {
@@ -492,8 +474,7 @@ class Invoice implements InvoiceInterface
 
     /**
      * @param DateTime $currentTime
-     *
-     * @return InvoiceInterface
+     * @return Invoice
      */
     public function setCurrentTime($currentTime)
     {
@@ -514,8 +495,7 @@ class Invoice implements InvoiceInterface
 
     /**
      * @param string $orderId
-     *
-     * @return InvoiceInterface
+     * @return Invoice
      */
     public function setOrderId($orderId)
     {
@@ -639,8 +619,7 @@ class Invoice implements InvoiceInterface
 
     /**
      * @param
-     *
-     * @return InvoiceInterface
+     * @return Invoice
      */
     public function setExceptionStatus($exceptionStatus)
     {
@@ -701,7 +680,7 @@ class Invoice implements InvoiceInterface
     }
     /**
      * @param TokenInterface $token
-     * @return InvoiceInterface
+     * @return Invoice
      */
     public function setToken(TokenInterface $token)
     {
