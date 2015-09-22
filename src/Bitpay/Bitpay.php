@@ -76,12 +76,12 @@ class Bitpay
     }
 
     /**
-     * @return array
+     * @return array<string,string>
      */
     protected function getParameters()
     {
         return array(
-            'bitpay.root_dir' => realpath(__DIR__.'/..'),
+            'bitpay.root_dir' => realpath(__DIR__ . '/..'),
         );
     }
 
@@ -116,7 +116,7 @@ class Bitpay
     /**
      * Returns an array of the default extensions.
      *
-     * @return array
+     * @return BitpayExtension[]
      */
     private function getDefaultExtensions()
     {
@@ -126,7 +126,7 @@ class Bitpay
     }
 
     /**
-     * @return Container
+     * @return ContainerBuilder
      */
     public function getContainer()
     {
@@ -134,7 +134,7 @@ class Bitpay
     }
 
     /**
-     * @return mixed
+     * @return object|null
      */
     public function get($service)
     {
