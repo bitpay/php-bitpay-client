@@ -626,7 +626,7 @@ class Client implements ClientInterface
             ->setExpirationTime($data['expirationTime'])
             ->setCurrentTime($data['currentTime'])
             ->setId($data['id'])
-            ->setBtcPaid($data['btcPrice'])
+            ->setBtcPaid($data['btcPaid'])
             ->setRate($data['rate'])
             ->setExceptionStatus($data['exceptionStatus']);
 
