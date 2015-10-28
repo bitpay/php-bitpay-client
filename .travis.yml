@@ -25,3 +25,8 @@ notifications:
 
 matrix:
     fast_finish: true
+
+# Only build the master branch and pull requests for the master branch
+branches:
+    only:
+        - master
