@@ -163,9 +163,9 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('new', $invoice->getStatus());
         $this->assertEquals('0.0632', $invoice->getBtcPrice());
         $this->assertEquals(19.95, $invoice->getPrice());
-        $this->assertEquals(1412594514486, $invoice->getInvoiceTime());
-        $this->assertEquals(1412595414486, $invoice->getExpirationTime());
-        $this->assertEquals(1412594514518, $invoice->getCurrentTime());
+        $this->assertEquals(1412594514486, $invoice->getInvoiceTime()->getTimestamp());
+        $this->assertEquals(1412595414486, $invoice->getExpirationTime()->getTimestamp());
+        $this->assertEquals(1412594514518, $invoice->getCurrentTime()->getTimestamp());
         $this->assertEquals('0.0000', $invoice->getBtcPaid());
         $this->assertEquals(315.7, $invoice->getRate());
         $this->assertEquals(false, $invoice->getExceptionStatus());
@@ -272,7 +272,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
 
         $this->client->createInvoice($invoice);
     }
-    
+
     /**
      * @depends testCreateInvoice
      */
