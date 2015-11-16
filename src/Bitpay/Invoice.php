@@ -131,7 +131,7 @@ class Invoice implements InvoiceInterface
      */
     public function getPrice()
     {
-        if (is_a($this->item, 'Item')) {
+        if (is_a($this->item, '\Bitpay\Item')) {
             return $this->getItem()->getPrice();
         } else {
             return 0.000000;
@@ -169,7 +169,7 @@ class Invoice implements InvoiceInterface
      */
     public function setCurrency(CurrencyInterface $currency)
     {
-        if (is_a($currency, 'Currency')) {
+        if (is_a($currency, '\Bitpay\Currency')) {
             $this->currency = $currency;
         }
 
@@ -194,7 +194,7 @@ class Invoice implements InvoiceInterface
      */
     public function setItem(ItemInterface $item)
     {
-        if (is_a($item, 'Item')) {
+        if (is_a($item, '\Bitpay\Item')) {
             $this->item = $item;
         }
 
@@ -219,7 +219,7 @@ class Invoice implements InvoiceInterface
      */
     public function setBuyer(BuyerInterface $buyer)
     {
-        if (is_a($buyer, 'Buyer')) {
+        if (is_a($buyer, '\Bitpay\Buyer')) {
             $this->buyer = $buyer;
         }
 
@@ -700,7 +700,7 @@ class Invoice implements InvoiceInterface
      */
     public function setToken(TokenInterface $token)
     {
-        if (is_a($token, 'Token')) {
+        if (is_a($token, '\Bitpay\Token')) {
             $this->token = $token;
         }
 
