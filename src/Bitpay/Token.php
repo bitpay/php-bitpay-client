@@ -6,6 +6,8 @@
 
 namespace Bitpay;
 
+date_default_timezone_set('utc');
+
 /**
  * @package Bitpay
  */
@@ -169,7 +171,7 @@ class Token implements TokenInterface
     public function setPairingCode($pairingCode)
     {
         $this->pairingCode = $pairingCode;
-        
+
         return $this;
     }
 

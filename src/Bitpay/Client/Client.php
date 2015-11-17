@@ -15,6 +15,7 @@ use Bitpay\Util\Util;
 use Bitpay\PublicKey;
 use Bitpay\PrivateKey;
 
+date_default_timezone_set('utc');
 /**
  * Client used to send requests and receive responses for BitPay's Web API.
  *
@@ -719,7 +720,7 @@ class Client implements ClientInterface
 
         $request->setHeader('X-BitPay-Plugin-Info', sprintf('%s/%s', self::NAME, self::VERSION));
         $request->setHeader('Content-Type', 'application/json');
-        $request->setHeader('X-Accept-Version', '2.2.6');
+        $request->setHeader('X-Accept-Version', '2.0.0');
     }
 
     /**

@@ -18,7 +18,7 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
     public function testGetPrice()
     {
         $this->assertNotNull($this->invoice);
-        $this->assertNull($this->invoice->getPrice());
+        $this->assertSame($this->invoice->getPrice(), 0.0);
     }
 
     /**
@@ -34,7 +34,7 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
     public function testGetCurrency()
     {
         $this->assertNotNull($this->invoice);
-        $this->assertNull($this->invoice->getCurrency());
+        $this->assertInstanceOf('Bitpay\Currency', $this->invoice->getCurrency());
     }
 
     /**
@@ -101,7 +101,7 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
     public function testGetNotificationEmail()
     {
         $this->assertNotNull($this->invoice);
-        $this->assertNull($this->invoice->getNotificationEmail());
+        $this->assertSame($this->invoice->getNotificationEmail(), '');
     }
 
     /**
@@ -117,7 +117,7 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
     public function testGetNotificationUrl()
     {
         $this->assertNotNull($this->invoice);
-        $this->assertNull($this->invoice->getNotificationUrl());
+        $this->assertSame($this->invoice->getNotificationUrl(), '');
     }
 
     /**
@@ -133,7 +133,7 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
     public function testGetRedirectUrl()
     {
         $this->assertNotNull($this->invoice);
-        $this->assertNull($this->invoice->getRedirectUrl());
+        $this->assertSame($this->invoice->getRedirectUrl(), '');
     }
 
     /**
@@ -149,7 +149,7 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
     public function testGetPosData()
     {
         $this->assertNotNull($this->invoice);
-        $this->assertNull($this->invoice->getPosData());
+        $this->assertSame($this->invoice->getPosData(), '');
     }
 
     /**
@@ -165,7 +165,7 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
     public function testGetStatus()
     {
         $this->assertNotNull($this->invoice);
-        $this->assertNull($this->invoice->getStatus());
+        $this->assertSame($this->invoice->getStatus(), '');
     }
 
     /**
@@ -187,7 +187,7 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
     public function testGetId()
     {
         $this->assertNotNull($this->invoice);
-        $this->assertNull($this->invoice->getId());
+        $this->assertSame($this->invoice->getId(), '');
     }
 
     /**
@@ -203,7 +203,7 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
     public function testGetUrl()
     {
         $this->assertNotNull($this->invoice);
-        $this->assertNull($this->invoice->getUrl());
+        $this->assertSame($this->invoice->getUrl(), '');
     }
 
     /**
@@ -219,7 +219,7 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
     public function testGetBtcPrice()
     {
         $this->assertNotNull($this->invoice);
-        $this->assertNull($this->invoice->getBtcPrice());
+        $this->assertSame($this->invoice->getBtcPrice(), 0.0);
     }
 
     /**
@@ -294,7 +294,7 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
     public function testGetOrderId()
     {
         $this->assertNotNull($this->invoice);
-        $this->assertNull($this->invoice->getOrderId());
+        $this->assertSame($this->invoice->getOrderId(), '');
     }
 
     /**
@@ -382,7 +382,7 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
     public function testGetExceptionStatus()
     {
         $this->assertNotNull($this->invoice);
-        $this->assertNull($this->invoice->getExceptionStatus());
+        $this->assertSame($this->invoice->getExceptionStatus(), '');
     }
 
     /**
@@ -398,7 +398,7 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
     public function testGetBtcPaid()
     {
         $this->assertNotNull($this->invoice);
-        $this->assertNull($this->invoice->getBtcPaid());
+        $this->assertSame($this->invoice->getBtcPaid(), 0.0);
     }
 
     /**
@@ -414,7 +414,7 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
     public function testGetRate()
     {
         $this->assertNotNull($this->invoice);
-        $this->assertNull($this->invoice->getRate());
+        $this->assertSame($this->invoice->getRate(), 0.0);
     }
 
     /**

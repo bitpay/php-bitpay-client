@@ -6,6 +6,8 @@
 
 namespace Bitpay;
 
+date_default_timezone_set('utc');
+
 /**
  * @package Bitpay
  */
@@ -131,7 +133,7 @@ class Invoice implements InvoiceInterface
      */
     public function getPrice()
     {
-        if (is_a($this->item, 'Item')) {
+        if (is_a($this->item, '\Bitpay\Item')) {
             return $this->getItem()->getPrice();
         } else {
             return 0.000000;
@@ -169,7 +171,7 @@ class Invoice implements InvoiceInterface
      */
     public function setCurrency(CurrencyInterface $currency)
     {
-        if (is_a($currency, 'Currency')) {
+        if (is_a($currency, '\Bitpay\Currency')) {
             $this->currency = $currency;
         }
 
@@ -194,7 +196,7 @@ class Invoice implements InvoiceInterface
      */
     public function setItem(ItemInterface $item)
     {
-        if (is_a($item, 'Item')) {
+        if (is_a($item, '\Bitpay\Item')) {
             $this->item = $item;
         }
 
@@ -219,7 +221,7 @@ class Invoice implements InvoiceInterface
      */
     public function setBuyer(BuyerInterface $buyer)
     {
-        if (is_a($buyer, 'Buyer')) {
+        if (is_a($buyer, '\Bitpay\Buyer')) {
             $this->buyer = $buyer;
         }
 
@@ -433,6 +435,8 @@ class Invoice implements InvoiceInterface
     {
         if (is_float($btcPrice)) {
             $this->btcPrice = $btcPrice;
+        } else if (is_numeric($btcPrice)) {
+            $this->btcPrice = floatval($btcPrice);
         }
 
         return $this;
@@ -454,8 +458,11 @@ class Invoice implements InvoiceInterface
     {
         if (is_a($invoiceTime, 'DateTime')) {
             $this->invoiceTime = $invoiceTime;
+        } else if (is_numeric($invoiceTime)) {
+            $invoiceDateTime = new \DateTime();
+            $invoiceDateTime->setTimestamp($invoiceTime);
+            $this->invoiceTime = $invoiceDateTime;
         }
-
         return $this;
     }
 
@@ -475,8 +482,11 @@ class Invoice implements InvoiceInterface
     {
         if (is_a($expirationTime, 'DateTime')) {
             $this->expirationTime = $expirationTime;
+        } else if (is_numeric($expirationTime)) {
+            $expirationDateTime = new \DateTime();
+            $expirationDateTime->setTimestamp($expirationTime);
+            $this->expirationTime = $expirationDateTime;
         }
-
         return $this;
     }
 
@@ -496,6 +506,10 @@ class Invoice implements InvoiceInterface
     {
         if (is_a($currentTime, 'DateTime')) {
             $this->currentTime = $currentTime;
+        } else if (is_numeric($currentTime)) {
+            $currentDateTime = new \DateTime();
+            $currentDateTime->setTimestamp($currentTime);
+            $this->currentTime = $currentDateTime;
         }
 
         return $this;
@@ -700,7 +714,7 @@ class Invoice implements InvoiceInterface
      */
     public function setToken(TokenInterface $token)
     {
-        if (is_a($token, 'Token')) {
+        if (is_a($token, '\Bitpay\Token')) {
             $this->token = $token;
         }
 
