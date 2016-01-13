@@ -362,4 +362,11 @@ interface InvoiceInterface
      * Returns the token for this resource.
      */
     public function getToken();
+
+    /**
+     * Returns a set of payment urls.
+     *
+     * @return PaymentUrlInterface
+     */
+    public function getPaymentUrls();
 }
