@@ -176,6 +176,7 @@ class Client implements ClientInterface
 
         $data = $body['data'];
         $invoiceToken = new \Bitpay\Token();
+        $paymentUrls = new \Bitpay\PaymentUrlSet();
 
         $invoice
             ->setToken($invoiceToken->setToken($data['token']))
@@ -189,7 +190,8 @@ class Client implements ClientInterface
             ->setCurrentTime($data['currentTime'] / 1000)
             ->setBtcPaid($data['btcPaid'])
             ->setRate($data['rate'])
-            ->setExceptionStatus($data['exceptionStatus']);
+            ->setExceptionStatus($data['exceptionStatus'])
+            ->setPaymentUrls($paymentUrls->setUrls($data['paymentUrls']));
 
         return $invoice;
     }
@@ -613,6 +615,7 @@ class Client implements ClientInterface
         $data = $body['data'];
         $invoice = new \Bitpay\Invoice();
         $invoiceToken = new \Bitpay\Token();
+        $paymentUrls = new \Bitpay\PaymentUrlSet();
 
         $invoice
             ->setToken($invoiceToken->setToken($data['token']))
@@ -629,7 +632,8 @@ class Client implements ClientInterface
             ->setId($data['id'])
             ->setBtcPaid($data['btcPaid'])
             ->setRate($data['rate'])
-            ->setExceptionStatus($data['exceptionStatus']);
+            ->setExceptionStatus($data['exceptionStatus'])
+            ->setPaymentUrls($paymentUrls->setUrls($data['paymentUrls']));
 
         return $invoice;
     }
