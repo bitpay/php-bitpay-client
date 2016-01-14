@@ -758,5 +758,4 @@ class Invoice implements InvoiceInterface
     {
         return $this->getPaymentUrls()->getUrl($paymentUrlType);
     }
-
 }
