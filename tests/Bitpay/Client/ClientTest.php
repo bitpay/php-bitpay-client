@@ -170,6 +170,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(315.7, $invoice->getRate());
         $this->assertEquals(false, $invoice->getExceptionStatus());
         $this->assertEquals('abcdefghijklmno', $invoice->getToken()->getToken());
+        $this->assertEquals('bitcoin:mabcdefghijkmnopqrstuvw123456789AB?amount=0.0632', $invoice->getPaymentUrl(PaymentUrlSet::BIP_21));
     }
 
     /**
@@ -584,6 +585,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
                     'getExceptionStatus', 'getBtcPaid', 'getRate', 'getToken', 'setId', 'setUrl',
                     'setStatus', 'setBtcPrice', 'setPrice', 'setInvoiceTime', 'setExpirationTime',
                     'setCurrentTime', 'setBtcPaid', 'setRate', 'setToken', 'setExceptionStatus',
+                    'getPaymentUrls',
                 )
             )
             ->getMock();
