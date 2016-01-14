@@ -736,7 +736,7 @@ class Invoice implements InvoiceInterface
             $this->paymentUrls = new PaymentUrlSet();
         }
 
-		return $this->paymentUrls;
+        return $this->paymentUrls;
     }
 
     /**
