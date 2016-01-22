@@ -460,7 +460,8 @@ class Invoice implements InvoiceInterface
             $this->invoiceTime = $invoiceTime;
         } else if (is_numeric($invoiceTime)) {
             $invoiceDateTime = new \DateTime();
-            $invoiceDateTime->setTimestamp($invoiceTime);
+            //this comes back from the api in milliseconds
+            $invoiceDateTime->setTimestamp($invoiceTime / 1000);
             $this->invoiceTime = $invoiceDateTime;
         }
         return $this;
@@ -484,7 +485,8 @@ class Invoice implements InvoiceInterface
             $this->expirationTime = $expirationTime;
         } else if (is_numeric($expirationTime)) {
             $expirationDateTime = new \DateTime();
-            $expirationDateTime->setTimestamp($expirationTime);
+            //this comes back from the api in milliseconds
+            $expirationDateTime->setTimestamp($expirationTime / 1000);
             $this->expirationTime = $expirationDateTime;
         }
         return $this;
@@ -508,7 +510,8 @@ class Invoice implements InvoiceInterface
             $this->currentTime = $currentTime;
         } else if (is_numeric($currentTime)) {
             $currentDateTime = new \DateTime();
-            $currentDateTime->setTimestamp($currentTime);
+            //this comes back from the api in milliseconds
+            $currentDateTime->setTimestamp($currentTime / 1000);
             $this->currentTime = $currentDateTime;
         }
 
