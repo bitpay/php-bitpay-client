@@ -632,8 +632,12 @@ class Client implements ClientInterface
             ->setId($data['id'])
             ->setBtcPaid($data['btcPaid'])
             ->setRate($data['rate'])
-            ->setExceptionStatus($data['exceptionStatus'])
-            ->setPaymentUrls($paymentUrls->setUrls($data['paymentUrls']));
+            ->setExceptionStatus($data['exceptionStatus']);
+
+        if (isset($data['paymentUrls'])) {
+            $invoice
+                ->setPaymentUrls($paymentUrls->setUrls($data['paymentUrls']));
+        }
 
         return $invoice;
     }
