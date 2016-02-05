@@ -118,6 +118,11 @@ class Invoice implements InvoiceInterface
      */
     protected $token = null;
 
+    /**
+     * @var PaymentUrlInterface
+     */
+    protected $paymentUrls = null;
+
     public function __construct($transactionSpeed = self::TRANSACTION_SPEED_LOW, $fullNotifications = false, $item = null, $currency = null, $orderId = '', $posData = '')
     {
         $this->currency = $currency;
@@ -708,6 +713,7 @@ class Invoice implements InvoiceInterface
     {
         return $this->token;
     }
+
     /**
      * @param TokenInterface $token
      * @return Invoice
@@ -719,5 +725,37 @@ class Invoice implements InvoiceInterface
         }
 
         return $this;
+    }
+
+    /**
+     * @return PaymentUrlInterface
+     */
+    public function getPaymentUrls()
+    {
+        if ($this->paymentUrls === null) {
+            $this->paymentUrls = new PaymentUrlSet();
+        }
+
+        return $this->paymentUrls;
+    }
+
+    /**
+     * @param PaymentUrlInterface $paymentUrls
+     * @return Invoice
+     */
+    public function setPaymentUrls(PaymentUrlInterface $paymentUrls)
+    {
+        $this->paymentUrls = $paymentUrls;
+
+        return $this;
+    }
+
+    /**
+     * @param string $paymentUrlType
+     * @return string
+     */
+    public function getPaymentUrl($paymentUrlType)
+    {
+        return $this->getPaymentUrls()->getUrl($paymentUrlType);
     }
 }
