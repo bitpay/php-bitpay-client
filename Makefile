@@ -1,5 +1,5 @@
 setup:
-	composer.phar install
+	./composer.phar install
 	npm install
 
 test:
