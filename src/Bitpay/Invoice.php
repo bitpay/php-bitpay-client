@@ -151,8 +151,8 @@ class Invoice implements InvoiceInterface
      */
     public function setPrice($price)
     {
-        if (is_float($price)) {
-            $this->getItem()->setPrice($price);
+        if (is_numeric($price)) {
+            $this->getItem()->setPrice(floatval($price));
         }
 
         return $this;
@@ -438,9 +438,7 @@ class Invoice implements InvoiceInterface
      */
     public function setBtcPrice($btcPrice)
     {
-        if (is_float($btcPrice)) {
-            $this->btcPrice = $btcPrice;
-        } else if (is_numeric($btcPrice)) {
+        if (is_numeric($btcPrice)) {
             $this->btcPrice = floatval($btcPrice);
         }
 
@@ -677,7 +675,7 @@ class Invoice implements InvoiceInterface
      */
     public function setBtcPaid($btcPaid)
     {
-        if (is_float($btcPaid)) {
+        if (is_numeric($btcPaid)) {
             $this->btcPaid = $btcPaid;
         }
 
@@ -699,8 +697,8 @@ class Invoice implements InvoiceInterface
      */
     public function setRate($rate)
     {
-        if (is_float($rate)) {
-            $this->rate = $rate;
+        if (is_numeric($rate)) {
+            $this->rate = floatval($rate);
         }
 
         return $this;
