@@ -6,7 +6,7 @@
 
 namespace Bitpay;
 
-date_default_timezone_set('utc');
+date_default_timezone_set('UTC');
 
 /**
  * @package Bitpay

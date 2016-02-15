@@ -15,7 +15,7 @@ use Bitpay\Util\Util;
 use Bitpay\PublicKey;
 use Bitpay\PrivateKey;
 
-date_default_timezone_set('utc');
+date_default_timezone_set('UTC');
 /**
  * Client used to send requests and receive responses for BitPay's Web API.
  *
