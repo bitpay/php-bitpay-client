@@ -52,7 +52,7 @@ php composer.phar require bitpay/php-client:^2.2
 
 # Configuration
 
-See https://labs.bitpay.com/t/php-bitpay-client-library-configuration/555
+https://help.bitpay.com/8451-Implementation-/how-to-configure-the-php-bitpay-client-library
 
 # Usage
 
@@ -84,8 +84,7 @@ Reading the latest documentation at https://labs.bitpay.com/c/libraries/php migh
 # Support
 
 * https://github.com/bitpay/php-bitpay-client/issues
-* https://labs.bitpay.com/c/libraries/php
-* https://support.bitpay.com/
+* https://help.bitpay.com/
 
 # License
 
