@@ -6,6 +6,13 @@
 
 namespace Bitpay\Client;
 
+class ChildOfClient extends Client
+{
+    public function checkPriceAndCurrency($price, $currency) {
+      return parent::checkPriceAndCurrency($price, $currency);
+    }
+}
+
 class ClientTest extends \PHPUnit_Framework_TestCase
 {
     protected $client;
@@ -20,6 +27,35 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $adapter = $this->getMockAdapter();
         $adapter->method('sendRequest')->willReturn($this->getMock('Bitpay\Client\ResponseInterface'));
         $this->client->setAdapter($adapter);
+    }
+
+    public function testCheckPriceAndCurrency() {
+      $client = new ChildOfClient();
+      $res = $client->checkPriceAndCurrency(.999999, 'BTC');
+      $this->assertNull($res);
+
+      $res = $client->checkPriceAndCurrency(1000, 'USD');
+      $this->assertNull($res);
+
+      $res = $client->checkPriceAndCurrency(0, 'USD');
+      $this->assertNull($res);
+
+      $res = $client->checkPriceAndCurrency(.01, 'USD');
+      $this->assertNull($res);
+
+      $res = $client->checkPriceAndCurrency(99, 'USD');
+      $this->assertNull($res);
+
+      $res = $client->checkPriceAndCurrency(100.9, 'USD');
+      $this->assertNull($res);
+    }
+
+    /**
+     * @expectedException \Exception
+     */
+    public function testCheckPriceAndCurrencyWithException() {
+      $client = new ChildOfClient();
+      $res = $client->checkPriceAndCurrency(.991, 'ABC');
     }
 
     /**

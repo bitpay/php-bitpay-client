@@ -1,6 +1,6 @@
 <?php
 /**
- * @license Copyright 2011-2014 BitPay Inc., MIT License 
+ * @license Copyright 2011-2014 BitPay Inc., MIT License
  * see https://github.com/bitpay/php-bitpay-client/blob/master/LICENSE
  */
 
@@ -30,12 +30,12 @@ interface ItemInterface
     public function getDescription();
 
     /**
-     * @return string
+     * @return float
      */
     public function getPrice();
 
     /**
-     * @return string
+     * @return integer
      */
     public function getQuantity();
 
