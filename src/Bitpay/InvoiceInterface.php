@@ -78,7 +78,7 @@ interface InvoiceInterface
      * specified in a currency other than BTC, the price will be converted into BTC at
      * market exchange rates to determine the amount collected from the buyer.
      *
-     * @return string
+     * @return float
      */
     public function getPrice();
 
@@ -195,7 +195,7 @@ interface InvoiceInterface
      * The amount of bitcoins being requested for payment of this invoice (same as the
      * price if the merchant set the price in BTC).
      *
-     * @return string
+     * @return float
      */
     public function getBtcPrice();
 
