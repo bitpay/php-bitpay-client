@@ -741,9 +741,9 @@ class Client implements ClientInterface
         // Get the decimal precision of the price
         $decimalPosition = strpos($price, '.');
         if ($decimalPosition == 0) {
-          $decimalPrecision = 0;
+            $decimalPrecision = 0;
         } else {
-          $decimalPrecision = strlen(substr($price, $decimalPosition + 1));
+            $decimalPrecision = strlen(substr($price, $decimalPosition + 1));
         }
 
         if (($decimalPrecision > 2 && $currency != 'BTC') || $decimalPrecision > 6) {

@@ -3,6 +3,35 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased][unreleased]
+## [2.2.12] - 2016-03-04
+###Fixed
+- should respect that numbers coming from the api might not have decimal points at all, but they are still valid
+
+## [2.2.11] - 2016-02-16
+###Fixed
+- Bug fixes that include proper type checking for invoice object creation
+
+## [2.2.10] - 2016-02-05
+###Added
+- Using this library with Symfony >=2.3 or Symfony 3.0.x should work. So if you are already using Symfony 3.0, then this library should work with it too.
+- Leo Hochberg added PaymentUrl support to the library since the BitPay backend support it. Thanks Leo.
+
+## [2.2.9] - 2016-01-25
+###Fixed
+- Fixed invoice, expiration, and current time error
+
+## [2.2.8] - 2015-11-16
+###Fixed
+- Repaired tests based on current changes to the code.
+
+## [2.2.7] - 2015-10-28
+###Fixed
+- btcPaid on invoice responses now contains the amount paid instead of the price
+
+## [2.2.6] - 2015-07-31
+###Fixed
+- The fixes several issues, including "Price only accepts .00 precision" and "Invoice exception state"
+
 ### Changed
 - Refactored function calls out of loops
 
