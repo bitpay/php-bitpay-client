@@ -32,7 +32,7 @@ Add to your composer.json file by hand.
     ...
     "require": {
         ...
-        "bitpay/php-client": "^2.2"
+        "bitpay/php-client": "^3.0"
     }
     ...
 }
@@ -47,7 +47,7 @@ php composer.phar update bitpay/php-client
 ### Install using composer
 
 ```bash
-php composer.phar require bitpay/php-client:^2.2
+php composer.phar require bitpay/php-client:^3.0
 ```
 
 # Configuration
@@ -88,7 +88,7 @@ be able to run all the examples by running ``php examples/File.php``.
 
 The MIT License (MIT)
 
-Copyright (c) 2011-2015 BitPay, Inc.
+Copyright (c) 2011-2016 BitPay, Inc.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
