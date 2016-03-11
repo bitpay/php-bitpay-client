@@ -6,6 +6,15 @@
 
 namespace Bitpay\Client;
 
+date_default_timezone_set('UTC');
+
+class ChildOfClient extends Client
+{
+    public function checkPriceAndCurrency($price, $currency) {
+        return parent::checkPriceAndCurrency($price, $currency);
+    }
+}
+
 class ClientTest extends \PHPUnit_Framework_TestCase
 {
     protected $client;
@@ -22,6 +31,29 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $this->client->setAdapter($adapter);
     }
 
+    public function testCheckPriceAndCurrency() {
+        $client = new ChildOfClient();
+        $res = $client->checkPriceAndCurrency(.999999, 'BTC');
+        $this->assertNull($res);
+        $res = $client->checkPriceAndCurrency(1000, 'USD');
+        $this->assertNull($res);
+        $res = $client->checkPriceAndCurrency(0, 'USD');
+        $this->assertNull($res);
+        $res = $client->checkPriceAndCurrency(.01, 'USD');
+        $this->assertNull($res);
+        $res = $client->checkPriceAndCurrency(99, 'USD');
+        $this->assertNull($res);
+        $res = $client->checkPriceAndCurrency(100.9, 'USD');
+        $this->assertNull($res);
+    }
+
+    /**
+     * @expectedException \Exception
+     */
+    public function testCheckPriceAndCurrencyWithException() {
+        $client = new ChildOfClient();
+        $res = $client->checkPriceAndCurrency(.991, 'ABC');
+    }
 
     /**
      * @expectedException \Exception
@@ -275,7 +307,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
 
         $this->client->createInvoice($invoice);
     }
-    
+
     /**
      * @depends testCreateInvoice
      */

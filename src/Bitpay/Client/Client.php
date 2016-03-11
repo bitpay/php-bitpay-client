@@ -683,10 +683,14 @@ class Client implements ClientInterface
 
     protected function checkPriceAndCurrency($price, $currency)
     {
-        //get the decimal precision of the price
-        $decimalPrecision = strlen(substr($price, strpos($price, '.')+1));
-        if (($decimalPrecision > 2 && $currency != "BTC") || $decimalPrecision > 6) {
-            throw new ArgumentException("Incorrect price format");
+        $decimalPosition = strpos($price, '.');
+        if ($decimalPosition == 0) {
+            $decimalPrecision = 0;
+        } else {
+            $decimalPrecision = strlen(substr($price, $decimalPosition + 1));
+        }
+        if (($decimalPrecision > 2 && $currency != 'BTC') || $decimalPrecision > 6) {
+            throw new \Exception('Incorrect price format or currency type.');
         }
     }
 }

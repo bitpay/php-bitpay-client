@@ -23,9 +23,10 @@ require __DIR__.'/../../vendor/autoload.php';
  * comment/uncomment.
  */
 $pairingCode    = 'YCBrKpr';
-$tokenString    = 'S9s6ZHAV4xzCjjnW4NXLjK';
+$tokenString    = 'realtokengoeshere';
 $privateKeyPath = '/tmp/bitpay.pri';
 $publicKeyPath  = '/tmp/bitpay.pub';
+$keyStoragePassword = 'YourTopSecretPassword';
 /*** end options ***/
 
 /**
@@ -42,6 +43,7 @@ $bitpay = new \Bitpay\Bitpay(
             'network'     => 'testnet', // Valid values are testnet/livenet
             'public_key'  => $publicKeyPath,
             'private_key' => $privateKeyPath,
+            'key_storage_password' => $keyStoragePassword,
         )
     )
 );
@@ -97,6 +99,7 @@ $item
     ->setDescription('General Description of Item')
     ->setPrice('1.99');
 $invoice->setCurrency(new \Bitpay\Currency('USD'));
+$invoice->setItem($item);
 $client = $bitpay->get('client');
 $client->setToken($token);
 try {

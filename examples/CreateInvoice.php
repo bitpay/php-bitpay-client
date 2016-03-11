@@ -69,17 +69,7 @@ $invoice->setCurrency($currency);
  * Create a new client. You can see the example of how to configure this using
  * a yml file as well.
  */
-$bitpay = new \Bitpay\Bitpay(
-    array(
-        'bitpay' => array(
-            'network'              => 'testnet', // testnet or livenet, default is livenet
-            'public_key'           => getenv('HOME').'/.bitpay/api.pub',
-            'private_key'          => getenv('HOME').'/.bitpay/api.key',
-            'key_storage'          => 'Bitpay\Storage\EncryptedFilesystemStorage',
-            'key_storage_password' => 'TopSecret',
-        )
-    )
-);
+$bitpay = new \Bitpay\Bitpay(__DIR__ . '/config.yml');
 
 /**
  * Create the client that will be used to send requests to BitPay's API
@@ -91,7 +81,7 @@ $client = $bitpay->get('client');
  * keys.
  */
 $token = new \Bitpay\Token();
-$token->setToken('Put your token here');
+$token->setToken('your token here');
 
 $client->setToken($token);
 
