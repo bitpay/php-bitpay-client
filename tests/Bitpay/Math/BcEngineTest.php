@@ -17,11 +17,7 @@ class BcEngineTest extends \PHPUnit_Framework_TestCase
       if (!extension_loaded('bcmath'))
       {
         $this->markTestSkipped('The Bcmath extension is NOT loaded! You must enable it to run this test');
-      } elseif (!extension_loaded('gmp'))
-      {
-        $this->markTestSkipped('The GMPmath extension is NOT loaded! You must enable it to run this test');
       }
-
     }
 
     public function testConstruct()
