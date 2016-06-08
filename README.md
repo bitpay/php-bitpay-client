@@ -81,13 +81,12 @@ Please see the ``docs`` directory for information on how to use this library
 and the ``examples`` directory for examples on using this library. You should
 be able to run all the examples by running ``php examples/File.php``.
 
-Reading the latest documentation at https://labs.bitpay.com/c/libraries/php might also help.
+Reading the latest documentation at https://help.bitpay.com/8451-Implementation- might also help.
 
 # Support
 
 * https://github.com/bitpay/php-bitpay-client/issues
-* https://labs.bitpay.com/c/libraries/php
-* https://support.bitpay.com/
+* https://help.bitpay.com/
 
 # License
 
