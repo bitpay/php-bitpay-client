@@ -235,7 +235,12 @@ class Util
             } else {
                 $bin .= '0';
             }
+            $prevDec = $dec;
             $dec = Math::div($dec, 2);
+            //sanity check to avoid infinite loop
+            if (Math::cmp($prevDec, $dec) < 1) {
+                throw new \Exception('Math library has unexpected behavior, please report the following information to support@bitpay.com. Math Engine is: ' . Math::getEngineName() . '. PHP Version is: ' . phpversion() . '.');
+            }
         }
 
         return $bin;
