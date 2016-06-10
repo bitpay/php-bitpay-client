@@ -30,7 +30,7 @@ printf("Public Key:  %s\n", $public);
 printf("Private Key: %s\n", $private);
 printf("Sin Key:     %s\n\n", $sin);
 
-$manager = new \Bitpay\KeyManager(new \Bitpay\Storage\FilesystemStorage());
+$manager = new \Bitpay\KeyManager(new \Bitpay\Storage\EncryptedFilesystemStorage('dN$8WNaT}j<gD3*q'));
 
 $manager->persist($private);
 $manager->persist($public);
