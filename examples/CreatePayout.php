@@ -5,7 +5,6 @@
 
 /**
  * WARNING - This example will NOT work until you have generated your public
- * and private keys. Please see the example documentation on generating your
  * keys and also see the documentation on how to save those keys.
  *
  * Also please be aware that you CANNOT create an invoice until you have paired
@@ -39,8 +38,6 @@ $payout
 	->setToken($token)
 	->addInstruction($instruction1);
 
-//read private key hex-encoded from disk
-$key = file_get_contents('/Users/chrisk/.php-bitpay-client/api.key');
 $private = new \Bitpay\PrivateKey();
 $private->setHex('662be90968bc659873d723374213fa5bf7a30c24f0f0713aa798eb7daa7230fc'); //this is your private key in some form (see GetKeys.php)
 

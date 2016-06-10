@@ -16,6 +16,11 @@ class EncryptedFilesystemStorage implements StorageInterface
     private $password;
 
     /**
+     * @var string
+     */
+    private $unencoded_password;
+
+    /**
      * Initialization Vector
      */
     const IV = '0000000000000000';
@@ -35,7 +40,10 @@ class EncryptedFilesystemStorage implements StorageInterface
      */
     public function __construct($password)
     {
-        $this->password = $password;
+        //to make this an non-breaking api change,
+        //I will have to keep both versions of the password
+        $this->password = base64_encode($password);
+        $this->unencoded_password = $password;
     }
 
     /**
@@ -71,6 +79,10 @@ class EncryptedFilesystemStorage implements StorageInterface
 
         $encoded = file_get_contents($id);
         $decoded = openssl_decrypt(\Bitpay\Util\Util::binConv($encoded), self::METHOD, $this->password, 1, self::IV);
+
+        if (false === $decoded) {
+            $decoded = openssl_decrypt(\Bitpay\Util\Util::binConv($encoded), self::METHOD, $this->unencoded_password, 1, self::IV);
+        }
 
         if (false === $decoded) {
             throw new \Exception('Could not decode key');
