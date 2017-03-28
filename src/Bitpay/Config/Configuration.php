@@ -76,29 +76,16 @@ class Configuration implements ConfigurationInterface
             ->info('Class that is used to store your keys')
             ->defaultValue('Bitpay\Storage\EncryptedFilesystemStorage')
             ->validate()
-                ->always()
-                ->then(function ($value) {
-                    if (!class_exists($value)) {
-                        throw new \Exception(
-                            sprintf(
-                                'Could not find class "%s".',
-                                $value
-                            )
-                        );
-                    }
-
-                    // requires PHP >= 5.3.7
-                    if (!is_subclass_of($value, 'Bitpay\Storage\StorageInterface')) {
-                        throw new \Exception(
-                            sprintf(
-                                '"%s" does not implement "Bitpay\Storage\StorageInterface"',
-                                $value
-                            )
-                        );
-                    }
-
-                    return $value;
+                ->ifTrue(function ($value) {
+                    return (false === class_exists($value));
                 })
+                ->thenInvalid('Could not find class "%s".')
+            ->end()
+            ->validate()
+                ->ifTrue(function ($value) {
+                    return (false === is_subclass_of($value, 'Bitpay\Storage\StorageInterface'));
+                })
+                ->thenInvalid('"%s" does not implement "Bitpay\Storage\StorageInterface"')
             ->end();
 
         return $node;
