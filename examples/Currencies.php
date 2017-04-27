@@ -5,7 +5,7 @@
 
 require __DIR__ . '/../vendor/autoload.php';
 
-$bitpay     = new \Bitpay\Bitpay();
+$bitpay     = new \Bitpay\Bitpay(__DIR__ . '/config.yml');
 $client     = $bitpay->get('client');
 $currencies = $client->getCurrencies();
 

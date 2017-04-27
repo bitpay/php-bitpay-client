@@ -9,14 +9,26 @@ namespace Bitpay\Math;
 class Math
 {
     private static $engine;
+    private static $engineName;
 
     public static function setEngine($engine)
     {
         static::$engine = $engine;
     }
+
+    public static function setEngineName($engineName)
+    {
+        static::$engineName = $engineName;
+    }
+
     public static function getEngine()
     {
         return static::$engine;
+    }
+
+    public static function getEngineName()
+    {
+        return static::$engineName;
     }
 
     public static function __callStatic($name, $arguments)
@@ -24,8 +36,10 @@ class Math
         if (is_null(static::$engine)) {
             if (extension_loaded('gmp')) {
                 static::$engine = new GmpEngine();
+                static::$engineName = "GMP";
             } elseif (extension_loaded('bcmath')) {
                 static::$engine = new BcEngine();
+                static::$engineName = "BCMATH";
             } else {
                 throw new \Exception('The GMP or BCMATH extension for PHP is required.');
             }

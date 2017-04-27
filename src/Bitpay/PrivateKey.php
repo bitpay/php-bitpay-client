@@ -40,6 +40,19 @@ class PrivateKey extends Key
         return (string) $this->hex;
     }
 
+    /*
+     * Use this method if you have a hex-encoded private key
+     * and you want to initialize your private key.
+     * If you have a private key, you can derive your public key
+     * and also your sin.
+     * @param string
+     */
+    public function setHex($hex)
+    {
+        $this->hex = $hex;
+        $this->dec = Util::decodeHex($this->hex);
+    }
+
     /**
      * @return PublicKey
      */

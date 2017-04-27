@@ -23,9 +23,10 @@ $bitpay = new \Bitpay\Bitpay(
     array(
         'bitpay' => array(
             'network'     => 'testnet', // testnet or livenet, default is livenet
-            'public_key'  => getenv('HOME').'/.bitpayphp/api.pub',
-            'private_key' => getenv('HOME').'/.bitpayphp/api.key',
-            'key_storage' => 'Bitpay\Storage\FilesystemStorage',
+            'public_key'  => '/tmp/bitpay.pub', //see tutorial/001.php and 002.php
+            'private_key' => '/tmp/bitpay.pri',
+            'key_storage' => 'Bitpay\Storage\EncryptedFilesystemStorage',
+            'key_storage_password' => 'YourTopSecretPassword'
         )
     )
 );

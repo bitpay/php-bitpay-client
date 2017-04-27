@@ -30,8 +30,7 @@ printf("Public Key:  %s\n", $public);
 printf("Private Key: %s\n", $private);
 printf("Sin Key:     %s\n\n", $sin);
 
-/**
- * NOTE: You MUST save your keypairs and not regenerate them once you have already
- * generated a pair and have paired them with the BitPay's API. To see how to
- * persist keys to the filesystem, please see the SaveKeypairsToFilesystem.php
- */
+$manager = new \Bitpay\KeyManager(new \Bitpay\Storage\EncryptedFilesystemStorage('dN$8WNaT}j<gD3*q'));
+
+$manager->persist($private);
+$manager->persist($public);

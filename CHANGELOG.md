@@ -2,7 +2,19 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+
+## [2.2.9] - 2017-02-21
+### Fixed
+- HTTP 100 messages not parsed correctly when doing payouts
+
 ## [Unreleased][unreleased]
+### Changed
+- Refactored function calls out of loops
+
+## [2.2.5] - 2015-06-23
+### Fixed
+- Item::setPrice accepts en_US formatted numeric strings
+- getInvoice now works with merchant and public facades
 
 ## [2.2.4] - 2015-06-04
 ### Added
@@ -72,7 +84,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 - Client library now uses BitPay's new API
 
-[unreleased]: https://github.com/bitpay/php-bitpay-client/compare/v2.2.4...HEAD
+[unreleased]: https://github.com/bitpay/php-bitpay-client/compare/v2.2.5...HEAD
+[2.2.5]: https://github.com/bitpay/php-bitpay-client/compare/v2.2.4...v2.2.5
 [2.2.4]: https://github.com/bitpay/php-bitpay-client/compare/v2.2.3...v2.2.4
 [2.2.3]: https://github.com/bitpay/php-bitpay-client/compare/v2.2.2...v2.2.3
 [2.2.2]: https://github.com/bitpay/php-bitpay-client/compare/v2.2.1...v2.2.2

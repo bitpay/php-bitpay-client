@@ -122,6 +122,8 @@ class Client implements ClientInterface
         $buyer        = $invoice->getBuyer();
         $buyerAddress = $buyer->getAddress();
 
+        $this->checkPriceAndCurrency($item->getPrice(), $currency->getCode());
+
         $body = array(
             'price'             => $item->getPrice(),
             'currency'          => $currency->getCode(),
@@ -555,9 +557,13 @@ class Client implements ClientInterface
     {
         $this->request = $this->createNewRequest();
         $this->request->setMethod(Request::METHOD_GET);
-        $this->request->setPath(sprintf('invoices/%s?token=%s', $invoiceId, $this->token->getToken()));
-        $this->addIdentityHeader($this->request);
-        $this->addSignatureHeader($this->request);
+        if ($this->token->getFacade() === 'merchant') {
+            $this->request->setPath(sprintf('invoices/%s?token=%s', $invoiceId, $this->token->getToken()));
+            $this->addIdentityHeader($this->request);
+            $this->addSignatureHeader($this->request);
+        } else {
+            $this->request->setPath(sprintf('invoices/%s', $invoiceId));
+        }
         $this->response = $this->sendRequest($this->request);
         $body = json_decode($this->response->getBody(), true);
 
@@ -582,7 +588,7 @@ class Client implements ClientInterface
             ->setExpirationTime($data['expirationTime'])
             ->setCurrentTime($data['currentTime'])
             ->setId($data['id'])
-            ->setBtcPaid($data['btcPrice'])
+            ->setBtcPaid($data['btcPaid'])
             ->setRate($data['rate'])
             ->setExceptionStatus($data['exceptionStatus']);
 
@@ -673,5 +679,18 @@ class Client implements ClientInterface
         $request->setHeader('X-BitPay-Plugin-Info', sprintf('%s/%s', self::NAME, self::VERSION));
         $request->setHeader('Content-Type', 'application/json');
         $request->setHeader('X-Accept-Version', '2.0.0');
+    }
+
+    protected function checkPriceAndCurrency($price, $currency)
+    {
+        $decimalPosition = strpos($price, '.');
+        if ($decimalPosition == 0) {
+            $decimalPrecision = 0;
+        } else {
+            $decimalPrecision = strlen(substr($price, $decimalPosition + 1));
+        }
+        if (($decimalPrecision > 2 && $currency != 'BTC') || $decimalPrecision > 6) {
+            throw new \Exception('Incorrect price format or currency type.');
+        }
     }
 }

@@ -29,7 +29,8 @@ final class Base58
      */
     public static function encode($data)
     {
-        if (strlen($data) % 2 != 0 || strlen($data) == 0) {
+        $dataLen = strlen($data);
+        if ($dataLen % 2 != 0 || $dataLen == 0) {
             throw new \Exception('Invalid Length');
         }
 
@@ -44,7 +45,7 @@ final class Base58
             $x = $q;
         }
 
-        for ($i = 0; $i < strlen($data) && substr($data, $i, 2) == '00'; $i += 2) {
+        for ($i = 0; $i < $dataLen && substr($data, $i, 2) == '00'; $i += 2) {
             $output_string .= substr($code_string, 0, 1);
         }
 
@@ -62,7 +63,9 @@ final class Base58
      */
     public static function decode($data)
     {
-        for ($return = '0', $i = 0; $i < strlen($data); $i++) {
+        $dataLen = strlen($data);
+
+        for ($return = '0', $i = 0; $i < $dataLen; $i++) {
             $current = strpos(self::BASE58_CHARS, $data[$i]);
             $return  = Math::mul($return, '58');
             $return  = Math::add($return, $current);
@@ -70,7 +73,7 @@ final class Base58
 
         $return = Util::encodeHex($return);
 
-        for ($i = 0; $i < strlen($data) && substr($data, $i, 1) == '1'; $i++) {
+        for ($i = 0; $i < $dataLen && substr($data, $i, 1) == '1'; $i++) {
             $return = '00'.$return;
         }
 

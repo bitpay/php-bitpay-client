@@ -181,7 +181,8 @@ class Util
             $hex = substr($hex, 2);
         }
 
-        for ($dec = '0', $i = 0; $i < strlen($hex); $i++) {
+        $hexLen = strlen($hex);
+        for ($dec = '0', $i = 0; $i < $hexLen; $i++) {
             $current = strpos(self::HEX_CHARS, $hex[$i]);
             $dec     = Math::add(Math::mul($dec, 16), $current);
         }
@@ -234,7 +235,12 @@ class Util
             } else {
                 $bin .= '0';
             }
+            $prevDec = $dec;
             $dec = Math::div($dec, 2);
+            //sanity check to avoid infinite loop
+            if (Math::cmp($prevDec, $dec) < 1) {
+                throw new \Exception('Math library has unexpected behavior, please report the following information to support@bitpay.com. Math Engine is: ' . Math::getEngineName() . '. PHP Version is: ' . phpversion() . '.');
+            }
         }
 
         return $bin;

@@ -1,69 +1,55 @@
-##  Configuration
-Configuration can of this library can be done in various different ways.
-Out of the box, you are able to configure the client using a PHP array
-or by using a yml file.
+Configuration
+-------------
+
+Configuration of this library can be done two different ways: using a PHP array or by using a YML file.
 
 Config Options
-==============
+--------------
 
-All configuration options can be found in the class
-BitpayConfigConfiguration
+All configuration options can be found in the class `BitpayConfigConfiguration`:
 
-public\_key
------------
+    public\_key
 
-This is the full path to the public key and the name. The default for
-this is `$HOME/.bitpay/bitpay.pub`
+This is the full path and name for the public key. The default value is `$HOME/.bitpay/bitpay.pub`
 
-private\_key
-------------
+    private\_key
 
-Default for this is `$HOME/.bitpay/bitpay.key`
+This is the full path and name for the private key.  The default value is `$HOME/.bitpay/bitpay.key`
 
-network
--------
+    network
 
-Use livenet or testnet. Valid values are `testnet` or `livenet` and it
-defaults to `livenet`.
+Specifies using the Live Bitcoin network or the Test Bitcoin network: `livenet` or `testnet`.  The default is `livenet`.
 
-adapter
--------
+    adapter
 
-Used mostly for testing. You shouldn't need to change or update this.
+Used mostly for testing. You shouldn't need to change or update this value.
 
-key\_storage
-------------
+    key\_storage
 
-The `key_storage` option allows you to give a class for persisting keys
-and loading them. The class must also implement
-`Bitpay\Storage\StorageInterface`.
+The `key_storage` option allows you to specify a class for persisting and retrieving keys.  By default this uses the `Bitpay\Storage\EncryptedFilesystemStorage` class.
 
-By default this uses the `Bitpay\Storage\EncryptedFilesystemStorage`.
-
-key\_storage\_password
-----------------------
+    key\_storage\_password
 
 This is the password used to encrypt and decrypt keys on the filesystem.
-If you have generated keys and change this to something else, you will
-be unable to load your keys.
 
 Example YAML config
-===================
+-------------------------
 
-``` {.sourceCode .yaml}
+```yaml
 # /path/to/config.yml
 bitpay:
     network: testnet
 ```
 
-``` {.sourceCode .php}
+Corresponding PHP code:
+```php
 $bitpay = new \Bitpay\Bitpay('/path/to/config.yml');
 ```
 
 Example array config
-====================
+------------------------
 
-``` {.sourceCode .php}
+```php
 $bitpay = new \Bitpay\Bitpay(
     array(
         'bitpay' => array(
