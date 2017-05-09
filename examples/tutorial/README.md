@@ -3,10 +3,12 @@
 
 1. 001_generateKeys.php : generates the private/public keys to sign the communication with BitPay. The private/public keys are stored in your filesystem for later usage.
 2. 002_pair.php : pairs your private/public keys to your BitPay merchant account. The result is an API token that can be used to create invoices permanently.
+
 ^^ the above two scripts need to be executed only once.
 
 3. 003_createInvoice.php : creates a BitPay invoice. Please make sure to fill in the API token received from 003_createInvoice.php
-^^ this last script can be executed permanently using the API token.
+
+^^ this last script (003_createInvoice.php) can be executed permanently using the API token.
 
 
 ## Testing
@@ -18,7 +20,7 @@ For more information about testing, please see https://bitpay.com/docs/testing
 
 
 Once you have an account and a testnet wallet, you should begin to go through
-this tutorial starting from file `001.php` and continuing on to the next
+this tutorial starting from file `001_generateKeys.php` and continuing on to the next
 files in order.
 
 
