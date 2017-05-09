@@ -9,7 +9,7 @@
 ^^ this last script can be executed permanently using the API token.
 
 
-##Testing
+## Testing
 To begin, please visit https://test.bitpay.com and register for a test account.
 If you are looking for a testnet wallet to test with, please visit https://bitpay.com/wallet and
 create a new wallet. 
