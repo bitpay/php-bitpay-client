@@ -493,7 +493,7 @@ class Client implements ClientInterface
     public function createToken(array $payload = array())
     {
         if (isset($payload['pairingCode']) && 1 !== preg_match('/^[a-zA-Z0-9]{7}$/', $payload['pairingCode'])) {
-            throw new \ArgumentException("pairing code is not legal");
+            throw new \InvalidArgumentException("pairing code is not legal");
         }
 
         $this->request = $this->createNewRequest();

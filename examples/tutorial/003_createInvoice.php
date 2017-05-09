@@ -44,7 +44,7 @@ $invoice = new \Bitpay\Invoice();
 
 $buyer = new \Bitpay\Buyer();
 $buyer
-    ->setEmail('buyeremail@test.com')
+    ->setEmail('buyeremail@test.com');
 
 // Add the buyers info to invoice
 $invoice->setBuyer($buyer);
