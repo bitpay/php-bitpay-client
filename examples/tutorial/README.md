@@ -1,4 +1,4 @@
-#Tutorial
+# Tutorial
 ==========================
 
 1. 001_generateKeys.php : generates the private/public keys to sign the communication with BitPay. The private/public keys are stored in your filesystem for later usage.
