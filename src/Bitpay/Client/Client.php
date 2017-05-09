@@ -131,6 +131,7 @@ class Client implements ClientInterface
             'notificationURL'   => $invoice->getNotificationUrl(),
             'transactionSpeed'  => $invoice->getTransactionSpeed(),
             'fullNotifications' => $invoice->isFullNotifications(),
+            'extendedNotifications' => $invoice->isExtendedNotifications(),
             'notificationEmail' => $invoice->getNotificationEmail(),
             'redirectURL'       => $invoice->getRedirectUrl(),
             'orderID'           => $invoice->getOrderId(),
@@ -146,6 +147,7 @@ class Client implements ClientInterface
             'buyerCountry'      => $buyer->getCountry(),
             'buyerEmail'        => $buyer->getEmail(),
             'buyerPhone'        => $buyer->getPhone(),
+            'buyerNotify'       => $buyer->getNotify(),
             'guid'              => Util::guid(),
             'nonce'             => Util::nonce(),
             'token'             => $this->token->getToken(),
@@ -491,7 +493,7 @@ class Client implements ClientInterface
     public function createToken(array $payload = array())
     {
         if (isset($payload['pairingCode']) && 1 !== preg_match('/^[a-zA-Z0-9]{7}$/', $payload['pairingCode'])) {
-            throw new ArgumentException("pairing code is not legal");
+            throw new \ArgumentException("pairing code is not legal");
         }
 
         $this->request = $this->createNewRequest();
@@ -572,25 +574,29 @@ class Client implements ClientInterface
         }
 
         $data = $body['data'];
-
+        
+        
         $invoice = new \Bitpay\Invoice();
         $invoiceToken = new \Bitpay\Token();
         $invoice
             ->setToken($invoiceToken->setToken($data['token']))
             ->setUrl($data['url'])
-            ->setPosData($data['posData'])
+            ->setPosData(array_key_exists('posData', $data) ? $data['posData'] : '')
             ->setStatus($data['status'])
             ->setBtcPrice($data['btcPrice'])
             ->setPrice($data['price'])
             ->setCurrency(new \Bitpay\Currency($data['currency']))
-            ->setOrderId($data['orderId'])
+            ->setOrderId(array_key_exists('orderId', $data) ? $data['orderId'] : '')
             ->setInvoiceTime($data['invoiceTime'])
             ->setExpirationTime($data['expirationTime'])
             ->setCurrentTime($data['currentTime'])
             ->setId($data['id'])
             ->setBtcPaid($data['btcPaid'])
             ->setRate($data['rate'])
-            ->setExceptionStatus($data['exceptionStatus']);
+            ->setExceptionStatus($data['exceptionStatus'])
+            //->setRefundAddress(array_key_exists('refundAddresses', $data) ? key($data['refundAddresses'][0]) : '');
+            ->setRefundAddresses(array_key_exists('refundAddresses', $data) ? $data['refundAddresses'] : '');
+    
 
         return $invoice;
     }

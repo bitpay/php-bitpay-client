@@ -58,4 +58,9 @@ interface UserInterface
      * @return string
      */
     public function getCountry();
+
+    /**
+     * @return boolean
+     */
+    public function getNotify();
 }

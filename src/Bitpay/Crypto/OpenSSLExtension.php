@@ -97,7 +97,7 @@ class OpenSSLExtension implements CryptoInterface
 
                 return false;
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             while ($msg = openssl_error_string()) {
                 throw new \Exception('Error in generateOpenSSLKeypair: OpenSSL reported error: '.$msg);
             }

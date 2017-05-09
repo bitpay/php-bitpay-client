@@ -166,7 +166,7 @@ interface InvoiceInterface
     public function getStatus();
 
     /**
-     * default value: false
+     * default value: true
      * ● true: Notifications will be sent on every status change.
      * ● false: Notifications are only sent when an invoice is confirmed (according
      *   to the “transactionSpeed” setting).
@@ -174,6 +174,15 @@ interface InvoiceInterface
      * @return boolean
      */
     public function isFullNotifications();
+
+    /**
+     * default value: false
+     * ● true: Notifications will also be sent for expired invoices and refunds.
+     * ● false: Notifications will not be sent for expired invoices and refunds
+     *
+     * @return boolean
+     */
+    public function isExtendedNotifications();
 
     /**
      * The unique id of the invoice assigned by bitpay.com
@@ -356,4 +365,16 @@ interface InvoiceInterface
     /**
      */
     public function getToken();
+
+    /**
+     * An array containing all bitcoin addresses linked to the invoice. 
+     * Only filled when doing a getInvoice using the Merchant facade.
+     * The array contains
+     *  [refundAddress] => Array
+     *       [type] => string (e.g. "PaymentProtocol")
+     *       [date] => datetime string
+     *
+     * @return array|object
+     */
+    public function getRefundAddresses();
 }

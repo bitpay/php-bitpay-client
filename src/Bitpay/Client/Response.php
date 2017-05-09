@@ -83,7 +83,7 @@ class Response implements ResponseInterface
                 break;
             }
 
-            if (strpos($lines[$i], ':')) {
+            if (strpos($lines[$i], ':') !== false) {
                 $headerParts = explode(':', $lines[$i]);
                 $response->setHeader($headerParts[0], $headerParts[1]);
             }

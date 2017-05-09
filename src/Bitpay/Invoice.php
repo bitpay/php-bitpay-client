@@ -63,6 +63,11 @@ class Invoice implements InvoiceInterface
     protected $fullNotifications;
 
     /**
+     * @var boolean
+     */
+    protected $extendedNotifications;
+
+    /**
      * @var string
      */
     protected $id;
@@ -118,11 +123,18 @@ class Invoice implements InvoiceInterface
     protected $token;
 
     /**
+     * @var Array
+     */
+    protected $refundAddresses;
+
+
+    /**
      */
     public function __construct()
     {
         $this->transactionSpeed  = self::TRANSACTION_SPEED_MEDIUM;
-        $this->fullNotifications = false;
+        $this->fullNotifications = true;
+        $this->extendedNotifications = false;
     }
 
     /**
@@ -368,6 +380,21 @@ class Invoice implements InvoiceInterface
     public function setFullNotifications($notifications)
     {
         $this->fullNotifications = (boolean) $notifications;
+
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function isExtendedNotifications()
+    {
+        return $this->extendedNotifications;
+    }
+
+    public function setExtendedNotifications($notifications)
+    {
+        $this->extendedNotifications = (boolean) $notifications;
 
         return $this;
     }
@@ -708,4 +735,26 @@ class Invoice implements InvoiceInterface
         $this->token = $token;
         return $this;
     }
+    /**
+     * @inheritdoc
+     */
+    public function getRefundAddresses()
+    {
+        return $this->refundAddresses;
+    }
+
+    /**
+     * @param array $refundAddress
+     *
+     * @return InvoiceInterface
+     */
+    public function setRefundAddresses($refundAddresses)
+    {
+        if (!empty($refundAddresses)) {
+            $this->refundAddresses = $refundAddresses;
+        }
+
+        return $this;
+    }
+
 }
