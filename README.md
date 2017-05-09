@@ -53,7 +53,7 @@ php composer.phar require bitpay/php-client:^2.2
 
 # Configuration
 
-See https://labs.bitpay.com/t/php-bitpay-client-library-configuration/555
+See http://help.bitpay.com/businesses-and-organizations/implementation-and-development/how-do-i-configure-the-php-bitpay-client-library
 
 # Usage
 
@@ -81,12 +81,16 @@ Please see the ``docs`` directory for information on how to use this library
 and the ``examples`` directory for examples on using this library. You should
 be able to run all the examples by running ``php examples/File.php``.
 
-Reading the latest documentation at https://help.bitpay.com/8451-Implementation- might also help.
+The ``examples/tutorial`` directory provides three scripts that guide you with creating a BitPay invoice.
+
+Reading the library usage tutorial at http://help.bitpay.com/businesses-and-organizations/implementation-and-development/bitpay-php-library-usage-tutorial-from-start-creating-keys-to-finish-creating-an-invoice might also help.
 
 # Support
 
 * https://github.com/bitpay/php-bitpay-client/issues
 * https://help.bitpay.com/
+
+When you receive blank IPN responses, please check http://help.bitpay.com/businesses-and-organizations/implementation-and-development/why-am-i-getting-a-blank-ipn-post-response-from-bitpay-when-using-php
 
 # License
 
