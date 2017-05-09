@@ -29,7 +29,7 @@ $buyer
     ->setFirstName('Some')
     ->setLastName('Customer')
     ->setPhone('555-5555-5555')
-    ->setEmail('integrations@bitpay.com')
+    ->setEmail('test@test.com')
     ->setAddress(
         array(
             '123 Main St',
