@@ -79,6 +79,7 @@ try {
      * decided that it makes more sense to allow your application to handle
      * this exception since each app is different and has different requirements.
      */
+    echo "Pairing failed. Please check whether you're trying to pair a production pairing code on test.";
     $request  = $client->getRequest();
     $response = $client->getResponse();
     /**

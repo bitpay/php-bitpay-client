@@ -292,6 +292,12 @@ class User implements UserInterface
     {
         return $this->notify;
     }
+    
+    /**
+     * @param bool $boolvalue
+     *
+     * @return User
+     */
     public function setNotify($boolvalue)
     {
         if (!empty($boolvalue)) {
