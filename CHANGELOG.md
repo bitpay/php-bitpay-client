@@ -28,8 +28,7 @@ Included buyer notify field (when creating an invoice)
 - Symfony v3 compatibility fixes
 - PHP 7 compatibility fixes
 
-
-## [2.2.10] - 2017-02-21
+## [2.2.9] - 2017-02-21
 ### Fixed
 - HTTP 100 messages not parsed correctly when doing payouts
 
