@@ -2,6 +2,33 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.2.13] - 2017-05-12
+### Fixed
+- Updated VERSION and changelog
+- Clarified tutorial text
+
+
+## [2.2.12] - 2017-05-09
+### Added
+- Included IPN processor example in tutorials
+
+### Fixed
+- broken exception in Client.php
+
+
+## [2.2.11] - 2017-05-09
+### Added
+- Added refund addresses to getInvoice
+- Included extendedNotifications
+
+Included buyer notify field (when creating an invoice)
+### Fixed
+- Improved tutorial (https://github.com/bitpay/php-bitpay-client/tree/master/examples/tutorial)
+- Made fullNotifications=true default
+- Symfony v3 compatibility fixes
+- PHP 7 compatibility fixes
+
+
 ## [2.2.10] - 2017-02-21
 ### Fixed
 - HTTP 100 messages not parsed correctly when doing payouts
