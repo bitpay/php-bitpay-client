@@ -30,7 +30,7 @@ class Invoice implements InvoiceInterface
     /**
      * @var string
      */
-    protected $transactionSpeed;
+    protected $transactionSpeed = self::TRANSACTION_SPEED_MEDIUM;
 
     /**
      * @var string
@@ -60,12 +60,12 @@ class Invoice implements InvoiceInterface
     /**
      * @var boolean
      */
-    protected $fullNotifications;
+    protected $fullNotifications = false;
 
     /**
      * @var boolean
      */
-    protected $extendedNotifications;
+    protected $extendedNotifications = false;
 
     /**
      * @var string
@@ -123,19 +123,9 @@ class Invoice implements InvoiceInterface
     protected $token;
 
     /**
-     * @var Array
+     * @var array
      */
     protected $refundAddresses;
-
-
-    /**
-     */
-    public function __construct()
-    {
-        $this->transactionSpeed  = self::TRANSACTION_SPEED_MEDIUM;
-        $this->fullNotifications = true;
-        $this->extendedNotifications = false;
-    }
 
     /**
      * @inheritdoc
