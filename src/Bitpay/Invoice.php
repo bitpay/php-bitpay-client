@@ -746,5 +746,4 @@ class Invoice implements InvoiceInterface
 
         return $this;
     }
-
 }
