@@ -60,7 +60,7 @@ class Invoice implements InvoiceInterface
     /**
      * @var boolean
      */
-    protected $fullNotifications = false;
+    protected $fullNotifications = true;
 
     /**
      * @var boolean
