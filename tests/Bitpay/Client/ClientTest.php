@@ -622,9 +622,9 @@ class ClientTest extends \PHPUnit_Framework_TestCase
                     'getExpirationTime', 'getCurrentTime', 'getOrderId', 'getItemDesc', 'getItemCode',
                     'isPhysical', 'getBuyerName', 'getBuyerAddress1', 'getBuyerAddress2', 'getBuyerCity',
                     'getBuyerState', 'getBuyerZip', 'getBuyerCountry', 'getBuyerEmail', 'getBuyerPhone',
-                    'getExceptionStatus', 'getBtcPaid', 'getRate', 'getToken', 'setId', 'setUrl',
-                    'setStatus', 'setBtcPrice', 'setPrice', 'setInvoiceTime', 'setExpirationTime',
-                    'setCurrentTime', 'setBtcPaid', 'setRate', 'setToken', 'setExceptionStatus',
+                    'getExceptionStatus', 'getBtcPaid', 'getRate', 'getToken', 'getRefundAddresses',
+                    'setId', 'setUrl', 'setStatus', 'setBtcPrice', 'setPrice', 'setInvoiceTime', 'setExpirationTime',
+                    'setCurrentTime', 'setBtcPaid', 'setRate', 'setToken', 'setExceptionStatus', 'isExtendedNotifications'
                 )
             )
             ->getMock();
@@ -688,6 +688,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
                     'getState',
                     'getZip',
                     'getCountry',
+                    'getNotify'
                 )
             )
             ->getMock();
