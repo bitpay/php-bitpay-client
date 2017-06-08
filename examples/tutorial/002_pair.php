@@ -5,7 +5,7 @@
  * 002 - Pairing
  *
  * Requirements:
- *   - Baisic PHP Knowledge
+ *   - Basic PHP Knowledge
  *   - Private and Public keys from 001.php
  *   - Account on https://test.bitpay.com
  *   - Pairing code
