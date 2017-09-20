@@ -220,7 +220,7 @@ class PrivateKey extends Key
         $byte = strrev($byte);
 
         // msb check
-        if (Math::cmp('0x'.bin2hex($byte[0]), '0x80') >= 0) {
+        if (Math::cmp('0x'.bin2hex($byte[0]), '0'.'x80') >= 0) {
             $byte = chr(0x00).$byte;
         }
 
@@ -240,7 +240,7 @@ class PrivateKey extends Key
         $byte = strrev($byte);
 
         // msb check
-        if (Math::cmp('0x'.bin2hex($byte[0]), '0x80') >= 0) {
+        if (Math::cmp('0x'.bin2hex($byte[0]), '0'.'x80') >= 0) {
             $byte = chr(0x00).$byte;
         }
 

@@ -36,7 +36,7 @@ class PublicKey extends Key
             return '';
         }
 
-        if (Math::mod('0x'.$this->y, '0x02') == '1') {
+        if (Math::mod('0x'.$this->y, '0'.'x02') == '1') {
             return sprintf('03%s', $this->x);
         } else {
             return sprintf('02%s', $this->x);
