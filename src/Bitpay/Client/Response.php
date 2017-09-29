@@ -52,17 +52,19 @@ class Response implements ResponseInterface
     }
 
     /**
+     * @param string $rawResponse
+     * @return Response
      */
     public static function createFromRawResponse($rawResponse)
-   {
+    {
         $response = new self($rawResponse);
-        // remove HTTP 100 responses
-        $delimiter = "\r\n\r\n"; // HTTP header delimiter
-        // check if the 100 Continue header exists
-        while ( preg_match('#^HTTP/[0-9\\.]+\s+100\s+Continue#i',$rawResponse) ) {
-            $tmp = explode($delimiter,$rawResponse,2); // grab the 100 Continue header
-            $rawResponse = $tmp[1]; // update the response, purging the most recent 100 Continue header
-        } // repeat
+        //remove HTTP 100 responses
+        $delimiter = "\r\n\r\n";// HTTP header delimiter
+        //check if the 100 Continue header exists
+        while (preg_match('#^HTTP/[0-9\\.]+\s+100\s+Continue#i', $rawResponse)) {
+            $tmp = explode($delimiter, $rawResponse, 2);// grab the 100 Continue header
+            $rawResponse = $tmp[1];// update the response, purging the most recent 100 Continue header
+        }// repeat
         
         $lines    = preg_split('/(\\r?\\n)/', $rawResponse);
         $linesLen = count($lines);
