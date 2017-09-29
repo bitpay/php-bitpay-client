@@ -2,6 +2,16 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.2.14] - 2017-09-27
+### Fixed
+- Fixed token check in get invoices method for public facade calls (#243)
+- Spell fixes (#233 and #233)
+- Fix some of the tests (#228)
+
+### Added
+- Added encrypt & decrypt functions to OpenSSL (#247)
+
+
 ## [2.2.13] - 2017-05-12
 ### Fixed
 - Updated VERSION and changelog
