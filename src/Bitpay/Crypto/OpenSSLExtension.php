@@ -26,6 +26,7 @@ class OpenSSLExtension implements CryptoInterface
      */
     public function getAlgos()
     {
+        return openssl_get_cipher_methods();
     }
 
     /**
@@ -177,4 +178,85 @@ class OpenSSLExtension implements CryptoInterface
 
         return openssl_csr_export($csr, $out, $notext);
     }
+     /**
+     *
+     * Encrypts $text based on your $key and $iv.  The returned text is
+     * base-64 encoded to make it easier to work with in various scenarios.
+     * Default cipher is AES-256-CBC but you can substitute depending
+     * on your specific encryption needs.
+     *
+     * @param  string    $text
+     * @param  string    $key
+     * @param  string    $iv
+     * @param  int       $bit_check
+     * @param  string    $cipher_type
+     * @return string    $text
+     * @throws Exception $e
+     *
+     */
+    public function encrypt($text, $key = '', $iv = '', $bit_check = 8, $cipher_type = 'AES-256-CBC') {
+        try {
+            if (function_exists('openssl_pkey_new')) {
+                /* Ensure the key & IV is the same for both encrypt & decrypt. */
+                if (!empty($text) && is_string($text)) {
+                    $text_num = str_split($text, $bit_check);
+                    $text_num = $bit_check - strlen($text_num[count($text_num) - 1]);
+
+                    for ($i = 0; $i < $text_num; $i++) {
+                        $text = $text . chr($text_num);
+                    }
+                    $encrypted = openssl_encrypt($text, $cipher_type, $key, 0, $iv);
+                    return base64_encode($encrypted);
+                } else {
+                    return $text;
+                }
+            } else {
+                throw new \Exception('Error in OpenSSL encrypt: OpenSSL PHP extension missing. openssl_encrypt function not found.');
+
+                return false;
+            }
+        } catch (\Exception $e) {
+            throw $e;
+        }
+    }
+
+    /**
+     *
+     * Decrypts $text based on your $key and $iv.  Make sure you use the same key
+     * and initialization vector that you used when encrypting the $text. Default
+     * cipher is AES-256-CBC but you can substitute depending on the cipher
+     * used for encrypting the text - very important.
+     *
+     * @param  string    $encrypted_text
+     * @param  string    $key
+     * @param  string    $iv
+     * @param  int       $bit_check
+     * @param  string    $cipher_type
+     * @return string    $text
+     * @throws Exception $e
+     *
+     */
+    public function decrypt($encrypted_text, $key = '', $iv = '', $bit_check = 8, $cipher_type = 'AES-256-CBC') {
+        try {
+            /* Ensure the key & IV is the same for both encrypt & decrypt. */
+            if (!empty($encrypted_text)) {
+
+                $decrypted = openssl_decrypt(base64_decode($encrypted_text), $cipher_type, $key, 0, $iv);
+                $last_char = substr($decrypted, -1);
+
+                for ($i = 0; $i < $bit_check; $i++) {
+                    if (chr($i) == $last_char) {
+                        $decrypted = substr($decrypted, 0, strlen($decrypted) - $i);
+                        break;
+                    }
+                }
+                return $decrypted;
+            } else {
+                return $encrypted_text;
+            }
+        } catch (\Exception $e) {
+            throw $e;
+        }
+    }
+
 }
