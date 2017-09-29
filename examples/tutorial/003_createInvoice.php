@@ -6,7 +6,7 @@
  *
  * Requirements:
  *   - Account on https://test.bitpay.com
- *   - Baisic PHP Knowledge
+ *   - Basic PHP Knowledge
  *   - Private and Public keys from 001.php
  *   - Token value obtained from 002.php
  */
