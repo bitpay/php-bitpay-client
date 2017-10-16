@@ -194,7 +194,8 @@ class OpenSSLExtension implements CryptoInterface
      * @throws Exception $e
      *
      */
-    public function encrypt($text, $key = '', $iv = '', $bit_check = 8, $cipher_type = 'AES-256-CBC') {
+    public function encrypt($text, $key = '', $iv = '', $bit_check = 8, $cipher_type = 'AES-256-CBC')
+    {
         try {
             if (function_exists('openssl_pkey_new')) {
                 /* Ensure the key & IV is the same for both encrypt & decrypt. */
@@ -236,7 +237,8 @@ class OpenSSLExtension implements CryptoInterface
      * @throws Exception $e
      *
      */
-    public function decrypt($encrypted_text, $key = '', $iv = '', $bit_check = 8, $cipher_type = 'AES-256-CBC') {
+    public function decrypt($encrypted_text, $key = '', $iv = '', $bit_check = 8, $cipher_type = 'AES-256-CBC')
+    {
         try {
             /* Ensure the key & IV is the same for both encrypt & decrypt. */
             if (!empty($encrypted_text)) {
@@ -258,5 +260,4 @@ class OpenSSLExtension implements CryptoInterface
             throw $e;
         }
     }
-
 }
