@@ -2,6 +2,14 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.2.15] - 2017-11-28
+### Fixed
+- Fixed invoice time being set as numeric instead of datetime object
+
+### Removed
+- Removed support for mcrypt (#254)
+
+
 ## [2.2.14] - 2017-09-27
 ### Fixed
 - Fixed token check in get invoices method for public facade calls (#243)

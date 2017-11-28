@@ -470,10 +470,13 @@ class Invoice implements InvoiceInterface
      */
     public function setInvoiceTime($invoiceTime)
     {
-        if (!empty($invoiceTime)) {
+        if (is_a($invoiceTime, 'DateTime')) {
             $this->invoiceTime = $invoiceTime;
+        } else if (is_numeric($invoiceTime)) {
+            $invoiceDateTime = new \DateTime();
+            $invoiceDateTime->setTimestamp($invoiceTime);
+            $this->invoiceTime = $invoiceDateTime;
         }
-
         return $this;
     }
 
@@ -492,10 +495,13 @@ class Invoice implements InvoiceInterface
      */
     public function setExpirationTime($expirationTime)
     {
-        if (!empty($expirationTime)) {
+        if (is_a($expirationTime, 'DateTime')) {
             $this->expirationTime = $expirationTime;
+        } else if (is_numeric($expirationTime)) {
+            $expirationDateTime = new \DateTime();
+            $expirationDateTime->setTimestamp($expirationTime);
+            $this->expirationTime = $expirationDateTime;
         }
-
         return $this;
     }
 
@@ -514,10 +520,13 @@ class Invoice implements InvoiceInterface
      */
     public function setCurrentTime($currentTime)
     {
-        if (!empty($currentTime)) {
+        if (is_a($currentTime, 'DateTime')) {
             $this->currentTime = $currentTime;
+        } else if (is_numeric($currentTime)) {
+            $currentDateTime = new \DateTime();
+            $currentDateTime->setTimestamp($currentTime);
+            $this->currentTime = $currentDateTime;
         }
-
         return $this;
     }
 

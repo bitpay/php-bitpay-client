@@ -273,13 +273,6 @@ class UtilTest extends \PHPUnit_Framework_TestCase
             $this->assertTrue(is_string($requirements['PHP']));
         }
 
-        // Mcrypt Extension
-        if (extension_loaded('mcrypt')) {
-            $this->assertTrue($requirements['Mcrypt']);
-        } else {
-            $this->assertTrue(is_string($requirements['Mcrypt']));
-        }
-
         // OpenSSL Extension
         if (extension_loaded('openssl')) {
             $this->assertTrue($requirements['OpenSSL']);

@@ -433,13 +433,6 @@ class Util
             $requirements['PHP'] = true;
         }
 
-        // Mcrypt Extension
-        if (!extension_loaded('mcrypt')) {
-            $requirements['Mcrypt'] = 'The Mcrypt PHP extension could not be found.';
-        } else {
-            $requirements['Mcrypt'] = true;
-        }
-
         // OpenSSL Extension
         if (!extension_loaded('openssl')) {
             $requirements['OpenSSL'] = 'The OpenSSL PHP extension could not be found.';
