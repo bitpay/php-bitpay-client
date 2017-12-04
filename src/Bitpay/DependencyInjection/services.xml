@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!--
 /**
- * @license Copyright 2011-2014 BitPay Inc., MIT License 
+ * @license Copyright 2011-2017 BitPay Inc., MIT License 
  * see https://github.com/bitpay/php-bitpay-client/blob/master/LICENSE
  */
  -->
@@ -39,11 +39,11 @@
             <argument type="service" id="key_storage" />
         </service>
 
-        <service id="public_key" class="Bitpay\PublicKey" factory-service="key_storage" factory-method="load">
+        <service id="public_key" class="Bitpay\PublicKey">
             <argument>%bitpay.public_key%</argument>
         </service>
 
-        <service id="private_key" class="Bitpay\PrivateKey" factory-service="key_storage" factory-method="load">
+        <service id="private_key" class="Bitpay\PrivateKey">
             <argument>%bitpay.private_key%</argument>
         </service>
     </services>
