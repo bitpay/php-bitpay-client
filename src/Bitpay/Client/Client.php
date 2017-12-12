@@ -169,6 +169,11 @@ class Client implements ClientInterface
         }
         $data = $body['data'];
         $invoiceToken = new \Bitpay\Token();
+        # BitPay returns the invoice time in milliseconds. PHP's DateTime object expects the time to be in seconds
+        $invoiceTime = is_numeric($data['invoiceTime']) ? intval($data['invoiceTime']/1000) : $data['invoiceTime'];
+        $expirationTime = is_numeric($data['expirationTime']) ? intval($data['expirationTime']/1000) : $data['expirationTime'];
+        $currentTime = is_numeric($data['currentTime']) ? intval($data['currentTime']/1000) : $data['currentTime'];
+
         $invoice
             ->setToken($invoiceToken->setToken($data['token']))
             ->setId($data['id'])
@@ -176,9 +181,9 @@ class Client implements ClientInterface
             ->setStatus($data['status'])
             ->setBtcPrice($data['btcPrice'])
             ->setPrice($data['price'])
-            ->setInvoiceTime($data['invoiceTime'])
-            ->setExpirationTime($data['expirationTime'])
-            ->setCurrentTime($data['currentTime'])
+            ->setInvoiceTime($invoiceTime)
+            ->setExpirationTime($expirationTime)
+            ->setCurrentTime($currentTime)
             ->setBtcPaid($data['btcPaid'])
             ->setRate($data['rate'])
             ->setExceptionStatus($data['exceptionStatus']);
@@ -574,6 +579,10 @@ class Client implements ClientInterface
         }
 
         $data = $body['data'];
+        # BitPay returns the invoice time in milliseconds. PHP's DateTime object expects the time to be in seconds
+        $invoiceTime = is_numeric($data['invoiceTime']) ? intval($data['invoiceTime']/1000) : $data['invoiceTime'];
+        $expirationTime = is_numeric($data['expirationTime']) ? intval($data['expirationTime']/1000) : $data['expirationTime'];
+        $currentTime = is_numeric($data['currentTime']) ? intval($data['currentTime']/1000) : $data['currentTime'];
         
         
         $invoice = new \Bitpay\Invoice();
@@ -587,9 +596,9 @@ class Client implements ClientInterface
             ->setPrice($data['price'])
             ->setCurrency(new \Bitpay\Currency($data['currency']))
             ->setOrderId(array_key_exists('orderId', $data) ? $data['orderId'] : '')
-            ->setInvoiceTime($data['invoiceTime'])
-            ->setExpirationTime($data['expirationTime'])
-            ->setCurrentTime($data['currentTime'])
+            ->setInvoiceTime($invoiceTime)
+            ->setExpirationTime($expirationTime)
+            ->setCurrentTime($currentTime)
             ->setId($data['id'])
             ->setBtcPaid($data['btcPaid'])
             ->setRate($data['rate'])
