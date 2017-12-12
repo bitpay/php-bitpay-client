@@ -36,11 +36,13 @@ These first two scripts need to be executed only once.
 
 ## Script 3: create a BitPay invoice
 3. 003_createInvoice.php : creates a BitPay invoice. Please make sure to update the script with the API token received from 002_pair.php
-This script returns a BitPay invoice object. You can display the invoice by loading the invoice-URL in a web browser. You can pay the invoice with your bitcoin wallet.
 
-## Script 4: create a BitPay invoice
+This script returns a BitPay invoice object. You can display the invoice by loading the invoice URL in a web browser. You can pay the invoice with your bitcoin wallet.
+
+## Script 4: display a BitPay invoice using BitPay's hosted payment page
 4. 004_HostedPaymentPage.php : creates a BitPay invoice and returns the HTML to show the invoice. Please make sure to update the script with the API token received from 002_pair.php
-For more information about paying a BitPay invoice, please see http://help.bitpay.com/paying-with-bitcoin/order-information-and-assistance/how-do-i-pay-a-bitpay-invoice-using-bitcoin
+
+For more information about paying a BitPay invoice, please see https://support.bitpay.com/hc/en-us/articles/203281456-How-do-I-pay-a-BitPay-invoice-
 
 Script 003_createInvoice.php and 004_HostedPaymentPage.php can be run permanently with the token from 002_pair.php
 
