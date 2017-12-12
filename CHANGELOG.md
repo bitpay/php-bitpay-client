@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.2.16] - 2017-12-12
+### Fixed
+- Fixed invoice time being set in milliseconds, whereas seconds are expected (Issue #256 and #257)
+- Removed deprecated factory methods from services.xml
+
+
 ## [2.2.15] - 2017-11-28
 ### Fixed
 - Fixed invoice time being set as numeric instead of datetime object
