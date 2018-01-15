@@ -26,7 +26,7 @@ interface ClientInterface
      * @see RFC2616 section 14.43 for User-Agent Format
      */
     const NAME    = 'BitPay PHP-Client';
-    const VERSION = '2.2.16';
+    const VERSION = '2.2.17';
 
     //public function createApplication(ApplicationInterface $application);
 

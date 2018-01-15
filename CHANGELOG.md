@@ -2,6 +2,11 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+
+## [2.2.17] - 2018-01-15
+### Fixed
+- Fixed decimal check for currencies without decimals (e.g. HUF)
+
 ## [2.2.16] - 2017-12-12
 ### Fixed
 - Fixed invoice time being set in milliseconds, whereas seconds are expected (Issue #256 and #257)
