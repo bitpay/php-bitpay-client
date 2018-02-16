@@ -94,7 +94,7 @@ try {
 }
 ?>
 <html>
-  <head><title>BitPay - Modal CSS invoice demo</title>title></head>
+  <head><title>BitPay - Modal CSS invoice demo</title></head>
   <body bgcolor="rgb(21,28,111)" textcolor="rgb(255,255,255)">
     <button onclick="openInvoice()">Pay Now</button>
     <br><br><br>
