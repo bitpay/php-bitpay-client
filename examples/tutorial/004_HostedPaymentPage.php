@@ -31,7 +31,6 @@ $client->setAdapter($adapter);
  * The last object that must be injected is the token object.
  */
 $token = new \Bitpay\Token();
-$token->setToken('HE7gQXJfm2CnTQ94bgKE9DiqHFqsPgBCvjgQRsU2tmkv'); // UPDATE THIS VALUE
 $token->setToken('UpdateThisValue'); // UPDATE THIS VALUE
 
 /**
