@@ -2,6 +2,18 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+
+## [2.2.19] - 2018-03-08
+### Added
+- Added support for BCH fields in the invoice: transactionCurrency, amountPaid, exchangeRates, paymentSubtotals, paymentTotals
+
+### Fixed
+- Set timezone to UTC (=timezone that BitPay invoices use), to prevent PHP errors when no default timezone is set
+
+### Deprecated
+- Deprecated BTC specific fields, as documented at https://bitpay.com/api#resource-Invoices
+
+
 ## [2.2.18] - 2018-01-15
 ### Fixed
 - Pushed actual code changes to GitHub from previous release
