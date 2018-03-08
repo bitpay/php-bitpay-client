@@ -17,7 +17,8 @@ $storageEngine = new \Bitpay\Storage\EncryptedFilesystemStorage('YourTopSecretPa
 $privateKey    = $storageEngine->load('/tmp/bitpay.pri');
 $publicKey     = $storageEngine->load('/tmp/bitpay.pub');
 $client        = new \Bitpay\Client\Client();
-$network       = new \Bitpay\Network\Testnet();
+//$network       = new \Bitpay\Network\Testnet();
+$network       = new \Bitpay\Network\Livenet();
 $adapter       = new \Bitpay\Client\Adapter\CurlAdapter();
 $client->setPrivateKey($privateKey);
 $client->setPublicKey($publicKey);
@@ -81,8 +82,10 @@ $invoice
  * a customer can view the invoice.
  */
 try {
+    echo "Creating invoice at BitPay now.".PHP_EOL;
     $client->createInvoice($invoice);
 } catch (\Exception $e) {
+    echo "Exception occured: " . $e->getMessage().PHP_EOL;
     $request  = $client->getRequest();
     $response = $client->getResponse();
     echo (string) $request.PHP_EOL.PHP_EOL.PHP_EOL;
@@ -91,3 +94,5 @@ try {
 }
 
 echo 'Invoice "'.$invoice->getId().'" created, see '.$invoice->getUrl().PHP_EOL;
+echo "Verbose details.".PHP_EOL;
+print_r($invoice);

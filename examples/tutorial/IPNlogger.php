@@ -51,6 +51,7 @@ $client->setNetwork($network);
 $client->setAdapter($adapter);
 
 $token = new \Bitpay\Token();
+$token->setToken('UpdateThisValue'); // UPDATE THIS VALUE
 $client->setToken($token);
 
 /**
