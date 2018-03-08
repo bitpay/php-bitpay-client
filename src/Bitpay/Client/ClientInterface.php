@@ -56,6 +56,8 @@ interface ClientInterface
      */
     public function getInvoice($invoiceId);
 
+
+
     //public function getLedgers();
     //public function getLedger(CurrencyInterface $currency);
 

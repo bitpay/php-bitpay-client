@@ -111,6 +111,42 @@ class Client implements ClientInterface
     /**
      * @inheritdoc
      */
+    protected function fillInvoiceData(InvoiceInterface $invoice, $data)
+    {
+        # BitPay returns the invoice time in milliseconds. PHP's DateTime object expects the time to be in seconds
+        $invoiceTime = is_numeric($data['invoiceTime']) ? intval($data['invoiceTime']/1000) : $data['invoiceTime'];
+        $expirationTime = is_numeric($data['expirationTime']) ? intval($data['expirationTime']/1000) : $data['expirationTime'];
+        $currentTime = is_numeric($data['currentTime']) ? intval($data['currentTime']/1000) : $data['currentTime'];
+        
+        $invoiceToken = new \Bitpay\Token();
+        $invoice
+            ->setToken($invoiceToken->setToken($data['token']))
+            ->setUrl($data['url'])
+            ->setPosData(array_key_exists('posData', $data) ? $data['posData'] : '')
+            ->setStatus($data['status'])
+            ->setBtcPrice(array_key_exists('btcPrice', $data) ? $data['btcPrice'] : '')
+            ->setPrice($data['price'])
+            ->setCurrency(new \Bitpay\Currency($data['currency']))
+            ->setOrderId(array_key_exists('orderId', $data) ? $data['orderId'] : '')
+            ->setInvoiceTime($invoiceTime)
+            ->setExpirationTime($expirationTime)
+            ->setCurrentTime($currentTime)
+            ->setId($data['id'])
+            ->setBtcPaid(array_key_exists('btcPaid', $data) ? $data['btcPaid'] : '')
+            ->setAmountPaid(array_key_exists('amountPaid', $data) ? $data['amountPaid'] : '')
+            ->setRate(array_key_exists('rate', $data) ? $data['rate'] : '')
+            ->setExceptionStatus($data['exceptionStatus'])
+            ->setRefundAddresses(array_key_exists('refundAddresses', $data) ? $data['refundAddresses'] : '')
+            ->setTransactionCurrency(array_key_exists('transactionCurrency', $data) ? $data['transactionCurrency'] : null)
+            ->setPaymentTotals(array_key_exists('paymentTotals', $data) ? $data['paymentTotals'] : '')
+            ->setPaymentSubtotals(array_key_exists('paymentSubtotals', $data) ? $data['paymentSubtotals'] : '')
+            ->setExchangeRates(array_key_exists('exchangeRates', $data) ? $data['exchangeRates'] : '');
+        return $invoice;
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function createInvoice(InvoiceInterface $invoice)
     {
         $request = $this->createNewRequest();
@@ -168,25 +204,8 @@ class Client implements ClientInterface
             throw new \Exception($error_message);
         }
         $data = $body['data'];
-        $invoiceToken = new \Bitpay\Token();
-        # BitPay returns the invoice time in milliseconds. PHP's DateTime object expects the time to be in seconds
-        $invoiceTime = is_numeric($data['invoiceTime']) ? intval($data['invoiceTime']/1000) : $data['invoiceTime'];
-        $expirationTime = is_numeric($data['expirationTime']) ? intval($data['expirationTime']/1000) : $data['expirationTime'];
-        $currentTime = is_numeric($data['currentTime']) ? intval($data['currentTime']/1000) : $data['currentTime'];
 
-        $invoice
-            ->setToken($invoiceToken->setToken($data['token']))
-            ->setId($data['id'])
-            ->setUrl($data['url'])
-            ->setStatus($data['status'])
-            ->setBtcPrice($data['btcPrice'])
-            ->setPrice($data['price'])
-            ->setInvoiceTime($invoiceTime)
-            ->setExpirationTime($expirationTime)
-            ->setCurrentTime($currentTime)
-            ->setBtcPaid($data['btcPaid'])
-            ->setRate($data['rate'])
-            ->setExceptionStatus($data['exceptionStatus']);
+        $invoice = $this->fillInvoiceData($invoice, $data); 
 
         return $invoice;
     }
@@ -579,36 +598,16 @@ class Client implements ClientInterface
         }
 
         $data = $body['data'];
-        # BitPay returns the invoice time in milliseconds. PHP's DateTime object expects the time to be in seconds
-        $invoiceTime = is_numeric($data['invoiceTime']) ? intval($data['invoiceTime']/1000) : $data['invoiceTime'];
-        $expirationTime = is_numeric($data['expirationTime']) ? intval($data['expirationTime']/1000) : $data['expirationTime'];
-        $currentTime = is_numeric($data['currentTime']) ? intval($data['currentTime']/1000) : $data['currentTime'];
-        
         
         $invoice = new \Bitpay\Invoice();
-        $invoiceToken = new \Bitpay\Token();
-        $invoice
-            ->setToken($invoiceToken->setToken($data['token']))
-            ->setUrl($data['url'])
-            ->setPosData(array_key_exists('posData', $data) ? $data['posData'] : '')
-            ->setStatus($data['status'])
-            ->setBtcPrice($data['btcPrice'])
-            ->setPrice($data['price'])
-            ->setCurrency(new \Bitpay\Currency($data['currency']))
-            ->setOrderId(array_key_exists('orderId', $data) ? $data['orderId'] : '')
-            ->setInvoiceTime($invoiceTime)
-            ->setExpirationTime($expirationTime)
-            ->setCurrentTime($currentTime)
-            ->setId($data['id'])
-            ->setBtcPaid($data['btcPaid'])
-            ->setRate($data['rate'])
-            ->setExceptionStatus($data['exceptionStatus'])
-            //->setRefundAddress(array_key_exists('refundAddresses', $data) ? key($data['refundAddresses'][0]) : '');
-            ->setRefundAddresses(array_key_exists('refundAddresses', $data) ? $data['refundAddresses'] : '');
-    
+        $invoice = $this->fillInvoiceData($invoice, $data);    
 
         return $invoice;
     }
+
+
+    
+
 
     /**
      * @param RequestInterface $request
