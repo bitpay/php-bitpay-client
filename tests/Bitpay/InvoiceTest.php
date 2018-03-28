@@ -244,7 +244,7 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
     public function testSetInvoiceTime()
     {
         $this->assertNotNull($this->invoice);
-        $date = new \DateTime();
+        $date = new \DateTime('now', new \DateTimeZone("UTC"));
         $this->invoice->setInvoiceTime($date);
         $this->assertSame($date, $this->invoice->getInvoiceTime());
     }
@@ -262,7 +262,7 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertNotNull($this->invoice);
 
-        $date = new \DateTime();
+        $date = new \DateTime('now',new \DateTimeZone("UTC"));
 
         $this->assertNotNull($date);
 
@@ -283,7 +283,7 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertNotNull($this->invoice);
 
-        $date = new \DateTime();
+        $date = new \DateTime('now',new \DateTimeZone("UTC"));
 
         $this->assertNotNull($date);
 

@@ -6,9 +6,6 @@
 
 namespace Bitpay;
 
-date_default_timezone_set('UTC');
-// BitPay uses UTC timezone for all its datetimes
-
 /**
  *
  * @package Bitpay
@@ -507,7 +504,7 @@ class Invoice implements InvoiceInterface
         if (is_a($invoiceTime, 'DateTime')) {
             $this->invoiceTime = $invoiceTime;
         } else if (is_numeric($invoiceTime)) {
-            $invoiceDateTime = new \DateTime();
+            $invoiceDateTime = new \DateTime('', new \DateTimeZone("UTC"));
             $invoiceDateTime->setTimestamp($invoiceTime);
             $this->invoiceTime = $invoiceDateTime;
         }
@@ -532,7 +529,7 @@ class Invoice implements InvoiceInterface
         if (is_a($expirationTime, 'DateTime')) {
             $this->expirationTime = $expirationTime;
         } else if (is_numeric($expirationTime)) {
-            $expirationDateTime = new \DateTime();
+            $expirationDateTime = new \DateTime('', new \DateTimeZone("UTC"));
             $expirationDateTime->setTimestamp($expirationTime);
             $this->expirationTime = $expirationDateTime;
         }
@@ -557,7 +554,7 @@ class Invoice implements InvoiceInterface
         if (is_a($currentTime, 'DateTime')) {
             $this->currentTime = $currentTime;
         } else if (is_numeric($currentTime)) {
-            $currentDateTime = new \DateTime();
+            $currentDateTime = new \DateTime('', new \DateTimeZone("UTC"));
             $currentDateTime->setTimestamp($currentTime);
             $this->currentTime = $currentDateTime;
         }
@@ -888,7 +885,7 @@ class Invoice implements InvoiceInterface
      */
     public function getPaymentTotals()
     {
-        return $this->paymentSubtotals;
+        return $this->paymentTotals;
     }
 
     /**

@@ -149,13 +149,6 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $this->item->setPrice(".");
     }
 
-    /**
-     * @expectedException        \Bitpay\Client\ArgumentException
-     */
-    public function testSetPriceExceptionDoubleDecimal()
-    {
-        $this->item->setPrice("6..5");
-    }
 
     public function testGetQuantity()
     {

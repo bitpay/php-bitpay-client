@@ -205,7 +205,7 @@ class Client implements ClientInterface
         }
         $data = $body['data'];
 
-        $invoice = $this->fillInvoiceData($invoice, $data); 
+        $invoice = $this->fillInvoiceData($invoice, $data);
 
         return $invoice;
     }
@@ -600,7 +600,7 @@ class Client implements ClientInterface
         $data = $body['data'];
         
         $invoice = new \Bitpay\Invoice();
-        $invoice = $this->fillInvoiceData($invoice, $data);    
+        $invoice = $this->fillInvoiceData($invoice, $data);
 
         return $invoice;
     }

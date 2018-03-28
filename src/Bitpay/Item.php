@@ -161,10 +161,12 @@ class Item implements ItemInterface
      */
     protected function checkPriceFormat($price)
     {
-        if($price === '0')
+        if($price === '0')  {
             return;
+        }
         $converted = (float)$price;
-        if($converted == 0)
+        if($converted == 0) {
             throw new \Bitpay\Client\ArgumentException("Price must be formatted as a float ". $converted);
+        }
     }
 }
