@@ -51,7 +51,7 @@ class BitpayTest extends \PHPUnit_Framework_TestCase
                 'bitpay' => array(
                     'network'     => 'testnet',
                     'private_key' => vfsStream::url('tmp/key.pri'),
-                    'public_key'  => vfsStream::url('tmp/key.pub'),
+                    'public_key'  => vfsStream::url('tmp/key.pub')
                 )
             )
         );
@@ -64,12 +64,13 @@ class BitpayTest extends \PHPUnit_Framework_TestCase
         /**
          * Save keys to the filesystem
          */
-        $storage = $bitpay->get('key_storage');
+        //$storage = $bitpay->get('key_storage');
+        $storage = new \Bitpay\Storage\FilesystemStorage();
         $storage->persist($pri);
         $storage->persist($pub);
 
         /**
-         * This will load the keys, if you have not already persisted them, than
+         * This will load the keys. If you have not already persisted them, then
          * this WILL throw an Exception since this will load the keys from the
          * storage class
          */
