@@ -2,6 +2,11 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.2.20] - 2018-03-28
+### Fixed
+- Fixed failing phpunit tests (#262)
+- Fixed DateTime zone issues (#261)
+- Fixed $invoice->getPaymentTotals() returns subTotals instead (#264)
 
 ## [2.2.19] - 2018-03-08
 ### Added
