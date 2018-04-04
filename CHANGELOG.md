@@ -2,6 +2,16 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [4.0.0] - 2018-04-04
+This release contains breaking changes, related to BitPay's multicurrency support (BTC and BCH).
+
+### Removed
+- Removed BTC only fields (btcPrice, btcPaid, rate) and methods for Invoice 
+
+### Added
+- Added support for Symfony v4
+
+
 ## [2.2.20] - 2018-03-28
 ### Fixed
 - Fixed failing phpunit tests (#262)
