@@ -124,7 +124,6 @@ class Client implements ClientInterface
             ->setUrl($data['url'])
             ->setPosData(array_key_exists('posData', $data) ? $data['posData'] : '')
             ->setStatus($data['status'])
-            ->setBtcPrice(array_key_exists('btcPrice', $data) ? $data['btcPrice'] : '')
             ->setPrice($data['price'])
             ->setCurrency(new \Bitpay\Currency($data['currency']))
             ->setOrderId(array_key_exists('orderId', $data) ? $data['orderId'] : '')
@@ -132,9 +131,7 @@ class Client implements ClientInterface
             ->setExpirationTime($expirationTime)
             ->setCurrentTime($currentTime)
             ->setId($data['id'])
-            ->setBtcPaid(array_key_exists('btcPaid', $data) ? $data['btcPaid'] : '')
             ->setAmountPaid(array_key_exists('amountPaid', $data) ? $data['amountPaid'] : '')
-            ->setRate(array_key_exists('rate', $data) ? $data['rate'] : '')
             ->setExceptionStatus($data['exceptionStatus'])
             ->setRefundAddresses(array_key_exists('refundAddresses', $data) ? $data['refundAddresses'] : '')
             ->setTransactionCurrency(array_key_exists('transactionCurrency', $data) ? $data['transactionCurrency'] : null)
@@ -201,7 +198,7 @@ class Client implements ClientInterface
         $error_message = (!empty($body['errors'])) ? $body['errors'] : $error_message;
         $error_message = (is_array($error_message)) ? implode("\n", $error_message) : $error_message;
         if (false !== $error_message) {
-            throw new \Exception($error_message);
+            throw new \Bitpay\Client\BitpayException($error_message);
         }
         $data = $body['data'];
 
@@ -221,7 +218,7 @@ class Client implements ClientInterface
         $this->response = $this->sendRequest($this->request);
         $body           = json_decode($this->response->getBody(), true);
         if (empty($body['data'])) {
-            throw new \Exception('Error with request: no data returned');
+            throw new \Bitpay\Client\BitpayException('Error with request: no data returned');
         }
         $currencies = $body['data'];
         array_walk($currencies, function (&$value, $key) {
@@ -296,7 +293,7 @@ class Client implements ClientInterface
         $error_message = (!empty($body['errors'])) ? $body['errors'] : $error_message;
         $error_message = (is_array($error_message)) ? implode("\n", $error_message) : $error_message;
         if (false !== $error_message) {
-            throw new \Exception($error_message);
+            throw new \Bitpay\Client\BitpayException($error_message);
         }
 
         $data = $body['data'];
@@ -336,7 +333,7 @@ class Client implements ClientInterface
         $error_message = (!empty($body['errors'])) ? $body['errors'] : $error_message;
         $error_message = (is_array($error_message)) ? implode("\n", $error_message) : $error_message;
         if (false !== $error_message) {
-            throw new \Exception($error_message);
+            throw new \Bitpay\Client\BitpayException($error_message);
         }
 
         $payouts = array();
@@ -404,7 +401,7 @@ class Client implements ClientInterface
 
         $body           = json_decode($this->response->getBody(), true);
         if (empty($body['data'])) {
-            throw new \Exception('Error with request: no data returned');
+            throw new \Bitpay\Client\BitpayException('Error with request: no data returned');
         }
 
         $data   = $body['data'];
@@ -430,7 +427,7 @@ class Client implements ClientInterface
 
         $body           = json_decode($this->response->getBody(), true);
         if (empty($body['data'])) {
-            throw new \Exception('Error with request: no data returned');
+            throw new \Bitpay\Client\BitpayException('Error with request: no data returned');
         }
         $data   = $body['data'];
 
@@ -492,7 +489,7 @@ class Client implements ClientInterface
         $this->response = $this->sendRequest($this->request);
         $body           = json_decode($this->response->getBody(), true);
         if (empty($body['data'])) {
-            throw new \Exception('Error with request: no data returned');
+            throw new \Bitpay\Client\BitpayException('Error with request: no data returned');
         }
 
         $tokens = array();
@@ -594,7 +591,7 @@ class Client implements ClientInterface
         $body = json_decode($this->response->getBody(), true);
 
         if (isset($body['error'])) {
-            throw new \Exception($body['error']);
+            throw new \Bitpay\Client\BitpayException($body['error']);
         }
 
         $data = $body['data'];
@@ -629,7 +626,7 @@ class Client implements ClientInterface
     protected function addIdentityHeader(RequestInterface $request)
     {
         if (null === $this->publicKey) {
-            throw new \Exception('Please set your Public Key.');
+            throw new \Bitpay\Client\BitpayException('Please set your Public Key.');
         }
 
         $request->setHeader('x-identity', (string) $this->publicKey);
@@ -641,7 +638,7 @@ class Client implements ClientInterface
     protected function addSignatureHeader(RequestInterface $request)
     {
         if (null === $this->privateKey) {
-            throw new \Exception('Please set your Private Key');
+            throw new \Bitpay\Client\BitpayException('Please set your Private Key');
         }
 
         if (true == property_exists($this->network, 'isPortRequiredInUrl')) {
@@ -703,8 +700,11 @@ class Client implements ClientInterface
         } else {
             $decimalPrecision = strlen(substr($price, $decimalPosition + 1));
         }
-        if (($decimalPrecision > 2 && $currency != 'BTC') || $decimalPrecision > 6) {
-            throw new \Exception('Incorrect price format or currency type.');
+        if (($currency != 'BCH' && $currency != 'BTC') && $decimalPrecision > 2) {
+            throw new \Bitpay\Client\BitpayException('Incorrect price format or currency type.');
+        }
+        elseif ($decimalPrecision > 6) {
+            throw new \Bitpay\Client\BitpayException('Incorrect price format or currency type.');
         }
     }
 }

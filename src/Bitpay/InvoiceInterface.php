@@ -24,8 +24,8 @@ interface InvoiceInterface
     const STATUS_NEW = 'new';
 
     /**
-     * As soon as full payment (or over payment) is received, an invoice goes into the
-     * paid status.
+     * As soon as full payment (or over payment) is received, an medium or low speed invoice goes into the
+     * paid status. A high speed invoice immediately goes into 'confirmed', see below.
      */
     const STATUS_PAID = 'paid';
 
@@ -76,17 +76,8 @@ interface InvoiceInterface
     const TRANSACTION_SPEED_LOW    = 'low';
 
     /**
-     * This is the amount that is required to be collected from the buyer. Note, if this is
-     * specified in a currency other than BTC, the price will be converted into BTC at
-     * market exchange rates to determine the amount collected from the buyer.
-     *
-     * @return string
-     */
-    public function getPrice();
-
-    /**
      * This is the currency code set for the price setting.  The pricing currencies
-     * currently supported are USD, EUR, BTC, and all of the codes listed on this page:
+     * currently supported are USD, EUR, BTC, BCH and all of the codes listed on this page:
      * https://bitpay.com/bitcoin­exchange­rates
      *
      * @return CurrencyInterface
@@ -197,14 +188,6 @@ interface InvoiceInterface
      * @return string
      */
     public function getUrl();
-
-    /**
-     * The amount of bitcoins being requested for payment of this invoice (same as the
-     * price if the merchant set the price in BTC).
-     *
-     * @return string
-     */
-    public function getBtcPrice();
 
     /**
      * The time the invoice was created in milliseconds since midnight January 1,
@@ -354,13 +337,6 @@ interface InvoiceInterface
      */
     public function getExceptionStatus();
 
-    /**
-     */
-    public function getBtcPaid();
-
-    /**
-     */
-    public function getRate();
 
     /**
      */
@@ -377,4 +353,21 @@ interface InvoiceInterface
      * @return array|object
      */
     public function getRefundAddresses();
+
+    public function getTransactionCurrency();
+
+    public function getPaymentSubtotals();
+
+    /**
+    * Equivalent to price for each supported transactionCurrency, excluding minerFees.
+    * The key is the currency and the value is an amount indicated in the smallest possible unit
+    * for each supported transactionCurrency (e.g satoshis for BTC and BCH)
+    * ex: '{"BCH": 1023200, "BTC": 113100 }'
+    */
+    public function getPaymentTotals();
+
+    public function getAmountPaid();
+
+    public function getExchangeRates();
+
 }

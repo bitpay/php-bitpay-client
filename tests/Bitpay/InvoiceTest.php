@@ -216,21 +216,46 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('https://bitpay.com/invoice?id=af7as6fd97ad6fa', $this->invoice->getUrl());
     }
 
-    public function testGetBtcPrice()
+    public function testGetPaymentSubtotals()
     {
         $this->assertNotNull($this->invoice);
-        $this->assertNull($this->invoice->getBtcPrice());
+        $this->assertNull($this->invoice->getPaymentSubtotals());
     }
 
     /**
-     * @depends testGetBtcPrice
+     * @depends testGetPaymentSubtotals
      */
-    public function testSetBtcPrice()
+    public function testSetPaymentSubtotals()
     {
         $this->assertNotNull($this->invoice);
-        $this->invoice->setBtcPrice(0.001);
-        $this->assertSame(0.001, $this->invoice->getBtcPrice());
+        $testValue = array(
+                'BTC' => 140300,
+                'BCH' => 1496200
+            );
+        $this->invoice->setPaymentSubtotals($testValue);
+        $this->assertSame($testValue, $this->invoice->getPaymentSubtotals());
     }
+
+    public function testGetPaymentTotals()
+    {
+        $this->assertNotNull($this->invoice);
+        $this->assertNull($this->invoice->getPaymentTotals());
+    }
+
+    /**
+     * @depends testGetPaymentTotals
+     */
+    public function testSetPaymentTotals()
+    {
+        $this->assertNotNull($this->invoice);
+        $testValue = array(
+            'BTC' => 140400,
+            'BCH' => 1498400
+    );
+        $this->invoice->setPaymentTotals($testValue);
+        $this->assertSame($testValue, $this->invoice->getPaymentTotals());
+    }
+
 
     public function testGetInvoiceTime()
     {
@@ -465,43 +490,67 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends testGetExceptionStatus
      */
-    public function testSetExcpetionStatus()
+    public function testSetExceptionStatus()
     {
         $this->assertNotNull($this->invoice);
         $this->invoice->setExceptionStatus(false);
         $this->assertFalse($this->invoice->getExceptionStatus());
     }
 
-    public function testGetBtcPaid()
+    public function testGetAmountPaid()
     {
         $this->assertNotNull($this->invoice);
-        $this->assertNull($this->invoice->getBtcPaid());
+        $this->assertNull($this->invoice->getAmountPaid());
     }
 
     /**
-     * @depends testGetBtcPaid
+     * @depends testGetAmountPaid
      */
-    public function testSetBtcPaid()
+    public function testSetAmountPaid()
     {
         $this->assertNotNull($this->invoice);
-        $this->invoice->setBtcPaid(0.00);
-        $this->assertSame(0.00, $this->invoice->getBtcPaid());
+        $this->invoice->setAmountPaid(0.00);
+        $this->assertSame(0.00, $this->invoice->getAmountPaid());
     }
 
-    public function testGetRate()
+    public function testGetTransactionCurrency()
     {
         $this->assertNotNull($this->invoice);
-        $this->assertNull($this->invoice->getRate());
+        $this->assertNull($this->invoice->getTransactionCurrency());
     }
 
     /**
-     * @depends testGetRate
+     * @depends testGetTransactionCurrency
      */
-    public function testSetRate()
+    public function testSetTransactionCurrency()
     {
         $this->assertNotNull($this->invoice);
-        $this->invoice->setRate(600.00);
-        $this->assertSame(600.00, $this->invoice->getRate());
+        $this->invoice->setTransactionCurrency("BCH");
+        $this->assertSame("BCH", $this->invoice->getTransactionCurrency());
+    }
+
+    public function testGetExchangeRates()
+    {
+        $this->assertNotNull($this->invoice);
+        $this->assertNull($this->invoice->getExchangeRates());
+    }
+
+    /**
+     * @depends testGetExchangeRates
+     */
+    public function testSetExchangeRates()
+    {
+        $this->assertNotNull($this->invoice);
+        $testValue = array();
+        $testValue['BTC'] = array(
+             "USD" => 7120.9400000000005,
+             "BCH" => 10.660089820359282 );
+        $testValue['BCH'] = array(
+             "USD" => 667.7000000000002,
+             "BCH" => 0.09371635818540879 );
+        
+        $this->invoice->setExchangeRates($testValue);
+        $this->assertSame($testValue, $this->invoice->getExchangeRates());
     }
 
     public function testGetToken()

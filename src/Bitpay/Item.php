@@ -153,7 +153,7 @@ class Item implements ItemInterface
     }
 
     /**
-     * Checks the new price to include BTC
+     * Checks the new price to include BTC & BCH
      * values with more than 6 decimals.
      *
      * @param string $price The price value to check

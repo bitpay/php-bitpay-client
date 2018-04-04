@@ -37,7 +37,7 @@ class Currency implements CurrencyInterface
         'SYP', 'SZL', 'THB', 'TJS', 'TMT', 'TND', 'TOP', 'TRY', 'TTD', 'TWD',
         'TZS', 'UAH', 'UGX', 'USD', 'UYU', 'UZS', 'VEF', 'VND', 'VUV', 'WST',
         'XAF', 'XAG', 'XAU', 'XCD', 'XOF', 'XPF', 'YER', 'ZAR', 'ZMW', 'ZWL',
-        'CUP', 'IRR', 'KPW'
+        'CUP', 'IRR', 'KPW', 'BCH'
     );
 
     /**

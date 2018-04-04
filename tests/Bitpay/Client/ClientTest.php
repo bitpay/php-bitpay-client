@@ -195,13 +195,10 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('abcdefghijkmnopqrstuvw', $invoice->getId());
         $this->assertEquals('https://test.bitpay.com/invoice?id=abcdefghijkmnopqrstuvw', $invoice->getUrl());
         $this->assertEquals('new', $invoice->getStatus());
-        //$this->assertEquals('0.0632', $invoice->getBtcPrice());
         $this->assertEquals(19.95, $invoice->getPrice());
         $this->assertInstanceOf('DateTime', $invoice->getInvoiceTime());
         $this->assertInstanceOf('DateTime', $invoice->getExpirationTime());
         $this->assertInstanceOf('DateTime', $invoice->getCurrentTime());
-        //$this->assertEquals('0.0000', $invoice->getBtcPaid());
-        $this->assertEquals(315.7, $invoice->getRate());
         $this->assertEquals(false, $invoice->getExceptionStatus());
         $this->assertEquals('abcdefghijklmno', $invoice->getToken()->getToken());
     }
@@ -223,13 +220,10 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $invoice->method('setId')->will($this->returnSelf());
         $invoice->method('setUrl')->will($this->returnSelf());
         $invoice->method('setStatus')->will($this->returnSelf());
-        //$invoice->method('setBtcPrice')->will($this->returnSelf());
         $invoice->method('setPrice')->will($this->returnSelf());
         $invoice->method('setInvoiceTime')->will($this->returnSelf());
         $invoice->method('setExpirationTime')->will($this->returnSelf());
         $invoice->method('setCurrentTime')->will($this->returnSelf());
-        //$invoice->method('setBtcPaid')->will($this->returnSelf());
-        $invoice->method('setRate')->will($this->returnSelf());
         $invoice->method('setExceptionStatus')->will($this->returnSelf());
         $invoice->method('getCurrency')->willReturn($this->getMockCurrency());
 
@@ -262,13 +256,10 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $invoice->method('setId')->will($this->returnSelf());
         $invoice->method('setUrl')->will($this->returnSelf());
         $invoice->method('setStatus')->will($this->returnSelf());
-        //$invoice->method('setBtcPrice')->will($this->returnSelf());
         $invoice->method('setPrice')->will($this->returnSelf());
         $invoice->method('setInvoiceTime')->will($this->returnSelf());
         $invoice->method('setExpirationTime')->will($this->returnSelf());
         $invoice->method('setCurrentTime')->will($this->returnSelf());
-        //$invoice->method('setBtcPaid')->will($this->returnSelf());
-        $invoice->method('setRate')->will($this->returnSelf());
         $invoice->method('setExceptionStatus')->will($this->returnSelf());
         $invoice->method('getCurrency')->willReturn($currency);
 
@@ -295,13 +286,10 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $invoice->method('setId')->will($this->returnSelf());
         $invoice->method('setUrl')->will($this->returnSelf());
         $invoice->method('setStatus')->will($this->returnSelf());
-        //$invoice->method('setBtcPrice')->will($this->returnSelf());
         $invoice->method('setPrice')->will($this->returnSelf());
         $invoice->method('setInvoiceTime')->will($this->returnSelf());
         $invoice->method('setExpirationTime')->will($this->returnSelf());
         $invoice->method('setCurrentTime')->will($this->returnSelf());
-        //$invoice->method('setBtcPaid')->will($this->returnSelf());
-        $invoice->method('setRate')->will($this->returnSelf());
         $invoice->method('setExceptionStatus')->will($this->returnSelf());
         $invoice->method('getCurrency')->willReturn($currency);
 
@@ -338,13 +326,10 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $invoice->method('setId')->will($this->returnSelf());
         $invoice->method('setUrl')->will($this->returnSelf());
         $invoice->method('setStatus')->will($this->returnSelf());
-        //$invoice->method('setBtcPrice')->will($this->returnSelf());
         $invoice->method('setPrice')->will($this->returnSelf());
         $invoice->method('setInvoiceTime')->will($this->returnSelf());
         $invoice->method('setExpirationTime')->will($this->returnSelf());
         $invoice->method('setCurrentTime')->will($this->returnSelf());
-        //$invoice->method('setBtcPaid')->will($this->returnSelf());
-        $invoice->method('setRate')->will($this->returnSelf());
         $invoice->method('setExceptionStatus')->will($this->returnSelf());
         $invoice->method('getCurrency')->willReturn($this->getMockCurrency());
         $invoice->method('getItem')->willReturn($this->getMockItem());
@@ -618,13 +603,15 @@ class ClientTest extends \PHPUnit_Framework_TestCase
                 array(
                     'getPrice', 'getCurrency', 'getItem', 'getBuyer', 'getTransactionSpeed',
                     'getNotificationEmail', 'getNotificationUrl', 'getRedirectUrl', 'getPosData', 'getStatus',
-                    'isFullNotifications', 'getId', 'getUrl', 'getBtcPrice', 'getInvoiceTime',
+                    'isFullNotifications', 'getId', 'getUrl', 'getInvoiceTime',
                     'getExpirationTime', 'getCurrentTime', 'getOrderId', 'getItemDesc', 'getItemCode',
                     'isPhysical', 'getBuyerName', 'getBuyerAddress1', 'getBuyerAddress2', 'getBuyerCity',
                     'getBuyerState', 'getBuyerZip', 'getBuyerCountry', 'getBuyerEmail', 'getBuyerPhone',
-                    'getExceptionStatus', 'getBtcPaid', 'getRate', 'getToken', 'getRefundAddresses',
-                    'setId', 'setUrl', 'setStatus', 'setBtcPrice', 'setPrice', 'setInvoiceTime', 'setExpirationTime',
-                    'setCurrentTime', 'setBtcPaid', 'setRate', 'setToken', 'setExceptionStatus', 'isExtendedNotifications'
+                    'getExceptionStatus', 'getToken', 'getRefundAddresses',
+                    'getExchangeRates', 'getPaymentSubtotals', 'getPaymentTotals', 'getTransactionCurrency', 'getAmountPaid',
+                    'setId', 'setUrl', 'setStatus', 'setInvoiceTime', 'setExpirationTime',
+                    'setCurrentTime', 'setToken', 'setExceptionStatus', 'isExtendedNotifications',
+                    'setExchangeRates', 'setPaymentSubtotals', 'setPaymentTotals', 'setTransactionCurrency', 'setAmountPaid'
                 )
             )
             ->getMock();
