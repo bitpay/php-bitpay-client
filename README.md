@@ -33,7 +33,7 @@ Add to your composer.json file by hand.
     ...
     "require": {
         ...
-        "bitpay/php-client": "~4.0"
+        "bitpay/php-client": "~2.2"
     }
     ...
 }
@@ -48,7 +48,7 @@ php composer.phar update bitpay/php-client
 ### Install using composer
 
 ```bash
-php composer.phar require bitpay/php-client:~4.0
+php composer.phar require bitpay/php-client:~2.2
 ```
 
 # Configuration
