@@ -11,3 +11,7 @@
 .buildpath
 composer.lock
 composer.phar
+.DS_Store
+build/.DS_Store
+docs/.DS_Store
+examples/.DS_Store
