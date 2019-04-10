@@ -296,7 +296,6 @@ class Util
             $yadd   = Math::add($ysub2, $ymul);
 
             $R['y'] = Math::mod($yadd, $p);
-
         } catch (\Exception $e) {
             throw new \Exception('Error in Util::pointDouble(): '.$e->getMessage());
         }

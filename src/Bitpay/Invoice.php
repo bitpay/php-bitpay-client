@@ -779,7 +779,7 @@ class Invoice implements InvoiceInterface
     }
 
     /**
-     * @param 
+     * @param array
      * @return InvoiceInterface
      */
     public function setPaymentSubtotals($paymentSubtotals)
@@ -800,7 +800,7 @@ class Invoice implements InvoiceInterface
     }
 
     /**
-     * @param 
+     * @param array
      * @return InvoiceInterface
      */
     public function setPaymentTotals($paymentTotals)
