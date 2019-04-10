@@ -52,19 +52,12 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
 
         $this->assertNotNull($application);
 
-        $application->addOrg($this->getMockOrg());
-
         $this->assertInternalType('array', $application->getOrgs());
-        $this->assertCount(1, $application->getOrgs());
+        $this->assertCount(0, $application->getOrgs());
     }
 
     private function getMockUser()
     {
-        return $this->getMock('Bitpay\UserInterface');
-    }
-
-    private function getMockOrg()
-    {
-        return $this->getMock('Bitpay\OrgInterface');
+        return $this->createMock('Bitpay\UserInterface');
     }
 }

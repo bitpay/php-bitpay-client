@@ -236,7 +236,7 @@ class PublicKeyTest extends \PHPUnit_Framework_TestCase
     private function getMockPrivateKey($hex = null)
     {
         $hex = ($hex === null) ? $this->hexKeys[0]['private'] : $hex;
-        $key = $this->getMock('Bitpay\PrivateKey');
+        $key = $this->createMock('Bitpay\PrivateKey');
         $key->method('isValid')->will($this->returnValue(true));
 
         $key

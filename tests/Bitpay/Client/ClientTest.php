@@ -27,7 +27,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $this->client->setPublicKey($this->getMockPublicKey());
         $this->client->setPrivateKey($this->getMockPrivateKey());
         $adapter = $this->getMockAdapter();
-        $adapter->method('sendRequest')->willReturn($this->getMock('Bitpay\Client\ResponseInterface'));
+        $adapter->method('sendRequest')->willReturn($this->createMock('Bitpay\Client\ResponseInterface'));
         $this->client->setAdapter($adapter);
     }
 
@@ -204,7 +204,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Exception
+     * @expectedException \Exception
      */
     public function testCreateResponseWithException()
     {
@@ -238,7 +238,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     *  @expectedException Exception
+     *  @expectedException \Exception
      */
     public function testCreateInvoiceWithTooMuchPrecisionForAnythingButBitcoin()
     {
@@ -268,7 +268,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
 
 
     /**
-     *  @expectedException Exception
+     *  @expectedException \Exception
      */
     public function testCreateInvoiceWithTooMuchPrecisionEvenForBitcoin()
     {
@@ -315,7 +315,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends testGetRequest
      * @depends testGetResponse
-     * @expectedException Exception
+     * @expectedException \Exception
      */
     public function testCreateInvoiceWithError()
     {
@@ -346,7 +346,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Exception
+     * @expectedException \Exception
      */
     public function testGetCurrenciesWithException()
     {
@@ -453,7 +453,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Exception
+     * @expectedException \Exception
      */
     public function testCreateTokenWithException()
     {
@@ -496,7 +496,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Exception
+     * @expectedException \Exception
      */
     public function testGetInvoiceException()
     {
@@ -528,7 +528,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Exception
+     * @expectedException \Exception
      */
     public function testGetPayoutException()
     {
@@ -717,26 +717,26 @@ class ClientTest extends \PHPUnit_Framework_TestCase
 
     private function getMockToken()
     {
-        return $this->getMock('Bitpay\TokenInterface');
+        return $this->createMock('Bitpay\TokenInterface');
     }
 
     private function getMockAdapter()
     {
-        return $this->getMock('Bitpay\Client\Adapter\AdapterInterface');
+        return $this->createMock('Bitpay\Client\Adapter\AdapterInterface');
     }
 
     private function getMockPublicKey()
     {
-        return $this->getMock('Bitpay\PublicKey');
+        return $this->createMock('Bitpay\PublicKey');
     }
 
     private function getMockPrivateKey()
     {
-        return $this->getMock('Bitpay\PrivateKey');
+        return $this->createMock('Bitpay\PrivateKey');
     }
 
     private function getMockResponse()
     {
-        return $this->getMock('Bitpay\Client\ResponseInterface');
+        return $this->createMock('Bitpay\Client\ResponseInterface');
     }
 }

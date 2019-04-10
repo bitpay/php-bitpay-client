@@ -1,6 +1,6 @@
 <?php
 /**
- * @license Copyright 2011-2014 BitPay Inc., MIT License 
+ * @license Copyright 2011-2014 BitPay Inc., MIT License
  * see https://github.com/bitpay/php-bitpay-client/blob/master/LICENSE
  */
 
@@ -242,7 +242,6 @@ class OpenSSLExtension implements CryptoInterface
         try {
             /* Ensure the key & IV is the same for both encrypt & decrypt. */
             if (!empty($encrypted_text)) {
-
                 $decrypted = openssl_decrypt(base64_decode($encrypted_text), $cipher_type, $key, 0, $iv);
                 $last_char = substr($decrypted, -1);
 

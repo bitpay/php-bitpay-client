@@ -1,6 +1,6 @@
 <?php
 /**
- * @license Copyright 2011-2014 BitPay Inc., MIT License 
+ * @license Copyright 2011-2014 BitPay Inc., MIT License
  * see https://github.com/bitpay/php-bitpay-client/blob/master/LICENSE
  */
 
@@ -52,7 +52,7 @@ class Request implements RequestInterface
     protected $path;
 
     /**
-     * Default is 443 but should be changed by whatever is passed in through the Adapter. 
+     * Default is 443 but should be changed by whatever is passed in through the Adapter.
      *
      * @var integer
      */

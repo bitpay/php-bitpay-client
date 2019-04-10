@@ -232,11 +232,11 @@ class BillTest extends \PHPUnit_Framework_TestCase
 
     private function getMockItem()
     {
-        return $this->getMock('Bitpay\ItemInterface');
+        return $this->createMock('Bitpay\ItemInterface');
     }
 
     private function getMockCurrency()
     {
-        return $this->getMock('Bitpay\CurrencyInterface');
+        return $this->createMock('Bitpay\CurrencyInterface');
     }
 }

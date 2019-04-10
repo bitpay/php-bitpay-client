@@ -86,7 +86,6 @@ class BcEngine implements EngineInterface
             $x = $y;
 
             $y = $tmp;
-
         } while (bccomp($num1, '0'));
 
         if (bccomp($x, '0') < 0) {
@@ -168,13 +167,12 @@ class BcEngine implements EngineInterface
             }
 
             return $sign.$dec;
-
-        } elseif (preg_match('/^-?[0-9]+$/', $x)) {
+        }
+        if (preg_match('/^-?[0-9]+$/', $x)) {
             return $x;
-        } else {
-            throw new \Exception("The input must be a numeric string in decimal or hexadecimal (with leading 0x) format.\n".var_export($x, true));
         }
 
+        throw new \Exception("The input must be a numeric string in decimal or hexadecimal (with leading 0x) format.\n".var_export($x, true));
     }
 
     /**

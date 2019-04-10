@@ -1,6 +1,6 @@
 <?php
 /**
- * @license Copyright 2011-2015 BitPay Inc., MIT License 
+ * @license Copyright 2011-2015 BitPay Inc., MIT License
  * see https://github.com/bitpay/php-bitpay-client/blob/master/LICENSE
  */
 
@@ -57,22 +57,6 @@ class Application implements ApplicationInterface
     {
         if (!empty($user)) {
             $this->users[] = $user;
-        }
-
-        return $this;
-    }
-
-    /**
-     * Add org to stack
-     *
-     * @param OrgInterface $org
-     *
-     * @return ApplicationInterface
-     */
-    public function addOrg(OrgInterface $org)
-    {
-        if (!empty($org)) {
-            $this->orgs[] = $org;
         }
 
         return $this;
