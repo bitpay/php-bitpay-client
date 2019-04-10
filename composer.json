@@ -39,9 +39,9 @@
         "fabpot/goutte": "~1.0.4",
         "behat/mink-goutte-driver": "1.*",
         "phpmd/phpmd": "~2.1.3",
-        "phpunit/phpunit": "~4.8.35",
+        "phpunit/phpunit": "~5.7.9",
         "fzaninotto/faker": "~1.4.0",
-        "mikey179/vfsStream": "~1.4.0",
+        "mikey179/vfsstream": "~1.4.0",
         "squizlabs/php_codesniffer": "~1.5.5",
         "satooshi/php-coveralls": "~0.6.1",
         "symfony/phpunit-bridge": "^4.0"

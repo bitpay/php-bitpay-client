@@ -61,20 +61,4 @@ class Application implements ApplicationInterface
 
         return $this;
     }
-
-    /**
-     * Add org to stack
-     *
-     * @param OrgInterface $org
-     *
-     * @return ApplicationInterface
-     */
-    public function addOrg(OrgInterface $org)
-    {
-        if (!empty($org)) {
-            $this->orgs[] = $org;
-        }
-
-        return $this;
-    }
 }

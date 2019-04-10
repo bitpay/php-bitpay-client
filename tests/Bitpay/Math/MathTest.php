@@ -17,7 +17,7 @@ class MathTest extends \PHPUnit_Framework_TestCase
 	{
 		Math::setEngine(null);
 		$this->assertNull(Math::getEngine());
-		$engine = $this->getMock('Bitpay\Math\EngineInterface');
+		$engine = $this->createMock('Bitpay\Math\EngineInterface');
 		Math::setEngine($engine);
 		$this->assertInstanceOf('Bitpay\Math\EngineInterface', Math::getEngine());
 	}

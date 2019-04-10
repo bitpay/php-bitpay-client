@@ -51,6 +51,9 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     {
         $response = Response::createFromRawResponse($this->getTestResponse200());
         $this->assertSame(200, $response->getStatusCode());
+
+        $response = Response::createFromRawResponse($this->getTestHttp2Response200());
+        $this->assertSame(200, $response->getStatusCode());
     }
 
     /**
@@ -68,6 +71,18 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     {
         return <<<EOF
 HTTP/1.1 200 OK
+Content-Type: text/xml; charset=utf-8
+
+{
+  "response": "example"
+}
+EOF;
+    }
+
+    private function getTestHttp2Response200()
+    {
+        return <<<EOF
+HTTP/2 200
 Content-Type: text/xml; charset=utf-8
 
 {
