@@ -100,16 +100,6 @@ class GmpEngineTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(1, $math->mul(1, 1));
     }
 
-    public function testpow()
-    {
-        $a = 1234;
-        $b = '1234123412341234123412341234123412412341234213412421341342342';
-        $c = '0x1234123412341234123412341234123412412341234213412421341342342';
-        $math = new GmpEngine();
-        $this->assertEquals(gmp_strval(gmp_pow($a, $a)), $math->pow($a, $a));
-        $this->assertEquals(gmp_strval(gmp_pow($c, $c)), $math->pow($c, $c));
-        $this->assertEquals(1, $math->pow(1, 1));
-    }
 
     public function testsub()
     {
