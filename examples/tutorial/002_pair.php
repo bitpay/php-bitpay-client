@@ -17,7 +17,7 @@ require __DIR__.'/../../vendor/autoload.php';
  * storage engine. You also need to tell it the location of the key you want
  * to load.
  */
-$storageEngine = new \Bitpay\Storage\EncryptedFilesystemStorage('YourTopSecretPassword');
+$storageEngine = new \Bitpay\Storage\EncryptedFilesystemStorage('SomeStrongPa$$%wOrD!');
 $privateKey    = $storageEngine->load('/tmp/bitpay.pri');
 $publicKey     = $storageEngine->load('/tmp/bitpay.pub');
 
@@ -33,8 +33,8 @@ $client = new \Bitpay\Client\Client();
  * own as long as it implements the NetworkInterface. In this example
  * we will use testnet
  */
-//$network = new \Bitpay\Network\Testnet();
-$network = new \Bitpay\Network\Livenet();
+$network = new \Bitpay\Network\Testnet();
+#$network = new \Bitpay\Network\Livenet();
 
 
 /**
@@ -56,20 +56,25 @@ $client->setAdapter($adapter);
  * Visit https://test.bitpay.com/api-tokens and create a new pairing code. Pairing
  * codes can only be used once and the generated code is valid for only 24 hours.
  */
-$pairingCode = 'InsertPairingCodeHere';
+$pairingCode = 'FiAisPc';
 
 /**
  * Currently this part is required, however future versions of the PHP SDK will
  * be refactor and this part may become obsolete.
  */
-$sin = \Bitpay\SinKey::create()->setPublicKey($publicKey)->generate();
+$sin    = new \Bitpay\SinKey('/tmp/sin.key');
+$sin->setPublicKey($publicKey);
+$sin->generate();
+#$sin = \Bitpay\SinKey::create()->setPublicKey($publicKey)->generate();
+error_log('$pairingCode: '.$pairingCode);
+error_log('$sin: '.$sin);
 /**** end ****/
 
 try {
     $token = $client->createToken(
         array(
             'pairingCode' => $pairingCode,
-            'label'       => 'You can insert a label here',
+            'label'       => 'php merchant',
             'id'          => (string) $sin,
         )
     );
