@@ -161,7 +161,7 @@ class Item implements ItemInterface
      */
     protected function checkPriceFormat($price)
     {
-        if ($price === '0')  {
+        if ($price === '0') {
             return;
         }
         $converted = (float)$price;
