@@ -702,8 +702,7 @@ class Client implements ClientInterface
         }
         if (($currency != 'BCH' && $currency != 'BTC') && $decimalPrecision > 2) {
             throw new \Bitpay\Client\BitpayException('Incorrect price format or currency type.');
-        }
-        elseif ($decimalPrecision > 6) {
+        } elseif ($decimalPrecision > 6) {
             throw new \Bitpay\Client\BitpayException('Incorrect price format or currency type.');
         }
     }
