@@ -12,12 +12,14 @@
  *   - Token value obtained from 002.php
  *   - A webserver to run the code. Running locally works with firefox, but not with Safari & Chrome
  */
+$key_dir = '/tmp';
 require __DIR__.'/../../vendor/autoload.php';
 
-// See 002.php for explanation
-$storageEngine = new \Bitpay\Storage\EncryptedFilesystemStorage('YourTopSecretPassword'); // Password may need to be updated if you changed it
-$privateKey    = $storageEngine->load('/tmp/bitpay.pri');
-$publicKey     = $storageEngine->load('/tmp/bitpay.pub');
+$storageEngine = new \Bitpay\Storage\EncryptedFilesystemStorage('TopSecretPassword');
+$privateKey = $storageEngine->load($key_dir . '/bitpay.pri');
+$publicKey = $storageEngine->load($key_dir . '/bitpay.pub');
+
+
 $client        = new \Bitpay\Client\Client();
 $network       = new \Bitpay\Network\Testnet();
 $adapter       = new \Bitpay\Client\Adapter\CurlAdapter();

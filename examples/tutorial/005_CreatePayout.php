@@ -11,14 +11,15 @@
  * the keys and received a token back. The token is usesd with the request.
  */
 
-require __DIR__ . '/../vendor/autoload.php';
+$key_dir = '/tmp';
+require __DIR__.'/../../vendor/autoload.php';
 
 $time = gmdate("Y-m-d\TH:i:s\.", 1414691179)."000Z";
 
 $token = new \Bitpay\Token();
 $token
 	->setFacade('payroll')
-	->setToken('<api token>'); //this is a special api that requires a explicit payroll relationship with BitPay
+	->setToken('your token goes here'); //this is a special api that requires a explicit payroll relationship with BitPay
 
 $instruction1 = new \Bitpay\PayoutInstruction();
 $instruction1
@@ -33,7 +34,7 @@ $payout
 	->setCurrency(new \Bitpay\Currency('USD'))
 	->setPricingMethod('bitcoinbestbuy')
 	->setReference('a reference, can be json')
-	->setNotificationEmail('<email address of person to get payout></email>')
+	->setNotificationEmail('an email goes here')
 	->setNotificationUrl('https://example.com/ipn.php')
 	->setToken($token)
 	->addInstruction($instruction1);
@@ -41,10 +42,11 @@ $payout
 
 //this is your private key in some form (see GetKeys.php)
 $storageEngine = new \Bitpay\Storage\EncryptedFilesystemStorage('TopSecretPassword');
-$private    = $storageEngine->load('/tmp/private_key.key');
+$private = $storageEngine->load($key_dir . '/bitpay.pri');
+$public = $storageEngine->load($key_dir . '/bitpay.pub');
 
-$public = new \Bitpay\PublicKey();
-$public->generate($private);
+
+
 
 $network = new \Bitpay\Network\Testnet();
 $adapter = new \Bitpay\Client\Adapter\CurlAdapter();
