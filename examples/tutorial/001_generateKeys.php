@@ -9,18 +9,15 @@
  */
 
 // If you have not already done so, please run `composer.phar install`
+#where to store keys
+$key_dir = '/tmp';
 require __DIR__.'/../../vendor/autoload.php';
-
 /**
  * Start by creating a PrivateKey object
  */
-$privateKey = new \Bitpay\PrivateKey('/tmp/bitpay.pri');
-
-// Generate a random number
-$privateKey->generate();
 
 // You can generate a private key with only one line of code like so
-$privateKey = \Bitpay\PrivateKey::create('/tmp/bitpay.pri')->generate();
+$privateKey = \Bitpay\PrivateKey::create( $key_dir . '/bitpay.pri')->generate();
 
 // NOTE: This has overridden the previous $privateKey variable, although its
 //       not an issue in this case since we have not used this key for
@@ -29,7 +26,7 @@ $privateKey = \Bitpay\PrivateKey::create('/tmp/bitpay.pri')->generate();
 /**
  * Once we have a private key, a public key is created from it.
  */
-$publicKey = new \Bitpay\PublicKey('/tmp/bitpay.pub');
+$publicKey = new \Bitpay\PublicKey($key_dir . '/bitpay.pub');
 
 // Inject the private key into the public key
 $publicKey->setPrivateKey($privateKey);
@@ -52,7 +49,7 @@ $publicKey->generate();
  * It's recommended that you use the EncryptedFilesystemStorage engine to persist your
  * keys. You can, of course, create your own as long as it implements the StorageInterface
  */
-$storageEngine = new \Bitpay\Storage\EncryptedFilesystemStorage('YourTopSecretPassword');
+$storageEngine = new \Bitpay\Storage\EncryptedFilesystemStorage('TopSecretPassword');
 $storageEngine->persist($privateKey);
 $storageEngine->persist($publicKey);
 
@@ -61,3 +58,6 @@ $storageEngine->persist($publicKey);
  * line `php examples/tutorial/001.php` This will generate and create two files
  * located at `/tmp/bitpay.pri` and `/tmp/bitpay.pub`
  */
+
+
+?>

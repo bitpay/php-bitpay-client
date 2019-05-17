@@ -10,16 +10,15 @@
  *   - Private and Public keys from 001.php
  *   - Token value obtained from 002.php
  */
+$key_dir = '/tmp';
 require __DIR__.'/../../vendor/autoload.php';
 
 // See 002.php for explanation
 #$storageEngine = new \Bitpay\Storage\EncryptedFilesystemStorage('YourTopSecretPassword'); // Password may need to be updated if you changed it
-#$privateKey    = $storageEngine->load('/tmp/bitpay.pri');
-#$publicKey     = $storageEngine->load('/tmp/bitpay.pub');
 
 $storageEngine = new \Bitpay\Storage\EncryptedFilesystemStorage('TopSecretPassword');
-$privateKey    = $storageEngine->load('/tmp/private_key.key');
-$publicKey     = $storageEngine->load('/tmp/public_key.key');
+$privateKey = $storageEngine->load($key_dir . '/bitpay.pri');
+$publicKey = $storageEngine->load($key_dir . '/bitpay.pub');
 
 $client        = new \Bitpay\Client\Client();
 $network       = new \Bitpay\Network\Testnet();
