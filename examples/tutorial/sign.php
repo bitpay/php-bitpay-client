@@ -2,12 +2,9 @@
 
 require __DIR__.'/../../vendor/autoload.php';
 
-$storageEngine = new \Bitpay\Storage\EncryptedFilesystemStorage('SomeStrongPa$$%wOrD!');
-
-
-$private = $storageEngine->load('/tmp/bitpay.pri');
-$public  = new \Bitpay\PublicKey('/tmp/bitpay.pub');
-#error_log('$private '.$private);
+$storageEngine = new \Bitpay\Storage\EncryptedFilesystemStorage('TopSecretPassword');
+$private    = $storageEngine->load('/tmp/private_key.key');
+$public     = $storageEngine->load('/tmp/public_key.key');
 $public->setPrivateKey($private);
 $public->generate();
 

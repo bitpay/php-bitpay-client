@@ -24,7 +24,7 @@ $instruction1 = new \Bitpay\PayoutInstruction();
 $instruction1
 	->setAmount(100)
 	->setAddress('2NA5EVH9HHHhM5RxSEWf54gP4v397EmFTxi')
-	->setLabel('Paying Someone');
+	->setLabel('Paying Chris');
 
 $payout = new \Bitpay\Payout();
 $payout
@@ -33,22 +33,16 @@ $payout
 	->setCurrency(new \Bitpay\Currency('USD'))
 	->setPricingMethod('bitcoinbestbuy')
 	->setReference('a reference, can be json')
-	->setNotificationEmail('joshlewis@gmail.com')
+	->setNotificationEmail('<email address of person to get payout></email>')
 	->setNotificationUrl('https://example.com/ipn.php')
 	->setToken($token)
 	->addInstruction($instruction1);
 
-#$private = new \Bitpay\PrivateKey();
-#$private->setHex('5555550968bc659873d723374213fa5bf7a30c24f0f0713aa798eb7daa7230fc'); 
+
 //this is your private key in some form (see GetKeys.php)
-
-#$public = new \Bitpay\PublicKey();
-#$public->generate($private);
-
 $storageEngine = new \Bitpay\Storage\EncryptedFilesystemStorage('TopSecretPassword');
 $private    = $storageEngine->load('/tmp/private_key.key');
-#$public     = $storageEngine->load('/tmp/public_key.key');
-#error_log('$private '.$private);
+
 $public = new \Bitpay\PublicKey();
 $public->generate($private);
 

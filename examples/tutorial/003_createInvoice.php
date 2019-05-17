@@ -13,12 +13,17 @@
 require __DIR__.'/../../vendor/autoload.php';
 
 // See 002.php for explanation
-$storageEngine = new \Bitpay\Storage\EncryptedFilesystemStorage('YourTopSecretPassword'); // Password may need to be updated if you changed it
-$privateKey    = $storageEngine->load('/tmp/bitpay.pri');
-$publicKey     = $storageEngine->load('/tmp/bitpay.pub');
+#$storageEngine = new \Bitpay\Storage\EncryptedFilesystemStorage('YourTopSecretPassword'); // Password may need to be updated if you changed it
+#$privateKey    = $storageEngine->load('/tmp/bitpay.pri');
+#$publicKey     = $storageEngine->load('/tmp/bitpay.pub');
+
+$storageEngine = new \Bitpay\Storage\EncryptedFilesystemStorage('TopSecretPassword');
+$privateKey    = $storageEngine->load('/tmp/private_key.key');
+$publicKey     = $storageEngine->load('/tmp/public_key.key');
+
 $client        = new \Bitpay\Client\Client();
-//$network       = new \Bitpay\Network\Testnet();
-$network       = new \Bitpay\Network\Livenet();
+$network       = new \Bitpay\Network\Testnet();
+#$network       = new \Bitpay\Network\Livenet();
 $adapter       = new \Bitpay\Client\Adapter\CurlAdapter();
 $client->setPrivateKey($privateKey);
 $client->setPublicKey($publicKey);
@@ -30,7 +35,7 @@ $client->setAdapter($adapter);
  * The last object that must be injected is the token object.
  */
 $token = new \Bitpay\Token();
-$token->setToken('UpdateThisValue'); // UPDATE THIS VALUE
+$token->setToken('<api token>'); // UPDATE THIS VALUE
 
 /**
  * Token object is injected into the client

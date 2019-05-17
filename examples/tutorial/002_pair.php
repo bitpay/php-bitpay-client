@@ -17,9 +17,9 @@ require __DIR__.'/../../vendor/autoload.php';
  * storage engine. You also need to tell it the location of the key you want
  * to load.
  */
-$storageEngine = new \Bitpay\Storage\EncryptedFilesystemStorage('SomeStrongPa$$%wOrD!');
-$privateKey    = $storageEngine->load('/tmp/bitpay.pri');
-$publicKey     = $storageEngine->load('/tmp/bitpay.pub');
+$storageEngine = new \Bitpay\Storage\EncryptedFilesystemStorage('TopSecretPassword');
+$privateKey    = $storageEngine->load('/tmp/private_key.key');
+$publicKey     = $storageEngine->load('/tmp/public_key.key');
 
 /**
  * Create the client, there's a lot to it and there are some easier ways, I am
@@ -56,7 +56,7 @@ $client->setAdapter($adapter);
  * Visit https://test.bitpay.com/api-tokens and create a new pairing code. Pairing
  * codes can only be used once and the generated code is valid for only 24 hours.
  */
-$pairingCode = 'FiAisPc';
+$pairingCode = '8nmCvLR';
 
 /**
  * Currently this part is required, however future versions of the PHP SDK will
@@ -74,7 +74,8 @@ try {
     $token = $client->createToken(
         array(
             'pairingCode' => $pairingCode,
-            'label'       => 'php merchant',
+            'label'       => 'bbb',
+            #'facade'      => 'payroll',
             'id'          => (string) $sin,
         )
     );
