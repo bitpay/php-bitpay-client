@@ -197,6 +197,8 @@ class Client implements ClientInterface
         $error_message = (!empty($body['error'])) ? $body['error'] : $error_message;
         $error_message = (!empty($body['errors'])) ? $body['errors'] : $error_message;
         $error_message = (is_array($error_message)) ? implode("\n", $error_message) : $error_message;
+
+        $data = $body['data'];
         if (false !== $error_message || !is_array($data)) {
             throw new \Bitpay\Client\BitpayException($error_message);
         }
