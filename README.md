@@ -12,7 +12,9 @@ bitpay/php-bitpay-client
 [![Total Downloads](https://poser.pugx.org/bitpay/php-client/downloads.svg)](https://packagist.org/packages/bitpay/php-client)
 [![Latest Unstable Version](https://poser.pugx.org/bitpay/php-client/v/unstable.svg)](https://packagist.org/packages/bitpay/php-client)
 
-This is a self-contained PHP implementation of BitPay's new cryptographically secure API: https://bitpay.com/api
+This is a self-contained PHP implementation of BitPay's new cryptographically secure API: https://bitpay.com/api.
+
+Our Lite version will most likely be all you need to integrate to your site, available [here](https://github.com/bitpay/php-bitpay-client/tree/lite)
 
 # Installation
 
