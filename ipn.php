@@ -2,16 +2,10 @@
 /*
 This IPN url is set when creating an invoice, modify as needed to integrate with your system
 This also uses the EXTENDED notifications, the preferred way to receive IPN updates on every status of your invoice
- */
-
+https://bitpay.com/api 
+*/
 /*
-autoload the classes
-
-buttons
-client
-config
-invoice
-item
+Autoload the classes
  */
 
 function BPC_autoloader($class)
@@ -36,6 +30,9 @@ $order_status = $data->status;
 $invoiceID = $data->id;
 
 /* We recommend double checking the invoice data by calling the Invoice API endpoint, instead of relying 100% on incoming notifications */
+
+$bitpay_checkout_token = '<your api token>';
+$environment = 'test';
 
 /*Create your configuration object, passing the $environment of 'test' or 'production'*/
 $config = new BPC_Configuration($bitpay_checkout_token, $environment);

@@ -1,14 +1,13 @@
 <?php
 /*
-autoload the classes
+Create an invoice using your API Token.
+API @ https://bitpay.com/api
+Create your token @ https://test.bitpay.com/dashboard/merchant/api-tokens or https:/.bitpay.com/dashboard/merchant/api-tokens
+*/
 
-buttons
-client
-config
-invoice
-item
+/*
+Autoload the classes
  */
-
 function BPC_autoloader($class)
 {
     if (strpos($class, 'BPC_') !== false):
@@ -20,18 +19,20 @@ function BPC_autoloader($class)
 }
 spl_autoload_register('BPC_autoloader');
 
-/*
-Create your token @ https://test.bitpay.com/dashboard/merchant/api-tokens or https:/.bitpay.com/dashboard/merchant/api-tokens
- */
+
+/* replace these variables */
+$bitpay_checkout_token = '<your api token>';
+$environment = 'test';
+$order_id = 1;
 
 /*Create your configuration object, passing the $environment of 'test' or 'production'*/
 $config = new BPC_Configuration($bitpay_checkout_token, $environment);
 
 /*Start building your parameters object to send to the API, filling in the details with your own data*/
 $params = new stdClass();
-/* optional
-$params->extension_version = 'MyApp_1.0.0;
- */
+/* your plugin version */
+$params->extension_version = 'MyApp_1.0.0';
+
 $params->price = '1.00';
 $params->currency = 'USD';
 
@@ -71,9 +72,13 @@ $invoice->BPC_createInvoice();
 /* This is optional but will have the data from the invoice of if you need it for other purposes */
 $invoiceData = json_decode($invoice->BPC_getInvoiceData());
 
+#leave this to show the output on the command line
+echo 'Invoice URL: '.$invoiceData->data->url.PHP_EOL;
+echo(print_r($invoiceData,true));
+
+
 
 /* EXAMPLE OF AN INVOICE FROM ABOVE */
-
 
 /*
 {

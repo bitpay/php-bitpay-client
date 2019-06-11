@@ -1,90 +1,15 @@
 bitpay/php-bitpay-client
 =================
 
-[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://raw.githubusercontent.com/bitpay/php-bitpay-client/master/LICENSE.md)
-[![Travis](https://img.shields.io/travis/bitpay/php-bitpay-client.svg?style=flat-square)](https://travis-ci.org/bitpay/php-bitpay-client)
-[![Packagist](https://img.shields.io/packagist/v/bitpay/php-client.svg?style=flat-square)](https://packagist.org/packages/bitpay/php-client)
-[![Code Climate](https://img.shields.io/codeclimate/github/bitpay/php-bitpay-client.svg?style=flat-square)](https://codeclimate.com/github/bitpay/php-bitpay-client)
-[![Scrutinizer](https://img.shields.io/scrutinizer/g/bitpay/php-bitpay-client.svg?style=flat-square)](https://scrutinizer-ci.com/g/bitpay/php-bitpay-client/)
-[![Coveralls](https://img.shields.io/coveralls/bitpay/php-bitpay-client.svg?style=flat-square)](https://coveralls.io/r/bitpay/php-bitpay-client)
+# Requirements
+You will need an API token from <https://test.bitpay.com/dashboard/merchant/api-tokens> or <https://bitpay.com/dashboard/merchant/api-tokens>
 
-[![Documentation Status](https://readthedocs.org/projects/php-bitpay-client/badge/?version=latest)](https://readthedocs.org/projects/php-bitpay-client/?badge=latest)
-[![Total Downloads](https://poser.pugx.org/bitpay/php-client/downloads.svg)](https://packagist.org/packages/bitpay/php-client)
-[![Latest Unstable Version](https://poser.pugx.org/bitpay/php-client/v/unstable.svg)](https://packagist.org/packages/bitpay/php-client)
+You will also need to complete the account setup from <https://test.bitpay.com/dashboard/signup> or <https://bitpay.com/dashboard/signup>
 
-This is a self-contained PHP implementation of BitPay's new cryptographically secure API: https://bitpay.com/api.
+After you have finished the setup, follow the example in **invoice.php** to connect to the API and start receiving payments through BitPay
 
-Our Lite version will most likely be all you need to integrate to your site, available [here](https://github.com/bitpay/php-bitpay-client/tree/lite)
+***note:*** *New accounts are set to a Tier 0, with a $500 daily limit.  To receive more, you will need to upgrade your account to the different Tier levels (all free) and provide documentation as needed*
 
-# Installation
-
-## Composer
-
-### Install Composer
-
-```bash
-curl -sS https://getcomposer.org/installer | php
-```
-
-### Install via composer by hand
-
-Add to your composer.json file by hand.
-
-```javascript
-{
-    ...
-    "require": {
-        ...
-        "bitpay/php-client": "~2.2"
-    }
-    ...
-}
-```
-
-Once you have added this, just run:
-
-```bash
-php composer.phar update bitpay/php-client
-```
-
-### Install using composer
-
-```bash
-php composer.phar require bitpay/php-client:~2.2
-```
-
-# Configuration
-
-See https://support.bitpay.com/hc/en-us/articles/115003001063-How-do-I-configure-the-PHP-BitPay-Client-Library-
-
-# Usage
-
-## Autoloader
-
-To use the library's autoloader (which doesn't include composer dependencies)
-instead of composer's autoloader, use the following code:
-
-```php
-<?php
-$autoloader = __DIR__ . '/relative/path/to/Bitpay/Autoloader.php';
-if (true === file_exists($autoloader) &&
-    true === is_readable($autoloader))
-{
-    require_once $autoloader;
-    \Bitpay\Autoloader::register();
-} else {
-    throw new Exception('BitPay Library could not be loaded');
-}
-```
-
-## Documentation
-
-Please see the ``docs`` directory for information on how to use this library
-and the ``examples`` directory for examples on using this library. You should
-be able to run all the examples by running ``php examples/File.php``.
-
-The ``examples/tutorial`` directory provides four scripts that guide you with creating a BitPay invoice:
-https://github.com/bitpay/php-bitpay-client/blob/master/examples/tutorial/
 
 # Support
 
