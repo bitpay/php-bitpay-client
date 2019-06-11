@@ -19,15 +19,14 @@ function BPC_autoloader($class)
 }
 spl_autoload_register('BPC_autoloader');
 
-$data = $request->get_body();
 
-$data = json_decode($data);
-$event = $data->event;
-$data = $data->data;
+$all_data = json_decode(file_get_contents("php://input"), true);
 
-$orderid = $data->orderId;
-$order_status = $data->status;
-$invoiceID = $data->id;
+$data = $all_data['data'];
+$event = $all_data['event'];
+$orderId = $data['orderId'];
+$invoiceID = $data['id'];
+$transaction_status = $event['name'];
 
 /* We recommend double checking the invoice data by calling the Invoice API endpoint, instead of relying 100% on incoming notifications */
 
@@ -47,7 +46,7 @@ $item = new BPC_Item($config, $params);
 $invoice = new BPC_Invoice($item); //this creates the invoice with all of the config params
 $orderStatus = json_decode($invoice->BPC_checkInvoiceStatus($invoiceID));
 
-switch ($event->name) {
+switch ($transaction_status) {
     case 'invoice_confirmed':
     if ($orderStatus->data->status == 'confirmed'):
         /* The invoice has gone through the confirmation and is complete */
