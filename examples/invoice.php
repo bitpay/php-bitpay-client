@@ -10,10 +10,11 @@ Autoload the classes
  */
 function BPC_autoloader($class)
 {
+    #change the pathing if needed
     if (strpos($class, 'BPC_') !== false):
-        if (!class_exists('BitPayLib/' . $class, false)):
+        if (!class_exists('../BitPayLib/' . $class, false)):
             #doesnt exist so include it
-            include 'BitPayLib/' . $class . '.php';
+            include '../BitPayLib/' . $class . '.php';
         endif;
     endif;
 }
