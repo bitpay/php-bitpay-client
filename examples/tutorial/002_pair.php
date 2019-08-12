@@ -71,9 +71,11 @@ error_log('$pairingCode: ' . $pairingCode);
 error_log('$sin: ' . $sin);
 /**** end ****/
 
-#'empty' will be POS
+$facade = '';
+#leave empty to create a POS facade, or use the two below
 #payroll
 #merchant
+
 
 if ($facade == ''):
     try {
