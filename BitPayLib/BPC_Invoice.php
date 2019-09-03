@@ -2,6 +2,8 @@
 
 class BPC_Invoice
 {
+    const NAME    = 'BitPay_PHP-Client_POS';
+    const VERSION = '4.1.0';
 
     public function __construct($item)
     {
@@ -23,13 +25,18 @@ class BPC_Invoice
         return $result;
     }
 
+    protected function prepareRequestHeaders()
+    {
+        return self::NAME.'_'. self::VERSION;
+    }
+
     public function BPC_createInvoice()
     {
        
        
         $post_fields = json_encode($this->item->item_params);
 
-        $pluginInfo = $this->item->item_params->extension_version;
+        $pluginInfo = $this->prepareRequestHeaders();
         $request_headers = array();
         $request_headers[] = 'X-BitPay-Plugin-Info: ' . $pluginInfo;
         $request_headers[] = 'Content-Type: application/json';
