@@ -31,8 +31,6 @@ $config = new BPC_Configuration($bitpay_checkout_token, $environment);
 
 /*Start building your parameters object to send to the API, filling in the details with your own data*/
 $params = new stdClass();
-/* your plugin version */
-$params->extension_version = 'MyApp_1.0.0';
 
 $params->price = '1.00';
 $params->currency = 'USD';
