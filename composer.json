@@ -29,7 +29,7 @@
         "ext-json": "*",
         "ext-openssl": "*",
         "symfony/config": "^2.3 || ^3.0 || ^4.0",
-        "symfony/dependency-injection": "^2.3 || ^3.0 || ^4.0"
+        "symfony/dependency-injection": "^2.3 || ^3.0 || ^4.0 || ^4.1 || ^4.2"
     },
     "require-dev": {
         "behat/behat": "2.5.*@stable",
