@@ -209,6 +209,8 @@ class Client implements ClientInterface
     /**
      * @inheritdoc
      */
+
+
     public function getCurrencies()
     {
         $this->request = $this->createNewRequest();
@@ -238,11 +240,33 @@ class Client implements ClientInterface
         return $currencies;
     }
 
+    public function createRecipient($token,$recipients)
+    {
+        $request = $this->createNewRequest();
+        $request->setMethod($request::METHOD_POST);
+        $request->setPath('recipients');
+        $body = array(
+            'token'         => $token,
+            'recipients'  => 
+                $recipients
+        );
+        $request->setBody(json_encode($body));
+        $this->addIdentityHeader($request);
+        $this->addSignatureHeader($request);
+
+        $this->request  = $request;
+        
+        $this->response = $this->sendRequest($request);
+        $body = json_decode($this->response->getBody(), true);
+        return $body;
+    }
+
     /**
      * @inheritdoc
      */
     public function createPayout(PayoutInterface $payout)
     {
+        
         $request = $this->createNewRequest();
         $request->setMethod($request::METHOD_POST);
         $request->setPath('payouts');
@@ -276,10 +300,9 @@ class Client implements ClientInterface
             $body['instructions'][] = array(
                 'label'   => $instruction->getLabel(),
                 'address' => $instruction->getAddress(),
-                'amount'  => $instruction->getAmount()
+                'amount'  => $instruction->getAmount(),
             );
         }
-
         $request->setBody(json_encode($body));
         $this->addIdentityHeader($request);
         $this->addSignatureHeader($request);
